@@ -1,0 +1,35 @@
+{
+  ".COMMENT-": "Hyphens should extend until column 60",
+
+  ".COMMENT-Tabs": "--------------------------------------- Tabs",
+  "itemGroup.arcane.arcane_tab": "Arcane",
+
+  ".COMMENT-Items": "-------------------------------------- Items",
+  "item.arcane.wand_acacia":    "Acacia Wand",
+  "item.arcane.wand_bamboo":    "Bamboo Wand",
+  "item.arcane.wand_birch":     "Birch Wand",
+  "item.arcane.wand_cherry":    "Cherry Wand",
+  "item.arcane.wand_dark_oak":  "Dark Oak Wand",
+  "item.arcane.wand_jungle":    "Jungle Wand",
+  "item.arcane.wand_mangrove":  "Mangrove Wand",
+  "item.arcane.wand_oak":       "Oak Wand",
+  "item.arcane.wand_spruce":    "Spruce Wand",
+  "item.arcane.wand_warped":    "Warped Wand",
+  "item.arcane.wand_crimson":   "Crimson Wand",
+
+  "item.arcane.auraglass_bottle": "Auraglass Bottle",
+  "item.arcane.auraometer":       "Auraometer",
+
+  ".COMMENT-Blocks": "------------------------------------- Blocks",
+  "block.arcane.aura_nodi": "Aura Nodi",
+  "block.arcane.auraglass": "Auraglass",
+
+  ".COMMENT-Messages": "----------------------------------- Messages",
+  "messages.arcane.aura": "Aura: %s/%s",
+  "messages.arcane.aura_extracted": "Aura extracted",
+  "messages.arcane.not_enough_aura": "Not enough aura",
+  "messages.arcane.out_of_aura": "Out of aura",
+  "messages.arcane.offhand_not_extractable": "Offhand item is not extractable",
+  "messages.arcane.block_not_extractable": "Block is not extractable",
+  "messages.arcane.cast_spell": "Casted spell"
+}
