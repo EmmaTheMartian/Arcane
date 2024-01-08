@@ -3,12 +3,14 @@ package martian.arcane.registry;
 import martian.arcane.ArcaneMod;
 import martian.arcane.ArcaneStaticConfig;
 import martian.arcane.item.ItemAuraWand;
+import martian.arcane.item.ItemAuraWrench;
 import martian.arcane.item.ItemAuraglassBottle;
 import martian.arcane.item.ItemAuraometer;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -16,7 +18,8 @@ import net.minecraftforge.registries.RegistryObject;
 import javax.annotation.Nullable;
 import java.util.function.Supplier;
 
-public class ArcaneItems {
+@SuppressWarnings("unused")
+public class ArcaneItems extends ArcaneRegistry {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ArcaneMod.MODID);
 
     public static final RegistryObject<Item> AURAGLASS_BOTTLE = registerItem("auraglass_bottle", ItemAuraglassBottle::new);
@@ -39,6 +42,8 @@ public class ArcaneItems {
             WAND_CRIMSON = registerItem("wand_crimson", ADVANCED_WAND_SUPPLIER);
 
     public static final RegistryObject<Item> AURAOMETER = registerItem("auraometer", ItemAuraometer::new);
+
+    public static final RegistryObject<Item> AURA_WRENCH = registerItem("aura_wrench", ItemAuraWrench::new);
 
     // Helpers
     private static RegistryObject<Item> registerItem(String id, Supplier<Item> sup) {

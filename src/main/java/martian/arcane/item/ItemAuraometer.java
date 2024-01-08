@@ -1,9 +1,11 @@
 package martian.arcane.item;
 
 import martian.arcane.api.MathHelpers;
+import martian.arcane.api.Raycasting;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
 import martian.arcane.api.capability.AuraStorage;
 import martian.arcane.api.capability.IAuraStorage;
+import martian.arcane.block.entity.BlockEntityAuraExtractor;
 import martian.arcane.registry.ArcaneCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -36,19 +38,18 @@ public class ItemAuraometer extends Item {
             return InteractionResultHolder.success(stack);
         }
 
-        HitResult hit = player.pick(player.getBlockReach(), 0, false);
-        if (hit.getType() != HitResult.Type.BLOCK) {
+        BlockHitResult hit = Raycasting.blockRaycast(player, player.getBlockReach(), false);
+        if (hit == null) {
             return InteractionResultHolder.pass(stack);
         }
-        BlockHitResult blockHit = (BlockHitResult)hit;
-        BlockState block = level.getBlockState(blockHit.getBlockPos());
+        BlockState block = level.getBlockState(hit.getBlockPos());
 
         if (!block.hasBlockEntity())
         {
             return InteractionResultHolder.fail(stack);
         }
 
-        BlockEntity be = level.getBlockEntity(blockHit.getBlockPos());
+        BlockEntity be = level.getBlockEntity(hit.getBlockPos());
 
         if (be instanceof AbstractAuraBlockEntity auraBe) {
             Optional<IAuraStorage> auraStorageOptional = auraBe.getAuraStorage();
@@ -58,6 +59,11 @@ public class ItemAuraometer extends Item {
 
             IAuraStorage aura = auraStorageOptional.get();
             player.sendSystemMessage(Component.literal("Aura: " + aura.getAura() + "/" + aura.getMaxAura()));
+
+            if (auraBe instanceof BlockEntityAuraExtractor extractor) {
+                boolean linked = extractor.targetPos != null;
+                player.sendSystemMessage(Component.literal("Linked?: " + linked));
+            }
         }
 
         return InteractionResultHolder.fail(stack);

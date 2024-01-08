@@ -14,6 +14,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class ItemAuraglassBottle extends AbstractAuraItem {
     public ItemAuraglassBottle() {
-        super(ArcaneStaticConfig.AuraMaximums.AURAGLASS_BOTTLE, true, new Item.Properties().stacksTo(1));
+        super(ArcaneStaticConfig.AuraMaximums.AURAGLASS_BOTTLE, true, true, new Item.Properties().stacksTo(1));
     }
 }

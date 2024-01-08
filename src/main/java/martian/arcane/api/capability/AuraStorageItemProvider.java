@@ -1,9 +1,7 @@
 package martian.arcane.api.capability;
 
-import martian.arcane.api.NbtKeys;
 import martian.arcane.registry.ArcaneCapabilities;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -12,45 +10,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class AuraStorageItemProvider implements ICapabilityProvider {
-    private final ItemStack stack;
     public final AuraStorage storage;
-
     private final LazyOptional<IAuraStorage> auraStorageHolder;
 
-    public AuraStorageItemProvider(ItemStack pStack, int maxAura, boolean extractable) {
-        stack = pStack;
-
-        storage = new AuraStorage(maxAura, extractable) {
-            private @NotNull CompoundTag getNbt() {
-                CompoundTag nbt = stack.getOrCreateTag();
-                if (!nbt.contains(NbtKeys.KEY_AURA))
-                    nbt.putInt(NbtKeys.KEY_AURA, 0);
-                if (!nbt.contains(NbtKeys.KEY_AURA_EXTRACTABLE))
-                    nbt.putBoolean(NbtKeys.KEY_AURA_EXTRACTABLE, storage.extractable);
-                return nbt;
-            }
-
-            @Override
-            public int getAura() {
-                return getNbt().getInt(NbtKeys.KEY_AURA);
-            }
-
-            @Override
-            public boolean canExtract() {
-                return getNbt().getBoolean(NbtKeys.KEY_AURA_EXTRACTABLE);
-            }
-
-            @Override
-            public void setAura(int value) {
-                getNbt().putInt(NbtKeys.KEY_AURA, value);
-            }
-
-            @Override
-            public void setExtractable(boolean value) {
-                getNbt().putBoolean(NbtKeys.KEY_AURA_EXTRACTABLE, value);
-            }
-        };
-
+    public AuraStorageItemProvider(ItemStack stack, int maxAura, boolean extractable, boolean acceptable) {
+        storage = new NbtAuraStorage(stack::getOrCreateTag, maxAura, extractable, acceptable);
         auraStorageHolder = LazyOptional.of(() -> storage);
     }
 

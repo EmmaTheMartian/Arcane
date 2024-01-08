@@ -1,8 +1,7 @@
 package martian.arcane;
 
-import martian.arcane.api.datagen.ArcaneBlockModelProvider;
-import martian.arcane.api.datagen.ArcaneBlockStateProvider;
-import martian.arcane.api.datagen.ArcaneItemModelProvider;
+import martian.arcane.datagen.ArcaneBlockStateProvider;
+import martian.arcane.datagen.ArcaneItemModelProvider;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraftforge.api.distmarker.Dist;
@@ -19,9 +18,9 @@ public class ArcaneClient {
         ExistingFileHelper efh = event.getExistingFileHelper();
         PackOutput output = gen.getPackOutput();
 
-//        gen.addProvider(event.includeClient(), new ArcaneBlockModelProvider(output, efh));
-        gen.addProvider(event.includeClient(), new ArcaneBlockStateProvider(output, efh));
-        gen.addProvider(event.includeClient(), new ArcaneItemModelProvider(output, efh));
-
+        if (event.includeClient()) {
+            gen.addProvider(true, new ArcaneBlockStateProvider(output, efh));
+            gen.addProvider(true, new ArcaneItemModelProvider(output, efh));
+        }
     }
 }

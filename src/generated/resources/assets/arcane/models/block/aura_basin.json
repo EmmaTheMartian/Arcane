@@ -1,0 +1,7 @@
+{
+  "parent": "arcane:block/aura_basin",
+  "render_type": "minecraft:translucent",
+  "textures": {
+    "all": "arcane:block/aura_basin"
+  }
+}

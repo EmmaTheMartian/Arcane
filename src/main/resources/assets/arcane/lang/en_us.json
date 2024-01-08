@@ -19,10 +19,14 @@
 
   "item.arcane.auraglass_bottle": "Auraglass Bottle",
   "item.arcane.auraometer":       "Auraometer",
+  "item.arcane.aura_wrench":      "Aurawrench",
 
   ".COMMENT-Blocks": "------------------------------------- Blocks",
-  "block.arcane.aura_nodi": "Aura Nodi",
-  "block.arcane.auraglass": "Auraglass",
+  "block.arcane.aura_nodi":      "Aura Nodi",
+  "block.arcane.auraglass":      "Auraglass",
+  "block.arcane.aura_extractor": "Aura Extractor",
+  "block.arcane.aura_inserter":  "Aura Inserter",
+  "block.arcane.aura_basin":     "Aura Basin",
 
   ".COMMENT-Messages": "----------------------------------- Messages",
   "messages.arcane.aura": "Aura: %s/%s",
@@ -31,5 +35,7 @@
   "messages.arcane.out_of_aura": "Out of aura",
   "messages.arcane.offhand_not_extractable": "Offhand item is not extractable",
   "messages.arcane.block_not_extractable": "Block is not extractable",
-  "messages.arcane.cast_spell": "Casted spell"
+  "messages.arcane.cast_spell": "Casted spell",
+  "messages.arcane.linked": "Linked!",
+  "messages.arcane.selected": "Selected block"
 }

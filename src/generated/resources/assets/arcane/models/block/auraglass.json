@@ -1,5 +1,6 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "arcane:block/auraglass",
+  "render_type": "minecraft:translucent",
   "textures": {
     "all": "arcane:block/auraglass"
   }

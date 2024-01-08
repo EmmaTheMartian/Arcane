@@ -1,4 +1,4 @@
-package martian.arcane.api.datagen;
+package martian.arcane.datagen;
 
 import martian.arcane.ArcaneMod;
 import martian.arcane.registry.ArcaneItems;
@@ -8,7 +8,6 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.RegistryObject;
 
 public class ArcaneItemModelProvider extends ItemModelProvider {
     public ArcaneItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
@@ -19,14 +18,14 @@ public class ArcaneItemModelProvider extends ItemModelProvider {
     protected void registerModels() {
         ArcaneItems.ITEMS.getEntries().forEach(item -> {
             if (item.get() instanceof BlockItem)
-                blockItem(item);
+                blockItem(item.get());
             else
                 basicItem(item.get());
         });
     }
 
-    private void blockItem(RegistryObject<Item> item) {
-        String path = item.getId().getPath();
-        withExistingParent("item/" + path, new ResourceLocation(item.getId().getNamespace(), "block/" + path));
+    private void blockItem(Item item) {
+        String path = DataGenUtils.name(item);
+        withExistingParent("item/" + path, new ResourceLocation(DataGenUtils.namespace(item), "block/" + path));
     }
 }

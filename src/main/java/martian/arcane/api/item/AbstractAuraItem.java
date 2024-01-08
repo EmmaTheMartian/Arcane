@@ -1,6 +1,7 @@
 package martian.arcane.api.item;
 
 import martian.arcane.api.MathHelpers;
+import martian.arcane.api.Raycasting;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
 import martian.arcane.registry.ArcaneCapabilities;
 import martian.arcane.api.capability.AuraStorageItemProvider;
@@ -32,18 +33,20 @@ import java.util.function.Function;
 public abstract class AbstractAuraItem extends Item {
     private final int maxAura;
     private final boolean extractable;
+    private final boolean receivable;
 
-    public AbstractAuraItem(int maxAura, boolean extractable, Item.Properties properties) {
+    public AbstractAuraItem(int maxAura, boolean extractable, boolean receivable, Item.Properties properties) {
         super(properties);
         this.maxAura = maxAura;
         this.extractable = extractable;
+        this.receivable = receivable;
     }
 
     // Capability
     @Override
     @Nullable
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return new AuraStorageItemProvider(stack, maxAura, extractable);
+        return new AuraStorageItemProvider(stack, maxAura, extractable, receivable);
     }
 
     public Optional<IAuraStorage> getAuraStorage(@NotNull ItemStack stack) {
@@ -107,7 +110,7 @@ public abstract class AbstractAuraItem extends Item {
 
             if (otherAura.canExtract())
             {
-                aura.extractAuraFrom(otherAura);
+                aura.extractAuraFrom(otherAura, -1);
                 player.sendSystemMessage(Component.translatable("messages.arcane.aura_extracted"));
                 return InteractionResultHolder.success(stack);
             }
@@ -116,12 +119,16 @@ public abstract class AbstractAuraItem extends Item {
                 return InteractionResultHolder.fail(stack);
             }
         } else {
-            HitResult hit = player.pick(player.getBlockReach(), 0, false);
-            if (hit.getType() != HitResult.Type.BLOCK) {
+//            HitResult hit = player.pick(player.getBlockReach(), 0, false);
+//            if (hit.getType() != HitResult.Type.BLOCK) {
+//                return InteractionResultHolder.pass(stack);
+//            }
+//            BlockHitResult blockHit = (BlockHitResult)hit;
+            BlockHitResult hit = Raycasting.blockRaycast(player, player.getBlockReach(), false);
+            if (hit == null) {
                 return InteractionResultHolder.pass(stack);
             }
-            BlockHitResult blockHit = (BlockHitResult)hit;
-            BlockState block = level.getBlockState(blockHit.getBlockPos());
+            BlockState block = level.getBlockState(hit.getBlockPos());
 
             if (!block.hasBlockEntity())
             {
@@ -129,7 +136,7 @@ public abstract class AbstractAuraItem extends Item {
                 return InteractionResultHolder.fail(stack);
             }
 
-            BlockEntity be = level.getBlockEntity(blockHit.getBlockPos());
+            BlockEntity be = level.getBlockEntity(hit.getBlockPos());
 
             if (be instanceof AbstractAuraBlockEntity auraBe) {
                 Optional<IAuraStorage> auraStorageOptional = auraBe.getAuraStorage();
@@ -146,7 +153,7 @@ public abstract class AbstractAuraItem extends Item {
                     return InteractionResultHolder.fail(stack);
                 }
 
-                aura.extractAuraFrom(blockAura);
+                aura.extractAuraFrom(blockAura, -1);
                 player.sendSystemMessage(Component.translatable("messages.arcane.aura_extracted"));
                 return InteractionResultHolder.success(stack);
             }

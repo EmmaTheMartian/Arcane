@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ItemAuraWand extends AbstractAuraItem {
     public ItemAuraWand(int maxAura, Properties properties) {
-        super(maxAura, false, properties);
+        super(maxAura, false, true, properties);
     }
 
     @Override

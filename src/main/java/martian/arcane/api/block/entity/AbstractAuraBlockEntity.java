@@ -15,13 +15,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
+import java.util.function.Function;
 
 public abstract class AbstractAuraBlockEntity extends BlockEntity {
     private final AuraStorageBlockEntityProvider provider;
 
-    public AbstractAuraBlockEntity(int maxAura, boolean extractable, BlockEntityType<?> type, BlockPos pos, BlockState state) {
+    public AbstractAuraBlockEntity(int maxAura, boolean extractable, boolean receivable, BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-        provider = new AuraStorageBlockEntityProvider(this, maxAura, extractable);
+        provider = new AuraStorageBlockEntityProvider(this, maxAura, extractable, receivable);
     }
 
     @Override
@@ -37,5 +38,9 @@ public abstract class AbstractAuraBlockEntity extends BlockEntity {
 
     public Optional<IAuraStorage> getAuraStorage() {
         return getCapability(ArcaneCapabilities.AURA_STORAGE).resolve();
+    }
+
+    public <U> Optional<U> mapAuraStorage(Function<? super IAuraStorage, ? extends U> func) {
+        return getAuraStorage().map(func);
     }
 }
