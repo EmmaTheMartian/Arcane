@@ -1,7 +1,9 @@
 {
-  "variants": {
-    "": {
-      "model": "arcane:block/aura_basin"
+  "multipart": [
+    {
+      "apply": {
+        "model": "arcane:block/aura_basin"
+      }
     }
-  }
+  ]
 }

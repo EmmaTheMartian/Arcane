@@ -6,6 +6,6 @@ import martian.arcane.block.entity.BlockEntityAuraBasin;
 
 public class BlockAuraBasin extends AbstractAuraMachine {
     public BlockAuraBasin() {
-        super(PropertyHelpers.basicAuraMachine(), BlockEntityAuraBasin::new);
+        super(PropertyHelpers.basicAuraMachine().noOcclusion(), BlockEntityAuraBasin::new);
     }
 }

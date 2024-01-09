@@ -48,12 +48,18 @@ public class BlockEntityAuraExtractor extends AbstractAuraBlockEntity {
             if (extractor.targetPos == null)
                 return;
 
-            LazyOptional<IAuraStorage> target = Objects.requireNonNullElseGet(extractor.cachedTarget, () ->
-                    Objects.requireNonNull(level.getBlockEntity(extractor.targetPos))
-                            .getCapability(ArcaneCapabilities.AURA_STORAGE));
-
-            if (extractor.cachedTarget == null)
-                extractor.cachedTarget = target;
+            LazyOptional<IAuraStorage> target;
+            if (extractor.cachedTarget != null)
+                target = extractor.cachedTarget;
+            else {
+                BlockEntity e = level.getBlockEntity(extractor.targetPos);
+                if (e != null) {
+                    target = e.getCapability(ArcaneCapabilities.AURA_STORAGE);
+                    if (extractor.cachedTarget == null)
+                        extractor.cachedTarget = target;
+                }
+                return;
+            }
 
             if (!target.isPresent())
                 return;

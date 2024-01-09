@@ -8,6 +8,13 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.rmi.registry.Registry;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Supplier;
 
 public class ArcaneBlockStateProvider extends BlockStateProvider {
     private static final ResourceLocation CUTOUT = new ResourceLocation("cutout");
@@ -24,6 +31,7 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
         makeBlockState(ArcaneBlocks.AURA_NODI);
         makeBlockState(ArcaneBlocks.AURA_EXTRACTOR);
         makeBlockState(ArcaneBlocks.AURA_INSERTER);
+        makeBlockState(ArcaneBlocks.AURA_BASIN);
     }
 
     private void makeBlockState(RegistryObject<Block> block) {
@@ -33,18 +41,22 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
                 .addModel();
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+    @SuppressWarnings("UnnecessaryReturnStatement")
     private void makeBlock(RegistryObject<Block> block) {
+        // Blocks to skip
         if (
-            block == ArcaneBlocks.AURAGLASS ||
-            block == ArcaneBlocks.AURA_BASIN
+                block == ArcaneBlocks.AURA_EXTRACTOR ||
+                block == ArcaneBlocks.AURA_INSERTER ||
+                block == ArcaneBlocks.AURA_NODI ||
+                block == ArcaneBlocks.AURA_BASIN
+        )
+            return;
+        // Basic translucent blocks
+        else if (
+                block == ArcaneBlocks.AURAGLASS
         )
             simpleTranslucent(block.get());
-        else if (
-            block == ArcaneBlocks.AURA_EXTRACTOR ||
-            block == ArcaneBlocks.AURA_INSERTER ||
-            block == ArcaneBlocks.AURA_NODI
-        ) { }
+        // Everything else
         else
             simpleBlock(block.get());
     }

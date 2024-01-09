@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class BlockAuraInserter extends AbstractAuraMachine {
     public BlockAuraInserter() {
-        super(PropertyHelpers.basicAuraMachine(), BlockEntityAuraInserter::new);
+        super(PropertyHelpers.basicAuraMachine().noCollission().noOcclusion(), BlockEntityAuraInserter::new);
     }
 
     @Override

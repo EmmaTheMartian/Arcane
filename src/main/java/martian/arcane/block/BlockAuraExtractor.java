@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class BlockAuraExtractor extends AbstractAuraMachine {
     public BlockAuraExtractor() {
-        super(PropertyHelpers.basicAuraMachine(), BlockEntityAuraExtractor::new);
+        super(PropertyHelpers.basicAuraMachine().noOcclusion().noCollission(), BlockEntityAuraExtractor::new);
     }
 
     @Override
