@@ -5,7 +5,6 @@ import martian.arcane.api.capability.IAuraStorage;
 import martian.arcane.registry.ArcaneCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;

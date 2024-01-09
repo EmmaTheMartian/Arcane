@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 public class BlockAuraExtractor extends AbstractAuraMachine {
     public BlockAuraExtractor() {
@@ -16,7 +17,7 @@ public class BlockAuraExtractor extends AbstractAuraMachine {
     }
 
     @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(@NotNull Level level, @NotNull BlockState state, @NotNull BlockEntityType<T> type) {
         return type == ArcaneBlockEntities.AURA_EXTRACTOR_BE.get() ? BlockEntityAuraExtractor::tick : null;
     }
 }

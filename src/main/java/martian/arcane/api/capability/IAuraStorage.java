@@ -18,9 +18,4 @@ public interface IAuraStorage {
     void extractAuraFrom(IAuraStorage other, int maxExtract);
 
     void sendAuraTo(IAuraStorage other, int maxPush);
-
-    //TODO
-//    void onExtractAura(int amountExtracted);
-//
-//    void onReceiveAura(int amountReceived);
 }

@@ -16,7 +16,7 @@ public class BlockEntityAuraInserter extends AbstractAuraBlockEntity {
         super(ArcaneStaticConfig.AuraMaximums.AURA_INSERTER, false, true, ArcaneBlockEntities.AURA_INSERTER_BE.get(), pos, state);
     }
 
-    public static <T extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, T blockEntity) {
+    public static <T extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState ignoredBlockState, T blockEntity) {
         if (blockEntity instanceof BlockEntityAuraInserter inserter) {
             BlockPos insertTarget = blockPos.below();
             if (!level.getBlockState(insertTarget).hasBlockEntity())

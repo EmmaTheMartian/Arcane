@@ -8,13 +8,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.rmi.registry.Registry;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Supplier;
 
 public class ArcaneBlockStateProvider extends BlockStateProvider {
     private static final ResourceLocation CUTOUT = new ResourceLocation("cutout");

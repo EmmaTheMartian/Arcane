@@ -1,13 +1,11 @@
 package martian.arcane.api.item;
 
-import martian.arcane.api.MathHelpers;
 import martian.arcane.api.Raycasting;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
-import martian.arcane.registry.ArcaneCapabilities;
 import martian.arcane.api.capability.AuraStorageItemProvider;
 import martian.arcane.api.capability.IAuraStorage;
+import martian.arcane.registry.ArcaneCapabilities;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FastColor;
@@ -21,7 +19,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.NotNull;
 
@@ -119,11 +116,6 @@ public abstract class AbstractAuraItem extends Item {
                 return InteractionResultHolder.fail(stack);
             }
         } else {
-//            HitResult hit = player.pick(player.getBlockReach(), 0, false);
-//            if (hit.getType() != HitResult.Type.BLOCK) {
-//                return InteractionResultHolder.pass(stack);
-//            }
-//            BlockHitResult blockHit = (BlockHitResult)hit;
             BlockHitResult hit = Raycasting.blockRaycast(player, player.getBlockReach(), false);
             if (hit == null) {
                 return InteractionResultHolder.pass(stack);

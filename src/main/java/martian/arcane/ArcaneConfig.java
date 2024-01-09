@@ -20,9 +20,9 @@ public class ArcaneConfig
 
     public static int auraNodiAura;
 
+    @SuppressWarnings("unused")
     @SubscribeEvent
-    static void onLoad(final ModConfigEvent event)
-    {
+    static void onLoad(final ModConfigEvent event) {
         auraNodiAura = AURA_NODI_AURA.get();
     }
 }

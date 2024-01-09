@@ -2,7 +2,6 @@ package martian.arcane.item;
 
 import martian.arcane.api.NBTHelpers;
 import martian.arcane.api.Raycasting;
-import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
 import martian.arcane.block.entity.BlockEntityAuraExtractor;
 import martian.arcane.block.entity.BlockEntityAuraInserter;
 import net.minecraft.core.BlockPos;
@@ -15,7 +14,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 

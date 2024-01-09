@@ -1,13 +1,9 @@
 package martian.arcane.item;
 
-import martian.arcane.api.MathHelpers;
 import martian.arcane.api.Raycasting;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
-import martian.arcane.api.capability.AuraStorage;
 import martian.arcane.api.capability.IAuraStorage;
 import martian.arcane.block.entity.BlockEntityAuraExtractor;
-import martian.arcane.registry.ArcaneCapabilities;
-import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -18,9 +14,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;

@@ -9,14 +9,10 @@ import martian.arcane.registry.ArcaneCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
-import java.util.Optional;
 
 public class BlockEntityAuraExtractor extends AbstractAuraBlockEntity {
     private LazyOptional<IAuraStorage> cachedTarget;
@@ -39,11 +35,11 @@ public class BlockEntityAuraExtractor extends AbstractAuraBlockEntity {
         targetPos = NBTHelpers.getBlockPos(nbt, NBTHelpers.KEY_EXTRACTOR_TARGET_POS);
     }
 
-    public static void setTarget(BlockEntityAuraExtractor extractor, BlockEntityAuraInserter target) {
+    public static void setTarget(@NotNull BlockEntityAuraExtractor extractor, BlockEntityAuraInserter target) {
         extractor.targetPos = target.getBlockPos();
     }
 
-    public static <T extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState blockState, T blockEntity) {
+    public static <T extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState ignoredBlockState, T blockEntity) {
         if (blockEntity instanceof BlockEntityAuraExtractor extractor) {
             if (extractor.targetPos == null)
                 return;

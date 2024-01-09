@@ -3,10 +3,8 @@ package martian.arcane.api;
 import martian.arcane.ArcaneMod;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import org.apache.logging.log4j.util.TriConsumer;
 
 import java.util.function.BiConsumer;
-import java.util.function.Supplier;
 
 public final class NBTHelpers {
     public static final String KEY_AURA = ArcaneMod.MODID + ".aura";
