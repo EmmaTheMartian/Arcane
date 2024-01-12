@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class AuraStorageItemProvider implements ICapabilityProvider {
-    public final AuraStorage storage;
+    public final IAuraStorage storage;
     private final LazyOptional<IAuraStorage> auraStorageHolder;
 
     public AuraStorageItemProvider(ItemStack stack, int maxAura, boolean extractable, boolean acceptable) {

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": {
+      "item": "arcane:blue_gold_ingot"
+    },
+    "S": {
+      "tag": "forge:stone"
+    }
+  },
+  "pattern": [
+    " B ",
+    "SSS"
+  ],
+  "result": {
+    "item": "arcane:aura_extractor"
+  },
+  "show_notification": true
+}

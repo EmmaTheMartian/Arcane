@@ -19,7 +19,7 @@ public class ArcaneBlocks extends ArcaneRegistry {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ArcaneMod.MODID);
 
     public static final RegistryObject<Block> AURA_NODI = registerBlock("aura_nodi", BlockAuraNodi::new);
-    public static final RegistryObject<Block> AURAGLASS = registerBlock("auraglass", () -> new Block(BlockBehaviour.Properties.copy(Blocks.GLASS)));
+    public static final RegistryObject<Block> AURAGLASS = registerBlock("auraglass", () -> new Block(BlockBehaviour.Properties.copy(Blocks.GLASS).noOcclusion()));
     public static final RegistryObject<Block> AURA_EXTRACTOR = registerBlock("aura_extractor", BlockAuraExtractor::new);
     public static final RegistryObject<Block> AURA_INSERTER = registerBlock("aura_inserter", BlockAuraInserter::new);
     public static final RegistryObject<Block> AURA_BASIN = registerBlock("aura_basin", BlockAuraBasin::new);

@@ -10,11 +10,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class AuraStorageBlockEntityProvider implements ICapabilityProvider {
-    public final AuraStorage storage;
+    public final IAuraStorage storage;
     private final LazyOptional<IAuraStorage> auraStorageHolder;
 
     public AuraStorageBlockEntityProvider(BlockEntity blockEntity, int maxAura, boolean extractable, boolean acceptable) {
-        storage = new NbtAuraStorage(blockEntity::getPersistentData, maxAura, extractable, acceptable);
+        storage = new BlockEntityAuraStorage(blockEntity::getPersistentData, blockEntity, maxAura, extractable, acceptable);
         auraStorageHolder = LazyOptional.of(() -> storage);
     }
 
@@ -26,5 +26,9 @@ public class AuraStorageBlockEntityProvider implements ICapabilityProvider {
             return capAuraStorage;
 
         return LazyOptional.empty();
+    }
+
+    public void invalidate() {
+        auraStorageHolder.invalidate();
     }
 }

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "item": "arcane:auraglass"
+    }
+  },
+  "pattern": [
+    "A A",
+    " A "
+  ],
+  "result": {
+    "item": "arcane:auraglass_bottle"
+  },
+  "show_notification": true
+}

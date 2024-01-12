@@ -4,6 +4,7 @@ import martian.arcane.api.NBTHelpers;
 import martian.arcane.api.Raycasting;
 import martian.arcane.block.entity.BlockEntityAuraExtractor;
 import martian.arcane.block.entity.BlockEntityAuraInserter;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -12,10 +13,14 @@ import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemAuraWrench extends Item {
     public ItemAuraWrench() {
@@ -71,6 +76,16 @@ public class ItemAuraWrench extends Item {
         }
 
         return InteractionResultHolder.fail(stack);
+    }
+
+    @Override
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, List<Component> text, @NotNull TooltipFlag flags) {
+        CompoundTag nbt = stack.getOrCreateTag();
+        initNbt(nbt);
+        if (nbt.getBoolean(NBTHelpers.KEY_WRENCH_HASP1))
+            text.add(Component.literal(
+                    "Position: " + NBTHelpers.getBlockPos(nbt, NBTHelpers.KEY_WRENCH_P1).toShortString()
+            ).withStyle(ChatFormatting.AQUA));
     }
 
     public static void initNbt(CompoundTag nbt) {

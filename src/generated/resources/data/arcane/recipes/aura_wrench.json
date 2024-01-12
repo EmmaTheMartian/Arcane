@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "arcane:blue_gold_ingot"
+    }
+  },
+  "pattern": [
+    "B B",
+    " B ",
+    " B "
+  ],
+  "result": {
+    "item": "arcane:aura_wrench"
+  },
+  "show_notification": true
+}

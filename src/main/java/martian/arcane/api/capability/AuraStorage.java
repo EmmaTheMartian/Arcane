@@ -1,12 +1,12 @@
 package martian.arcane.api.capability;
 
 public class AuraStorage implements IAuraStorage {
+    protected int maxAura;
     protected int currentAura;
     /* If this storage can have aura extracted from it */
     protected boolean extractable;
     /* If this storage can have aura sent to it */
     protected boolean receivable;
-    protected final int maxAura;
 
     public AuraStorage(int maxAura, boolean extractable, boolean receivable) {
         this.maxAura = maxAura;
@@ -37,6 +37,11 @@ public class AuraStorage implements IAuraStorage {
     @Override
     public void setAura(int value) {
         currentAura = value;
+    }
+
+    @Override
+    public void setMaxAura(int value) {
+        maxAura = value;
     }
 
     @Override

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "arcane:blue_gold_ingot"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    " R ",
+    " B ",
+    " B "
+  ],
+  "result": {
+    "item": "arcane:auraometer"
+  },
+  "show_notification": true
+}

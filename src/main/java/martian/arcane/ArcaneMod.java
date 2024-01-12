@@ -1,8 +1,13 @@
 package martian.arcane;
 
 import com.mojang.logging.LogUtils;
-import martian.arcane.registry.*;
+import martian.arcane.datagen.ArcaneDatagen;
+import martian.arcane.registry.ArcaneBlockEntities;
+import martian.arcane.registry.ArcaneBlocks;
+import martian.arcane.registry.ArcaneItems;
+import martian.arcane.registry.ArcaneTabs;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -26,6 +31,8 @@ public class ArcaneMod
         ArcaneBlockEntities.BLOCK_ENTITIES.register(modBus);
         ArcaneItems.ITEMS.register(modBus);
         ArcaneTabs.TABS.register(modBus);
+
+        modBus.addListener(EventPriority.LOWEST, ArcaneDatagen::gatherData);
 
         forgeBus.register(this);
     }

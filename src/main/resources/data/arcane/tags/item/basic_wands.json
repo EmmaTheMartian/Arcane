@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "values": [
+    "wand_acacia",
+    "wand_bamboo",
+    "wand_birch",
+    "wand_cherry",
+    "wand_dark_oak",
+    "wand_jungle",
+    "wand_mangrove",
+    "wand_oak",
+    "wand_spruce",
+    "wand_warped",
+    "wand_crimson"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "arcane:aurachalcum_ingot"
+    },
+    "G": {
+      "item": "arcane:auraglass"
+    }
+  },
+  "pattern": [
+    "GAG",
+    "A A",
+    "GAG"
+  ],
+  "result": {
+    "item": "arcane:aurachalcum_core"
+  },
+  "show_notification": true
+}

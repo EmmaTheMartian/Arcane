@@ -6,6 +6,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
+import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -63,9 +64,11 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
     }
 
     private void simpleBlockWithRenderType(Block block, ResourceLocation renderType) {
-        simpleBlock(block, models()
-                .getBuilder(DataGenUtils.name(block))
-                .parent(cubeAll(block))
-                .renderType(renderType));
+        getVariantBuilder(block)
+                .partialState()
+                .setModels(new ConfiguredModel(models()
+                        .cubeAll(DataGenUtils.name(block), blockTexture(block))
+                        .renderType(renderType)
+                ));
     }
 }

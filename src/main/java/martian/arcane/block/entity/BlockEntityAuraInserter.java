@@ -2,6 +2,7 @@ package martian.arcane.block.entity;
 
 import martian.arcane.ArcaneStaticConfig;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
+import martian.arcane.api.block.entity.IAuraInserter;
 import martian.arcane.api.capability.IAuraStorage;
 import martian.arcane.registry.ArcaneBlockEntities;
 import martian.arcane.registry.ArcaneCapabilities;
@@ -11,7 +12,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.LazyOptional;
 
-public class BlockEntityAuraInserter extends AbstractAuraBlockEntity {
+public class BlockEntityAuraInserter extends AbstractAuraBlockEntity implements IAuraInserter {
     public BlockEntityAuraInserter(BlockPos pos, BlockState state) {
         super(ArcaneStaticConfig.AuraMaximums.AURA_INSERTER, false, true, ArcaneBlockEntities.AURA_INSERTER_BE.get(), pos, state);
     }

@@ -11,6 +11,8 @@ public interface IAuraStorage {
 
     void setAura(int value);
 
+    void setMaxAura(int value);
+
     void setExtractable(boolean value);
 
     void setReceivable(boolean value);

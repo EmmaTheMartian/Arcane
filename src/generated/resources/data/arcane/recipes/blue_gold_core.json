@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "arcane:blue_gold_ingot"
+    },
+    "G": {
+      "item": "minecraft:glass"
+    }
+  },
+  "pattern": [
+    "GBG",
+    "B B",
+    "GBG"
+  ],
+  "result": {
+    "item": "arcane:blue_gold_core"
+  },
+  "show_notification": true
+}

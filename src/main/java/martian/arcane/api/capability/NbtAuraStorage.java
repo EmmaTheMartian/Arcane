@@ -46,6 +46,11 @@ public class NbtAuraStorage extends AuraStorage {
     }
 
     @Override
+    public void setMaxAura(int value) {
+        getNbt().putInt(NBTHelpers.KEY_MAX_AURA, value);
+    }
+
+    @Override
     public void setExtractable(boolean value) {
         getNbt().putBoolean(NBTHelpers.KEY_AURA_EXTRACTABLE, value);
     }
