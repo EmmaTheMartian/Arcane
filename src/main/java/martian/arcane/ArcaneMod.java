@@ -24,11 +24,11 @@ public class ArcaneMod
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ArcaneConfig.SPEC);
 
-        ArcaneRecipeTypes.RECIPE_TYPES.register(modBus);
-        ArcaneRecipeSerializers.SERIALIZERS.register(modBus);
         ArcaneBlocks.BLOCKS.register(modBus);
-        ArcaneBlockEntities.BLOCK_ENTITIES.register(modBus);
         ArcaneItems.ITEMS.register(modBus);
+        ArcaneBlockEntities.BLOCK_ENTITIES.register(modBus);
+        ArcaneRecipeTypes.RECIPE_TYPES.register(modBus);
+        ArcaneRecipeTypes.RECIPE_SERIALIZERS.register(modBus);
         ArcaneTabs.TABS.register(modBus);
 
         modBus.addListener(EventPriority.LOWEST, ArcaneDatagen::gatherData);

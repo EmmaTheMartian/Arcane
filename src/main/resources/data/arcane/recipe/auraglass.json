@@ -1,6 +1,6 @@
 {
   "type": "arcane:aura_infusion",
-  "ingredient": {
+  "input": {
     "item": "minecraft:glass"
   },
   "result": {

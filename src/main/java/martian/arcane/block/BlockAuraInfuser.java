@@ -43,11 +43,11 @@ public class BlockAuraInfuser extends AbstractAuraMachine {
         for (RecipeAuraInfusion recipe : RecipeAuraInfusion.getAllRecipes(level)) {
             player.sendSystemMessage(Component
                     .literal("Recipe: ")
-                    .append(recipe.ingredient.toString())
+                    .append(recipe.input().toString())
                     .append(" -> ")
-                    .append(recipe.result.getDisplayName())
+                    .append(recipe.result().getDisplayName())
                     .append(" (aura: ")
-                    .append(Integer.toString(recipe.aura))
+                    .append(Integer.toString(recipe.aura()))
                     .append(")"));
         }
 
@@ -68,13 +68,13 @@ public class BlockAuraInfuser extends AbstractAuraMachine {
 
                     player.sendSystemMessage(Component
                             .literal("Crafting: ")
-                            .append(recipe.result.getDisplayName()));
+                            .append(recipe.result().getDisplayName()));
 
                     player.sendSystemMessage(Component
                             .literal("Crafting Progress: ")
                             .append(Integer.toString(infuser.auraProgress))
                             .append("/")
-                            .append(Integer.toString(recipe.aura)));
+                            .append(Integer.toString(recipe.aura())));
                 } else {
                     player.sendSystemMessage(Component
                             .literal("No recipe using this item.")

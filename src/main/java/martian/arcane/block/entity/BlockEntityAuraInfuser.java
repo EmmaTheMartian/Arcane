@@ -72,13 +72,13 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntity implements I
 
             text.add(Component
                     .literal("Crafting: ")
-                    .append(recipe.result.getDisplayName()));
+                    .append(recipe.result().getDisplayName()));
 
             text.add(Component
                     .literal("Crafting Progress: ")
                     .append(Integer.toString(auraProgress))
                     .append("/")
-                    .append(Integer.toString(recipe.aura)));
+                    .append(Integer.toString(recipe.aura())));
         }
 
         return super.getText(text);
@@ -115,12 +115,12 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntity implements I
             if (optionalRecipe.isEmpty()) return;
             RecipeAuraInfusion recipe = optionalRecipe.get();
 
-            if (storage.getAura() > 0 && infuser.auraProgress < recipe.aura) {
+            if (storage.getAura() > 0 && infuser.auraProgress < recipe.aura()) {
                 infuser.auraProgress++;
                 storage.setAura(storage.getAura() - 1);
             }
 
-            if (infuser.auraProgress >= recipe.aura) {
+            if (infuser.auraProgress >= recipe.aura()) {
                 recipe.assemble(infuser);
             }
         }
