@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import martian.arcane.ArcaneMod;
 import martian.arcane.api.recipe.SimpleRecipe;
 import martian.arcane.block.entity.BlockEntityAuraInfuser;
+import martian.arcane.registry.ArcaneRecipeTypes;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -22,7 +23,6 @@ import java.util.Optional;
 public class RecipeAuraInfusion extends SimpleRecipe<AuraInfusionContainer> {
     public static final String NAME = "aura_infusion";
     public static final ResourceLocation ID = new ResourceLocation(ArcaneMod.MODID, NAME);
-    public static final RecipeType<RecipeAuraInfusion> TYPE = RecipeType.simple(ID);
 
     public final int aura;
 
@@ -51,7 +51,7 @@ public class RecipeAuraInfusion extends SimpleRecipe<AuraInfusionContainer> {
     @Override
     @NotNull
     public RecipeType<?> getType() {
-        return TYPE;
+        return ArcaneRecipeTypes.AURA_INFUSION.get();
     }
 
     public static Optional<RecipeAuraInfusion> getRecipeFor(Level level, AuraInfusionContainer container) {
@@ -62,7 +62,7 @@ public class RecipeAuraInfusion extends SimpleRecipe<AuraInfusionContainer> {
     }
 
     public static List<RecipeAuraInfusion> getAllRecipes(Level level) {
-        return level.getRecipeManager().getAllRecipesFor(TYPE);
+        return level.getRecipeManager().getAllRecipesFor(ArcaneRecipeTypes.AURA_INFUSION.get());
     }
 
     public static class Serializer implements RecipeSerializer<RecipeAuraInfusion> {
