@@ -79,7 +79,7 @@ public class ItemAuraWrench extends Item {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, List<Component> text, @NotNull TooltipFlag flags) {
+    public void appendHoverText(ItemStack stack, Level level, @NotNull List<Component> text, @NotNull TooltipFlag flags) {
         CompoundTag nbt = stack.getOrCreateTag();
         initNbt(nbt);
         if (nbt.getBoolean(NBTHelpers.KEY_WRENCH_HASP1))

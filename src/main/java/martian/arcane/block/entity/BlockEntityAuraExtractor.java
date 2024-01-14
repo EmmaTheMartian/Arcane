@@ -5,10 +5,12 @@ import martian.arcane.api.NBTHelpers;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
 import martian.arcane.api.block.entity.IAuraInserter;
 import martian.arcane.api.capability.IAuraStorage;
+import martian.arcane.block.BlockAuraExtractor;
 import martian.arcane.registry.ArcaneBlockEntities;
 import martian.arcane.registry.ArcaneCapabilities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
@@ -60,7 +62,7 @@ public class BlockEntityAuraExtractor extends AbstractAuraBlockEntity {
         extractor.targetPos = target.getBlockPos();
     }
 
-    public static <T extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState ignoredBlockState, T blockEntity) {
+    public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T blockEntity) {
         if (blockEntity instanceof BlockEntityAuraExtractor extractor) {
             if (extractor.targetPos == null)
                 return;
@@ -82,8 +84,8 @@ public class BlockEntityAuraExtractor extends AbstractAuraBlockEntity {
                 return;
 
             extractor.mapAuraStorage(storage -> {
-                // Extract from the block below the extractor
-                BlockPos extractFrom = blockPos.below();
+                Direction facing = state.getValue(BlockAuraExtractor.FACING);
+                BlockPos extractFrom = pos.offset(facing.getStepX(), facing.getStepY(), facing.getStepZ());
                 if (!level.getBlockState(extractFrom).hasBlockEntity())
                     return null;
 

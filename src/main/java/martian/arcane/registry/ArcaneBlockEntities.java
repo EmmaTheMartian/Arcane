@@ -1,10 +1,8 @@
 package martian.arcane.registry;
 
 import martian.arcane.ArcaneMod;
-import martian.arcane.block.entity.BlockEntityAuraBasin;
-import martian.arcane.block.entity.BlockEntityAuraExtractor;
-import martian.arcane.block.entity.BlockEntityAuraInserter;
-import martian.arcane.block.entity.BlockEntityAuraNodi;
+import martian.arcane.api.ArcaneRegistry;
+import martian.arcane.block.entity.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -33,5 +31,10 @@ public class ArcaneBlockEntities extends ArcaneRegistry {
     public static final RegistryObject<BlockEntityType<BlockEntityAuraBasin>> AURA_BASIN_BE =
             BLOCK_ENTITIES.register("be_aura_basin", () -> BlockEntityType.Builder
                     .of(BlockEntityAuraBasin::new, ArcaneBlocks.AURA_BASIN.get())
+                    .build(null));
+
+    public static final RegistryObject<BlockEntityType<BlockEntityAuraInfuser>> AURA_INFUSER_BE =
+            BLOCK_ENTITIES.register("be_aura_infuser", () -> BlockEntityType.Builder
+                    .of(BlockEntityAuraInfuser::new, ArcaneBlocks.AURA_INFUSER.get())
                     .build(null));
 }

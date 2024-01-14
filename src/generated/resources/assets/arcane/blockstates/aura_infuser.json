@@ -2,7 +2,7 @@
   "multipart": [
     {
       "apply": {
-        "model": "arcane:block/aura_inserter"
+        "model": "arcane:block/aura_infuser"
       }
     }
   ]

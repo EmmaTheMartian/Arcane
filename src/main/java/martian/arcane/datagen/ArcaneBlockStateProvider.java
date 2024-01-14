@@ -23,9 +23,8 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
         ArcaneBlocks.BLOCKS.getEntries().forEach(this::makeBlock);
 
         makeBlockState(ArcaneBlocks.AURA_NODI);
-        makeBlockState(ArcaneBlocks.AURA_EXTRACTOR);
-        makeBlockState(ArcaneBlocks.AURA_INSERTER);
         makeBlockState(ArcaneBlocks.AURA_BASIN);
+        makeBlockState(ArcaneBlocks.AURA_INFUSER);
     }
 
     private void makeBlockState(RegistryObject<Block> block) {
@@ -42,7 +41,8 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
                 block == ArcaneBlocks.AURA_EXTRACTOR ||
                 block == ArcaneBlocks.AURA_INSERTER ||
                 block == ArcaneBlocks.AURA_NODI ||
-                block == ArcaneBlocks.AURA_BASIN
+                block == ArcaneBlocks.AURA_BASIN ||
+                block == ArcaneBlocks.AURA_INFUSER
         )
             return;
         // Basic translucent blocks

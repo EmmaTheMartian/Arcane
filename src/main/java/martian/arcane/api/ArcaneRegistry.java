@@ -1,4 +1,4 @@
-package martian.arcane.registry;
+package martian.arcane.api;
 
 public abstract class ArcaneRegistry {
 }

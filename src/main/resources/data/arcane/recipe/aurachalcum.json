@@ -1,0 +1,12 @@
+{
+  "type": "arcane:aura_infusion",
+  "ingredient": [
+    {
+      "item": "arcane:raw_aurachalcum"
+    }
+  ],
+  "result": {
+    "item": "arcane:aurachalcum_ingot"
+  },
+  "aura": 256
+}

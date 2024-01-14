@@ -2,6 +2,7 @@ package martian.arcane.registry;
 
 import martian.arcane.ArcaneMod;
 import martian.arcane.ArcaneStaticConfig;
+import martian.arcane.api.ArcaneRegistry;
 import martian.arcane.item.ItemAuraWand;
 import martian.arcane.item.ItemAuraWrench;
 import martian.arcane.item.ItemAuraglassBottle;

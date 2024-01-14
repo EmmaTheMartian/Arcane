@@ -2,10 +2,7 @@ package martian.arcane;
 
 import com.mojang.logging.LogUtils;
 import martian.arcane.datagen.ArcaneDatagen;
-import martian.arcane.registry.ArcaneBlockEntities;
-import martian.arcane.registry.ArcaneBlocks;
-import martian.arcane.registry.ArcaneItems;
-import martian.arcane.registry.ArcaneTabs;
+import martian.arcane.registry.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -27,6 +24,8 @@ public class ArcaneMod
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ArcaneConfig.SPEC);
 
+        ArcaneRecipeTypes.RECIPE_TYPES.register(modBus);
+        ArcaneRecipeSerializers.SERIALIZERS.register(modBus);
         ArcaneBlocks.BLOCKS.register(modBus);
         ArcaneBlockEntities.BLOCK_ENTITIES.register(modBus);
         ArcaneItems.ITEMS.register(modBus);

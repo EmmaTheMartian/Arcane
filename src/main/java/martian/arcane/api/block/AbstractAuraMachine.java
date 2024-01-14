@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.BiFunction;
 
 public abstract class AbstractAuraMachine extends Block implements EntityBlock {
@@ -20,7 +21,8 @@ public abstract class AbstractAuraMachine extends Block implements EntityBlock {
 
     @Override
     @NotNull
-    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+    @ParametersAreNonnullByDefault
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return beSupplier.apply(pos, state);
     }
 }

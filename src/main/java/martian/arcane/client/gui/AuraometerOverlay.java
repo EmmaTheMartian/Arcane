@@ -1,4 +1,4 @@
-package martian.arcane.gui;
+package martian.arcane.client.gui;
 
 import martian.arcane.api.Raycasting;
 import martian.arcane.api.block.entity.IAuraometerOutput;

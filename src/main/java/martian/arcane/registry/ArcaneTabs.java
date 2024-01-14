@@ -1,6 +1,7 @@
 package martian.arcane.registry;
 
 import martian.arcane.ArcaneMod;
+import martian.arcane.api.ArcaneRegistry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;

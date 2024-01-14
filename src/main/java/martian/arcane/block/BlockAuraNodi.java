@@ -8,8 +8,9 @@ import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 public class BlockAuraNodi extends Block implements EntityBlock {
     public BlockAuraNodi() {
@@ -18,7 +19,8 @@ public class BlockAuraNodi extends Block implements EntityBlock {
 
     @Nullable
     @Override
-    public BlockEntity newBlockEntity(@NotNull BlockPos pos, @NotNull BlockState state) {
+    @ParametersAreNonnullByDefault
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new BlockEntityAuraNodi(pos, state);
     }
 }

@@ -1,16 +1,16 @@
 {
   "replace": false,
   "values": [
-    "wand_acacia",
-    "wand_bamboo",
-    "wand_birch",
-    "wand_cherry",
-    "wand_dark_oak",
-    "wand_jungle",
-    "wand_mangrove",
-    "wand_oak",
-    "wand_spruce",
-    "wand_warped",
-    "wand_crimson"
+    "arcane:wand_acacia",
+    "arcane:wand_bamboo",
+    "arcane:wand_birch",
+    "arcane:wand_cherry",
+    "arcane:wand_dark_oak",
+    "arcane:wand_jungle",
+    "arcane:wand_mangrove",
+    "arcane:wand_oak",
+    "arcane:wand_spruce",
+    "arcane:wand_warped",
+    "arcane:wand_crimson"
   ]
 }

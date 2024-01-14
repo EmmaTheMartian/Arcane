@@ -1,0 +1,10 @@
+{
+  "type": "arcane:aura_infusion",
+  "ingredient": {
+    "item": "minecraft:glass"
+  },
+  "result": {
+    "item": "arcane:auraglass"
+  },
+  "aura": 32
+}
