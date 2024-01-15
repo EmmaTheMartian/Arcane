@@ -1,8 +1,6 @@
 package martian.arcane.recipe.aurainfuser;
 
 import com.google.gson.JsonObject;
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 import martian.arcane.ArcaneMod;
 import martian.arcane.block.entity.BlockEntityAuraInfuser;
 import martian.arcane.registry.ArcaneRecipeTypes;
@@ -12,10 +10,11 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -24,13 +23,29 @@ import java.util.Optional;
 // Input ItemStack must have a count of 1!
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public record RecipeAuraInfusion(ItemStack input, ItemStack result, int aura) implements Recipe<AuraInfusionContainer> {
+public class RecipeAuraInfusion implements Recipe<AuraInfusionContainer> {
     public static final String NAME = "aura_infusion";
     public static final ResourceLocation ID = new ResourceLocation(ArcaneMod.MODID, NAME);
 
+    public final ResourceLocation id;
+    public final ItemStack input;
+    public final ItemStack result;
+    public final int aura;
+
+    public RecipeAuraInfusion(ResourceLocation id, ItemStack input, ItemStack result, int aura) {
+        this.id = id;
+        this.input = input;
+        this.result = result;
+        this.aura = aura;
+    }
+
     @Override
     public boolean matches(AuraInfusionContainer container, Level level) {
-        return this.input.is(container.getItem().getItem()) && container.aura >= aura;
+        return this.matchesWithoutAuraCost(container, level) && container.aura >= this.aura;
+    }
+
+    public boolean matchesWithoutAuraCost(AuraInfusionContainer container, Level ignoredLevel) {
+        return this.input.is(container.getItem().getItem());
     }
 
     @Override
@@ -55,7 +70,7 @@ public record RecipeAuraInfusion(ItemStack input, ItemStack result, int aura) im
 
     @Override
     public ResourceLocation getId() {
-        return ID;
+        return id;
     }
 
     @Override
@@ -69,9 +84,15 @@ public record RecipeAuraInfusion(ItemStack input, ItemStack result, int aura) im
     }
 
     public static Optional<RecipeAuraInfusion> getRecipeFor(Level level, AuraInfusionContainer container) {
+        return getRecipeFor(level, container, false);
+    }
+
+    public static Optional<RecipeAuraInfusion> getRecipeFor(Level level, AuraInfusionContainer container, boolean ignoreAuraCost) {
         return getAllRecipes(level)
                 .stream()
-                .filter(recipe -> recipe.matches(container, level))
+                .filter(recipe -> ignoreAuraCost ?
+                        recipe.matchesWithoutAuraCost(container, level)
+                        : recipe.matches(container, level))
                 .findFirst();
     }
 
@@ -84,11 +105,10 @@ public record RecipeAuraInfusion(ItemStack input, ItemStack result, int aura) im
 
         @Override
         public RecipeAuraInfusion fromJson(ResourceLocation id, JsonObject json) {
-            ArcaneMod.LOGGER.warn(".ARCANE. fromJson called");
             ItemStack input = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "input"));
             ItemStack output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
             int aura = GsonHelper.getAsInt(json, "aura");
-            return new RecipeAuraInfusion(input, output, aura);
+            return new RecipeAuraInfusion(id, input, output, aura);
         }
 
         @Override
@@ -96,7 +116,7 @@ public record RecipeAuraInfusion(ItemStack input, ItemStack result, int aura) im
             ItemStack input = buf.readItem();
             ItemStack output = buf.readItem();
             int aura = buf.readInt();
-            return new RecipeAuraInfusion(input, output, aura);
+            return new RecipeAuraInfusion(id, input, output, aura);
         }
 
         @Override

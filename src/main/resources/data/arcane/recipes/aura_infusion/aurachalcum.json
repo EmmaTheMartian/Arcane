@@ -1,10 +1,8 @@
 {
   "type": "arcane:aura_infusion",
-  "input": [
-    {
-      "item": "arcane:raw_aurachalcum"
-    }
-  ],
+  "input": {
+    "item": "arcane:raw_aurachalcum"
+  },
   "result": {
     "item": "arcane:aurachalcum_ingot"
   },

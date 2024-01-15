@@ -7,6 +7,7 @@ import martian.arcane.api.capability.IAuraStorage;
 import martian.arcane.recipe.aurainfuser.AuraInfusionContainer;
 import martian.arcane.recipe.aurainfuser.RecipeAuraInfusion;
 import martian.arcane.registry.ArcaneBlockEntities;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -35,6 +36,7 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntity implements I
     @Override
     public void saveAdditional(@NotNull CompoundTag nbt) {
         nbt.put(NBTHelpers.KEY_STACK, inv.serializeNBT());
+        nbt.putInt(NBTHelpers.KEY_AURA, auraProgress);
         super.saveAdditional(nbt);
     }
 
@@ -43,6 +45,7 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntity implements I
         super.load(nbt);
         inv = new ItemStackHandler(1);
         inv.deserializeNBT(nbt.getCompound(NBTHelpers.KEY_STACK));
+        auraProgress = nbt.getInt(NBTHelpers.KEY_AURA);
     }
 
     @Override
@@ -50,6 +53,7 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntity implements I
     public CompoundTag getUpdateTag() {
         CompoundTag nbt = super.getUpdateTag();
         nbt.put(NBTHelpers.KEY_STACK, inv.serializeNBT());
+        nbt.putInt(NBTHelpers.KEY_AURA, auraProgress);
         return nbt;
     }
 
@@ -58,6 +62,7 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntity implements I
         CompoundTag nbt = getUpdateTag();
         inv = new ItemStackHandler(1);
         inv.deserializeNBT(nbt.getCompound(NBTHelpers.KEY_STACK));
+        auraProgress = nbt.getInt(NBTHelpers.KEY_AURA);
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
@@ -66,19 +71,20 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntity implements I
         if (!getItem().isEmpty())
             text.add(Component.literal("Holding: ").append(getItem().getDisplayName()));
 
-        Optional<RecipeAuraInfusion> optionalRecipe = getRecipe();
+        Optional<RecipeAuraInfusion> optionalRecipe = getRecipe(true);
         if (optionalRecipe.isPresent()) {
             RecipeAuraInfusion recipe = optionalRecipe.get();
 
             text.add(Component
                     .literal("Crafting: ")
-                    .append(recipe.result().getDisplayName()));
+                    .append(recipe.result.getDisplayName()));
 
             text.add(Component
-                    .literal("Crafting Progress: ")
+                    .literal("Infusing Progress: ")
                     .append(Integer.toString(auraProgress))
                     .append("/")
-                    .append(Integer.toString(recipe.aura())));
+                    .append(Integer.toString(recipe.aura))
+                    .withStyle(ChatFormatting.LIGHT_PURPLE));
         }
 
         return super.getText(text);
@@ -92,36 +98,37 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntity implements I
         inv.setStackInSlot(0, stack);
     }
 
-    public Optional<RecipeAuraInfusion> getRecipe() {
+    public Optional<RecipeAuraInfusion> getRecipe(boolean ignoreAura) {
         if (getLevel() == null)
             return Optional.empty();
-        return RecipeAuraInfusion.getRecipeFor(getLevel(), new AuraInfusionContainer(this.inv, this.auraProgress));
+        return RecipeAuraInfusion.getRecipeFor(getLevel(), new AuraInfusionContainer(this.inv, this.auraProgress), ignoreAura);
     }
 
-    public Optional<RecipeAuraInfusion> getRecipeIgnoringAura() {
-        if (getLevel() == null)
-            return Optional.empty();
-        return RecipeAuraInfusion.getRecipeFor(getLevel(), new AuraInfusionContainer(this.inv, this.auraProgress));
-    }
-
-    public static <T extends BlockEntity> void tick(Level level, BlockPos ignoredPos, BlockState ignoredState, T entity) {
+    public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T entity) {
         if (level.isClientSide())
             return;
 
         if (entity instanceof BlockEntityAuraInfuser infuser) {
             IAuraStorage storage = infuser.getAuraStorage().orElseThrow();
 
-            Optional<RecipeAuraInfusion> optionalRecipe = infuser.getRecipeIgnoringAura();
-            if (optionalRecipe.isEmpty()) return;
+            //FIXME: Cache current recipe
+            Optional<RecipeAuraInfusion> optionalRecipe = infuser.getRecipe(true);
+            if (optionalRecipe.isEmpty())
+                return;
             RecipeAuraInfusion recipe = optionalRecipe.get();
 
-            if (storage.getAura() > 0 && infuser.auraProgress < recipe.aura()) {
-                infuser.auraProgress++;
-                storage.setAura(storage.getAura() - 1);
+            if (storage.getAura() > 0 && infuser.auraProgress < recipe.aura) {
+                int auraToAdd = recipe.aura;
+                if (auraToAdd > storage.getAura())
+                    auraToAdd = storage.getAura();
+
+                infuser.auraProgress += auraToAdd;
+                storage.setAura(storage.getAura() - auraToAdd);
             }
 
-            if (infuser.auraProgress >= recipe.aura()) {
+            if (infuser.auraProgress >= recipe.aura) {
                 recipe.assemble(infuser);
+                level.sendBlockUpdated(pos, state, state, 2);
             }
         }
     }
