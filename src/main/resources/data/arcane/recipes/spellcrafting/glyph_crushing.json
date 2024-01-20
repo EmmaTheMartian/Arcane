@@ -1,0 +1,17 @@
+{
+  "type": "arcane:spellcrafting",
+  "center": {
+    "item": "minecraft:anvil"
+  },
+  "ingredients": [
+    { "item": "arcane:auraglass" },
+    { "item": "arcane:auraglass" },
+    { "item": "arcane:auraglass" },
+    { "item": "arcane:blue_gold_ingot" },
+    { "item": "arcane:blue_gold_ingot" },
+    { "item": "arcane:blue_gold_ingot" }
+  ],
+  "result": {
+    "item": "minecraft:diamond_block"
+  }
+}

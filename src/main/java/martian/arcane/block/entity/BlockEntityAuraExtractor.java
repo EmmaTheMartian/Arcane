@@ -44,7 +44,7 @@ public class BlockEntityAuraExtractor extends AbstractAuraBlockEntity {
     }
 
     @Override
-    public List<Component> getText(List<Component> text) {
+    public List<Component> getText(List<Component> text, boolean detailed) {
         boolean linked = targetPos != null;
 
         if (linked) {
@@ -55,7 +55,7 @@ public class BlockEntityAuraExtractor extends AbstractAuraBlockEntity {
                     .withStyle(ChatFormatting.DARK_RED));
         }
 
-        return super.getText(text);
+        return super.getText(text, detailed);
     }
 
     public static void setTarget(@NotNull BlockEntityAuraExtractor extractor, BlockEntityAuraInserter target) {

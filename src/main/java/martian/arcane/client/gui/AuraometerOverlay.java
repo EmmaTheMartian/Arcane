@@ -51,7 +51,7 @@ public class AuraometerOverlay implements IGuiOverlay {
 
             BlockEntity be = level.getBlockEntity(hit.getBlockPos());
             if (be instanceof IAuraometerOutput beAo) {
-                text = beAo.getText(text);
+                text = beAo.getText(text, player.isCrouching());
                 for (Component c : text) {
                     guiGraphics.drawString(font, c, x, y, 0xFFFFFF, true);
                     y += font.lineHeight + 2;

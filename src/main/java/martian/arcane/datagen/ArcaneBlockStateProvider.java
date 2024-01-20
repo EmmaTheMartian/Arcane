@@ -11,7 +11,6 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 
 public class ArcaneBlockStateProvider extends BlockStateProvider {
-    private static final ResourceLocation CUTOUT = new ResourceLocation("cutout");
     private static final ResourceLocation TRANSLUCENT = new ResourceLocation("translucent");
 
     public ArcaneBlockStateProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
@@ -25,6 +24,8 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
         makeBlockState(ArcaneBlocks.AURA_NODI);
         makeBlockState(ArcaneBlocks.AURA_BASIN);
         makeBlockState(ArcaneBlocks.AURA_INFUSER);
+        makeBlockState(ArcaneBlocks.ITEM_PYLON);
+        makeBlockState(ArcaneBlocks.SPELLCRAFTING_CORE);
     }
 
     private void makeBlockState(RegistryObject<Block> block) {
@@ -42,7 +43,9 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
                 block == ArcaneBlocks.AURA_INSERTER ||
                 block == ArcaneBlocks.AURA_NODI ||
                 block == ArcaneBlocks.AURA_BASIN ||
-                block == ArcaneBlocks.AURA_INFUSER
+                block == ArcaneBlocks.AURA_INFUSER ||
+                block == ArcaneBlocks.SPELLCRAFTING_CORE ||
+                block == ArcaneBlocks.ITEM_PYLON
         )
             return;
         // Basic translucent blocks
@@ -55,14 +58,11 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
             simpleBlock(block.get());
     }
 
-    private void simpleCutout(Block block) {
-        simpleBlockWithRenderType(block, CUTOUT);
-    }
-
     private void simpleTranslucent(Block block) {
         simpleBlockWithRenderType(block, TRANSLUCENT);
     }
 
+    @SuppressWarnings("SameParameterValue")
     private void simpleBlockWithRenderType(Block block, ResourceLocation renderType) {
         getVariantBuilder(block)
                 .partialState()

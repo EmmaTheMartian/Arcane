@@ -67,7 +67,7 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntity implements I
     }
 
     @Override
-    public List<Component> getText(List<Component> text) {
+    public List<Component> getText(List<Component> text, boolean detailed) {
         if (!getItem().isEmpty())
             text.add(Component.literal("Holding: ").append(getItem().getDisplayName()));
 
@@ -87,7 +87,7 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntity implements I
                     .withStyle(ChatFormatting.LIGHT_PURPLE));
         }
 
-        return super.getText(text);
+        return super.getText(text, detailed);
     }
 
     public ItemStack getItem() {

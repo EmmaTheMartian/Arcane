@@ -67,7 +67,7 @@ public abstract class AbstractAuraBlockEntity extends BlockEntity implements IAu
         return getAuraStorage().map(func);
     }
 
-    public List<Component> getText(List<Component> text) {
+    public List<Component> getText(List<Component> text, boolean detailed) {
         IAuraStorage aura = getAuraStorage().orElseThrow();
         text.add(Component
                 .translatable("messages.arcane.aura")

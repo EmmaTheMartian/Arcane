@@ -37,4 +37,14 @@ public class ArcaneBlockEntities extends ArcaneRegistry {
             BLOCK_ENTITIES.register("be_aura_infuser", () -> BlockEntityType.Builder
                     .of(BlockEntityAuraInfuser::new, ArcaneBlocks.AURA_INFUSER.get())
                     .build(null));
+
+    public static final RegistryObject<BlockEntityType<BlockEntitySpellcraftingCore>> SPELLCRAFTING_CORE_BE =
+            BLOCK_ENTITIES.register("be_spellcrafting_core", () -> BlockEntityType.Builder
+                    .of(BlockEntitySpellcraftingCore::new, ArcaneBlocks.SPELLCRAFTING_CORE.get())
+                    .build(null));
+
+    public static final RegistryObject<BlockEntityType<BlockEntityItemPylon>> ITEM_PYLON_BE =
+            BLOCK_ENTITIES.register("be_item_pylon", () -> BlockEntityType.Builder
+                    .of(BlockEntityItemPylon::new, ArcaneBlocks.ITEM_PYLON.get())
+                    .build(null));
 }

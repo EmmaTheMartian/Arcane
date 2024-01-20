@@ -22,6 +22,8 @@ public class ArcaneBlocks extends ArcaneRegistry {
     public static final RegistryObject<Block> AURA_INSERTER = registerBlock("aura_inserter", BlockAuraInserter::new);
     public static final RegistryObject<Block> AURA_BASIN = registerBlock("aura_basin", BlockAuraBasin::new);
     public static final RegistryObject<Block> AURA_INFUSER = registerBlock("aura_infuser", BlockAuraInfuser::new);
+    public static final RegistryObject<Block> SPELLCRAFTING_CORE = registerBlock("spellcrafting_core", BlockSpellcraftingCore::new);
+    public static final RegistryObject<Block> ITEM_PYLON = registerBlock("item_pylon", BlockItemPylon::new);
 
     // Helpers
     private static RegistryObject<Block> registerBlock(String id, Supplier<Block> sup) {
