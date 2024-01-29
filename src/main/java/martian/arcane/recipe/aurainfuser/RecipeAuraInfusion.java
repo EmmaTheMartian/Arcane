@@ -25,7 +25,7 @@ import java.util.Optional;
 @ParametersAreNonnullByDefault
 public class RecipeAuraInfusion implements Recipe<AuraInfusionContainer> {
     public static final String NAME = "aura_infusion";
-    public static final ResourceLocation ID = new ResourceLocation(ArcaneMod.MODID, NAME);
+    public static final ResourceLocation ID = ArcaneMod.id(NAME);
 
     public final ResourceLocation id;
     public final ItemStack input;

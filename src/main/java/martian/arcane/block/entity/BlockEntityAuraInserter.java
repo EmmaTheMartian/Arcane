@@ -15,8 +15,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.LazyOptional;
 
 public class BlockEntityAuraInserter extends AbstractAuraBlockEntity implements IAuraInserter {
+    public int insertRate;
+
+    public BlockEntityAuraInserter(int maxAura, int insertRate, BlockPos pos, BlockState state) {
+        super(maxAura, false, true, ArcaneBlockEntities.AURA_INSERTER.get(), pos, state);
+        this.insertRate = insertRate;
+    }
+
     public BlockEntityAuraInserter(BlockPos pos, BlockState state) {
-        super(ArcaneStaticConfig.AuraMaximums.AURA_INSERTER, false, true, ArcaneBlockEntities.AURA_INSERTER_BE.get(), pos, state);
+        super(ArcaneStaticConfig.Maximums.AURA_INSERTER, false, true, ArcaneBlockEntities.AURA_INSERTER.get(), pos, state);
+        this.insertRate = ArcaneStaticConfig.Rates.AURA_INSERTER_RATE;
     }
 
     public static <T extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState state, T blockEntity) {
@@ -35,7 +43,7 @@ public class BlockEntityAuraInserter extends AbstractAuraBlockEntity implements 
                 return;
 
             inserter.mapAuraStorage(aura -> {
-                aura.sendAuraTo(storage.resolve().orElseThrow(), -1);
+                aura.sendAuraTo(storage.resolve().orElseThrow(), inserter.insertRate);
                 return null;
             });
         }

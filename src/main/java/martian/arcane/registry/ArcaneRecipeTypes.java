@@ -3,7 +3,6 @@ package martian.arcane.registry;
 import martian.arcane.ArcaneMod;
 import martian.arcane.api.ArcaneRegistry;
 import martian.arcane.recipe.aurainfuser.RecipeAuraInfusion;
-import martian.arcane.recipe.spellcrafting.RecipeSpellcrafting;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.registries.DeferredRegister;
@@ -19,9 +18,4 @@ public class ArcaneRecipeTypes extends ArcaneRegistry {
             RECIPE_SERIALIZERS.register(RecipeAuraInfusion.NAME, RecipeAuraInfusion.Serializer::new);
     public static final RegistryObject<RecipeType<RecipeAuraInfusion>> AURA_INFUSION =
             RECIPE_TYPES.register(RecipeAuraInfusion.NAME, () -> RecipeType.simple(RecipeAuraInfusion.ID));
-
-    public static final RegistryObject<RecipeSerializer<RecipeSpellcrafting>> SPELLCRAFTING_SERIALIZER =
-            RECIPE_SERIALIZERS.register(RecipeSpellcrafting.NAME, RecipeSpellcrafting.Serializer::new);
-    public static final RegistryObject<RecipeType<RecipeSpellcrafting>> SPELLCRAFTING =
-            RECIPE_TYPES.register(RecipeSpellcrafting.NAME, () -> RecipeType.simple(RecipeSpellcrafting.ID));
 }

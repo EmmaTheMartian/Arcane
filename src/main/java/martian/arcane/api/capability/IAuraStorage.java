@@ -20,4 +20,8 @@ public interface IAuraStorage {
     void extractAuraFrom(IAuraStorage other, int maxExtract);
 
     void sendAuraTo(IAuraStorage other, int maxPush);
+
+    int addAura(int value);
+
+    int removeAura(int value);
 }

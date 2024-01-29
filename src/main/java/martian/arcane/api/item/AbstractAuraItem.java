@@ -1,7 +1,5 @@
 package martian.arcane.api.item;
 
-import martian.arcane.api.Raycasting;
-import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
 import martian.arcane.api.capability.AuraStorageItemProvider;
 import martian.arcane.api.capability.IAuraStorage;
 import martian.arcane.registry.ArcaneCapabilities;
@@ -9,16 +7,10 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FastColor;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.NotNull;
 
@@ -86,74 +78,5 @@ public abstract class AbstractAuraItem extends Item {
         text.add(Component.literal(
                 mapAuraStorage(stack, aura -> AURA_TEXT.formatted(aura.getAura(), aura.getMaxAura())).orElseThrow()
         ).withStyle(ChatFormatting.AQUA));
-    }
-
-    // Extract mana from another item or block
-    @Override
-    @NotNull
-    public InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand) {
-        ItemStack stack = player.getItemInHand(hand);
-        final IAuraStorage aura = getAuraStorage(stack).orElseThrow();
-
-        if (aura.getAura() >= aura.getMaxAura())
-            return InteractionResultHolder.pass(stack);
-
-        if (level.isClientSide())
-            return InteractionResultHolder.success(stack);
-
-        if (player.getOffhandItem().getCapability(ArcaneCapabilities.AURA_STORAGE).isPresent()) {
-            ItemStack other = stack == player.getMainHandItem() ? player.getOffhandItem() : player.getMainHandItem();
-            final IAuraStorage otherAura = getAuraStorage(other).orElseThrow();
-
-            if (otherAura.canExtract())
-            {
-                aura.extractAuraFrom(otherAura, -1);
-                player.sendSystemMessage(Component.translatable("messages.arcane.aura_extracted"));
-                return InteractionResultHolder.success(stack);
-            }
-            else {
-                player.sendSystemMessage(Component.translatable("messages.arcane.offhand_not_extractable"));
-                return InteractionResultHolder.fail(stack);
-            }
-        } else {
-            BlockHitResult hit = Raycasting.blockRaycast(player, player.getBlockReach(), false);
-            if (hit == null) {
-                return InteractionResultHolder.pass(stack);
-            }
-            BlockState block = level.getBlockState(hit.getBlockPos());
-
-            if (!block.hasBlockEntity())
-            {
-                player.sendSystemMessage(Component.translatable("messages.arcane.offhand_not_extractable"));
-                return InteractionResultHolder.fail(stack);
-            }
-
-            BlockEntity be = level.getBlockEntity(hit.getBlockPos());
-
-            if (be instanceof AbstractAuraBlockEntity auraBe) {
-                Optional<IAuraStorage> auraStorageOptional = auraBe.getAuraStorage();
-                if (auraStorageOptional.isEmpty()) {
-                    player.sendSystemMessage(Component.translatable("messages.arcane.offhand_not_extractable"));
-                    return InteractionResultHolder.fail(stack);
-                }
-
-                IAuraStorage blockAura = auraStorageOptional.get();
-
-                if (blockAura.getAura() <= 0)
-                {
-                    player.sendSystemMessage(Component.translatable("messages.arcane.out_of_aura"));
-                    return InteractionResultHolder.fail(stack);
-                }
-
-                aura.extractAuraFrom(blockAura, -1);
-                player.sendSystemMessage(Component.translatable("messages.arcane.aura_extracted"));
-                return InteractionResultHolder.success(stack);
-            }
-            else
-            {
-                player.sendSystemMessage(Component.translatable("messages.arcane.offhand_not_extractable"));
-                return InteractionResultHolder.fail(stack);
-            }
-        }
     }
 }

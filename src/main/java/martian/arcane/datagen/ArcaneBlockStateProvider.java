@@ -24,8 +24,6 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
         makeBlockState(ArcaneBlocks.AURA_NODI);
         makeBlockState(ArcaneBlocks.AURA_BASIN);
         makeBlockState(ArcaneBlocks.AURA_INFUSER);
-        makeBlockState(ArcaneBlocks.ITEM_PYLON);
-        makeBlockState(ArcaneBlocks.SPELLCRAFTING_CORE);
     }
 
     private void makeBlockState(RegistryObject<Block> block) {
@@ -41,11 +39,11 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
         if (
                 block == ArcaneBlocks.AURA_EXTRACTOR ||
                 block == ArcaneBlocks.AURA_INSERTER ||
+                block == ArcaneBlocks.IMPROVED_AURA_EXTRACTOR ||
+                block == ArcaneBlocks.IMPROVED_AURA_INSERTER ||
                 block == ArcaneBlocks.AURA_NODI ||
                 block == ArcaneBlocks.AURA_BASIN ||
-                block == ArcaneBlocks.AURA_INFUSER ||
-                block == ArcaneBlocks.SPELLCRAFTING_CORE ||
-                block == ArcaneBlocks.ITEM_PYLON
+                block == ArcaneBlocks.AURA_INFUSER
         )
             return;
         // Basic translucent blocks

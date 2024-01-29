@@ -59,4 +59,28 @@ public class NbtAuraStorage extends AuraStorage {
     public void setReceivable(boolean value) {
         getNbt().putBoolean(NBTHelpers.KEY_AURA_RECEIVABLE, value);
     }
+
+    @Override
+    public int addAura(int value) {
+        setAura(getAura() + value);
+        int aura = getAura();
+        if (aura > getMaxAura()) {
+            int overflow = aura - getMaxAura();
+            setAura(getMaxAura());
+            return overflow;
+        }
+        return 0;
+    }
+
+    @Override
+    public int removeAura(int value) {
+        setAura(getAura() - value);
+        int aura = getAura();
+        if (aura < 0) {
+            int underflow = Math.abs(aura);
+            setAura(0);
+            return underflow;
+        }
+        return 0;
+    }
 }

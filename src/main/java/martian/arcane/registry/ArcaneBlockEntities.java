@@ -13,38 +13,33 @@ import net.minecraftforge.registries.RegistryObject;
 public class ArcaneBlockEntities extends ArcaneRegistry {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, ArcaneMod.MODID);
 
-    public static final RegistryObject<BlockEntityType<BlockEntityAuraNodi>> AURA_NODI_BE =
+    public static final RegistryObject<BlockEntityType<BlockEntityAuraNodi>> AURA_NODI =
             BLOCK_ENTITIES.register("be_aura_nodi", () -> BlockEntityType.Builder
                 .of(BlockEntityAuraNodi::new, ArcaneBlocks.AURA_NODI.get())
                 .build(null));
 
-    public static final RegistryObject<BlockEntityType<BlockEntityAuraExtractor>> AURA_EXTRACTOR_BE =
+    public static final RegistryObject<BlockEntityType<BlockEntityAuraExtractor>> AURA_EXTRACTOR =
             BLOCK_ENTITIES.register("be_aura_extractor", () -> BlockEntityType.Builder
-                    .of(BlockEntityAuraExtractor::new, ArcaneBlocks.AURA_EXTRACTOR.get())
+                    .of(BlockEntityAuraExtractor::new, ArcaneBlocks.AURA_EXTRACTOR.get(), ArcaneBlocks.IMPROVED_AURA_EXTRACTOR.get())
                     .build(null));
 
-    public static final RegistryObject<BlockEntityType<BlockEntityAuraInserter>> AURA_INSERTER_BE =
+    public static final RegistryObject<BlockEntityType<BlockEntityAuraInserter>> AURA_INSERTER =
             BLOCK_ENTITIES.register("be_aura_inserter", () -> BlockEntityType.Builder
-                    .of(BlockEntityAuraInserter::new, ArcaneBlocks.AURA_INSERTER.get())
+                    .of(BlockEntityAuraInserter::new, ArcaneBlocks.AURA_INSERTER.get(), ArcaneBlocks.IMPROVED_AURA_INSERTER.get())
                     .build(null));
 
-    public static final RegistryObject<BlockEntityType<BlockEntityAuraBasin>> AURA_BASIN_BE =
+    public static final RegistryObject<BlockEntityType<BlockEntityAuraBasin>> AURA_BASIN =
             BLOCK_ENTITIES.register("be_aura_basin", () -> BlockEntityType.Builder
                     .of(BlockEntityAuraBasin::new, ArcaneBlocks.AURA_BASIN.get())
                     .build(null));
 
-    public static final RegistryObject<BlockEntityType<BlockEntityAuraInfuser>> AURA_INFUSER_BE =
+    public static final RegistryObject<BlockEntityType<BlockEntityAuraInfuser>> AURA_INFUSER =
             BLOCK_ENTITIES.register("be_aura_infuser", () -> BlockEntityType.Builder
                     .of(BlockEntityAuraInfuser::new, ArcaneBlocks.AURA_INFUSER.get())
                     .build(null));
 
-    public static final RegistryObject<BlockEntityType<BlockEntitySpellcraftingCore>> SPELLCRAFTING_CORE_BE =
-            BLOCK_ENTITIES.register("be_spellcrafting_core", () -> BlockEntityType.Builder
-                    .of(BlockEntitySpellcraftingCore::new, ArcaneBlocks.SPELLCRAFTING_CORE.get())
-                    .build(null));
-
-    public static final RegistryObject<BlockEntityType<BlockEntityItemPylon>> ITEM_PYLON_BE =
-            BLOCK_ENTITIES.register("be_item_pylon", () -> BlockEntityType.Builder
-                    .of(BlockEntityItemPylon::new, ArcaneBlocks.ITEM_PYLON.get())
+    public static final RegistryObject<BlockEntityType<BlockEntityIgnisCollector>> IGNIS_COLLECTOR =
+            BLOCK_ENTITIES.register("be_ignis_collector", () -> BlockEntityType.Builder
+                    .of(BlockEntityIgnisCollector::new, ArcaneBlocks.IGNIS_COLLECTOR.get())
                     .build(null));
 }

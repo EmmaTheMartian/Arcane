@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "item": "arcane:large_auraglass_bottle"
+    },
+    "B": {
+      "item": "arcane:aurachalcum_core"
+    }
+  },
+  "pattern": [
+    "BAB",
+    " B "
+  ],
+  "result": {
+    "item": "arcane:extreme_auraglass_bottle"
+  },
+  "show_notification": true
+}

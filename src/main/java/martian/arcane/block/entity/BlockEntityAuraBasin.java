@@ -8,6 +8,6 @@ import net.minecraft.world.level.block.state.BlockState;
 
 public class BlockEntityAuraBasin extends AbstractAuraBlockEntity {
     public BlockEntityAuraBasin(BlockPos pos, BlockState state) {
-        super(ArcaneStaticConfig.AuraMaximums.AURA_BASIN, true, true, ArcaneBlockEntities.AURA_BASIN_BE.get(), pos, state);
+        super(ArcaneStaticConfig.Maximums.AURA_BASIN, true, true, ArcaneBlockEntities.AURA_BASIN.get(), pos, state);
     }
 }

@@ -36,4 +36,18 @@ public class BlockEntityAuraStorage extends NbtAuraStorage {
         super.setReceivable(value);
         blockEntity.setChanged();
     }
+
+    @Override
+    public int addAura(int value) {
+        int overflow = super.addAura(value);
+        blockEntity.setChanged();
+        return overflow;
+    }
+
+    @Override
+    public int removeAura(int value) {
+        int underflow = super.removeAura(value);
+        blockEntity.setChanged();
+        return underflow;
+    }
 }

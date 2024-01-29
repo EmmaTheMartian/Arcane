@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": {
+      "item": "arcane:blue_gold_core"
+    },
+    "P": {
+      "item": "arcane:blue_gold_ingot"
+    }
+  },
+  "pattern": [
+    "  P",
+    " P ",
+    "C  "
+  ],
+  "result": {
+    "item": "arcane:wand_blue_gold"
+  },
+  "show_notification": true
+}

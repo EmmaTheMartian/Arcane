@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": {
+      "item": "arcane:blue_gold_ingot"
+    },
+    "C": {
+      "item": "arcane:blue_gold_core"
+    },
+    "O": {
+      "item": "minecraft:obsidian"
+    }
+  },
+  "pattern": [
+    "BCB",
+    "OOO"
+  ],
+  "result": {
+    "item": "arcane:aura_infuser"
+  },
+  "show_notification": true
+}

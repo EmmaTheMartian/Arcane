@@ -24,9 +24,16 @@ import java.util.List;
 public class BlockEntityAuraExtractor extends AbstractAuraBlockEntity {
     private LazyOptional<IAuraStorage> cachedTarget;
     public BlockPos targetPos;
+    public int extractRate;
+
+    public BlockEntityAuraExtractor(int maxAura, int extractRate, BlockPos pos, BlockState state) {
+        super(maxAura, false, false, ArcaneBlockEntities.AURA_EXTRACTOR.get(), pos, state);
+        this.extractRate = extractRate;
+    }
 
     public BlockEntityAuraExtractor(BlockPos pos, BlockState state) {
-        super(ArcaneStaticConfig.AuraMaximums.AURA_EXTRACTOR, false, false, ArcaneBlockEntities.AURA_EXTRACTOR_BE.get(), pos, state);
+        super(ArcaneStaticConfig.Maximums.AURA_EXTRACTOR, false, false, ArcaneBlockEntities.AURA_EXTRACTOR.get(), pos, state);
+        this.extractRate = ArcaneStaticConfig.Rates.AURA_EXTRACTOR_RATE;
     }
 
     @Override
@@ -95,10 +102,10 @@ public class BlockEntityAuraExtractor extends AbstractAuraBlockEntity {
 
                 LazyOptional<IAuraStorage> cap = e.getCapability(ArcaneCapabilities.AURA_STORAGE);
                 if (cap.isPresent() && cap.resolve().isPresent())
-                    storage.extractAuraFrom(cap.resolve().get(), ArcaneStaticConfig.Rates.AURA_EXTRACTOR_RATE);
+                    storage.extractAuraFrom(cap.resolve().get(), extractor.extractRate);
 
                 // Send to the target inserter
-                storage.sendAuraTo(target.resolve().orElseThrow(), -1);
+                storage.sendAuraTo(target.resolve().orElseThrow(), extractor.extractRate);
 
                 return null;
             });

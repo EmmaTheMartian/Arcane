@@ -1,9 +1,0 @@
-{
-  "multipart": [
-    {
-      "apply": {
-        "model": "arcane:block/spellcrafting_core"
-      }
-    }
-  ]
-}

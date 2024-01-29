@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": {
+      "item": "arcane:blue_gold_core"
+    },
+    "P": {
+      "item": "minecraft:jungle_planks"
+    }
+  },
+  "pattern": [
+    "  P",
+    " P ",
+    "C  "
+  ],
+  "result": {
+    "item": "arcane:wand_jungle"
+  },
+  "show_notification": true
+}

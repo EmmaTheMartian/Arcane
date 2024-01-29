@@ -10,9 +10,9 @@
     }
   },
   "pattern": [
+    " G ",
     "GBG",
-    "B B",
-    "GBG"
+    " G "
   ],
   "result": {
     "item": "arcane:blue_gold_core"

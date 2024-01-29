@@ -15,6 +15,7 @@ public final class NBTHelpers {
     public static final String KEY_WRENCH_P1 = ArcaneMod.MODID + ".wrench.p1";
     public static final String KEY_EXTRACTOR_TARGET_POS = ArcaneMod.MODID + ".targetPos";
     public static final String KEY_STACK = ArcaneMod.MODID + ".stack";
+    public static final String KEY_MODE = ArcaneMod.MODID + ".mode";
 
     public static void putBlockPos(CompoundTag nbt, String key, BlockPos pos) {
         nbt.putIntArray(key, new int[]{pos.getX(), pos.getY(), pos.getZ()});

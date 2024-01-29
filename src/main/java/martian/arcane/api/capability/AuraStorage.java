@@ -85,4 +85,26 @@ public class AuraStorage implements IAuraStorage {
         setAura(getAura() - auraToPush);
         other.setAura(other.getAura() + auraToPush);
     }
+
+    @Override
+    public int addAura(int value) {
+        currentAura += value;
+        if (currentAura > getMaxAura()) {
+            int overflow = currentAura - getMaxAura();
+            currentAura = getMaxAura();
+            return overflow;
+        }
+        return 0;
+    }
+
+    @Override
+    public int removeAura(int value) {
+        currentAura -= value;
+        if (currentAura < 0) {
+            int underflow = Math.abs(currentAura);
+            currentAura = 0;
+            return underflow;
+        }
+        return 0;
+    }
 }

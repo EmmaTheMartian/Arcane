@@ -10,9 +10,9 @@
     }
   },
   "pattern": [
+    " G ",
     "GAG",
-    "A A",
-    "GAG"
+    " G "
   ],
   "result": {
     "item": "arcane:aurachalcum_core"
