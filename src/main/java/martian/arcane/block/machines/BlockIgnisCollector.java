@@ -1,4 +1,4 @@
-package martian.arcane.block;
+package martian.arcane.block.machines;
 
 import martian.arcane.ArcaneStaticConfig;
 import martian.arcane.api.PropertyHelpers;

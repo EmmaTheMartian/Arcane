@@ -42,4 +42,9 @@ public class ArcaneBlockEntities extends ArcaneRegistry {
             BLOCK_ENTITIES.register("be_ignis_collector", () -> BlockEntityType.Builder
                     .of(BlockEntityIgnisCollector::new, ArcaneBlocks.IGNIS_COLLECTOR.get())
                     .build(null));
+
+    public static final RegistryObject<BlockEntityType<BlockEntityAquaCollector>> AQUA_COLLECTOR =
+            BLOCK_ENTITIES.register("be_aqua_collector", () -> BlockEntityType.Builder
+                    .of(BlockEntityAquaCollector::new, ArcaneBlocks.AQUA_COLLECTOR.get())
+                    .build(null));
 }

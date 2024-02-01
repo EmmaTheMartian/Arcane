@@ -16,10 +16,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemAuraWrench extends Item {
@@ -38,26 +38,35 @@ public class ItemAuraWrench extends Item {
         CompoundTag nbt = stack.getOrCreateTag();
         initNbt(nbt); // Init just-in-case
 
+        BlockHitResult hit = Raycasting.blockRaycast(player, player.getBlockReach(), false);
+
         if (player.isCrouching()) {
-            nbt.putBoolean(NBTHelpers.KEY_WRENCH_HASP1, false);
-            return InteractionResultHolder.success(stack);
+            if (hit == null) {
+                nbt.putBoolean(NBTHelpers.KEY_WRENCH_HASP1, false);
+                return InteractionResultHolder.success(stack);
+            }
+
+            BlockEntity l = level.getBlockEntity(hit.getBlockPos());
+            if (l instanceof BlockEntityAuraExtractor extractor) {
+                BlockEntityAuraExtractor.removeTarget(extractor);
+                BlockState state = level.getBlockState(hit.getBlockPos());
+                level.sendBlockUpdated(hit.getBlockPos(), state, state, 2);
+            }
         }
 
-        BlockHitResult hit = Raycasting.blockRaycast(player, player.getBlockReach(), false);
         if (hit == null)
             return InteractionResultHolder.fail(stack);
 
         if (nbt.getBoolean(NBTHelpers.KEY_WRENCH_HASP1)) {
             BlockEntity l = level.getBlockEntity(hit.getBlockPos());
-            if (l == null)
-                return InteractionResultHolder.fail(stack);
-
             if (l instanceof BlockEntityAuraInserter inserter) {
                 BlockPos pos1 = NBTHelpers.getBlockPos(nbt, NBTHelpers.KEY_WRENCH_P1);
                 BlockEntity e = level.getBlockEntity(pos1);
 
                 if (e instanceof BlockEntityAuraExtractor extractor) {
                     BlockEntityAuraExtractor.setTarget(extractor, inserter);
+                    BlockState state = level.getBlockState(pos1);
+                    level.sendBlockUpdated(hit.getBlockPos(), state, state, 2);
                     player.sendSystemMessage(Component.translatable("messages.arcane.linked"));
                     nbt.putBoolean(NBTHelpers.KEY_WRENCH_HASP1, false);
                     return InteractionResultHolder.success(stack);
@@ -65,8 +74,6 @@ public class ItemAuraWrench extends Item {
             }
         } else {
             BlockEntity e = level.getBlockEntity(hit.getBlockPos());
-            if (e == null)
-                return InteractionResultHolder.fail(stack);
             if (e instanceof BlockEntityAuraExtractor) {
                 nbt.putBoolean(NBTHelpers.KEY_WRENCH_HASP1, true);
                 NBTHelpers.putBlockPos(nbt, NBTHelpers.KEY_WRENCH_P1, hit.getBlockPos());
@@ -82,18 +89,16 @@ public class ItemAuraWrench extends Item {
     public void appendHoverText(ItemStack stack, Level level, @NotNull List<Component> text, @NotNull TooltipFlag flags) {
         CompoundTag nbt = stack.getOrCreateTag();
         initNbt(nbt);
-        if (nbt.getBoolean(NBTHelpers.KEY_WRENCH_HASP1))
-            text.add(Component.literal(
-                    "Position: " + NBTHelpers.getBlockPos(nbt, NBTHelpers.KEY_WRENCH_P1).toShortString()
-            ).withStyle(ChatFormatting.AQUA));
+        if (nbt.getBoolean(NBTHelpers.KEY_WRENCH_HASP1)) {
+            text.add(Component
+                    .translatable("messages.arcane.position")
+                    .append(NBTHelpers.getBlockPos(nbt, NBTHelpers.KEY_WRENCH_P1).toShortString())
+                    .withStyle(ChatFormatting.AQUA));
+        }
     }
 
     public static void initNbt(CompoundTag nbt) {
-        NBTHelpers.init(nbt, NBTHelpers.KEY_WRENCH_HASP1, (nbt_, key) -> {
-            nbt.putBoolean(key, false);
-        });
-        NBTHelpers.init(nbt, NBTHelpers.KEY_WRENCH_P1, (nbt_, key) -> {
-            NBTHelpers.putBlockPos(nbt, key, new BlockPos(0, 0, 0));
-        });
+        NBTHelpers.init(nbt, NBTHelpers.KEY_WRENCH_HASP1, (nbt_, key) -> nbt.putBoolean(key, false));
+        NBTHelpers.init(nbt, NBTHelpers.KEY_WRENCH_P1, (nbt_, key) -> NBTHelpers.putBlockPos(nbt, key, new BlockPos(0, 0, 0)));
     }
 }

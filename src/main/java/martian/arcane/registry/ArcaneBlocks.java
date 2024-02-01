@@ -4,6 +4,7 @@ import martian.arcane.ArcaneMod;
 import martian.arcane.ArcaneStaticConfig;
 import martian.arcane.api.ArcaneRegistry;
 import martian.arcane.block.*;
+import martian.arcane.block.machines.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -33,6 +34,9 @@ public class ArcaneBlocks extends ArcaneRegistry {
     public static final RegistryObject<Block> AURA_INFUSER = registerBlock("aura_infuser", BlockAuraInfuser::new);
 
     public static final RegistryObject<Block> IGNIS_COLLECTOR = registerBlock("ignis_collector", BlockIgnisCollector::new);
+    public static final RegistryObject<Block> AQUA_COLLECTOR = registerBlock("aqua_collector", BlockAquaCollector::new);
+
+    public static final RegistryObject<Block> SOUL_MAGMA = registerBlock("soul_magma", BlockSoulMagma::new);
 
     // Helpers
     private static RegistryObject<Block> registerBlock(String id, Supplier<Block> sup) {

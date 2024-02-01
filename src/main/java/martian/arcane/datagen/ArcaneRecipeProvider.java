@@ -1,5 +1,6 @@
 package martian.arcane.datagen;
 
+import martian.arcane.ArcaneMod;
 import martian.arcane.registry.ArcaneBlocks;
 import martian.arcane.registry.ArcaneItems;
 import net.minecraft.data.PackOutput;
@@ -7,7 +8,6 @@ import net.minecraft.data.recipes.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
-import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -61,6 +61,15 @@ public class ArcaneRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_item", has(ArcaneItems.BLUE_GOLD.get()))
                 .save(writer);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, ArcaneBlocks.AURA_INFUSER.get().asItem())
+                .pattern("BCB")
+                .pattern("OOO")
+                .define('B', ArcaneItems.BLUE_GOLD.get())
+                .define('C', ArcaneItems.BLUE_GOLD_CORE.get())
+                .define('O', Items.OBSIDIAN)
+                .unlockedBy("has_item", has(ArcaneItems.BLUE_GOLD.get()))
+                .save(writer);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, ArcaneBlocks.AURA_EXTRACTOR.get().asItem())
                 .pattern(" B ")
                 .pattern("SSS")
@@ -69,20 +78,33 @@ public class ArcaneRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_item", has(ArcaneItems.BLUE_GOLD.get()))
                 .save(writer);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, ArcaneBlocks.IGNIS_COLLECTOR.get().asItem())
+                .pattern("GIG")
+                .pattern("FCF")
+                .pattern("GIG")
+                .define('G', Items.GLASS)
+                .define('I', Items.IRON_INGOT)
+                .define('F', Items.FLINT)
+                .define('C', ArcaneItems.BLUE_GOLD_CORE.get())
+                .unlockedBy("has_item", has(ArcaneItems.BLUE_GOLD_CORE.get()))
+                .save(writer);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, ArcaneBlocks.AQUA_COLLECTOR.get().asItem())
+                .pattern("GIG")
+                .pattern("ICI")
+                .pattern("GWG")
+                .define('G', Items.GLASS)
+                .define('I', Items.IRON_INGOT)
+                .define('W', Items.WATER_BUCKET)
+                .define('C', ArcaneItems.BLUE_GOLD_CORE.get())
+                .unlockedBy("has_item", has(ArcaneItems.BLUE_GOLD_CORE.get()))
+                .save(writer);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, ArcaneBlocks.AURA_INSERTER.get().asItem())
                 .pattern("SSS")
                 .pattern(" B ")
                 .define('B', ArcaneItems.BLUE_GOLD.get())
                 .define('S', Tags.Items.STONE)
-                .unlockedBy("has_item", has(ArcaneItems.BLUE_GOLD.get()))
-                .save(writer);
-
-        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, ArcaneBlocks.AURA_INFUSER.get().asItem())
-                .pattern("BCB")
-                .pattern("OOO")
-                .define('B', ArcaneItems.BLUE_GOLD.get())
-                .define('C', ArcaneItems.BLUE_GOLD_CORE.get())
-                .define('O', Items.OBSIDIAN)
                 .unlockedBy("has_item", has(ArcaneItems.BLUE_GOLD.get()))
                 .save(writer);
 
@@ -105,22 +127,22 @@ public class ArcaneRecipeProvider extends RecipeProvider {
         ShapelessRecipeBuilder.shapeless(RecipeCategory.REDSTONE, ArcaneBlocks.AURA_EXTRACTOR.get().asItem())
                 .requires(ArcaneBlocks.AURA_INFUSER.get().asItem())
                 .unlockedBy("has_item", has(ArcaneBlocks.AURA_INFUSER.get()))
-                .save(writer);
+                .save(writer, ArcaneMod.id("aura_extractor_alt"));
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.REDSTONE, ArcaneBlocks.AURA_INSERTER.get().asItem())
                 .requires(ArcaneBlocks.AURA_EXTRACTOR.get().asItem())
                 .unlockedBy("has_item", has(ArcaneBlocks.AURA_EXTRACTOR.get()))
-                .save(writer);
+                .save(writer, ArcaneMod.id("aura_inserter_alt"));
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.REDSTONE, ArcaneBlocks.IMPROVED_AURA_EXTRACTOR.get().asItem())
                 .requires(ArcaneBlocks.IMPROVED_AURA_INSERTER.get().asItem())
                 .unlockedBy("has_item", has(ArcaneBlocks.IMPROVED_AURA_INSERTER.get()))
-                .save(writer);
+                .save(writer, ArcaneMod.id("improved_aura_extractor_alt"));
 
         ShapelessRecipeBuilder.shapeless(RecipeCategory.REDSTONE, ArcaneBlocks.IMPROVED_AURA_INSERTER.get().asItem())
                 .requires(ArcaneBlocks.IMPROVED_AURA_EXTRACTOR.get().asItem())
                 .unlockedBy("has_item", has(ArcaneBlocks.IMPROVED_AURA_EXTRACTOR.get()))
-                .save(writer);
+                .save(writer, ArcaneMod.id("improved_aura_inserter_alt"));
 
         // Aura Items
         ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ArcaneItems.AURA_WRENCH.get())

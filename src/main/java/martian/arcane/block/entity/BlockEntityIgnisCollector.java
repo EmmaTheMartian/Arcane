@@ -30,7 +30,7 @@ public class BlockEntityIgnisCollector extends AbstractAuraBlockEntity {
     public List<Component> getText(List<Component> text, boolean detailed) {
         if (level != null)
             text.add(Component
-                    .literal("Generating: ")
+                    .translatable("messages.arcane.generating")
                     .append(Integer.toString(getAuraToGenerate(level, getBlockPos())))
                     .withStyle(ChatFormatting.RED));
 
@@ -38,11 +38,7 @@ public class BlockEntityIgnisCollector extends AbstractAuraBlockEntity {
     }
 
     public static int getAuraToGenerate(Level level, BlockPos pos) {
-        BlockState blockBelow = level.getBlockState(pos.below());
-        if (blockBelow.is(ArcaneTags.IGNIS_HEAT_SOURCES)) {
-            return ArcaneMod.getIgnisGenAmountForState(blockBelow);
-        }
-        return 0;
+        return ArcaneMod.getIgnisGenAmountForState(level.getBlockState(pos.below()));
     }
 
     public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState ignoredState, T blockEntity) {

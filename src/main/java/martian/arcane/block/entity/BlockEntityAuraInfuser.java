@@ -81,12 +81,12 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntity implements I
     @Override
     public List<Component> getText(List<Component> text, boolean detailed) {
         if (!getItem().isEmpty())
-            text.add(Component.literal("Holding: ").append(getItem().getDisplayName()));
+            text.add(Component.translatable("messages.arcane.holding").append(getItem().getDisplayName()));
 
-        text.add(Component.literal("Mode: ")
+        text.add(Component.translatable("messages.arcane.mode")
                 .append(switch (mode) {
-                    case CRAFTING -> "Crafting";
-                    case INSERT_AURA -> "Inserting";
+                    case CRAFTING -> Component.translatable("messages.arcane.mode_crafting");
+                    case INSERT_AURA -> Component.translatable("messages.arcane.mode_filling");
                 }));
 
         if (mode == InfusionMode.CRAFTING) {
@@ -95,11 +95,11 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntity implements I
                 RecipeAuraInfusion recipe = optionalRecipe.get();
 
                 text.add(Component
-                        .literal("Crafting: ")
+                        .translatable("messages.arcane.crafting")
                         .append(recipe.result.getDisplayName()));
 
                 text.add(Component
-                        .literal("Infusing Progress: ")
+                        .translatable("messages.arcane.infusing_progress")
                         .append(Integer.toString(auraProgress))
                         .append("/")
                         .append(Integer.toString(recipe.aura))
@@ -110,7 +110,7 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntity implements I
             if (cap.isPresent()) {
                 IAuraStorage aura = cap.resolve().orElseThrow();
                 text.add(Component
-                        .literal("Item Aura: ")
+                        .translatable("messages.arcane.item_aura")
                         .append(Integer.toString(aura.getAura()))
                         .append("/")
                         .append(Integer.toString(aura.getMaxAura()))

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "A": {
+      "item": "arcane:aurachalcum_ingot"
+    },
+    "E": {
+      "item": "arcane:aura_extractor"
+    }
+  },
+  "pattern": [
+    " E ",
+    "AAA"
+  ],
+  "result": {
+    "item": "arcane:improved_aura_extractor"
+  },
+  "show_notification": true
+}

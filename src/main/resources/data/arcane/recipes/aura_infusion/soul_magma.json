@@ -1,0 +1,10 @@
+{
+  "type": "arcane:aura_infusion",
+  "input": {
+    "item": "minecraft:magma_block"
+  },
+  "result": {
+    "item": "arcane:soul_magma"
+  },
+  "aura": 128
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    {
+      "item": "arcane:improved_aura_inserter"
+    }
+  ],
+  "result": {
+    "item": "arcane:improved_aura_extractor"
+  }
+}

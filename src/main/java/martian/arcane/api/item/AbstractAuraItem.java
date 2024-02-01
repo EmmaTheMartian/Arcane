@@ -70,13 +70,17 @@ public abstract class AbstractAuraItem extends Item {
                 .orElse(color_highAura);
     }
 
-    private final String AURA_TEXT = "Aura: %s/%s";
-
     // Tooltip
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, List<Component> text, @NotNull TooltipFlag flags) {
-        text.add(Component.literal(
-                mapAuraStorage(stack, aura -> AURA_TEXT.formatted(aura.getAura(), aura.getMaxAura())).orElseThrow()
-        ).withStyle(ChatFormatting.AQUA));
+    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> text, @NotNull TooltipFlag flags) {
+        mapAuraStorage(stack, aura -> {
+            text.add(Component
+                    .translatable("messages.arcane.aura")
+                    .append(Integer.toString(aura.getAura()))
+                    .append(" / ")
+                    .append(Integer.toString(aura.getMaxAura()))
+                    .withStyle(ChatFormatting.AQUA));
+            return null;
+        });
     }
 }

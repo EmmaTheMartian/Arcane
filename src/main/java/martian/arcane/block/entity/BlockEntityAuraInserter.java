@@ -4,7 +4,7 @@ import martian.arcane.ArcaneStaticConfig;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
 import martian.arcane.api.block.entity.IAuraInserter;
 import martian.arcane.api.capability.IAuraStorage;
-import martian.arcane.block.BlockAuraExtractor;
+import martian.arcane.block.machines.BlockAuraExtractor;
 import martian.arcane.registry.ArcaneBlockEntities;
 import martian.arcane.registry.ArcaneCapabilities;
 import net.minecraft.core.BlockPos;

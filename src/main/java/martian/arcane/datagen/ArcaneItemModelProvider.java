@@ -8,6 +8,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ArcaneItemModelProvider extends ItemModelProvider {
     public ArcaneItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
@@ -25,7 +26,19 @@ public class ArcaneItemModelProvider extends ItemModelProvider {
     }
 
     private void blockItem(Item item) {
-        String path = DataGenUtils.name(item);
-        withExistingParent("item/" + path, new ResourceLocation(DataGenUtils.namespace(item), "block/" + path));
+        String path = name(item);
+        withExistingParent("item/" + path, new ResourceLocation(namespace(item), "block/" + path));
+    }
+
+    public static ResourceLocation key(Item item) {
+        return ForgeRegistries.ITEMS.getKey(item);
+    }
+
+    public static String name(Item item) {
+        return key(item).getPath();
+    }
+
+    public static String namespace(Item item) {
+        return key(item).getNamespace();
     }
 }

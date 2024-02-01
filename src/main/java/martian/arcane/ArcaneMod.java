@@ -20,7 +20,6 @@ import org.slf4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 
 @Mod(ArcaneMod.MODID)
@@ -44,14 +43,17 @@ public class ArcaneMod
         ArcaneRecipeTypes.RECIPE_SERIALIZERS.register(modBus);
         ArcaneTabs.TABS.register(modBus);
 
+        // TODO: Replace this with something data-driven
         ignisGenerationAmounts.put(state -> state.is(Blocks.FIRE), 1);
         ignisGenerationAmounts.put(state -> state.is(Blocks.CAMPFIRE) && state.getValue(CampfireBlock.LIT), 1);
         ignisGenerationAmounts.put(state -> state.is(Blocks.LAVA_CAULDRON), 1);
-        ignisGenerationAmounts.put(state -> state.is(Blocks.SOUL_FIRE), 1);
-        ignisGenerationAmounts.put(state -> state.is(Blocks.SOUL_CAMPFIRE) && state.getValue(CampfireBlock.LIT), 1);
+        ignisGenerationAmounts.put(state -> state.is(Blocks.MAGMA_BLOCK), 1);
         ignisGenerationAmounts.put(state -> state.is(Blocks.FURNACE) && state.getValue(FurnaceBlock.LIT), 1);
-        ignisGenerationAmounts.put(state -> state.is(Blocks.BLAST_FURNACE) && state.getValue(BlastFurnaceBlock.LIT), 1);
+        ignisGenerationAmounts.put(state -> state.is(Blocks.BLAST_FURNACE) && state.getValue(BlastFurnaceBlock.LIT), 2);
+        ignisGenerationAmounts.put(state -> state.is(Blocks.SOUL_FIRE), 2);
+        ignisGenerationAmounts.put(state -> state.is(Blocks.SOUL_CAMPFIRE) && state.getValue(CampfireBlock.LIT), 2);
         ignisGenerationAmounts.put(state -> state.is(Blocks.LAVA), 2);
+        ignisGenerationAmounts.put(state -> state.is(ArcaneBlocks.SOUL_MAGMA.get()), 3);
 
         modBus.addListener(EventPriority.LOWEST, ArcaneDatagen::gatherData);
 

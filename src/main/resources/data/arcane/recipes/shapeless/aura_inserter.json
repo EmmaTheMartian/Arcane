@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "arcane:aura_extractor"
+    }
+  ],
+  "result": {
+    "item": "arcane:aura_inserter"
+  }
+}

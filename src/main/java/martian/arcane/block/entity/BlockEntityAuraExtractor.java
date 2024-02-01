@@ -1,11 +1,12 @@
 package martian.arcane.block.entity;
 
 import martian.arcane.ArcaneStaticConfig;
+import martian.arcane.ArcaneTags;
 import martian.arcane.api.NBTHelpers;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
 import martian.arcane.api.block.entity.IAuraInserter;
 import martian.arcane.api.capability.IAuraStorage;
-import martian.arcane.block.BlockAuraExtractor;
+import martian.arcane.block.machines.BlockAuraExtractor;
 import martian.arcane.registry.ArcaneBlockEntities;
 import martian.arcane.registry.ArcaneCapabilities;
 import net.minecraft.ChatFormatting;
@@ -65,8 +66,18 @@ public class BlockEntityAuraExtractor extends AbstractAuraBlockEntity {
         return super.getText(text, detailed);
     }
 
+    public boolean validateTarget(Level level) {
+        BlockState target = level.getBlockState(targetPos);
+        return target.is(ArcaneTags.AURA_INSERTERS);
+    }
+
     public static void setTarget(@NotNull BlockEntityAuraExtractor extractor, BlockEntityAuraInserter target) {
         extractor.targetPos = target.getBlockPos();
+    }
+
+    public static void removeTarget(@NotNull BlockEntityAuraExtractor extractor) {
+        extractor.targetPos = null;
+        extractor.cachedTarget = LazyOptional.empty();
     }
 
     public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T blockEntity) {
@@ -74,18 +85,25 @@ public class BlockEntityAuraExtractor extends AbstractAuraBlockEntity {
             if (extractor.targetPos == null)
                 return;
 
-            LazyOptional<IAuraStorage> target;
-            if (extractor.cachedTarget != null)
-                target = extractor.cachedTarget;
-            else {
-                BlockEntity e = level.getBlockEntity(extractor.targetPos);
-                if (e instanceof IAuraInserter) {
-                    target = e.getCapability(ArcaneCapabilities.AURA_STORAGE);
-                    if (extractor.cachedTarget == null)
-                        extractor.cachedTarget = target;
-                }
+            if (!extractor.validateTarget(level)) {
+                removeTarget(extractor);
+                level.sendBlockUpdated(pos, state, state, 2);
                 return;
             }
+
+            LazyOptional<IAuraStorage> target;
+            if (extractor.cachedTarget == null) {
+                BlockEntity e = level.getBlockEntity(extractor.targetPos);
+                if (e instanceof IAuraInserter && extractor.cachedTarget == null) {
+                    LazyOptional<IAuraStorage> cap = e.getCapability(ArcaneCapabilities.AURA_STORAGE);
+                    if (cap.isPresent()) {
+                        extractor.cachedTarget = cap;
+                    } else {
+                        return;
+                    }
+                }
+            }
+            target = extractor.cachedTarget;
 
             if (!target.isPresent())
                 return;
