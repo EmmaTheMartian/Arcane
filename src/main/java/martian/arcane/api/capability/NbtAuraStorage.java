@@ -20,8 +20,8 @@ public class NbtAuraStorage extends AuraStorage {
             nbt.putInt(NBTHelpers.KEY_AURA, 0);
         if (!nbt.contains(NBTHelpers.KEY_AURA_EXTRACTABLE))
             nbt.putBoolean(NBTHelpers.KEY_AURA_EXTRACTABLE, this.extractable);
-        if (!nbt.contains(NBTHelpers.KEY_AURA_RECEIVABLE))
-            nbt.putBoolean(NBTHelpers.KEY_AURA_RECEIVABLE, this.receivable);
+        if (!nbt.contains(NBTHelpers.KEY_AURA_INSERTABLE))
+            nbt.putBoolean(NBTHelpers.KEY_AURA_INSERTABLE, this.insertable);
         return nbt;
     }
 
@@ -36,8 +36,8 @@ public class NbtAuraStorage extends AuraStorage {
     }
 
     @Override
-    public boolean canReceive() {
-        return getNbt().getBoolean(NBTHelpers.KEY_AURA_RECEIVABLE);
+    public boolean canInsert() {
+        return getNbt().getBoolean(NBTHelpers.KEY_AURA_INSERTABLE);
     }
 
     @Override
@@ -56,8 +56,8 @@ public class NbtAuraStorage extends AuraStorage {
     }
 
     @Override
-    public void setReceivable(boolean value) {
-        getNbt().putBoolean(NBTHelpers.KEY_AURA_RECEIVABLE, value);
+    public void setInsertable(boolean value) {
+        getNbt().putBoolean(NBTHelpers.KEY_AURA_INSERTABLE, value);
     }
 
     @Override

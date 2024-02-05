@@ -1,7 +1,8 @@
-package martian.arcane.recipe.aurainfuser;
+package martian.arcane.recipe;
 
 import com.google.gson.JsonObject;
 import martian.arcane.ArcaneMod;
+import martian.arcane.api.recipe.SimpleContainer;
 import martian.arcane.block.entity.BlockEntityAuraInfuser;
 import martian.arcane.registry.ArcaneRecipeTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -15,6 +16,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.items.IItemHandlerModifiable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -23,7 +25,7 @@ import java.util.Optional;
 // Input ItemStack must have a count of 1!
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public class RecipeAuraInfusion implements Recipe<AuraInfusionContainer> {
+public class RecipeAuraInfusion implements Recipe<RecipeAuraInfusion.Container> {
     public static final String NAME = "aura_infusion";
     public static final ResourceLocation ID = ArcaneMod.id(NAME);
 
@@ -40,16 +42,17 @@ public class RecipeAuraInfusion implements Recipe<AuraInfusionContainer> {
     }
 
     @Override
-    public boolean matches(AuraInfusionContainer container, Level level) {
+    public boolean matches(Container container, Level level) {
         return this.matchesWithoutAuraCost(container, level) && container.aura >= this.aura;
     }
 
-    public boolean matchesWithoutAuraCost(AuraInfusionContainer container, Level ignoredLevel) {
+    public boolean matchesWithoutAuraCost(Container container, Level ignoredLevel) {
         return this.input.is(container.getItem().getItem());
     }
 
     @Override
-    public ItemStack assemble(AuraInfusionContainer container, RegistryAccess access) {
+    @Deprecated
+    public ItemStack assemble(Container container, RegistryAccess access) {
         return ItemStack.EMPTY;
     }
 
@@ -83,11 +86,11 @@ public class RecipeAuraInfusion implements Recipe<AuraInfusionContainer> {
         return ArcaneRecipeTypes.AURA_INFUSION.get();
     }
 
-    public static Optional<RecipeAuraInfusion> getRecipeFor(Level level, AuraInfusionContainer container) {
+    public static Optional<RecipeAuraInfusion> getRecipeFor(Level level, Container container) {
         return getRecipeFor(level, container, false);
     }
 
-    public static Optional<RecipeAuraInfusion> getRecipeFor(Level level, AuraInfusionContainer container, boolean ignoreAuraCost) {
+    public static Optional<RecipeAuraInfusion> getRecipeFor(Level level, Container container, boolean ignoreAuraCost) {
         return getAllRecipes(level)
                 .stream()
                 .filter(recipe -> ignoreAuraCost ?
@@ -124,6 +127,15 @@ public class RecipeAuraInfusion implements Recipe<AuraInfusionContainer> {
             buf.writeItemStack(recipe.input, false);
             buf.writeItemStack(recipe.result, false);
             buf.writeInt(recipe.aura);
+        }
+    }
+
+    public static class Container extends SimpleContainer {
+        public final int aura;
+
+        public Container(IItemHandlerModifiable items, int aura) {
+            super(items);
+            this.aura = aura;
         }
     }
 }

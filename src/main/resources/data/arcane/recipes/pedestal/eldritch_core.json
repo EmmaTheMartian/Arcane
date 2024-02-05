@@ -1,0 +1,13 @@
+{
+  "type": "arcane:pedestal",
+  "input": {
+    "item": "arcane:eldritch_alloy"
+  },
+  "interaction_input": {
+    "item": "minecraft:glass"
+  },
+  "consume": true,
+  "result": {
+    "item": "arcane:eldritch_core"
+  }
+}

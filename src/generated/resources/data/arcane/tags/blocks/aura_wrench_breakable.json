@@ -1,0 +1,12 @@
+{
+  "values": [
+    "arcane:aura_extractor",
+    "arcane:aura_inserter",
+    "arcane:improved_aura_extractor",
+    "arcane:improved_aura_inserter",
+    "arcane:aura_basin",
+    "arcane:aura_infuser",
+    "arcane:ignis_collector",
+    "arcane:aqua_collector"
+  ]
+}

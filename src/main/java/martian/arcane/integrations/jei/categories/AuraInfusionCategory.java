@@ -2,7 +2,7 @@ package martian.arcane.integrations.jei.categories;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import martian.arcane.integrations.jei.ArcaneJeiPlugin;
-import martian.arcane.recipe.aurainfuser.RecipeAuraInfusion;
+import martian.arcane.recipe.RecipeAuraInfusion;
 import martian.arcane.registry.ArcaneBlocks;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;

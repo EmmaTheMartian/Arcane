@@ -5,7 +5,7 @@ public interface IAuraStorage {
 
     boolean canExtract();
 
-    boolean canReceive();
+    boolean canInsert();
 
     int getMaxAura();
 
@@ -15,7 +15,7 @@ public interface IAuraStorage {
 
     void setExtractable(boolean value);
 
-    void setReceivable(boolean value);
+    void setInsertable(boolean value);
 
     void extractAuraFrom(IAuraStorage other, int maxExtract);
 

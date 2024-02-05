@@ -1,12 +1,14 @@
 package martian.arcane.datagen;
 
 import martian.arcane.ArcaneMod;
+import martian.arcane.item.ItemAuraWand;
 import martian.arcane.registry.ArcaneItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
+import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -20,9 +22,17 @@ public class ArcaneItemModelProvider extends ItemModelProvider {
         ArcaneItems.ITEMS.getEntries().forEach(item -> {
             if (item.get() instanceof BlockItem)
                 blockItem(item.get());
+            else if (item.get() instanceof ItemAuraWand)
+                itemWithTexturePath(item.get());
             else
                 basicItem(item.get());
         });
+    }
+
+    private void itemWithTexturePath(Item item) {
+        getBuilder(item.toString())
+                .parent(new ModelFile.UncheckedModelFile("item/generated"))
+                .texture("layer0", namespace(item) + ":item/wands/" + name(item));
     }
 
     private void blockItem(Item item) {

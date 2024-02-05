@@ -35,6 +35,7 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
         makeBlockState(ArcaneBlocks.IGNIS_COLLECTOR);
         makeBlockState(ArcaneBlocks.AQUA_COLLECTOR);
         makeBlockState(ArcaneBlocks.SOUL_MAGMA);
+        makeBlockState(ArcaneBlocks.PEDESTAL);
     }
 
     private void makeBlockState(RegistryObject<Block> block) {

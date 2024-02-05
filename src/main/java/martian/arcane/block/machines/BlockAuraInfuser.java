@@ -6,6 +6,7 @@ import martian.arcane.block.entity.BlockEntityAuraInfuser;
 import martian.arcane.registry.ArcaneBlockEntities;
 import martian.arcane.registry.ArcaneItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -62,7 +63,7 @@ public class BlockAuraInfuser extends AbstractAuraMachine {
             } else if (!infuser.getItem().isEmpty()) {
                 player.getInventory().placeItemBackInInventory(infuser.getItem());
                 infuser.setItem(ItemStack.EMPTY);
-            } else if (!stack.isEmpty()) {
+            } else if (!stack.isEmpty() && infuser.getItem().isEmpty()) {
                 infuser.setItem(stack.copyWithCount(1));
                 stack.shrink(1);
             }
@@ -71,5 +72,16 @@ public class BlockAuraInfuser extends AbstractAuraMachine {
         }
 
         return InteractionResult.CONSUME;
+    }
+
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onRemove(BlockState state, @NotNull Level level, @NotNull BlockPos pos, BlockState newState, boolean movedByPiston) {
+        if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof BlockEntityAuraInfuser infuser) {
+            Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), infuser.getItem());
+            // Note: If comparator support is added for this then it'll need to be updated here
+            // See ChestBlock#onRemove
+        }
+        super.onRemove(state, level, pos, newState, movedByPiston);
     }
 }

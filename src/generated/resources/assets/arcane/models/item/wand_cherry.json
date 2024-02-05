@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "arcane:item/wand_cherry"
+    "layer0": "arcane:item/wands/wand_cherry"
   }
 }

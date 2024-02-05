@@ -13,6 +13,7 @@ object Properties {
     const val JEI_VERSION = "15.2.0.27"
     const val PARCHMENT_VERSION = "1.20.1:2023.09.03"
     const val EMI_VERSION = "1.1.0+1.20.1"
+    const val JADE_VERSION = "5072729" // 1.20.1-forge-11.8.0
 
     const val MOD_VERSION = "1.0.0"
     const val MOD_LICENSE = "MIT"
@@ -65,6 +66,8 @@ repositories {
     maven("https://modmaven.dev") { name = "ModMaven" }
     // EMI
     maven("https://maven.terraformersmc.com") { name = "TerraformersMC" }
+    // Jade
+    maven("https://www.cursemaven.com") { mavenContent { includeGroup("curse.maven") } }
 }
 
 dependencies {
@@ -85,6 +88,10 @@ dependencies {
     // EMI
     modCompileOnly("dev.emi:emi-forge:${Properties.EMI_VERSION}:api")
     modRuntimeOnly("dev.emi:emi-forge:${Properties.EMI_VERSION}")
+
+    // Jade
+    modCompileOnly("curse.maven:jade-324717:${Properties.JADE_VERSION}")
+    modRuntimeOnly("curse.maven:jade-324717:${Properties.JADE_VERSION}")
 }
 
 tasks.processResources {

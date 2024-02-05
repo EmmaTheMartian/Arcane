@@ -10,12 +10,13 @@ public final class NBTHelpers {
     public static final String KEY_AURA = ArcaneMod.MODID + ".aura";
     public static final String KEY_MAX_AURA = ArcaneMod.MODID + ".maxAura";
     public static final String KEY_AURA_EXTRACTABLE = ArcaneMod.MODID + ".canExtractAura";
-    public static final String KEY_AURA_RECEIVABLE = ArcaneMod.MODID + ".canReceive";
-    public static final String KEY_WRENCH_HASP1 = ArcaneMod.MODID + ".wrench.hasp1";
-    public static final String KEY_WRENCH_P1 = ArcaneMod.MODID + ".wrench.p1";
+    public static final String KEY_AURA_INSERTABLE = ArcaneMod.MODID + ".canInsertAura";
+    public static final String KEY_CONFIGURATOR_HASP1 = ArcaneMod.MODID + ".configurator.hasp1";
+    public static final String KEY_CONFIGURATOR_P1 = ArcaneMod.MODID + ".configurator.p1";
     public static final String KEY_EXTRACTOR_TARGET_POS = ArcaneMod.MODID + ".targetPos";
     public static final String KEY_STACK = ArcaneMod.MODID + ".stack";
     public static final String KEY_MODE = ArcaneMod.MODID + ".mode";
+    public static final String KEY_SPELL = ArcaneMod.MODID + ".spell";
 
     public static void putBlockPos(CompoundTag nbt, String key, BlockPos pos) {
         nbt.putIntArray(key, new int[]{pos.getX(), pos.getY(), pos.getZ()});

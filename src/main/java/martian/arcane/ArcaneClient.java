@@ -2,6 +2,7 @@ package martian.arcane;
 
 import martian.arcane.client.renderers.be.AuraInfuserRenderer;
 import martian.arcane.client.gui.AuraometerOverlay;
+import martian.arcane.client.renderers.be.PedestalRenderer;
 import martian.arcane.registry.ArcaneBlockEntities;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
@@ -20,5 +21,6 @@ public class ArcaneClient {
     @SubscribeEvent
     public static void registerBlockEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(ArcaneBlockEntities.AURA_INFUSER.get(), AuraInfuserRenderer::new);
+        event.registerBlockEntityRenderer(ArcaneBlockEntities.PEDESTAL.get(), PedestalRenderer::new);
     }
 }

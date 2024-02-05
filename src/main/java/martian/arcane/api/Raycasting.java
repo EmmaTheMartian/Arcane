@@ -13,4 +13,8 @@ public class Raycasting {
         }
         return (BlockHitResult)hit;
     }
+
+    public static HitResult raycast(Entity entity, double reach, boolean hitFluids) {
+        return entity.pick(reach, 0, hitFluids);
+    }
 }

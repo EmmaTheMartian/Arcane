@@ -2,7 +2,9 @@ package martian.arcane.registry;
 
 import martian.arcane.ArcaneMod;
 import martian.arcane.api.ArcaneRegistry;
-import martian.arcane.recipe.aurainfuser.RecipeAuraInfusion;
+import martian.arcane.recipe.RecipeAuraInfusion;
+import martian.arcane.recipe.RecipeHammering;
+import martian.arcane.recipe.RecipePedestalCrafting;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.registries.DeferredRegister;
@@ -18,4 +20,14 @@ public class ArcaneRecipeTypes extends ArcaneRegistry {
             RECIPE_SERIALIZERS.register(RecipeAuraInfusion.NAME, RecipeAuraInfusion.Serializer::new);
     public static final RegistryObject<RecipeType<RecipeAuraInfusion>> AURA_INFUSION =
             RECIPE_TYPES.register(RecipeAuraInfusion.NAME, () -> RecipeType.simple(RecipeAuraInfusion.ID));
+
+    public static final RegistryObject<RecipeSerializer<RecipeHammering>> HAMMERING_SERIALIZER =
+            RECIPE_SERIALIZERS.register(RecipeHammering.NAME, RecipeHammering.Serializer::new);
+    public static final RegistryObject<RecipeType<RecipeHammering>> HAMMERING =
+            RECIPE_TYPES.register(RecipeHammering.NAME, () -> RecipeType.simple(RecipeHammering.ID));
+
+    public static final RegistryObject<RecipeSerializer<RecipePedestalCrafting>> PEDESTAL_SERIALIZER =
+            RECIPE_SERIALIZERS.register(RecipePedestalCrafting.NAME, RecipePedestalCrafting.Serializer::new);
+    public static final RegistryObject<RecipeType<RecipePedestalCrafting>> PEDESTAL =
+            RECIPE_TYPES.register(RecipePedestalCrafting.NAME, () -> RecipeType.simple(RecipePedestalCrafting.ID));
 }

@@ -1,6 +1,7 @@
 package martian.arcane.datagen;
 
 import martian.arcane.ArcaneMod;
+import martian.arcane.ArcaneTags;
 import martian.arcane.registry.ArcaneBlocks;
 import martian.arcane.registry.ArcaneItems;
 import net.minecraft.data.PackOutput;
@@ -153,6 +154,15 @@ public class ArcaneRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_item", has(ArcaneItems.BLUE_GOLD.get()))
                 .save(writer);
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ArcaneItems.AURA_CONFIGURATOR.get())
+                .pattern("B B")
+                .pattern(" I ")
+                .pattern(" B ")
+                .define('B', ArcaneItems.BLUE_GOLD.get())
+                .define('I', Items.IRON_INGOT)
+                .unlockedBy("has_item", has(ArcaneItems.BLUE_GOLD.get()))
+                .save(writer);
+
         ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ArcaneItems.AURAOMETER.get())
                 .pattern(" R ")
                 .pattern(" B ")
@@ -209,16 +219,24 @@ public class ArcaneRecipeProvider extends RecipeProvider {
             wands.forEach((wandItem, output) -> wandRecipe(ArcaneItems.BLUE_GOLD_CORE.get(), wandItem, output, writer));
         }
 
-        wandRecipe(ArcaneItems.AURACHALCUM_CORE.get(), ArcaneItems.BLUE_GOLD.get(), ArcaneItems.WAND_BLUE_GOLD.get(), writer);
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ArcaneItems.WAND_BLUE_GOLD.get())
+                .pattern("  D")
+                .pattern(" W ")
+                .pattern("C  ")
+                .define('D', Items.DIAMOND)
+                .define('W', ArcaneTags.BASIC_WANDS)
+                .define('C', ArcaneItems.AURACHALCUM_CORE.get())
+                .unlockedBy("has_item", has(ArcaneItems.AURACHALCUM_CORE.get()))
+                .save(writer);
     }
 
-    private void wandRecipe(Item coreItem, Item wandItem, Item output, @NotNull Consumer<FinishedRecipe> writer) {
+    private void wandRecipe(Item coreItem, Item stickItem, Item output, @NotNull Consumer<FinishedRecipe> writer) {
         ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, output)
                 .pattern("  P")
                 .pattern(" P ")
                 .pattern("C  ")
                 .define('C', coreItem)
-                .define('P', wandItem)
+                .define('P', stickItem)
                 .unlockedBy("has_item", has(coreItem))
                 .save(writer);
     }

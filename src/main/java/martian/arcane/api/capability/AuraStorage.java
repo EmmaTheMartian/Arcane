@@ -6,12 +6,12 @@ public class AuraStorage implements IAuraStorage {
     /* If this storage can have aura extracted from it */
     protected boolean extractable;
     /* If this storage can have aura sent to it */
-    protected boolean receivable;
+    protected boolean insertable;
 
     public AuraStorage(int maxAura, boolean extractable, boolean receivable) {
         this.maxAura = maxAura;
         this.extractable = extractable;
-        this.receivable = receivable;
+        this.insertable = receivable;
     }
 
     @Override
@@ -25,8 +25,8 @@ public class AuraStorage implements IAuraStorage {
     }
 
     @Override
-    public boolean canReceive() {
-        return receivable;
+    public boolean canInsert() {
+        return insertable;
     }
 
     @Override
@@ -50,8 +50,8 @@ public class AuraStorage implements IAuraStorage {
     }
 
     @Override
-    public void setReceivable(boolean value) {
-        receivable = value;
+    public void setInsertable(boolean value) {
+        insertable = value;
     }
 
     @Override
@@ -72,7 +72,7 @@ public class AuraStorage implements IAuraStorage {
 
     @Override
     public void sendAuraTo(IAuraStorage other, int maxPush) {
-        if (!other.canReceive() || other.getAura() >= other.getMaxAura()) {
+        if (!other.canInsert() || other.getAura() >= other.getMaxAura()) {
             return;
         }
 

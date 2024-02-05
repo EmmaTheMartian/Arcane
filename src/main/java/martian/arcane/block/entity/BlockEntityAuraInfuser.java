@@ -4,8 +4,7 @@ import martian.arcane.api.NBTHelpers;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
 import martian.arcane.api.block.entity.IAuraometerOutput;
 import martian.arcane.api.capability.IAuraStorage;
-import martian.arcane.recipe.aurainfuser.AuraInfusionContainer;
-import martian.arcane.recipe.aurainfuser.RecipeAuraInfusion;
+import martian.arcane.recipe.RecipeAuraInfusion;
 import martian.arcane.registry.ArcaneBlockEntities;
 import martian.arcane.registry.ArcaneCapabilities;
 import net.minecraft.ChatFormatting;
@@ -139,7 +138,7 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntity implements I
     public Optional<RecipeAuraInfusion> getRecipe(boolean ignoreAura) {
         if (getLevel() == null)
             return Optional.empty();
-        return RecipeAuraInfusion.getRecipeFor(getLevel(), new AuraInfusionContainer(this.inv, this.auraProgress), ignoreAura);
+        return RecipeAuraInfusion.getRecipeFor(getLevel(), new RecipeAuraInfusion.Container(this.inv, this.auraProgress), ignoreAura);
     }
 
     public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T entity) {

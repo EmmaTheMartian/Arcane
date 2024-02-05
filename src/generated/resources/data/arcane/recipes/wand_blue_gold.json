@@ -5,13 +5,16 @@
     "C": {
       "item": "arcane:aurachalcum_core"
     },
-    "P": {
-      "item": "arcane:blue_gold_ingot"
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "W": {
+      "tag": "arcane:basic_wands"
     }
   },
   "pattern": [
-    "  P",
-    " P ",
+    "  D",
+    " W ",
     "C  "
   ],
   "result": {

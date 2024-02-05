@@ -18,30 +18,30 @@ import java.util.function.Supplier;
 public class ArcaneBlocks extends ArcaneRegistry {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ArcaneMod.MODID);
 
-    public static final RegistryObject<Block> AURA_NODI = registerBlock("aura_nodi", BlockAuraNodi::new);
-    public static final RegistryObject<Block> AURAGLASS = registerBlock("auraglass", () -> new Block(BlockBehaviour.Properties.copy(Blocks.GLASS).noOcclusion()));
+    public static final RegistryObject<Block> AURA_NODI = register("aura_nodi", BlockAuraNodi::new);
 
-    public static final RegistryObject<Block> AURA_EXTRACTOR = registerBlock("aura_extractor", () ->
-            new BlockAuraExtractor(ArcaneStaticConfig.Maximums.AURA_EXTRACTOR, ArcaneStaticConfig.Rates.AURA_EXTRACTOR_RATE));
-    public static final RegistryObject<Block> AURA_INSERTER = registerBlock("aura_inserter", () ->
-            new BlockAuraInserter(ArcaneStaticConfig.Maximums.AURA_INSERTER, ArcaneStaticConfig.Rates.AURA_INSERTER_RATE));
-    public static final RegistryObject<Block> IMPROVED_AURA_EXTRACTOR = registerBlock("improved_aura_extractor", () ->
-            new BlockAuraExtractor(ArcaneStaticConfig.Maximums.IMPROVED_AURA_EXTRACTOR, ArcaneStaticConfig.Rates.IMPROVED_AURA_EXTRACTOR_RATE));
-    public static final RegistryObject<Block> IMPROVED_AURA_INSERTER = registerBlock("improved_aura_inserter", () ->
-            new BlockAuraInserter(ArcaneStaticConfig.Maximums.IMPROVED_AURA_INSERTER, ArcaneStaticConfig.Rates.IMPROVED_AURA_INSERTER_RATE));
+    public static final RegistryObject<Block>
+            // General Blocks
+            AURAGLASS = register("auraglass", () -> new Block(BlockBehaviour.Properties.copy(Blocks.GLASS).noOcclusion())),
+            SOUL_MAGMA = register("soul_magma", BlockSoulMagma::new),
+            // Logistics
+            AURA_EXTRACTOR = register("aura_extractor", () -> new BlockAuraExtractor(ArcaneStaticConfig.Maximums.AURA_EXTRACTOR, ArcaneStaticConfig.Rates.AURA_EXTRACTOR_RATE)),
+            AURA_INSERTER = register("aura_inserter", () -> new BlockAuraInserter(ArcaneStaticConfig.Maximums.AURA_INSERTER, ArcaneStaticConfig.Rates.AURA_INSERTER_RATE)),
+            IMPROVED_AURA_EXTRACTOR = register("improved_aura_extractor", () -> new BlockAuraExtractor(ArcaneStaticConfig.Maximums.IMPROVED_AURA_EXTRACTOR, ArcaneStaticConfig.Rates.IMPROVED_AURA_EXTRACTOR_RATE)),
+            IMPROVED_AURA_INSERTER = register("improved_aura_inserter", () -> new BlockAuraInserter(ArcaneStaticConfig.Maximums.IMPROVED_AURA_INSERTER, ArcaneStaticConfig.Rates.IMPROVED_AURA_INSERTER_RATE)),
+            // Storage
+            AURA_BASIN = register("aura_basin", BlockAuraBasin::new),
+            PEDESTAL = register("pedestal", BlockPedestal::new),
+            // Machines
+            AURA_INFUSER = register("aura_infuser", BlockAuraInfuser::new),
+            // Generators
+            IGNIS_COLLECTOR = register("ignis_collector", BlockIgnisCollector::new),
+            AQUA_COLLECTOR = register("aqua_collector", BlockAquaCollector::new)
+    ;
 
-    public static final RegistryObject<Block> AURA_BASIN = registerBlock("aura_basin", BlockAuraBasin::new);
-    public static final RegistryObject<Block> AURA_INFUSER = registerBlock("aura_infuser", BlockAuraInfuser::new);
-
-    public static final RegistryObject<Block> IGNIS_COLLECTOR = registerBlock("ignis_collector", BlockIgnisCollector::new);
-    public static final RegistryObject<Block> AQUA_COLLECTOR = registerBlock("aqua_collector", BlockAquaCollector::new);
-
-    public static final RegistryObject<Block> SOUL_MAGMA = registerBlock("soul_magma", BlockSoulMagma::new);
-
-    // Helpers
-    private static RegistryObject<Block> registerBlock(String id, Supplier<Block> sup) {
+    private static RegistryObject<Block> register(String id, Supplier<Block> sup) {
         RegistryObject<Block> reg = BLOCKS.register(id, sup);
-        ArcaneItems.registerBlockItem(id, reg, null);
+        ArcaneItems.blockItem(id, reg);
         return reg;
     }
 }

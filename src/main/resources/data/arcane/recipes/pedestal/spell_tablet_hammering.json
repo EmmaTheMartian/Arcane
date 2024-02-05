@@ -1,0 +1,16 @@
+{
+  "type": "arcane:pedestal",
+  "input": {
+    "item": "arcane:spell_tablet"
+  },
+  "interaction_input": {
+    "item": "minecraft:iron_block"
+  },
+  "consume": true,
+  "result": {
+    "item": "arcane:spell_tablet",
+    "nbt": {
+      "arcane.spell": "arcane:hammering"
+    }
+  }
+}

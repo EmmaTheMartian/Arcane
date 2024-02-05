@@ -3,7 +3,9 @@ package martian.arcane;
 import com.mojang.logging.LogUtils;
 import martian.arcane.datagen.ArcaneDatagen;
 import martian.arcane.registry.*;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.BlastFurnaceBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
@@ -38,12 +40,13 @@ public class ArcaneMod
 
         ArcaneBlocks.BLOCKS.register(modBus);
         ArcaneItems.ITEMS.register(modBus);
-        ArcaneBlockEntities.BLOCK_ENTITIES.register(modBus);
+        ArcaneBlockEntities.REGISTER.register(modBus);
         ArcaneRecipeTypes.RECIPE_TYPES.register(modBus);
         ArcaneRecipeTypes.RECIPE_SERIALIZERS.register(modBus);
         ArcaneTabs.TABS.register(modBus);
+        ArcaneSpells.REGISTER.register(modBus);
 
-        // TODO: Replace this with something data-driven
+        // TODO: Replace this with something data-driven. Maybe a NeoForge data map could work?
         ignisGenerationAmounts.put(state -> state.is(Blocks.FIRE), 1);
         ignisGenerationAmounts.put(state -> state.is(Blocks.CAMPFIRE) && state.getValue(CampfireBlock.LIT), 1);
         ignisGenerationAmounts.put(state -> state.is(Blocks.LAVA_CAULDRON), 1);
@@ -70,5 +73,9 @@ public class ArcaneMod
 
     public static ResourceLocation id(String obj) {
         return new ResourceLocation(MODID, obj);
+    }
+
+    public static void debug(Player player, String message) {
+        player.sendSystemMessage(Component.literal("[Arcane/Debug]: " + message));
     }
 }

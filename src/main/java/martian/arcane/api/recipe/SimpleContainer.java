@@ -24,7 +24,7 @@ public class SimpleContainer extends RecipeWrapper {
         return stack.isEmpty() ? ItemStack.EMPTY : stack.split(count);
     }
 
-    public ItemStack remoteItemNoUpdate() {
+    public ItemStack removeItemNoUpdate() {
         ItemStack stack = this.getItem();
         if (stack.isEmpty())
             return ItemStack.EMPTY;

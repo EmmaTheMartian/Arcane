@@ -32,8 +32,8 @@ public class BlockEntityAuraStorage extends NbtAuraStorage {
     }
 
     @Override
-    public void setReceivable(boolean value) {
-        super.setReceivable(value);
+    public void setInsertable(boolean value) {
+        super.setInsertable(value);
         blockEntity.setChanged();
     }
 
