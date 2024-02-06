@@ -17,6 +17,8 @@ public final class NBTHelpers {
     public static final String KEY_STACK = ArcaneMod.MODID + ".stack";
     public static final String KEY_MODE = ArcaneMod.MODID + ".mode";
     public static final String KEY_SPELL = ArcaneMod.MODID + ".spell";
+    public static final String KEY_ACTIVE = ArcaneMod.MODID + ".active";
+    public static final String KEY_PUSH_RATE = ArcaneMod.MODID + ".pushRate";
 
     public static void putBlockPos(CompoundTag nbt, String key, BlockPos pos) {
         nbt.putIntArray(key, new int[]{pos.getX(), pos.getY(), pos.getZ()});

@@ -2,23 +2,23 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "B": {
-      "item": "arcane:blue_gold_ingot"
-    },
     "C": {
-      "item": "arcane:blue_gold_core"
+      "item": "arcane:aurachalcum_core"
+    },
+    "D": {
+      "item": "arcane:aurachalcum_ingot"
     },
     "W": {
-      "tag": "arcane:basic_wands"
+      "tag": "arcane:advanced_wands"
     }
   },
   "pattern": [
-    "  B",
+    "  D",
     " W ",
     "C  "
   ],
   "result": {
-    "item": "arcane:wand_blue_gold"
+    "item": "arcane:wand_aurachalcum"
   },
   "show_notification": true
 }

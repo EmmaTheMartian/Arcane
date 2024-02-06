@@ -75,6 +75,7 @@
   "messages.arcane.can_insert":              "Aura Insertable?: ",
   "messages.arcane.wand_level":              "Wand Level: ",
   "messages.arcane.spell_min_level":         "Required Wand Level: ",
+  "messages.arcane.push_rate":               "Push Rate: ",
 
   "messages.arcane.not_linked":              "Not linked",
   "messages.arcane.mode_crafting":           "Crafting",

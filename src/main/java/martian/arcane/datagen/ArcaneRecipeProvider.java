@@ -6,6 +6,7 @@ import martian.arcane.registry.ArcaneBlocks;
 import martian.arcane.registry.ArcaneItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.common.Tags;
@@ -145,6 +146,16 @@ public class ArcaneRecipeProvider extends RecipeProvider {
                 .unlockedBy("has_item", has(ArcaneBlocks.IMPROVED_AURA_EXTRACTOR.get()))
                 .save(writer, ArcaneMod.id("improved_aura_inserter_alt"));
 
+        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, ArcaneBlocks.PEDESTAL.get().asItem())
+                .pattern("BBB")
+                .pattern(" L ")
+                .pattern("SSS")
+                .define('B', ArcaneItems.BLUE_GOLD.get())
+                .define('L', ItemTags.LOGS)
+                .define('S', ItemTags.WOODEN_SLABS)
+                .unlockedBy("has_item", has(ArcaneItems.BLUE_GOLD.get()))
+                .save(writer);
+
         // Aura Items
         ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ArcaneItems.AURA_WRENCH.get())
                 .pattern("B B")
@@ -220,13 +231,33 @@ public class ArcaneRecipeProvider extends RecipeProvider {
         }
 
         ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ArcaneItems.WAND_BLUE_GOLD.get())
+                .pattern("  B")
+                .pattern(" W ")
+                .pattern("C  ")
+                .define('B', ArcaneItems.BLUE_GOLD.get())
+                .define('C', ArcaneItems.BLUE_GOLD_CORE.get())
+                .define('W', ArcaneTags.BASIC_WANDS)
+                .unlockedBy("has_item", has(ArcaneItems.AURACHALCUM_CORE.get()))
+                .save(writer);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ArcaneItems.WAND_AURACHALCUM.get())
                 .pattern("  D")
                 .pattern(" W ")
                 .pattern("C  ")
-                .define('D', Items.DIAMOND)
-                .define('W', ArcaneTags.BASIC_WANDS)
+                .define('D', ArcaneItems.AURACHALCUM.get())
+                .define('W', ArcaneTags.ADVANCED_WANDS)
                 .define('C', ArcaneItems.AURACHALCUM_CORE.get())
                 .unlockedBy("has_item", has(ArcaneItems.AURACHALCUM_CORE.get()))
+                .save(writer);
+
+        ShapedRecipeBuilder.shaped(RecipeCategory.TOOLS, ArcaneItems.WAND_ELDRITCH.get())
+                .pattern("  E")
+                .pattern(" W ")
+                .pattern("C  ")
+                .define('E', ArcaneItems.ELDRITCH_ALLOY.get())
+                .define('W', ArcaneTags.ADVANCED_WANDS)
+                .define('C', ArcaneItems.ELDRITCH_CORE.get())
+                .unlockedBy("has_item", has(ArcaneItems.ELDRITCH_CORE.get()))
                 .save(writer);
     }
 

@@ -26,10 +26,10 @@ public class ArcaneItems extends ArcaneRegistry {
     // Actual Items
     public static final RegistryObject<Item>
             // Auraglass Bottles
-            AURAGLASS_BOTTLE = register("auraglass_bottle", () -> new ItemAuraglassBottle(ArcaneStaticConfig.Maximums.SMALL_AURAGLASS_BOTTLE)),
-            MEDIUM_AURAGLASS_BOTTLE = register("medium_auraglass_bottle", () -> new ItemAuraglassBottle(ArcaneStaticConfig.Maximums.MEDIUM_AURAGLASS_BOTTLE)),
-            LARGE_AURAGLASS_BOTTLE = register("large_auraglass_bottle", () -> new ItemAuraglassBottle(ArcaneStaticConfig.Maximums.LARGE_AURAGLASS_BOTTLE)),
-            EXTREME_AURAGLASS_BOTTLE = register("extreme_auraglass_bottle", () -> new ItemAuraglassBottle(ArcaneStaticConfig.Maximums.EXTREME_AURAGLASS_BOTTLE)),
+            AURAGLASS_BOTTLE = register("auraglass_bottle", () -> new ItemAuraglassBottle(ArcaneStaticConfig.Maximums.SMALL_AURAGLASS_BOTTLE, ArcaneStaticConfig.Rates.SMALL_AURAGLASS_BOTTLE)),
+            MEDIUM_AURAGLASS_BOTTLE = register("medium_auraglass_bottle", () -> new ItemAuraglassBottle(ArcaneStaticConfig.Maximums.MEDIUM_AURAGLASS_BOTTLE, ArcaneStaticConfig.Rates.MEDIUM_AURAGLASS_BOTTLE)),
+            LARGE_AURAGLASS_BOTTLE = register("large_auraglass_bottle", () -> new ItemAuraglassBottle(ArcaneStaticConfig.Maximums.LARGE_AURAGLASS_BOTTLE, ArcaneStaticConfig.Rates.LARGE_AURAGLASS_BOTTLE)),
+            EXTREME_AURAGLASS_BOTTLE = register("extreme_auraglass_bottle", () -> new ItemAuraglassBottle(ArcaneStaticConfig.Maximums.EXTREME_AURAGLASS_BOTTLE, ArcaneStaticConfig.Rates.EXTREME_AURAGLASS_BOTTLE)),
             // Wands
             WAND_ACACIA_AURA = register("wand_acacia", BASIC_WAND_SUPPLIER),
             WAND_BAMBOO_AURA = register("wand_bamboo", BASIC_WAND_SUPPLIER),

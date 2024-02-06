@@ -1,24 +1,24 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "equipment",
+  "category": "redstone",
   "key": {
     "B": {
       "item": "arcane:blue_gold_ingot"
     },
-    "C": {
-      "item": "arcane:blue_gold_core"
+    "L": {
+      "tag": "minecraft:logs"
     },
-    "W": {
-      "tag": "arcane:basic_wands"
+    "S": {
+      "tag": "minecraft:wooden_slabs"
     }
   },
   "pattern": [
-    "  B",
-    " W ",
-    "C  "
+    "BBB",
+    " L ",
+    "SSS"
   ],
   "result": {
-    "item": "arcane:wand_blue_gold"
+    "item": "arcane:pedestal"
   },
   "show_notification": true
 }

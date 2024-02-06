@@ -27,6 +27,11 @@ public final class ArcaneStaticConfig {
         public static final int AURA_INSERTER_RATE = 1;
         public static final int IMPROVED_AURA_EXTRACTOR_RATE = 4;
         public static final int IMPROVED_AURA_INSERTER_RATE = 4;
+
+        public static final int SMALL_AURAGLASS_BOTTLE = 1;
+        public static final int MEDIUM_AURAGLASS_BOTTLE = 2;
+        public static final int LARGE_AURAGLASS_BOTTLE = 2;
+        public static final int EXTREME_AURAGLASS_BOTTLE = 4;
     }
 
     // Machine speed is measured in ticks

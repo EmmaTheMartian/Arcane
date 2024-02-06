@@ -73,6 +73,7 @@ public abstract class AbstractAuraItem extends Item {
     // Tooltip
     @Override
     public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> text, @NotNull TooltipFlag flags) {
+        super.appendHoverText(stack, level, text, flags);
         mapAuraStorage(stack, aura -> {
             text.add(Component
                     .translatable("messages.arcane.aura")
