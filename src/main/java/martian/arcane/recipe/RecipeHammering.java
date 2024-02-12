@@ -43,6 +43,11 @@ public class RecipeHammering implements Recipe<SimpleContainer> {
     }
 
     @Override
+    public ItemStack getResultItem(RegistryAccess registryAccess) {
+        return getResultItem();
+    }
+
+    @Override
     public boolean matches(SimpleContainer container, Level level) {
         return this.input.is(container.getItem().getItem());
     }
@@ -73,12 +78,6 @@ public class RecipeHammering implements Recipe<SimpleContainer> {
         throw new RuntimeException("Cannot invoke RecipeHammering#assemble(SimpleContainer, RegistryAccess)");
     }
 
-    @Override
-    @Deprecated
-    public ItemStack getResultItem(RegistryAccess registryAccess) {
-        throw new RuntimeException("Cannot invoke RecipeHammering#getResultItem(RegistryAccess)");
-    }
-
     public static Optional<RecipeHammering> getRecipeFor(Level level, SimpleContainer container) {
         return getAllRecipes(level)
                 .stream()
@@ -93,7 +92,6 @@ public class RecipeHammering implements Recipe<SimpleContainer> {
     public static class Serializer implements RecipeSerializer<RecipeHammering> {
         @Override
         public RecipeHammering fromJson(ResourceLocation id, JsonObject json) {
-            ArcaneMod.LOGGER.info("hammering " + id);
             ItemStack input = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "input"));
             ItemStack result = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
             return new RecipeHammering(id, input, result);

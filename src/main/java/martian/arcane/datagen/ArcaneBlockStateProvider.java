@@ -22,6 +22,7 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
     protected void registerStatesAndModels() {
         // Block Models
         simpleTranslucent(ArcaneBlocks.AURAGLASS.get());
+        simpleTranslucent(ArcaneBlocks.CONJURED_BLOCK.get());
 
         topBottom(ArcaneBlocks.IGNIS_COLLECTOR.get(), texture("collectors/ignis_sides"), texture("collectors/top_and_bottom"));
         topBottom(ArcaneBlocks.AQUA_COLLECTOR.get(), texture("collectors/aqua_sides"), texture("collectors/top_and_bottom"));
@@ -36,6 +37,7 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
         makeBlockState(ArcaneBlocks.AQUA_COLLECTOR);
         makeBlockState(ArcaneBlocks.SOUL_MAGMA);
         makeBlockState(ArcaneBlocks.PEDESTAL);
+        makeBlockState(ArcaneBlocks.CONJURED_CRAFTING_TABLE);
     }
 
     private void makeBlockState(RegistryObject<Block> block) {

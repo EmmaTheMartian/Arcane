@@ -19,20 +19,42 @@ public class ArcaneItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        ArcaneItems.ITEMS.getEntries().forEach(item -> {
-            if (item.get() instanceof BlockItem)
-                blockItem(item.get());
-            else if (item.get() instanceof ItemAuraWand)
-                itemWithTexturePath(item.get());
+        ArcaneItems.ITEMS.getEntries().forEach(itemHolder -> {
+            Item item = itemHolder.get();
+            if (item instanceof BlockItem)
+                blockItem(item);
+            else if (item instanceof ItemAuraWand)
+                itemWithTexturePath(item, "wands");
+            else if (
+                    item == ArcaneItems.CRUSHED_RAW_COPPER.get() ||
+                    item == ArcaneItems.CRUSHED_RAW_IRON.get() ||
+                    item == ArcaneItems.CRUSHED_RAW_GOLD.get() ||
+                    item == ArcaneItems.PURIFIED_RAW_COPPER.get() ||
+                    item == ArcaneItems.PURIFIED_RAW_IRON.get() ||
+                    item == ArcaneItems.PURIFIED_RAW_GOLD.get()
+            )
+                itemWithTexturePath(item, "dusts");
+            else if (item == ArcaneItems.CREATIVE_AURAGLASS_BOTTLE.get())
+                itemWithTexture(item, ArcaneMod.id("item/extreme_auraglass_bottle"));
             else
-                basicItem(item.get());
+                basicItem(item);
         });
     }
 
-    private void itemWithTexturePath(Item item) {
+    private void blankItem(Item item) {
+        itemWithTexture(item, new ResourceLocation("minecraft", "item/amethyst_shard"));  // Why amethyst? Why not.
+    }
+
+    private void itemWithTexturePath(Item item, String path) {
         getBuilder(item.toString())
                 .parent(new ModelFile.UncheckedModelFile("item/generated"))
-                .texture("layer0", namespace(item) + ":item/wands/" + name(item));
+                .texture("layer0", namespace(item) + ":item/" + path + "/" + name(item));
+    }
+
+    private void itemWithTexture(Item item, ResourceLocation texture) {
+        getBuilder(item.toString())
+                .parent(new ModelFile.UncheckedModelFile("item/generated"))
+                .texture("layer0", texture);
     }
 
     private void blockItem(Item item) {

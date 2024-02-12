@@ -1,0 +1,13 @@
+{
+  "parent": "minecraft:block/cube",
+  "render_type": "minecraft:translucent",
+  "textures": {
+    "up": "arcane:block/conjured_crafting_table",
+    "down": "arcane:block/conjured_block",
+    "north": "arcane:block/conjured_block",
+    "east": "arcane:block/conjured_block",
+    "south": "arcane:block/conjured_block",
+    "west": "arcane:block/conjured_block",
+    "particle": "arcane:block/conjured_block"
+  }
+}

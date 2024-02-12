@@ -3,8 +3,7 @@ package martian.arcane.registry;
 import martian.arcane.ArcaneMod;
 import martian.arcane.api.ArcaneRegistry;
 import martian.arcane.api.spell.AbstractSpell;
-import martian.arcane.spells.SpellBreaking;
-import martian.arcane.spells.SpellHammering;
+import martian.arcane.spells.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -18,8 +17,15 @@ public class ArcaneSpells extends ArcaneRegistry {
     public static final DeferredRegister<AbstractSpell> REGISTER = DeferredRegister.create(ArcaneMod.id("spells"), ArcaneMod.MODID);
     public static final Supplier<IForgeRegistry<AbstractSpell>> REGISTRY = REGISTER.makeRegistry(RegistryBuilder::new);
 
-    public static final RegistryObject<SpellBreaking> BREAKING = REGISTER.register("breaking", SpellBreaking::new);
-    public static final RegistryObject<SpellHammering> HAMMERING = REGISTER.register("hammering", SpellHammering::new);
+    public static final RegistryObject<?>
+            BREAKING = REGISTER.register("breaking", SpellBreaking::new),
+            HAMMERING = REGISTER.register("hammering", SpellHammering::new),
+            PURIFYING = REGISTER.register("purifying", SpellPurifying::new),
+            CLEANSING = REGISTER.register("cleansing", SpellCleansing::new),
+            BUILDING = REGISTER.register("building", SpellBuilding::new),
+            DASHING = REGISTER.register("dashing", SpellDashing::new),
+            CRAFTING = REGISTER.register("crafting", SpellCrafting::new)
+    ;
 
     public static AbstractSpell getSpellById(ResourceLocation id) {
         //noinspection OptionalGetWithoutIsPresent

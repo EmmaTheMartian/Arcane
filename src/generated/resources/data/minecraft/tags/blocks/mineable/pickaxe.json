@@ -11,6 +11,8 @@
     "arcane:pedestal",
     "arcane:aura_infuser",
     "arcane:ignis_collector",
-    "arcane:aqua_collector"
+    "arcane:aqua_collector",
+    "arcane:conjured_block",
+    "arcane:conjured_crafting_table"
   ]
 }

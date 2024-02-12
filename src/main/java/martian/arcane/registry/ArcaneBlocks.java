@@ -36,7 +36,10 @@ public class ArcaneBlocks extends ArcaneRegistry {
             AURA_INFUSER = register("aura_infuser", BlockAuraInfuser::new),
             // Generators
             IGNIS_COLLECTOR = register("ignis_collector", BlockIgnisCollector::new),
-            AQUA_COLLECTOR = register("aqua_collector", BlockAquaCollector::new)
+            AQUA_COLLECTOR = register("aqua_collector", BlockAquaCollector::new),
+            // Conjured Blocks
+            CONJURED_BLOCK = register("conjured_block", () -> new Block(BlockBehaviour.Properties.copy(Blocks.GLASS).instabreak().noParticlesOnBreak())),
+            CONJURED_CRAFTING_TABLE = register("conjured_crafting_table", BlockConjuredCraftingTable::new)
     ;
 
     private static RegistryObject<Block> register(String id, Supplier<Block> sup) {

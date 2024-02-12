@@ -1,0 +1,9 @@
+{
+  "type": "arcane:hammering",
+  "input": {
+    "item": "minecraft:raw_iron"
+  },
+  "result": {
+    "item": "arcane:crushed_raw_iron"
+  }
+}

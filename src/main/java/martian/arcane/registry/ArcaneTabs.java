@@ -2,11 +2,14 @@ package martian.arcane.registry;
 
 import martian.arcane.ArcaneMod;
 import martian.arcane.api.ArcaneRegistry;
+import martian.arcane.item.ItemAuraglassBottle;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 
@@ -20,8 +23,20 @@ public class ArcaneTabs extends ArcaneRegistry {
             .title(Component
                     .translatable("itemGroup.arcane.arcane_tab")
                     .withStyle(ChatFormatting.DARK_PURPLE))
-            .displayItems((_params, output) ->
+            .displayItems((_params, output) -> {
                 ArcaneItems.ITEMS.getEntries().forEach(item ->
-                    output.accept(item.get().getDefaultInstance())))
+                        output.accept(item.get().getDefaultInstance()));
+
+                { // Creative Auraglass Bottle (with Integer.MAX_VALUE aura already)
+                    ItemStack stack = new ItemStack(ArcaneItems.CREATIVE_AURAGLASS_BOTTLE.get());
+                    CompoundTag nbt = stack.getOrCreateTag();
+                    ItemAuraglassBottle.initNBT(nbt, Integer.MAX_VALUE);
+                    ((ItemAuraglassBottle)stack.getItem()).mapAuraStorage(stack, storage -> {
+                        storage.setAura(Integer.MAX_VALUE);
+                        return null;
+                    });
+                    output.accept(stack);
+                }
+            })
             .build());
 }

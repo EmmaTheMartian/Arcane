@@ -1,0 +1,16 @@
+{
+  "type": "arcane:pedestal",
+  "input": {
+    "item": "arcane:spell_tablet"
+  },
+  "interaction_input": {
+    "item": "minecraft:emerald"
+  },
+  "consume": true,
+  "result": {
+    "item": "arcane:spell_tablet",
+    "nbt": {
+      "arcane.spell": "arcane:purifying"
+    }
+  }
+}

@@ -100,6 +100,10 @@ public class ItemAuraglassBottle extends AbstractAuraItem {
     }
 
     public void initNBT(CompoundTag nbt) {
+        initNBT(nbt, pushRate);
+    }
+
+    public static void initNBT(CompoundTag nbt, int pushRate) {
         NBTHelpers.init(nbt, NBTHelpers.KEY_ACTIVE, (_nbt, key) -> nbt.putBoolean(key, false));
         NBTHelpers.init(nbt, NBTHelpers.KEY_PUSH_RATE, (_nbt, key) -> nbt.putInt(key, pushRate));
     }

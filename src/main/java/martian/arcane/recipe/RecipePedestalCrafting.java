@@ -56,7 +56,7 @@ public class RecipePedestalCrafting implements Recipe<SimpleContainer> {
         if (matches(pedestal.getItem(), interactionItem)) {
             pedestal.setItem(getResultItem());
             if (consumeInteractionItem) {
-                interactionItem.setCount(interactionItem.getCount() - 1);
+                interactionItem.shrink(1);
             }
         }
     }

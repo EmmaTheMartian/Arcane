@@ -1,6 +1,5 @@
 package martian.arcane.block;
 
-import martian.arcane.ArcaneTags;
 import martian.arcane.api.PropertyHelpers;
 import martian.arcane.api.spell.AbstractSpell;
 import martian.arcane.block.entity.BlockEntityPedestal;
@@ -65,35 +64,42 @@ public class BlockPedestal extends Block implements EntityBlock {
 
         if (level.getBlockEntity(pos) instanceof BlockEntityPedestal pedestal) {
             ItemStack stack = player.getItemInHand(hand);
+            ItemStack pedestalStack = pedestal.getItem();
 
             // Set wand spell
             if (
-                pedestal.getItem().getItem() instanceof ItemAuraWand wand &&
+                pedestalStack.getItem() instanceof ItemAuraWand wand &&
                 stack.getItem() instanceof ItemSpellTablet &&
                 ItemSpellTablet.hasSpell(stack)
             ) {
+                // Prevent overriding spells
+                if (ItemAuraWand.getSpellId(pedestalStack) != null)
+                    return InteractionResult.FAIL;
+
                 ResourceLocation id = ItemSpellTablet.getSpell(stack);
                 if (id == null)
                     return InteractionResult.FAIL;
 
                 AbstractSpell spell = ArcaneSpells.getSpellById(id);
-                if (spell.isValidWand(wand))
-                    wand.setSpell(id, pedestal.getItem());
-
-                player.sendSystemMessage(Component.translatable("messages.arcane.pedestal_set_spell"));
-                pedestal.getItem().setHoverName(wand.getSpellOrElse().getItemName(wand, stack));
-                stack.setCount(stack.getCount() - 1);
-
-                level.sendBlockUpdated(pos, state, state, 2);
-                return InteractionResult.SUCCESS;
+                if (spell.isValidWand(wand)) {
+                    wand.setSpell(id, pedestalStack);
+                    player.sendSystemMessage(Component.translatable("messages.arcane.pedestal_set_spell"));
+                    stack.shrink(1);
+                    level.sendBlockUpdated(pos, state, state, 2);
+                    return InteractionResult.SUCCESS;
+                } else {
+                    //todo: translatable
+                    player.sendSystemMessage(Component.literal("Invalid wand for spell."));
+                    return InteractionResult.FAIL;
+                }
             }
 
             // Pedestal crafting
             if (
-                !pedestal.getItem().isEmpty() &&
+                !pedestalStack.isEmpty() &&
                 !stack.isEmpty()
             ) {
-                Optional<RecipePedestalCrafting> recipe = RecipePedestalCrafting.getRecipeFor(level, pedestal.getItem(), stack);
+                Optional<RecipePedestalCrafting> recipe = RecipePedestalCrafting.getRecipeFor(level, pedestalStack, stack);
                 if (recipe.isPresent()) {
                     recipe.get().assemble(pedestal, stack);
                     level.sendBlockUpdated(pos, state, state, 2);
@@ -102,14 +108,14 @@ public class BlockPedestal extends Block implements EntityBlock {
             }
 
             // Remove item from pedestal
-            if (!pedestal.getItem().isEmpty()) {
+            if (!pedestalStack.isEmpty()) {
                 player.getInventory().placeItemBackInInventory(pedestal.getItem());
                 pedestal.setItem(ItemStack.EMPTY);
                 level.sendBlockUpdated(pos, state, state, 2);
                 return InteractionResult.CONSUME;
             }
             // Put item on pedestal
-            else if (!stack.isEmpty() && pedestal.getItem().isEmpty()) {
+            else if (!stack.isEmpty() && pedestalStack.isEmpty()) {
                 pedestal.setItem(stack.copyWithCount(1));
                 stack.shrink(1);
                 level.sendBlockUpdated(pos, state, state, 2);
@@ -117,7 +123,7 @@ public class BlockPedestal extends Block implements EntityBlock {
             }
         }
 
-        return InteractionResult.PASS;
+        return InteractionResult.SUCCESS;
     }
 
     @SuppressWarnings("deprecation")

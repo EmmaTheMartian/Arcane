@@ -4,7 +4,6 @@ import martian.arcane.api.AOEHelpers;
 import martian.arcane.api.spell.AbstractSpell;
 import martian.arcane.item.ItemAuraWand;
 import net.minecraft.core.BlockPos;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -20,16 +19,19 @@ public class SpellBreaking extends AbstractSpell {
 
     @Override
     public int getAuraCost(ItemAuraWand wand, ItemStack stack) {
-        return 1;
+        return wand.level >= 3 ? 3 : 2;
     }
 
     @Override
     public void cast(ItemAuraWand wand, ItemStack stack, Level level, Player caster, InteractionHand castHand, HitResult hit) {
+        if (level.isClientSide())
+            return;
+
         if (hit.getType() != HitResult.Type.BLOCK)
             return;
 
         BlockHitResult bHit = (BlockHitResult)hit;
-        if (wand.level == 1)
+        if (wand.level == 1 || caster.isCrouching())
             tryBreak(level, bHit.getBlockPos());
         else
             AOEHelpers.streamAOE(bHit.getBlockPos(), bHit.getDirection(), getRadius(wand)).forEach(pos -> tryBreak(level, pos));
@@ -37,7 +39,7 @@ public class SpellBreaking extends AbstractSpell {
 
     private static void tryBreak(Level level, BlockPos pos) {
         BlockState state = level.getBlockState(pos);
-        if (state.is(BlockTags.MINEABLE_WITH_PICKAXE) || state.is(BlockTags.MINEABLE_WITH_SHOVEL)) {
+        if (state.getDestroySpeed(level, pos) >= 0) {
             level.destroyBlock(pos, true);
         }
     }
@@ -45,7 +47,7 @@ public class SpellBreaking extends AbstractSpell {
     private static int getRadius(ItemAuraWand wand) {
         return switch (wand.level) {
             case 2 -> 1;
-            case 3 -> 3;
+            case 3 -> 2;
             default -> 0;
         };
     }

@@ -15,8 +15,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 
-public class ArcaneTagProvider extends BlockTagsProvider {
-    public ArcaneTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
+public class ArcaneBlockTagProvider extends BlockTagsProvider {
+    public ArcaneBlockTagProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider, @Nullable ExistingFileHelper existingFileHelper) {
         super(output, lookupProvider, ArcaneMod.MODID, existingFileHelper);
     }
 

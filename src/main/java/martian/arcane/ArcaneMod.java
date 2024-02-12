@@ -3,9 +3,7 @@ package martian.arcane;
 import com.mojang.logging.LogUtils;
 import martian.arcane.datagen.ArcaneDatagen;
 import martian.arcane.registry.*;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.BlastFurnaceBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
@@ -73,9 +71,5 @@ public class ArcaneMod
 
     public static ResourceLocation id(String obj) {
         return new ResourceLocation(MODID, obj);
-    }
-
-    public static void debug(Player player, String message) {
-        player.sendSystemMessage(Component.literal("[Arcane/Debug]: " + message));
     }
 }

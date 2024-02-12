@@ -4,7 +4,7 @@
     "item": "arcane:spell_tablet"
   },
   "interaction_input": {
-    "item": "minecraft:iron_pickaxe"
+    "item": "minecraft:diamond_pickaxe"
   },
   "consume": true,
   "result": {

@@ -11,6 +11,8 @@ public class ArcaneTags {
     public static final TagKey<Item> BASIC_WANDS = TagKey.create(Registries.ITEM, ArcaneMod.id("basic_wands"));
     public static final TagKey<Item> ADVANCED_WANDS = TagKey.create(Registries.ITEM, ArcaneMod.id("advanced_wands"));
     public static final TagKey<Item> MYSTICAL_WANDS = TagKey.create(Registries.ITEM, ArcaneMod.id("mystical_wands"));
+    public static final TagKey<Item> CRUSHED_DUSTS = TagKey.create(Registries.ITEM, ArcaneMod.id("crushed_dusts"));
+    public static final TagKey<Item> PURIFIED_DUSTS = TagKey.create(Registries.ITEM, ArcaneMod.id("purified_dusts"));
 
     public static final TagKey<Block> AURA_EXTRACTORS = TagKey.create(Registries.BLOCK, ArcaneMod.id("aura_extractors"));
     public static final TagKey<Block> AURA_INSERTERS = TagKey.create(Registries.BLOCK, ArcaneMod.id("aura_inserters"));

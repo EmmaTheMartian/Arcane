@@ -4,6 +4,7 @@ import martian.arcane.ArcaneMod;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
+import net.minecraftforge.common.data.BlockTagsProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 
@@ -26,7 +27,8 @@ public class ArcaneDatagen {
         if (event.includeServer()) {
             ArcaneMod.LOGGER.info("gatherDataEvent: including server");
             gen.addProvider(true, new ArcaneRecipeProvider(output));
-            gen.addProvider(true, new ArcaneTagProvider(output, lookupProvider, efh));
+            BlockTagsProvider blockTags = gen.addProvider(true, new ArcaneBlockTagProvider(output, lookupProvider, efh));
+            gen.addProvider(true, new ArcaneItemTagProvider(output, lookupProvider, blockTags.contentsGetter(), efh));
             gen.addProvider(true, new ArcaneLootTableProvider(output));
         }
     }

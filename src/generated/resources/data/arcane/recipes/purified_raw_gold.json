@@ -1,0 +1,10 @@
+{
+  "type": "arcane:purifying",
+  "input": {
+    "item": "arcane:crushed_raw_gold"
+  },
+  "result": {
+    "count": 2,
+    "item": "arcane:purified_raw_gold"
+  }
+}

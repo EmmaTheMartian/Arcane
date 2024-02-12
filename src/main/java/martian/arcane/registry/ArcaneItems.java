@@ -30,9 +30,10 @@ public class ArcaneItems extends ArcaneRegistry {
             MEDIUM_AURAGLASS_BOTTLE = register("medium_auraglass_bottle", () -> new ItemAuraglassBottle(ArcaneStaticConfig.Maximums.MEDIUM_AURAGLASS_BOTTLE, ArcaneStaticConfig.Rates.MEDIUM_AURAGLASS_BOTTLE)),
             LARGE_AURAGLASS_BOTTLE = register("large_auraglass_bottle", () -> new ItemAuraglassBottle(ArcaneStaticConfig.Maximums.LARGE_AURAGLASS_BOTTLE, ArcaneStaticConfig.Rates.LARGE_AURAGLASS_BOTTLE)),
             EXTREME_AURAGLASS_BOTTLE = register("extreme_auraglass_bottle", () -> new ItemAuraglassBottle(ArcaneStaticConfig.Maximums.EXTREME_AURAGLASS_BOTTLE, ArcaneStaticConfig.Rates.EXTREME_AURAGLASS_BOTTLE)),
+            CREATIVE_AURAGLASS_BOTTLE = register("creative_auraglass_bottle", () -> new ItemAuraglassBottle(Integer.MAX_VALUE, Integer.MAX_VALUE)),
             // Wands
-            WAND_ACACIA_AURA = register("wand_acacia", BASIC_WAND_SUPPLIER),
-            WAND_BAMBOO_AURA = register("wand_bamboo", BASIC_WAND_SUPPLIER),
+            WAND_ACACIA = register("wand_acacia", BASIC_WAND_SUPPLIER),
+            WAND_BAMBOO = register("wand_bamboo", BASIC_WAND_SUPPLIER),
             WAND_BIRCH = register("wand_birch", BASIC_WAND_SUPPLIER),
             WAND_CHERRY = register("wand_cherry", BASIC_WAND_SUPPLIER),
             WAND_DARK_OAK = register("wand_dark_oak", BASIC_WAND_SUPPLIER),
@@ -57,7 +58,15 @@ public class ArcaneItems extends ArcaneRegistry {
             BLUE_GOLD_CORE = basicItem("blue_gold_core"),
             AURACHALCUM_CORE = basicItem("aurachalcum_core"),
             ELDRITCH_ALLOY = basicItem("eldritch_alloy"),
-            ELDRITCH_CORE = basicItem("eldritch_core")
+            ELDRITCH_CORE = basicItem("eldritch_core"),
+            AURAGLASS_SHARD = basicItem("auraglass_shard"),
+            // Ore Processing
+            CRUSHED_RAW_COPPER = basicItem("crushed_raw_copper"),
+            CRUSHED_RAW_IRON = basicItem("crushed_raw_iron"),
+            CRUSHED_RAW_GOLD = basicItem("crushed_raw_gold"),
+            PURIFIED_RAW_COPPER = basicItem("purified_raw_copper"),
+            PURIFIED_RAW_IRON = basicItem("purified_raw_iron"),
+            PURIFIED_RAW_GOLD = basicItem("purified_raw_gold")
     ;
 
     // Helpers

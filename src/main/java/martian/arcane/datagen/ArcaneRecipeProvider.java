@@ -2,6 +2,8 @@ package martian.arcane.datagen;
 
 import martian.arcane.ArcaneMod;
 import martian.arcane.ArcaneTags;
+import martian.arcane.datagen.builders.HammeringRecipeBuilder;
+import martian.arcane.datagen.builders.PurifyingRecipeBuilder;
 import martian.arcane.registry.ArcaneBlocks;
 import martian.arcane.registry.ArcaneItems;
 import net.minecraft.data.PackOutput;
@@ -9,6 +11,7 @@ import net.minecraft.data.recipes.*;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 
@@ -216,8 +219,8 @@ public class ArcaneRecipeProvider extends RecipeProvider {
 
         { // Basic Wands
             Map<Item, Item> wands = new HashMap<>();
-            wands.put(Items.ACACIA_PLANKS, ArcaneItems.WAND_ACACIA_AURA.get());
-            wands.put(Items.BAMBOO_PLANKS, ArcaneItems.WAND_BAMBOO_AURA.get());
+            wands.put(Items.ACACIA_PLANKS, ArcaneItems.WAND_ACACIA.get());
+            wands.put(Items.BAMBOO_PLANKS, ArcaneItems.WAND_BAMBOO.get());
             wands.put(Items.BIRCH_PLANKS, ArcaneItems.WAND_BIRCH.get());
             wands.put(Items.CHERRY_PLANKS, ArcaneItems.WAND_CHERRY.get());
             wands.put(Items.DARK_OAK_PLANKS, ArcaneItems.WAND_DARK_OAK.get());
@@ -259,6 +262,11 @@ public class ArcaneRecipeProvider extends RecipeProvider {
                 .define('C', ArcaneItems.ELDRITCH_CORE.get())
                 .unlockedBy("has_item", has(ArcaneItems.ELDRITCH_CORE.get()))
                 .save(writer);
+
+        // Ore Processing
+        oreProcessingLine(writer, Items.RAW_COPPER, ArcaneItems.CRUSHED_RAW_COPPER.get(), ArcaneItems.PURIFIED_RAW_COPPER.get(), Items.COPPER_INGOT);
+        oreProcessingLine(writer, Items.RAW_IRON, ArcaneItems.CRUSHED_RAW_IRON.get(), ArcaneItems.PURIFIED_RAW_IRON.get(), Items.IRON_INGOT);
+        oreProcessingLine(writer, Items.RAW_GOLD, ArcaneItems.CRUSHED_RAW_GOLD.get(), ArcaneItems.PURIFIED_RAW_GOLD.get(), Items.GOLD_INGOT);
     }
 
     private void wandRecipe(Item coreItem, Item stickItem, Item output, @NotNull Consumer<FinishedRecipe> writer) {
@@ -269,6 +277,20 @@ public class ArcaneRecipeProvider extends RecipeProvider {
                 .define('C', coreItem)
                 .define('P', stickItem)
                 .unlockedBy("has_item", has(coreItem))
+                .save(writer);
+    }
+
+    private void oreProcessingLine(Consumer<FinishedRecipe> writer, Item rawItem, Item crushedItem, Item purifiedItem, Item resultIngot) {
+        HammeringRecipeBuilder.hammering(Ingredient.of(rawItem), crushedItem, 1)
+                .unlockedBy("has_item", has(rawItem))
+                .save(writer);
+
+        PurifyingRecipeBuilder.purifying(Ingredient.of(crushedItem), purifiedItem, 2)
+                .unlockedBy("has_item", has(rawItem))
+                .save(writer);
+
+        SimpleCookingRecipeBuilder.blasting(Ingredient.of(purifiedItem), RecipeCategory.MISC, resultIngot, 0.7f, 100)
+                .unlockedBy("has_item", has(rawItem))
                 .save(writer);
     }
 }
