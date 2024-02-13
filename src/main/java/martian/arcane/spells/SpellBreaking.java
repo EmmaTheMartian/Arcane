@@ -2,10 +2,10 @@ package martian.arcane.spells;
 
 import martian.arcane.api.AOEHelpers;
 import martian.arcane.api.spell.AbstractSpell;
+import martian.arcane.api.spell.CastContext;
+import martian.arcane.api.spell.ICastingSource;
 import martian.arcane.item.ItemAuraWand;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -23,18 +23,24 @@ public class SpellBreaking extends AbstractSpell {
     }
 
     @Override
-    public void cast(ItemAuraWand wand, ItemStack stack, Level level, Player caster, InteractionHand castHand, HitResult hit) {
-        if (level.isClientSide())
+    public void cast(CastContext c) {
+        if (c.level.isClientSide())
             return;
 
-        if (hit.getType() != HitResult.Type.BLOCK)
-            return;
+        if (c.source == ICastingSource.Type.WAND) {
+            CastContext.WandContext wc = (CastContext.WandContext)c;
+            HitResult result = wc.raycast();
+            if (result.getType() != HitResult.Type.BLOCK)
+                return;
 
-        BlockHitResult bHit = (BlockHitResult)hit;
-        if (wand.level == 1 || caster.isCrouching())
-            tryBreak(level, bHit.getBlockPos());
-        else
-            AOEHelpers.streamAOE(bHit.getBlockPos(), bHit.getDirection(), getRadius(wand)).forEach(pos -> tryBreak(level, pos));
+            BlockHitResult bHit = (BlockHitResult)result;
+            if (wc.wand.level == 1 || wc.caster.isCrouching())
+                tryBreak(c.level, bHit.getBlockPos());
+            else
+                AOEHelpers.streamAOE(bHit.getBlockPos(), bHit.getDirection(), getRadius(wc.wand)).forEach(pos -> tryBreak(c.level, pos));
+        } else if (c.source == ICastingSource.Type.SPELL_CIRCLE) {
+            tryBreak(c.level, c.getTarget());
+        }
     }
 
     private static void tryBreak(Level level, BlockPos pos) {

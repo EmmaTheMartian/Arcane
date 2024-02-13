@@ -3,11 +3,7 @@ package martian.arcane.api.spell;
 import martian.arcane.item.ItemAuraWand;
 import martian.arcane.registry.ArcaneSpells;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.HitResult;
 
 public abstract class AbstractSpell {
     public final int minLevel;
@@ -30,5 +26,5 @@ public abstract class AbstractSpell {
 
     public abstract int getAuraCost(ItemAuraWand wand, ItemStack stack);
 
-    public abstract void cast(ItemAuraWand wand, ItemStack stack, Level level, Player caster, InteractionHand castHand, HitResult hit);
+    public abstract void cast(CastContext context);
 }

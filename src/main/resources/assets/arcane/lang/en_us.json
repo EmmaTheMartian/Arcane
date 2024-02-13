@@ -3,6 +3,7 @@
 
   ".COMMENT-Tabs": "------------------------------------------------------ Tabs",
   "itemGroup.arcane.arcane_tab": "Arcane",
+  "itemGroup.arcane.arcane_spells_tab": "Arcane (Spells)",
 
   ".COMMENT-Wands": "----------------------------------------------------- Wands",
   "item.arcane.wand_acacia":      "Acacia Wand",

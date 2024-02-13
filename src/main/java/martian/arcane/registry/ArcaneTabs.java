@@ -3,6 +3,7 @@ package martian.arcane.registry;
 import martian.arcane.ArcaneMod;
 import martian.arcane.api.ArcaneRegistry;
 import martian.arcane.item.ItemAuraglassBottle;
+import martian.arcane.item.ItemSpellTablet;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -37,6 +38,21 @@ public class ArcaneTabs extends ArcaneRegistry {
                     });
                     output.accept(stack);
                 }
+            })
+            .build());
+
+    public static final RegistryObject<CreativeModeTab> ARCANE_SPELLS_TAB = TABS.register("arcane_spells_tab", () -> CreativeModeTab.builder()
+            .withTabsBefore(ARCANE_TAB.getId())
+            .icon(() -> ArcaneItems.SPELL_TABLET.get().getDefaultInstance())
+            .title(Component
+                    .translatable("itemGroup.arcane.arcane_spells_tab")
+                    .withStyle(ChatFormatting.AQUA))
+            .displayItems((_params, output) -> {
+                ArcaneSpells.REGISTRY.get().getEntries().forEach(entry -> {
+                    ItemStack stack = ArcaneItems.SPELL_TABLET.get().getDefaultInstance();
+                    ItemSpellTablet.setSpell(stack, entry.getKey().location());
+                    output.accept(stack);
+                });
             })
             .build());
 }

@@ -24,7 +24,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 public abstract class AbstractAuraBlockEntity extends BlockEntity implements IAuraometerOutput {
-    private final AuraStorageBlockEntityProvider provider;
+    protected final AuraStorageBlockEntityProvider provider;
 
     public AbstractAuraBlockEntity(int maxAura, boolean extractable, boolean receivable, BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);

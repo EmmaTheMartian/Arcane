@@ -1,7 +1,7 @@
 package martian.arcane.block.entity;
 
 import martian.arcane.api.NBTHelpers;
-import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
+import martian.arcane.api.block.entity.AbstractAuraBlockEntityWithSingleItem;
 import martian.arcane.api.block.entity.IAuraometerOutput;
 import martian.arcane.api.capability.IAuraStorage;
 import martian.arcane.recipe.RecipeAuraInfusion;
@@ -25,13 +25,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Optional;
 
-public class BlockEntityAuraInfuser extends AbstractAuraBlockEntity implements IAuraometerOutput {
+public class BlockEntityAuraInfuser extends AbstractAuraBlockEntityWithSingleItem implements IAuraometerOutput {
     public enum InfusionMode {
         CRAFTING,
         INSERT_AURA
     }
 
-    public ItemStackHandler inv;
     public InfusionMode mode = InfusionMode.INSERT_AURA;
     public int auraProgress = 0;
 
@@ -42,8 +41,7 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntity implements I
 
     @Override
     public void saveAdditional(@NotNull CompoundTag nbt) {
-        nbt.put(NBTHelpers.KEY_STACK, inv.serializeNBT());
-        nbt.putInt(NBTHelpers.KEY_AURA, auraProgress);
+        nbt.putInt(NBTHelpers.KEY_AURA_PROGRESS, auraProgress);
         nbt.putString(NBTHelpers.KEY_MODE, mode.toString());
         super.saveAdditional(nbt);
     }
@@ -52,8 +50,7 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntity implements I
     public void load(@NotNull CompoundTag nbt) {
         super.load(nbt);
         inv = new ItemStackHandler(1);
-        inv.deserializeNBT(nbt.getCompound(NBTHelpers.KEY_STACK));
-        auraProgress = nbt.getInt(NBTHelpers.KEY_AURA);
+        auraProgress = nbt.getInt(NBTHelpers.KEY_AURA_PROGRESS);
         mode = InfusionMode.valueOf(nbt.getString(NBTHelpers.KEY_MODE));
     }
 
@@ -61,8 +58,7 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntity implements I
     @NotNull
     public CompoundTag getUpdateTag() {
         CompoundTag nbt = super.getUpdateTag();
-        nbt.put(NBTHelpers.KEY_STACK, inv.serializeNBT());
-        nbt.putInt(NBTHelpers.KEY_AURA, auraProgress);
+        nbt.putInt(NBTHelpers.KEY_AURA_PROGRESS, auraProgress);
         nbt.putString(NBTHelpers.KEY_MODE, mode.toString());
         return nbt;
     }
@@ -70,9 +66,7 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntity implements I
     @Override
     public Packet<ClientGamePacketListener> getUpdatePacket() {
         CompoundTag nbt = getUpdateTag();
-        inv = new ItemStackHandler(1);
-        inv.deserializeNBT(nbt.getCompound(NBTHelpers.KEY_STACK));
-        auraProgress = nbt.getInt(NBTHelpers.KEY_AURA);
+        auraProgress = nbt.getInt(NBTHelpers.KEY_AURA_PROGRESS);
         mode = InfusionMode.valueOf(nbt.getString(NBTHelpers.KEY_MODE));
         return ClientboundBlockEntityDataPacket.create(this);
     }
@@ -118,14 +112,6 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntity implements I
         }
 
         return super.getText(text, detailed);
-    }
-
-    public ItemStack getItem() {
-        return inv.getStackInSlot(0);
-    }
-
-    public void setItem(ItemStack stack) {
-        inv.setStackInSlot(0, stack);
     }
 
     public void nextMode() {

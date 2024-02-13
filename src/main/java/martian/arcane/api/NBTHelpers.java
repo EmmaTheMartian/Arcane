@@ -8,6 +8,7 @@ import java.util.function.BiConsumer;
 
 public final class NBTHelpers {
     public static final String KEY_AURA = ArcaneMod.MODID + ".aura";
+    public static final String KEY_AURA_PROGRESS = ArcaneMod.MODID + ".auraProgess";
     public static final String KEY_MAX_AURA = ArcaneMod.MODID + ".maxAura";
     public static final String KEY_AURA_EXTRACTABLE = ArcaneMod.MODID + ".canExtractAura";
     public static final String KEY_AURA_INSERTABLE = ArcaneMod.MODID + ".canInsertAura";

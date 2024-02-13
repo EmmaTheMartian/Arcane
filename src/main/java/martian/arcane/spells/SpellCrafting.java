@@ -1,13 +1,12 @@
 package martian.arcane.spells;
 
 import martian.arcane.api.spell.AbstractSpell;
+import martian.arcane.api.spell.CastContext;
+import martian.arcane.api.spell.ICastingSource;
 import martian.arcane.item.ItemAuraWand;
 import martian.arcane.registry.ArcaneBlocks;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
@@ -22,18 +21,28 @@ public class SpellCrafting extends AbstractSpell {
     }
 
     @Override
-    public void cast(ItemAuraWand wand, ItemStack stack, Level level, Player caster, InteractionHand castHand, HitResult hit) {
-        if (level.isClientSide())
+    public void cast(CastContext c) {
+        if (c.level.isClientSide())
             return;
 
-        if (hit.getType() != HitResult.Type.BLOCK)
-            return;
+        BlockPos pos = null;
 
-        BlockHitResult bHit = (BlockHitResult)hit;
-        BlockPos pos = bHit.getBlockPos().relative(bHit.getDirection());
-        if (!level.isInWorldBounds(pos))
-            return;
+        if (c.source == ICastingSource.Type.WAND) {
+            CastContext.WandContext wandContext = (CastContext.WandContext)c;
+            HitResult hit = wandContext.raycast();
+            if (hit.getType() != HitResult.Type.BLOCK)
+                return;
 
-        level.setBlockAndUpdate(pos, ArcaneBlocks.CONJURED_CRAFTING_TABLE.get().defaultBlockState());
+            BlockHitResult bHit = (BlockHitResult)hit;
+            pos = bHit.getBlockPos().relative(bHit.getDirection());
+            if (!c.level.isInWorldBounds(pos))
+                return;
+        } else if (c.source == ICastingSource.Type.SPELL_CIRCLE) {
+            CastContext.SpellCircleContext spellCircleContext = (CastContext.SpellCircleContext)c;
+            pos = spellCircleContext.getTarget();
+        }
+
+        if (pos != null && c.level.isInWorldBounds(pos))
+            c.level.setBlockAndUpdate(pos, ArcaneBlocks.CONJURED_CRAFTING_TABLE.get().defaultBlockState());
     }
 }

@@ -39,7 +39,12 @@ public class ArcaneLootTableProvider extends LootTableProvider {
 
         @Override
         protected void generate() {
-            ArcaneBlocks.BLOCKS.getEntries().forEach(block -> dropSelf(block.get()));
+            ArcaneBlocks.BLOCKS.getEntries().forEach(block -> {
+                if (block == ArcaneBlocks.CONJURED_BLOCK || block == ArcaneBlocks.CONJURED_CRAFTING_TABLE)
+                    return;
+
+                dropSelf(block.get());
+            });
         }
 
         @Override

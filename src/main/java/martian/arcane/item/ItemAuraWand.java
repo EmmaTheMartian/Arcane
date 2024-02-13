@@ -1,10 +1,11 @@
 package martian.arcane.item;
 
 import martian.arcane.api.NBTHelpers;
-import martian.arcane.api.Raycasting;
 import martian.arcane.api.capability.IAuraStorage;
 import martian.arcane.api.item.AbstractAuraItem;
 import martian.arcane.api.spell.AbstractSpell;
+import martian.arcane.api.spell.CastContext;
+import martian.arcane.api.spell.ICastingSource;
 import martian.arcane.registry.ArcaneSpells;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -22,13 +23,16 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 
-public class ItemAuraWand extends AbstractAuraItem {
+public class ItemAuraWand extends AbstractAuraItem implements ICastingSource {
     public final int level;
-    public final double reach = 7.0D;
 
     public ItemAuraWand(int maxAura, int level, Properties properties) {
         super(maxAura, false, true, properties);
         this.level = level;
+    }
+
+    public ICastingSource.Type getType() {
+        return Type.WAND;
     }
 
     @Override
@@ -52,7 +56,7 @@ public class ItemAuraWand extends AbstractAuraItem {
         }
 
         aura.setAura(aura.getAura() - cost);
-        spell.cast(this, stack, level, player, hand, Raycasting.raycast(player, reach, false));
+        spell.cast(new CastContext.WandContext(level, player, hand, stack, this));
         return InteractionResultHolder.success(stack);
     }
 

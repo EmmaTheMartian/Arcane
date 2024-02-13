@@ -1,6 +1,7 @@
 package martian.arcane.spells;
 
 import martian.arcane.api.recipe.SimpleContainer;
+import martian.arcane.api.spell.AbstractCraftingSpell;
 import martian.arcane.item.ItemAuraWand;
 import martian.arcane.recipe.RecipeHammering;
 import net.minecraft.world.item.ItemStack;
