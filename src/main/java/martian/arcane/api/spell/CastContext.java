@@ -1,7 +1,7 @@
 package martian.arcane.api.spell;
 
 import martian.arcane.api.Raycasting;
-import martian.arcane.item.ItemAuraWand;
+import martian.arcane.common.item.ItemAuraWand;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;

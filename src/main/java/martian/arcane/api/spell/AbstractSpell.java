@@ -1,7 +1,7 @@
 package martian.arcane.api.spell;
 
-import martian.arcane.item.ItemAuraWand;
-import martian.arcane.registry.ArcaneSpells;
+import martian.arcane.common.item.ItemAuraWand;
+import martian.arcane.common.registry.ArcaneSpells;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 
@@ -12,7 +12,7 @@ public abstract class AbstractSpell {
         this.minLevel = minLevel;
     }
 
-    public Component getSpellName(ItemStack stack) {
+    public Component getSpellName() {
         return Component.translatable("spell." + ArcaneSpells.getId(this).toShortLanguageKey() + ".name");
     }
 
@@ -24,7 +24,7 @@ public abstract class AbstractSpell {
         return wand.level >= minLevel;
     }
 
-    public abstract int getAuraCost(ItemAuraWand wand, ItemStack stack);
+    public abstract int getAuraCost(int casterLevel);
 
     public abstract void cast(CastContext context);
 }

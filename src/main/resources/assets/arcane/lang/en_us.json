@@ -21,7 +21,7 @@
   "item.arcane.wand_aurachalcum": "Aurachalcum Wand",
   "item.arcane.wand_eldritch":    "Eldritch Wand",
 
-  ".COMMENT-Items": "----------------------------------------------------- Items",
+  ".COMMENT-Tools": "----------------------------------------------------- Tools",
   "item.arcane.auraglass_bottle":          "Auraglass Bottle",
   "item.arcane.medium_auraglass_bottle":   "Medium Auraglass Bottle",
   "item.arcane.large_auraglass_bottle":    "Large Auraglass Bottle",
@@ -32,6 +32,9 @@
   "item.arcane.aura_wrench":               "Aurawrench",
   "item.arcane.aura_configurator":         "Configaurator",
   "item.arcane.spell_tablet":              "Spell Tablet",
+  "block.arcane.spell_circle":             "Spell Chalk",
+  "item.arcane.arcane_bleach":             "Arcane Bleach",
+  "item.arcane.enderpack":                 "Enderpack",
 
   ".COMMENT-Resources": "------------------------------------------------- Resources",
   "item.arcane.blue_gold_ingot":           "Blue Gold Ingot",
@@ -41,7 +44,9 @@
   "item.arcane.blue_gold_core":            "Blue Gold Core",
   "item.arcane.aurachalcum_core":          "Aurachalcum Core",
   "item.arcane.eldritch_core":             "Eldritch Core",
+  "item.arcane.spell_circle_core":         "Spell Circle Core",
   "item.arcane.auraglass_shard":           "Auraglass Shard",
+  "item.arcane.auraglass_dust":            "Auraglass Dust",
 
   "item.arcane.crushed_raw_copper":        "Crushed Raw Copper",
   "item.arcane.crushed_raw_iron":          "Crushed Raw Iron",
@@ -94,6 +99,7 @@
   "messages.arcane.wand_level":              "Wand Level: ",
   "messages.arcane.spell_min_level":         "Required Wand Level: ",
   "messages.arcane.push_rate":               "Push Rate: ",
+  "messages.arcane.cast_timer":              "Cast Timer: ",
 
   "messages.arcane.not_linked":              "Not linked",
   "messages.arcane.mode_crafting":           "Crafting",
@@ -128,6 +134,7 @@
   "spell.arcane.crafting.name":       "Conjure Crafting Table",
   "spell.arcane.cleansing.name":      "Cleansing",
   "spell.arcane.purifying.name":      "Purifying",
+  "spell.arcane.activator.name":      "Activating",
 
   "spell.arcane.hammering.name.item": "Arcane Hammer",
   "spell.arcane.breaking.name.item":  "Arcane Pickaxe",
@@ -136,10 +143,17 @@
   "spell.arcane.crafting.name.item":  "Arcane Crafting Table",
   "spell.arcane.cleansing.name.item": "Arcane Cleansing",
   "spell.arcane.purifying.name.item": "Arcane Purifying",
+  "spell.arcane.activator.name.item": "Arcane Activating",
 
   ".COMMENT-Jade": "------------------------------------------------------ Jade",
   "config.jade.plugin_arcane.jade_auraometer_provider": "Auraometer",
 
   ".COMMENT-Screen": "---------------------------------------------------- Screens",
-  "container.arcane.conjured_crafting_table": "Conjured Crafting Table"
+  "container.arcane.conjured_crafting_table": "Conjured Crafting Table",
+  "container.arcane.enderpack":               "Enderpack",
+
+  ".COMMENT-Keys": "------------------------------------------------------ Keys",
+  "key.categories.arcane.arcane": "Arcane",
+
+  "key.arcane.open_enderpack":    "Open Enderpack"
 }

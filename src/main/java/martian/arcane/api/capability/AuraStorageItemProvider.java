@@ -1,6 +1,6 @@
 package martian.arcane.api.capability;
 
-import martian.arcane.registry.ArcaneCapabilities;
+import martian.arcane.common.registry.ArcaneCapabilities;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;

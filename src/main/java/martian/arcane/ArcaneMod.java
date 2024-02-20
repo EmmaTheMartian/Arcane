@@ -1,8 +1,9 @@
 package martian.arcane;
 
 import com.mojang.logging.LogUtils;
+import martian.arcane.common.registry.*;
 import martian.arcane.datagen.ArcaneDatagen;
-import martian.arcane.registry.*;
+import martian.arcane.integration.curios.CuriosIntegration;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.BlastFurnaceBlock;
 import net.minecraft.world.level.block.Blocks;
@@ -12,9 +13,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
 
@@ -43,8 +46,10 @@ public class ArcaneMod
         ArcaneRecipeTypes.RECIPE_SERIALIZERS.register(modBus);
         ArcaneTabs.TABS.register(modBus);
         ArcaneSpells.REGISTER.register(modBus);
+        ArcaneNetworking.init();
 
-        // TODO: Replace this with something data-driven. Maybe a NeoForge data map could work?
+        // TODO: Replace this with something data-driven.
+        //  Once I update to NeoForge, this can become a data map. I am unsure of what to use on Fabric though.
         ignisGenerationAmounts.put(state -> state.is(Blocks.FIRE), 1);
         ignisGenerationAmounts.put(state -> state.is(Blocks.CAMPFIRE) && state.getValue(CampfireBlock.LIT), 1);
         ignisGenerationAmounts.put(state -> state.is(Blocks.LAVA_CAULDRON), 1);
@@ -56,9 +61,16 @@ public class ArcaneMod
         ignisGenerationAmounts.put(state -> state.is(Blocks.LAVA), 2);
         ignisGenerationAmounts.put(state -> state.is(ArcaneBlocks.SOUL_MAGMA.get()), 3);
 
+        modBus.addListener(this::setup);
         modBus.addListener(EventPriority.LOWEST, ArcaneDatagen::gatherData);
 
         forgeBus.register(this);
+    }
+
+    private void setup(final FMLCommonSetupEvent event) {
+        if (ModList.get().isLoaded("curios")) {
+            CuriosIntegration.init();
+        }
     }
 
     public static int getIgnisGenAmountForState(BlockState state) {

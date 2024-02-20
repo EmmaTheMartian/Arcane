@@ -3,7 +3,7 @@
   "category": "misc",
   "ingredients": [
     {
-      "item": "minecraft:gold_ingot"
+      "tag": "forge:ingots/iron"
     },
     {
       "item": "minecraft:gold_ingot"
@@ -12,7 +12,7 @@
       "item": "minecraft:gold_ingot"
     },
     {
-      "item": "minecraft:iron_ingot"
+      "item": "minecraft:gold_ingot"
     }
   ],
   "result": {

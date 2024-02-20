@@ -1,5 +1,6 @@
 package martian.arcane.api.block.entity;
 
+import martian.arcane.api.BlockHelpers;
 import martian.arcane.api.NBTHelpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -17,26 +18,26 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractSingleItemBlockEntity extends BlockEntity implements Container {
     private final LazyOptional<IItemHandler> itemHandler = LazyOptional.of(() -> new InvWrapper(this));
-    public ItemStackHandler inv;
+    protected ItemStack stack = ItemStack.EMPTY;
+    public boolean hasSignal = false;
 
     public AbstractSingleItemBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState blockState) {
         super(type, pos, blockState);
-        this.inv = new ItemStackHandler();
     }
 
     public ItemStack getItem() {
-        return inv.getStackInSlot(0);
+        return stack;
     }
 
     public void setItem(ItemStack stack) {
-        inv.setStackInSlot(0, stack);
+        this.stack = stack;
+        BlockHelpers.sync(this);
     }
 
     @Override
@@ -51,35 +52,39 @@ public abstract class AbstractSingleItemBlockEntity extends BlockEntity implemen
 
     @Override
     public boolean isEmpty() {
-        return getItem().isEmpty();
+        return stack.isEmpty();
     }
 
     @Override
     @NotNull
     @Deprecated
     public ItemStack getItem(int slot) {
-        return getItem();
+        return stack;
     }
 
     @Override
     @NotNull
     @Deprecated
     public ItemStack removeItem(int slot, int amount) {
-        return inv.extractItem(slot, amount, true);
+        ItemStack stack = getItem().copy().split(amount);
+        getItem().shrink(amount);
+        BlockHelpers.sync(this);
+        return stack;
     }
 
     @Override
     @NotNull
     public ItemStack removeItemNoUpdate(int slot) {
         ItemStack old = getItem(slot);
-        inv.setStackInSlot(slot, ItemStack.EMPTY);
+        this.stack = ItemStack.EMPTY;
         return old;
     }
 
     @Override
     @Deprecated
     public void setItem(int slot, @NotNull ItemStack stack) {
-        inv.setStackInSlot(slot, stack);
+        this.stack = stack;
+        BlockHelpers.sync(this);
     }
 
     @Override
@@ -102,31 +107,39 @@ public abstract class AbstractSingleItemBlockEntity extends BlockEntity implemen
     }
 
     @Override
+    public void invalidateCaps() {
+        itemHandler.invalidate();
+        super.invalidateCaps();
+    }
+
+    @Override
     public void saveAdditional(@NotNull CompoundTag nbt) {
-        nbt.put(NBTHelpers.KEY_STACK, inv.serializeNBT());
+        NBTHelpers.putItemStack(nbt, NBTHelpers.KEY_STACK, stack);
+        nbt.putBoolean(NBTHelpers.KEY_HAS_SIGNAL, hasSignal);
         super.saveAdditional(nbt);
     }
 
     @Override
     public void load(@NotNull CompoundTag nbt) {
         super.load(nbt);
-        inv = new ItemStackHandler(1);
-        inv.deserializeNBT(nbt.getCompound(NBTHelpers.KEY_STACK));
+        stack = NBTHelpers.getItemStack(nbt, NBTHelpers.KEY_STACK);
+        hasSignal = nbt.getBoolean(NBTHelpers.KEY_HAS_SIGNAL);
     }
 
     @Override
     @NotNull
     public CompoundTag getUpdateTag() {
         CompoundTag nbt = super.getUpdateTag();
-        nbt.put(NBTHelpers.KEY_STACK, inv.serializeNBT());
+        NBTHelpers.putItemStack(nbt, NBTHelpers.KEY_STACK, stack);
+        nbt.putBoolean(NBTHelpers.KEY_HAS_SIGNAL, hasSignal);
         return nbt;
     }
 
     @Override
     public Packet<ClientGamePacketListener> getUpdatePacket() {
         CompoundTag nbt = getUpdateTag();
-        inv = new ItemStackHandler(1);
-        inv.deserializeNBT(nbt.getCompound(NBTHelpers.KEY_STACK));
+        stack = NBTHelpers.getItemStack(nbt, NBTHelpers.KEY_STACK);
+        hasSignal = nbt.getBoolean(NBTHelpers.KEY_HAS_SIGNAL);
         return ClientboundBlockEntityDataPacket.create(this);
     }
 }

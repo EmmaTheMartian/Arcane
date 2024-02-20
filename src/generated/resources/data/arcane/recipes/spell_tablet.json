@@ -1,0 +1,13 @@
+{
+  "type": "arcane:pedestal",
+  "consume": true,
+  "input": {
+    "item": "minecraft:clay_ball"
+  },
+  "interaction_input": {
+    "item": "minecraft:paper"
+  },
+  "result": {
+    "item": "arcane:spell_tablet"
+  }
+}

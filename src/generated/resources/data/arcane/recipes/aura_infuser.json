@@ -9,7 +9,7 @@
       "item": "arcane:blue_gold_core"
     },
     "O": {
-      "item": "minecraft:obsidian"
+      "tag": "forge:obsidian"
     }
   },
   "pattern": [

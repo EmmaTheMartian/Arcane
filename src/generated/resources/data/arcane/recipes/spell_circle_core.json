@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "arcane:auraglass_dust"
+    },
+    "C": {
+      "item": "arcane:aurachalcum_core"
+    }
+  },
+  "pattern": [
+    " A ",
+    "ACA",
+    " A "
+  ],
+  "result": {
+    "item": "arcane:spell_circle_core"
+  },
+  "show_notification": true
+}

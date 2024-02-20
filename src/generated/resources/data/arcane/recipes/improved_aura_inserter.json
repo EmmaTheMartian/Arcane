@@ -2,16 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "redstone",
   "key": {
-    "A": {
-      "item": "arcane:aurachalcum_ingot"
-    },
-    "E": {
+    "B": {
       "item": "arcane:aura_inserter"
+    },
+    "S": {
+      "item": "arcane:aurachalcum_ingot"
     }
   },
   "pattern": [
-    "AAA",
-    " E "
+    "SSS",
+    " B "
   ],
   "result": {
     "item": "arcane:improved_aura_inserter"

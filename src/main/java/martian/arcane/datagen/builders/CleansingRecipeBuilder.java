@@ -1,7 +1,6 @@
 package martian.arcane.datagen.builders;
 
-import martian.arcane.recipe.RecipeCleansing;
-import martian.arcane.registry.ArcaneRecipeTypes;
+import martian.arcane.common.registry.ArcaneRecipeTypes;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;

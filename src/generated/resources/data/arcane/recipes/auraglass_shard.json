@@ -1,0 +1,10 @@
+{
+  "type": "arcane:hammering",
+  "input": {
+    "item": "arcane:auraglass"
+  },
+  "result": {
+    "count": 2,
+    "item": "arcane:auraglass_shard"
+  }
+}

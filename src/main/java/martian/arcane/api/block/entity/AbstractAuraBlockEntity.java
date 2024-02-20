@@ -2,7 +2,7 @@ package martian.arcane.api.block.entity;
 
 import martian.arcane.api.capability.AuraStorageBlockEntityProvider;
 import martian.arcane.api.capability.IAuraStorage;
-import martian.arcane.registry.ArcaneCapabilities;
+import martian.arcane.common.registry.ArcaneCapabilities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

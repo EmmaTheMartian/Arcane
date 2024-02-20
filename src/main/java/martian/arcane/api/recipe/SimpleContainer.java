@@ -2,13 +2,24 @@ package martian.arcane.api.recipe;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
 public class SimpleContainer extends RecipeWrapper {
-    public int editSlot = 0;
+    public final int editSlot = 0;
 
     public SimpleContainer(IItemHandlerModifiable items) {
         super(items);
+    }
+
+    public SimpleContainer() {
+        super(new ItemStackHandler());
+        setItem(ItemStack.EMPTY);
+    }
+
+    public SimpleContainer(ItemStack stack) {
+        super(new ItemStackHandler());
+        setItem(stack);
     }
 
     public ItemStack getItem() {

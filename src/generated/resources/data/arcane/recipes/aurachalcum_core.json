@@ -2,16 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "A": {
+    "B": {
       "item": "arcane:aurachalcum_ingot"
     },
     "G": {
-      "item": "arcane:auraglass"
+      "tag": "forge:glass/colorless"
     }
   },
   "pattern": [
     " G ",
-    "GAG",
+    "GBG",
     " G "
   ],
   "result": {

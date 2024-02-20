@@ -12,8 +12,11 @@ object Properties {
     const val FORGE_VERSION = "47.2.20"
     const val JEI_VERSION = "15.2.0.27"
     const val PARCHMENT_VERSION = "1.20.1:2023.09.03"
-    const val EMI_VERSION = "1.1.0+1.20.1"
+    const val EMI_VERSION = "1.1.0"
     const val JADE_VERSION = "5072729" // 1.20.1-forge-11.8.0
+    const val LDLIB_VERSION = "1.0.24.a"
+    const val PHOTON_VERSION = "1.0.7.a"
+    const val CURIOS_VERSION = "5.7.0"
 
     const val MOD_VERSION = "1.0.0"
     const val MOD_LICENSE = "MIT"
@@ -39,6 +42,10 @@ java {
 
 loom {
     runs {
+        all {
+            vmArg("-XX:+AllowEnhancedClassRedefinition")
+        }
+
         register("data") {
             data()
             programArgs("--all", "--mod", Properties.MOD_ID,
@@ -60,14 +67,30 @@ sourceSets {
 repositories {
     // Parchment
     maven("https://maven.parchmentmc.org") { name = "ParchmentMC" }
+
     // JEI
     maven("https://maven.blamejared.com/") { name = "Jared's maven" }
+
     // JEI Mirror (backup)
     maven("https://modmaven.dev") { name = "ModMaven" }
+
     // EMI
     maven("https://maven.terraformersmc.com") { name = "TerraformersMC" }
+
     // Jade
-    maven("https://www.cursemaven.com") { mavenContent { includeGroup("curse.maven") } }
+    maven("https://www.cursemaven.com") {
+        mavenContent {
+            includeGroup("curse.maven")
+        }
+    }
+
+    // LDLib and Photon
+    maven("https://maven.firstdarkdev.xyz/snapshots")
+
+    // Curios
+    maven("https://maven.theillusivec4.top/") {
+        name = "Illusive Soulworks maven"
+    }
 }
 
 dependencies {
@@ -86,12 +109,22 @@ dependencies {
     modRuntimeOnly("mezz.jei:jei-${Properties.MC_VERSION}-forge:${Properties.JEI_VERSION}") { isTransitive = false }
 
     // EMI
-    modCompileOnly("dev.emi:emi-forge:${Properties.EMI_VERSION}:api")
-    modRuntimeOnly("dev.emi:emi-forge:${Properties.EMI_VERSION}")
+    modCompileOnly("dev.emi:emi-forge:${Properties.EMI_VERSION}+${Properties.MC_VERSION}:api")
+    modRuntimeOnly("dev.emi:emi-forge:${Properties.EMI_VERSION}+${Properties.MC_VERSION}")
 
     // Jade
     modCompileOnly("curse.maven:jade-324717:${Properties.JADE_VERSION}")
     modRuntimeOnly("curse.maven:jade-324717:${Properties.JADE_VERSION}")
+
+    // LDLib
+    modImplementation("com.lowdragmc.ldlib:ldlib-forge-${Properties.MC_VERSION}:${Properties.LDLIB_VERSION}") { isTransitive = false }
+
+    // Photon
+    modImplementation("com.lowdragmc.photon:photon-forge-${Properties.MC_VERSION}:${Properties.PHOTON_VERSION}") { isTransitive = false }
+
+    // Curios
+    modCompileOnly("top.theillusivec4.curios:curios-forge:${Properties.CURIOS_VERSION}+${Properties.MC_VERSION}:api")
+    modRuntimeOnly("top.theillusivec4.curios:curios-forge:${Properties.CURIOS_VERSION}+${Properties.MC_VERSION}")
 }
 
 tasks.processResources {

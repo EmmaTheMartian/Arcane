@@ -6,7 +6,7 @@
       "item": "arcane:blue_gold_ingot"
     },
     "G": {
-      "item": "minecraft:glass"
+      "tag": "forge:glass/colorless"
     }
   },
   "pattern": [

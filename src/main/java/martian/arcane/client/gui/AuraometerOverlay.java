@@ -2,7 +2,7 @@ package martian.arcane.client.gui;
 
 import martian.arcane.api.Raycasting;
 import martian.arcane.api.block.entity.IAuraometerOutput;
-import martian.arcane.registry.ArcaneItems;
+import martian.arcane.common.registry.ArcaneItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;

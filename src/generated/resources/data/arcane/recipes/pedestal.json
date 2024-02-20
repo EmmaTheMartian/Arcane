@@ -6,16 +6,16 @@
       "item": "arcane:blue_gold_ingot"
     },
     "L": {
-      "tag": "minecraft:logs"
+      "tag": "forge:stone"
     },
     "S": {
-      "tag": "minecraft:wooden_slabs"
+      "item": "minecraft:stone_slab"
     }
   },
   "pattern": [
     "BBB",
     " L ",
-    "SSS"
+    " S "
   ],
   "result": {
     "item": "arcane:pedestal"

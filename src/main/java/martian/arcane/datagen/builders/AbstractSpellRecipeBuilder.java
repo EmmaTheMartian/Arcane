@@ -86,18 +86,16 @@ public abstract class AbstractSpellRecipeBuilder implements RecipeBuilder {
         }
 
         public void serializeRecipeData(JsonObject json) {
-            if (!this.group.isEmpty()) {
+            if (!this.group.isEmpty())
                 json.addProperty("group", this.group);
-            }
 
             json.add("input", this.input.toJson());
 
             JsonObject stack = new JsonObject();
             //noinspection DataFlowIssue
             stack.addProperty("item", ForgeRegistries.ITEMS.getKey(this.result).toString());
-            if (count > 1) {
+            if (count > 1)
                 stack.addProperty("count", this.count);
-            }
             json.add("result", stack);
         }
 

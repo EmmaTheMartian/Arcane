@@ -1,8 +1,7 @@
 package martian.arcane.client.renderers.be;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import martian.arcane.block.entity.BlockEntityAuraInfuser;
-import martian.arcane.block.entity.BlockEntityPedestal;
+import martian.arcane.common.block.entity.BlockEntityPedestal;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -10,7 +9,6 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 

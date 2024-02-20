@@ -9,10 +9,10 @@
       "item": "minecraft:flint"
     },
     "G": {
-      "item": "minecraft:glass"
+      "tag": "forge:glass/colorless"
     },
     "I": {
-      "item": "minecraft:iron_ingot"
+      "tag": "forge:ingots/iron"
     }
   },
   "pattern": [

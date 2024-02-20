@@ -1,6 +1,12 @@
 package martian.arcane.datagen;
 
 import martian.arcane.ArcaneMod;
+import martian.arcane.datagen.client.ArcaneBlockStateProvider;
+import martian.arcane.datagen.client.ArcaneItemModelProvider;
+import martian.arcane.datagen.server.ArcaneBlockTagProvider;
+import martian.arcane.datagen.server.ArcaneItemTagProvider;
+import martian.arcane.datagen.server.ArcaneLootTableProvider;
+import martian.arcane.datagen.server.ArcaneRecipeProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;

@@ -1,7 +1,10 @@
 package martian.arcane.api.spell;
 
+import com.lowdragmc.photon.client.fx.BlockEffect;
+import martian.arcane.api.BlockHelpers;
 import martian.arcane.api.recipe.SimpleContainer;
-import martian.arcane.block.entity.BlockEntityPedestal;
+import martian.arcane.client.ArcaneFx;
+import martian.arcane.common.block.entity.BlockEntityPedestal;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.BlockItem;
@@ -9,7 +12,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.Optional;
@@ -30,21 +32,21 @@ public abstract class AbstractCraftingSpell<T extends Recipe<?>> extends Abstrac
             } else {
                 level.removeBlock(pos, false);
                 Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), r.getResultItem(level.registryAccess()));
+                new BlockEffect(ArcaneFx.ON_CAST_GRAVITY, level, pos).start();
             }
         });
     }
 
     private void targetPedestal(Level level, BlockPos pos, BlockEntityPedestal pedestal) {
-        SimpleContainer container = new SimpleContainer(pedestal.inv);
-        Optional<T> recipe = getRecipeFor(level, container);
+        Optional<T> recipe = getRecipeFor(level, new SimpleContainer(pedestal.getItem()));
         recipe.ifPresent(r -> pedestal.setItem(r.getResultItem(level.registryAccess())));
-        BlockState state = level.getBlockState(pos);
-        level.sendBlockUpdated(pos, state, state, 2);
+        BlockHelpers.sync(level, pos);
+        new BlockEffect(ArcaneFx.ON_CAST_GRAVITY, level, pos.above()).start();
     }
 
     @Override
     public void cast(CastContext c) {
-        if (c.level.isClientSide())
+        if (c.level.isClientSide)
             return;
 
         BlockPos target = c.getTarget();

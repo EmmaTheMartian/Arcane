@@ -1,0 +1,9 @@
+{
+  "type": "arcane:cleansing",
+  "input": {
+    "item": "minecraft:gravel"
+  },
+  "result": {
+    "item": "minecraft:flint"
+  }
+}

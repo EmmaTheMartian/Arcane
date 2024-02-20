@@ -3,10 +3,10 @@
   "category": "misc",
   "ingredients": [
     {
-      "item": "arcane:blue_gold_ingot"
+      "item": "minecraft:obsidian"
     },
     {
-      "item": "minecraft:obsidian"
+      "item": "arcane:blue_gold_ingot"
     }
   ],
   "result": {

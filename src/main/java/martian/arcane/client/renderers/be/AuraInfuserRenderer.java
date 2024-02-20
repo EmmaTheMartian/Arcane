@@ -1,7 +1,7 @@
 package martian.arcane.client.renderers.be;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import martian.arcane.block.entity.BlockEntityAuraInfuser;
+import martian.arcane.common.block.entity.machines.BlockEntityAuraInfuser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;

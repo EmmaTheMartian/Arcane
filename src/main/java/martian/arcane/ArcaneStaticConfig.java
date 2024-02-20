@@ -19,6 +19,12 @@ public final class ArcaneStaticConfig {
         public static final int AURA_BASIN = 512;
 
         public static final int COLLECTOR_MAX_AURA = 8;
+
+        public static final int SPELL_CIRCLE_BASIC = 8;
+        public static final int SPELL_CIRCLE_ADVANCED = 16;
+        public static final int SPELL_CIRCLE_MYSTIC = 32;
+
+        public static final int ENDERPACK = 8;
     }
 
     // Rates are per tick unless otherwise specified
@@ -36,7 +42,15 @@ public final class ArcaneStaticConfig {
 
     // Machine speed is measured in ticks
     public static final class Speed {
-        public static final int IGNIS_COLLECTOR_SPEED = 20;
-        public static final int AQUA_COLLECTOR_SPEED = 40;
+        public static final int IGNIS_COLLECTOR_SPEED = 20;  // 1s
+        public static final int AQUA_COLLECTOR_SPEED = 40;   // 2s
+
+        public static final int SPELL_CIRCLE_BASIC = 80;     // 4s
+        public static final int SPELL_CIRCLE_ADVANCED = 60;  // 3s
+        public static final int SPELL_CIRCLE_MYSTIC = 40;    // 2s
+    }
+
+    public static final class Consumption {
+        public static final int ENDERPACK = 1;
     }
 }

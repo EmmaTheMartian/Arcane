@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "minecraft:bone_meal"
+    },
+    "C": {
+      "item": "minecraft:clay_ball"
+    },
+    "S": {
+      "item": "arcane:spell_circle_core"
+    }
+  },
+  "pattern": [
+    " CB",
+    "CSC",
+    "BC "
+  ],
+  "result": {
+    "item": "arcane:spell_chalk"
+  },
+  "show_notification": true
+}
