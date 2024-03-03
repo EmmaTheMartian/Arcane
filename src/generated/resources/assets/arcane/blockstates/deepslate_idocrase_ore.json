@@ -1,0 +1,9 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "arcane:block/deepslate_idocrase_ore"
+      }
+    }
+  ]
+}

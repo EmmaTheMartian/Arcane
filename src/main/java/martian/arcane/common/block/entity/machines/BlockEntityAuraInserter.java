@@ -17,20 +17,26 @@ import net.minecraftforge.common.util.LazyOptional;
 public class BlockEntityAuraInserter extends AbstractAuraBlockEntity implements IAuraInserter {
     public int insertRate;
 
-    public BlockEntityAuraInserter(int maxAura, int insertRate, BlockPos pos, BlockState state) {
-        super(maxAura, false, true, ArcaneBlockEntities.AURA_INSERTER.get(), pos, state);
+    public BlockEntityAuraInserter(int maxAura, int auraLoss, int insertRate, BlockPos pos, BlockState state) {
+        super(maxAura, auraLoss, false, true, ArcaneBlockEntities.AURA_INSERTER.get(), pos, state);
         this.insertRate = insertRate;
     }
 
     public BlockEntityAuraInserter(BlockPos pos, BlockState state) {
-        super(ArcaneStaticConfig.Maximums.AURA_INSERTER, false, true, ArcaneBlockEntities.AURA_INSERTER.get(), pos, state);
-        this.insertRate = ArcaneStaticConfig.Rates.AURA_INSERTER_RATE;
+        super(ArcaneStaticConfig.Maximums.AURA_INSERTERS, ArcaneStaticConfig.AuraLoss.COPPER_TIER, false, true, ArcaneBlockEntities.AURA_INSERTER.get(), pos, state);
+        this.insertRate = ArcaneStaticConfig.Rates.COPPER_AURA_INSERTER_RATE;
     }
 
-    public static <T extends BlockEntity> void tick(Level level, BlockPos blockPos, BlockState state, T blockEntity) {
+    public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T blockEntity) {
+        AbstractAuraBlockEntity.tick(level, pos, state, blockEntity);
+
         if (blockEntity instanceof BlockEntityAuraInserter inserter) {
+            // If there is a redstone signal coming into this block then we stop now
+            if (level.hasNeighborSignal(pos))
+                return;
+
             Direction facing = state.getValue(BlockAuraExtractor.FACING);
-            BlockPos insertTarget = blockPos.offset(facing.getStepX(), facing.getStepY(), facing.getStepZ());
+            BlockPos insertTarget = pos.offset(facing.getStepX(), facing.getStepY(), facing.getStepZ());
             if (!level.getBlockState(insertTarget).hasBlockEntity())
                 return;
 

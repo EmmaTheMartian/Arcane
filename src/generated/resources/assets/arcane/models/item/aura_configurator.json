@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "arcane:item/aura_configurator"
+    "layer0": "arcane:item/tools/aura_configurator"
   }
 }

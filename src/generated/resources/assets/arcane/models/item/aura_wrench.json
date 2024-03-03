@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "arcane:item/aura_wrench"
+    "layer0": "arcane:item/tools/aura_wrench"
   }
 }

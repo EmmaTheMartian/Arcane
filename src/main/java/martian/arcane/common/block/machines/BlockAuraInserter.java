@@ -37,8 +37,8 @@ public class BlockAuraInserter extends AbstractAuraMachine {
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
-    public BlockAuraInserter(int maxAura, int insertRate) {
-        super(PropertyHelpers.basicAuraMachine().noCollission().noOcclusion(), (pos, state) -> new BlockEntityAuraInserter(maxAura, insertRate, pos, state));
+    public BlockAuraInserter(int maxAura, int auraLoss, int insertRate) {
+        super(PropertyHelpers.basicAuraMachine().noOcclusion(), (pos, state) -> new BlockEntityAuraInserter(maxAura, auraLoss, insertRate, pos, state));
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.DOWN));
     }
 

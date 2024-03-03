@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": {
+      "item": "arcane:larimar_core"
+    },
+    "S": {
+      "tag": "forge:stone"
+    }
+  },
+  "pattern": [
+    " B ",
+    "SSS"
+  ],
+  "result": {
+    "item": "arcane:aura_inserter_larimar"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    {
+      "item": "arcane:aura_extractor_aurachalcum"
+    }
+  ],
+  "result": {
+    "item": "arcane:aura_inserter_aurachalcum"
+  }
+}

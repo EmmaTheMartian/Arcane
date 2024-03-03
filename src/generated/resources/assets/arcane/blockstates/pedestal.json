@@ -1,9 +1,19 @@
 {
-  "multipart": [
-    {
-      "apply": {
-        "model": "arcane:block/pedestal"
-      }
+  "variants": {
+    "facing=east": {
+      "model": "arcane:block/pedestal",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "arcane:block/pedestal",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "arcane:block/pedestal"
+    },
+    "facing=west": {
+      "model": "arcane:block/pedestal",
+      "y": 90
     }
-  ]
+  }
 }

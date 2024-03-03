@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "arcane:item/enderpack"
+    "layer0": "arcane:item/tools/enderpack"
   }
 }

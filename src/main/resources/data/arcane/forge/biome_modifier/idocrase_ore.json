@@ -1,0 +1,6 @@
+{
+  "type": "forge:add_features",
+  "biomes": "#minecraft:is_nether",
+  "features": "arcane:ore_idocrase",
+  "step": "underground_ores"
+}

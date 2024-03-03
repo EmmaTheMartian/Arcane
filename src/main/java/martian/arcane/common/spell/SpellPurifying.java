@@ -1,5 +1,6 @@
 package martian.arcane.common.spell;
 
+import martian.arcane.ArcaneStaticConfig;
 import martian.arcane.api.recipe.SimpleContainer;
 import martian.arcane.api.spell.AbstractCraftingSpell;
 import martian.arcane.common.recipe.RecipePurifying;
@@ -9,12 +10,7 @@ import java.util.Optional;
 
 public class SpellPurifying extends AbstractCraftingSpell<RecipePurifying> {
     public SpellPurifying() {
-        super(2);
-    }
-
-    @Override
-    public int getAuraCost(int level) {
-        return 4;
+        super(ArcaneStaticConfig.SpellMinLevels.PURIFYING, ArcaneStaticConfig.SpellCosts.PURIFYING);
     }
 
     @Override

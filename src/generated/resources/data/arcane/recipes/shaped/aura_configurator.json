@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "tag": "forge:ingots/iron"
+    },
+    "I": {
+      "item": "arcane:copper_core"
+    }
+  },
+  "pattern": [
+    "B B",
+    " I ",
+    " B "
+  ],
+  "result": {
+    "item": "arcane:aura_configurator"
+  },
+  "show_notification": true
+}

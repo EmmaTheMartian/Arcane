@@ -1,6 +1,8 @@
 package martian.arcane.common.block.entity.machines;
 
+import martian.arcane.ArcaneStaticConfig;
 import martian.arcane.api.NBTHelpers;
+import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntityWithSingleItem;
 import martian.arcane.api.block.entity.IAuraometerOutput;
 import martian.arcane.api.capability.IAuraStorage;
@@ -33,8 +35,12 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntityWithSingleIte
     public InfusionMode mode = InfusionMode.INSERT_AURA;
     public int auraProgress = 0;
 
+    public BlockEntityAuraInfuser(int maxAura, int auraLoss, BlockPos pos, BlockState state) {
+        super(maxAura, auraLoss, false, true, ArcaneBlockEntities.AURA_INFUSER.get(), pos, state);
+    }
+
     public BlockEntityAuraInfuser(BlockPos pos, BlockState state) {
-        super(32, false, true, ArcaneBlockEntities.AURA_INFUSER.get(), pos, state);
+        super(ArcaneStaticConfig.Maximums.AURA_INFUSER, ArcaneStaticConfig.AuraLoss.COPPER_TIER, false, true, ArcaneBlockEntities.AURA_INFUSER.get(), pos, state);
     }
 
     @Override
@@ -125,10 +131,16 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntityWithSingleIte
     }
 
     public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T entity) {
+        AbstractAuraBlockEntity.tick(level, pos, state, entity);
+
         if (level.isClientSide)
             return;
 
         if (entity instanceof BlockEntityAuraInfuser infuser) {
+            // If there is a redstone signal coming into this block then we stop now
+            if (level.hasNeighborSignal(pos))
+                return;
+
             IAuraStorage storage = infuser.getAuraStorage().orElseThrow();
 
             if (infuser.mode == InfusionMode.CRAFTING) {

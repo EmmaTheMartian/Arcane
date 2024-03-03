@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "arcane:item/medium_auraglass_bottle"
+    "layer0": "arcane:item/tools/medium_auraglass_bottle"
   }
 }

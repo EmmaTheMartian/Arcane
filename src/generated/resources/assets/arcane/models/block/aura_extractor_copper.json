@@ -1,0 +1,6 @@
+{
+  "parent": "arcane:block/base/aura_extractor",
+  "textures": {
+    "0": "arcane:block/machines/aura_extractor_copper"
+  }
+}

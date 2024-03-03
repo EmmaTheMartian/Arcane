@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": {
+      "item": "arcane:copper_core"
+    },
+    "C": {
+      "tag": "forge:ingots/copper"
+    },
+    "S": {
+      "tag": "forge:stone"
+    }
+  },
+  "pattern": [
+    "CBC",
+    " S ",
+    "SSS"
+  ],
+  "result": {
+    "item": "arcane:pedestal"
+  },
+  "show_notification": true
+}

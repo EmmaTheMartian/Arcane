@@ -25,7 +25,8 @@ public class ArcaneSpells extends ArcaneRegistry {
             BUILDING = REGISTER.register("building", SpellBuilding::new),
             DASHING = REGISTER.register("dashing", SpellDashing::new),
             CRAFTING = REGISTER.register("crafting", SpellCrafting::new),
-            ACTIVATOR = REGISTER.register("activator", SpellSpellCircleActivator::new)
+            ACTIVATOR = REGISTER.register("activator", SpellSpellCircleActivator::new),
+            PRESERVATION = REGISTER.register("preservation", SpellPreservation::new)
     ;
 
     public static AbstractSpell getSpellById(ResourceLocation id) {

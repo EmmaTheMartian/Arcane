@@ -1,10 +1,9 @@
 package martian.arcane.api.spell;
 
-import com.lowdragmc.photon.client.fx.BlockEffect;
-import martian.arcane.api.BlockHelpers;
+import martian.arcane.api.block.BlockHelpers;
 import martian.arcane.api.recipe.SimpleContainer;
-import martian.arcane.client.ArcaneFx;
 import martian.arcane.common.block.entity.BlockEntityPedestal;
+import martian.arcane.integration.photon.ArcaneFx;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.BlockItem;
@@ -15,48 +14,53 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public abstract class AbstractCraftingSpell<T extends Recipe<?>> extends AbstractSpell {
-    public AbstractCraftingSpell(int minLevel) {
+    public final int costPerCraft;
+
+    public AbstractCraftingSpell(int minLevel, int costPerCraft) {
         super(minLevel);
-    }
-
-    private void targetBlock(Level level, BlockPos pos) {
-        Item item = level.getBlockState(pos).getBlock().asItem();
-        SimpleContainer container = new SimpleContainer(new ItemStackHandler());
-        container.setItem(new ItemStack(item));
-        Optional<T> recipe = getRecipeFor(level, container);
-        recipe.ifPresent(r -> {
-            if (r.getResultItem(level.registryAccess()).getItem() instanceof BlockItem bi) {
-                level.setBlockAndUpdate(pos, bi.getBlock().defaultBlockState());
-            } else {
-                level.removeBlock(pos, false);
-                Containers.dropItemStack(level, pos.getX(), pos.getY(), pos.getZ(), r.getResultItem(level.registryAccess()));
-                new BlockEffect(ArcaneFx.ON_CAST_GRAVITY, level, pos).start();
-            }
-        });
-    }
-
-    private void targetPedestal(Level level, BlockPos pos, BlockEntityPedestal pedestal) {
-        Optional<T> recipe = getRecipeFor(level, new SimpleContainer(pedestal.getItem()));
-        recipe.ifPresent(r -> pedestal.setItem(r.getResultItem(level.registryAccess())));
-        BlockHelpers.sync(level, pos);
-        new BlockEffect(ArcaneFx.ON_CAST_GRAVITY, level, pos.above()).start();
+        this.costPerCraft = costPerCraft;
     }
 
     @Override
-    public void cast(CastContext c) {
+    public CastResult cast(CastContext c) {
         if (c.level.isClientSide)
-            return;
+            return CastResult.PASS;
 
-        BlockPos target = c.getTarget();
-        if (target == null)
-            return;
+        BlockPos pos = c.getTarget();
+        if (pos == null)
+            return CastResult.FAILED;
 
-        if (c.level.getBlockEntity(target) instanceof BlockEntityPedestal pedestal)
-            targetPedestal(c.level, target, pedestal);
-        else
-            targetBlock(c.level, target);
+        AtomicBoolean didCraft = new AtomicBoolean(false);
+
+        if (c.level.getBlockEntity(pos) instanceof BlockEntityPedestal pedestal) {
+            Optional<T> recipe = getRecipeFor(c.level, new SimpleContainer(pedestal.getItem()));
+            recipe.ifPresent(r -> {
+                pedestal.setItem(r.getResultItem(c.level.registryAccess()));
+                BlockHelpers.sync(c.level, pos);
+                ArcaneFx.ON_CAST_GRAVITY.goBlock(c.level, pos.above());
+                didCraft.set(true);
+            });
+        } else {
+            Item item = c.level.getBlockState(pos).getBlock().asItem();
+            SimpleContainer container = new SimpleContainer(new ItemStackHandler());
+            container.setItem(new ItemStack(item));
+            Optional<T> recipe = getRecipeFor(c.level, container);
+            recipe.ifPresent(r -> {
+                if (r.getResultItem(c.level.registryAccess()).getItem() instanceof BlockItem bi) {
+                    c.level.setBlockAndUpdate(pos, bi.getBlock().defaultBlockState());
+                } else {
+                    c.level.removeBlock(pos, false);
+                    Containers.dropItemStack(c.level, pos.getX(), pos.getY(), pos.getZ(), r.getResultItem(c.level.registryAccess()));
+                    ArcaneFx.ON_CAST_GRAVITY.goBlock(c.level, pos);
+                }
+                didCraft.set(true);
+            });
+        }
+
+        return didCraft.get() ? new CastResult(costPerCraft, false) : CastResult.FAILED;
     }
 
     protected abstract Optional<T> getRecipeFor(Level level, SimpleContainer container);

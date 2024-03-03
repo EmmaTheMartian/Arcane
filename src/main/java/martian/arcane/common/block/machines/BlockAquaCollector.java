@@ -14,8 +14,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 public class BlockAquaCollector extends AbstractAuraMachine {
-    public BlockAquaCollector() {
-        super(PropertyHelpers.basicAuraMachine(), (pos, state) -> new BlockEntityAquaCollector(ArcaneStaticConfig.Maximums.COLLECTOR_MAX_AURA, pos, state));
+    public BlockAquaCollector(int maxAura, int auraLoss) {
+        super(PropertyHelpers.basicAuraMachine(), (pos, state) -> new BlockEntityAquaCollector(maxAura, auraLoss, pos, state));
     }
 
     @Override

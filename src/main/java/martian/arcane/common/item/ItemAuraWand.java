@@ -5,6 +5,7 @@ import martian.arcane.api.capability.IAuraStorage;
 import martian.arcane.api.item.AbstractAuraItem;
 import martian.arcane.api.spell.AbstractSpell;
 import martian.arcane.api.spell.CastContext;
+import martian.arcane.api.spell.CastResult;
 import martian.arcane.api.spell.ICastingSource;
 import martian.arcane.common.registry.ArcaneSpells;
 import net.minecraft.ChatFormatting;
@@ -31,10 +32,6 @@ public class ItemAuraWand extends AbstractAuraItem implements ICastingSource {
         this.level = level;
     }
 
-    public ICastingSource.Type getType() {
-        return Type.WAND;
-    }
-
     @Override
     @NotNull
     public InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand) {
@@ -48,15 +45,8 @@ public class ItemAuraWand extends AbstractAuraItem implements ICastingSource {
         if (spell == null)
             return InteractionResultHolder.fail(stack);
 
-        int cost = spell.getAuraCost(this.level);
-        if (aura.getAura() < cost) {
-            if (!level.isClientSide)
-                player.sendSystemMessage(Component.translatable("messages.arcane.not_enough_aura"));
-            return InteractionResultHolder.fail(stack);
-        }
-
-        spell.cast(new CastContext.WandContext(level, player, hand, stack, this));
-        aura.setAura(aura.getAura() - cost);
+        CastResult result = spell.cast(new CastContext.WandContext(level, aura, player, hand, stack, this));
+        aura.removeAura(result.auraToConsume());
 
         return InteractionResultHolder.success(stack);
     }
@@ -112,5 +102,10 @@ public class ItemAuraWand extends AbstractAuraItem implements ICastingSource {
 
     public static CompoundTag getNBT(ItemStack stack) {
         return stack.getOrCreateTag();
+    }
+
+    @Override
+    public int getCastLevel() {
+        return level;
     }
 }

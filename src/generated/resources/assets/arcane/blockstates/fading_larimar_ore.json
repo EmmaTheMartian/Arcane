@@ -1,0 +1,9 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "arcane:block/fading_larimar_ore"
+      }
+    }
+  ]
+}

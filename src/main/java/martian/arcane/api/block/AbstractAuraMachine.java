@@ -1,9 +1,13 @@
 package martian.arcane.api.block;
 
+import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
@@ -24,5 +28,42 @@ public abstract class AbstractAuraMachine extends Block implements EntityBlock {
     @ParametersAreNonnullByDefault
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return beSupplier.apply(pos, state);
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        return !level.isClientSide ? AbstractAuraBlockEntity::tick : null;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public boolean hasAnalogOutputSignal(@NotNull BlockState state) {
+        return true;
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    @ParametersAreNonnullByDefault
+    public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+        if (level.getBlockEntity(pos) instanceof AbstractAuraBlockEntity machine)
+            return Math.round(machine.mapAuraStorage(aura -> (float)aura.getAura() / aura.getMaxAura() * 15F).orElseThrow());
+        return 0;
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    @SuppressWarnings("deprecation")
+    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block fromBlock, BlockPos fromPos, boolean isMoving) {
+        super.neighborChanged(state, level, pos, fromBlock, fromPos, isMoving);
+        if (
+            !level.isClientSide &&
+            level.getBlockEntity(pos) instanceof AbstractAuraBlockEntity machine &&
+            machine.hasSignal != level.hasNeighborSignal(pos)
+        ) {
+            machine.hasSignal = !machine.hasSignal;
+            level.updateNeighbourForOutputSignal(pos, this);
+            BlockHelpers.sync(machine);
+        }
     }
 }

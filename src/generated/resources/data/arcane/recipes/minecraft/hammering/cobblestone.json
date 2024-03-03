@@ -1,0 +1,9 @@
+{
+  "type": "arcane:hammering",
+  "input": {
+    "tag": "forge:stone"
+  },
+  "result": {
+    "item": "minecraft:cobblestone"
+  }
+}

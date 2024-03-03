@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "E": {
+      "item": "minecraft:ender_chest"
+    },
+    "L": {
+      "tag": "forge:leather"
+    },
+    "P": {
+      "item": "arcane:polished_larimar"
+    }
+  },
+  "pattern": [
+    " P ",
+    "LEL",
+    "PPP"
+  ],
+  "result": {
+    "item": "arcane:enderpack"
+  },
+  "show_notification": true
+}

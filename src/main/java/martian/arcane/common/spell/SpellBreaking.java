@@ -1,56 +1,66 @@
 package martian.arcane.common.spell;
 
-import martian.arcane.api.AOEHelpers;
+import martian.arcane.ArcaneStaticConfig;
+import martian.arcane.api.block.AOEHelpers;
 import martian.arcane.api.spell.AbstractSpell;
 import martian.arcane.api.spell.CastContext;
-import martian.arcane.api.spell.ICastingSource;
-import martian.arcane.common.item.ItemAuraWand;
+import martian.arcane.api.spell.CastResult;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SpellBreaking extends AbstractSpell {
     public SpellBreaking() {
-        super(1);
+        super(ArcaneStaticConfig.SpellMinLevels.BREAKING);
     }
 
     @Override
-    public int getAuraCost(int level) {
-        return level >= 3 ? 3 : 2;
-    }
-
-    @Override
-    public void cast(CastContext c) {
+    public CastResult cast(CastContext c) {
         if (c.level.isClientSide)
-            return;
+            return CastResult.PASS;
 
-        if (c.source == ICastingSource.Type.WAND) {
-            CastContext.WandContext wc = (CastContext.WandContext)c;
-            HitResult result = wc.raycast();
-            if (result.getType() != HitResult.Type.BLOCK)
-                return;
+        AtomicInteger cost = new AtomicInteger(0);
+        BlockPos target = c.getTarget();
 
-            BlockHitResult bHit = (BlockHitResult)result;
-            if (wc.wand.level == 1 || wc.caster.isCrouching())
-                tryBreak(c.level, bHit.getBlockPos());
-            else
-                AOEHelpers.streamAOE(bHit.getBlockPos(), bHit.getDirection(), getRadius(wc.wand)).forEach(pos -> tryBreak(c.level, pos));
-        } else if (c.source == ICastingSource.Type.SPELL_CIRCLE) {
-            tryBreak(c.level, c.getTarget());
+        if (target == null)
+            return CastResult.FAILED;
+
+        if (c instanceof CastContext.WandContext wc) {
+            if (wc.raycast() instanceof BlockHitResult bHit) {
+                if (c.source.getCastLevel() == 1 || wc.caster.isCrouching()) {
+                    if (tryBreak(c.level, target, !wc.caster.isCreative()))
+                        cost.getAndAdd(ArcaneStaticConfig.SpellCosts.BREAKING);
+                } else {
+                    AOEHelpers.streamAOE(target, bHit.getDirection(), getRadius(c.source.getCastLevel())).forEach(pos -> {
+                        if (c.aura.getAura() - cost.get() <= 0)
+                            return;
+
+                        if (tryBreak(c.level, pos, !wc.caster.isCreative()))
+                            cost.getAndAdd(ArcaneStaticConfig.SpellCosts.BREAKING);
+                    });
+                }
+            } else {
+                return CastResult.FAILED;
+            }
+        } else if (tryBreak(c.level, target, true)) {
+            cost.getAndAdd(ArcaneStaticConfig.SpellCosts.BREAKING);
         }
+
+        return new CastResult(cost.get(), false);
     }
 
-    private static void tryBreak(Level level, BlockPos pos) {
-        BlockState state = level.getBlockState(pos);
-        if (state.getDestroySpeed(level, pos) >= 0) {
-            level.destroyBlock(pos, true);
+    private static boolean tryBreak(Level level, BlockPos pos, boolean drop) {
+        if (level.getBlockState(pos).getDestroySpeed(level, pos) >= 0) {
+            level.destroyBlock(pos, drop);
+            return true;
         }
+        return false;
     }
 
-    private static int getRadius(ItemAuraWand wand) {
-        return switch (wand.level) {
+    private static int getRadius(int level) {
+        return switch (level) {
             case 2 -> 1;
             case 3 -> 2;
             default -> 0;

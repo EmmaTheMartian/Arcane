@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "arcane:raw_larimar"
+    },
+    {
+      "item": "arcane:gem_saw"
+    }
+  ],
+  "result": {
+    "item": "arcane:cut_larimar"
+  }
+}

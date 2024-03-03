@@ -36,8 +36,8 @@ public class BlockAuraExtractor extends AbstractAuraMachine {
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
-    public BlockAuraExtractor(int maxAura, int extractRate) {
-        super(PropertyHelpers.basicAuraMachine().noOcclusion().noCollission(), (pos, state) -> new BlockEntityAuraExtractor(maxAura, extractRate, pos, state));
+    public BlockAuraExtractor(int maxAura, int extractRate, int auraLoss) {
+        super(PropertyHelpers.basicAuraMachine().noOcclusion(), (pos, state) -> new BlockEntityAuraExtractor(maxAura, auraLoss, extractRate, pos, state));
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.DOWN));
     }
 
@@ -52,7 +52,7 @@ public class BlockAuraExtractor extends AbstractAuraMachine {
     @Override
     @ParametersAreNonnullByDefault
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return !level.isClientSide && type == ArcaneBlockEntities.AURA_EXTRACTOR.get() ? BlockEntityAuraExtractor::tick : null;
+        return type == ArcaneBlockEntities.AURA_EXTRACTOR.get() ? BlockEntityAuraExtractor::tick : null;
     }
 
     @Override

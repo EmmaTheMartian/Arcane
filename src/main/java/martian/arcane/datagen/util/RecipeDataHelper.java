@@ -13,6 +13,7 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -24,6 +25,8 @@ public class RecipeDataHelper {
     // the "minecraft" namespace.
     public boolean moveNamespacesToModid = true;
     public RecipeCategory defaultCategory;
+    // Used to add prefixes to recipe IDs based on their provider.
+    public Map<Class<?>, String> prefixesByProvider = new HashMap<>();
 
     public RecipeDataHelper(@NotNull Consumer<FinishedRecipe> writer, String modid, RecipeCategory defaultCategory) {
         this.writer = writer;
@@ -81,9 +84,20 @@ public class RecipeDataHelper {
         }
 
         public void save(ResourceLocation id) {
-            if (helper.moveNamespacesToModid && !id.getNamespace().equals(helper.modid))
-                id = new ResourceLocation(helper.modid, id.getNamespace() + "/" + id.getPath());
-            builder.save(helper.writer, id);
+            String namespace = id.getNamespace();
+            String path = id.getPath();
+
+            // Prefix depending on RecipeProvider, if applicable
+            if (helper.prefixesByProvider.containsKey(builder.getClass()))
+                path = helper.prefixesByProvider.get(builder.getClass()) + "/" + path;
+
+            // Prefix with the mod ID to help prevent conflicts and keep generated data clean
+            if (helper.moveNamespacesToModid && !id.getNamespace().equals(helper.modid)) {
+                path = id.getNamespace() + "/" + path;
+                namespace = helper.modid;
+            }
+
+            builder.save(helper.writer, new ResourceLocation(namespace, path));
         }
 
         public void save(String id) {
@@ -118,7 +132,7 @@ public class RecipeDataHelper {
             return this;
         }
 
-        public BuilderWrapper<T> define(char ch, Item item) {
+        public BuilderWrapper<T> define(char ch, Ingredient item) {
             assert builder instanceof ShapedRecipeBuilder;
             ((ShapedRecipeBuilder) builder).define(ch, item);
             return this;
@@ -130,7 +144,7 @@ public class RecipeDataHelper {
             return this;
         }
 
-        public BuilderWrapper<T> define(Map<Character, Item> defs) {
+        public BuilderWrapper<T> define(Map<Character, Ingredient> defs) {
             assert builder instanceof ShapedRecipeBuilder;
             ShapedRecipeBuilder shapelessBuilder = (ShapedRecipeBuilder) builder;
             defs.forEach(shapelessBuilder::define);

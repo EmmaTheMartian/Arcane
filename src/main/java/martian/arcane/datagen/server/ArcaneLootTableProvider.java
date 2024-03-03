@@ -1,11 +1,13 @@
 package martian.arcane.datagen.server;
 
 import martian.arcane.common.registry.ArcaneBlocks;
+import martian.arcane.common.registry.ArcaneItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.flag.FeatureFlags;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
@@ -39,12 +41,44 @@ public class ArcaneLootTableProvider extends LootTableProvider {
 
         @Override
         protected void generate() {
-            ArcaneBlocks.BLOCKS.getEntries().forEach(block -> {
-                if (block == ArcaneBlocks.CONJURED_BLOCK || block == ArcaneBlocks.CONJURED_CRAFTING_TABLE || block == ArcaneBlocks.SPELL_CIRCLE)
-                    return;
+            // General Blocks
+            dropSelf(ArcaneBlocks.SOUL_MAGMA.get());
 
-                dropSelf(block.get());
-            });
+            // Machines
+            dropSelf(ArcaneBlocks.COPPER_AURA_EXTRACTOR.get());
+            dropSelf(ArcaneBlocks.LARIMAR_AURA_EXTRACTOR.get());
+            dropSelf(ArcaneBlocks.AURACHALCUM_AURA_EXTRACTOR.get());
+
+            dropSelf(ArcaneBlocks.COPPER_AURA_INSERTER.get());
+            dropSelf(ArcaneBlocks.LARIMAR_AURA_INSERTER.get());
+            dropSelf(ArcaneBlocks.AURACHALCUM_AURA_INSERTER.get());
+
+            dropSelf(ArcaneBlocks.COPPER_AURA_BASIN.get());
+            dropSelf(ArcaneBlocks.LARIMAR_AURA_BASIN.get());
+            dropSelf(ArcaneBlocks.AURACHALCUM_AURA_BASIN.get());
+
+            dropSelf(ArcaneBlocks.PEDESTAL.get());
+            dropSelf(ArcaneBlocks.AURA_INFUSER.get());
+
+            // Generators
+            dropSelf(ArcaneBlocks.IGNIS_COLLECTOR.get());
+            dropSelf(ArcaneBlocks.AQUA_COLLECTOR.get());
+
+            // Ores
+            ore(ArcaneBlocks.LARIMAR_ORE.get(), ArcaneItems.RAW_LARIMAR.get());
+            ore(ArcaneBlocks.FADING_LARIMAR_ORE.get(), ArcaneItems.RAW_LARIMAR.get());
+            ore(ArcaneBlocks.FADED_LARIMAR_ORE.get(), ArcaneItems.FADED_RAW_LARIMAR.get());
+            ore(ArcaneBlocks.DEEPSLATE_LARIMAR_ORE.get(), ArcaneItems.RAW_LARIMAR.get());
+            ore(ArcaneBlocks.FADING_DEEPSLATE_LARIMAR_ORE.get(), ArcaneItems.RAW_LARIMAR.get());
+            ore(ArcaneBlocks.FADED_DEEPSLATE_LARIMAR_ORE.get(), ArcaneItems.FADED_RAW_LARIMAR.get());
+            ore(ArcaneBlocks.IDOCRASE_ORE.get(), ArcaneItems.RAW_IDOCRASE.get());
+            ore(ArcaneBlocks.DEEPSLATE_IDOCRASE_ORE.get(), ArcaneItems.RAW_IDOCRASE.get());
+            ore(ArcaneBlocks.NETHER_IDOCRASE_ORE.get(), ArcaneItems.RAW_IDOCRASE.get());
+            ore(ArcaneBlocks.BLACKSTONE_IDOCRASE_ORE.get(), ArcaneItems.RAW_IDOCRASE.get());
+        }
+
+        private void ore(Block block, Item item) {
+            add(block, b -> createOreDrop(block, item));
         }
 
         @Override

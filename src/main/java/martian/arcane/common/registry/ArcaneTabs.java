@@ -1,8 +1,8 @@
 package martian.arcane.common.registry;
 
+import com.klikli_dev.modonomicon.api.ModonomiconConstants;
 import martian.arcane.ArcaneMod;
 import martian.arcane.api.ArcaneRegistry;
-import martian.arcane.common.item.ItemAuraWand;
 import martian.arcane.common.item.ItemAuraglassBottle;
 import martian.arcane.common.item.ItemSpellTablet;
 import net.minecraft.ChatFormatting;
@@ -11,12 +11,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.CreativeModeTabs;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
-
-import java.util.List;
 
 @SuppressWarnings("unused")
 public class ArcaneTabs extends ArcaneRegistry {
@@ -29,6 +26,15 @@ public class ArcaneTabs extends ArcaneRegistry {
                     .translatable("itemGroup.arcane.arcane_tab")
                     .withStyle(ChatFormatting.DARK_PURPLE))
             .displayItems((_params, output) -> ArcaneItems.ITEMS.getEntries().forEach(item -> {
+                // Guidebook!
+                if (item == ArcaneItems.GUIDEBOOK) {
+                    ItemStack stack = ArcaneItems.GUIDEBOOK.get().getDefaultInstance();
+                    CompoundTag tag = stack.getOrCreateTag();
+                    tag.putString(ModonomiconConstants.Nbt.ITEM_BOOK_ID_TAG, "arcane:arcane_guidebook");
+                    output.accept(stack);
+                    return;
+                }
+
                 output.accept(item.get().getDefaultInstance());
 
                 // Creative Auraglass Bottle (with Integer.MAX_VALUE aura already)
@@ -51,20 +57,13 @@ public class ArcaneTabs extends ArcaneRegistry {
             .icon(() -> ArcaneItems.SPELL_TABLET.get().getDefaultInstance())
             .title(Component
                     .translatable("itemGroup.arcane.arcane_spells_tab")
-                    .withStyle(ChatFormatting.AQUA))
+                    .withStyle(ChatFormatting.DARK_AQUA))
             .displayItems((_params, output) -> {
                 ArcaneSpells.REGISTRY.get().getEntries().forEach(entry -> {
                     ItemStack stack = ArcaneItems.SPELL_TABLET.get().getDefaultInstance();
                     ItemSpellTablet.setSpell(stack, entry.getKey().location());
                     output.accept(stack);
                 });
-
-                List<Item> wands = List.of(ArcaneItems.WAND_CHERRY.get(), ArcaneItems.WAND_BLUE_GOLD.get(), ArcaneItems.WAND_AURACHALCUM.get());
-                wands.forEach(wand -> ArcaneSpells.REGISTRY.get().getEntries().forEach(entry -> {
-                    ItemStack stack = wand.getDefaultInstance();
-                    ((ItemAuraWand)stack.getItem()).setSpell(entry.getKey().location(), stack);
-                    output.accept(stack);
-                }));
             })
             .build());
 }

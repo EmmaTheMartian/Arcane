@@ -1,45 +1,36 @@
 package martian.arcane.common.spell;
 
-import com.lowdragmc.photon.client.fx.BlockEffect;
-import martian.arcane.api.BlockHelpers;
+import martian.arcane.ArcaneStaticConfig;
+import martian.arcane.api.block.BlockHelpers;
 import martian.arcane.api.spell.AbstractSpell;
 import martian.arcane.api.spell.CastContext;
-import martian.arcane.api.spell.ICastingSource;
-import martian.arcane.client.ArcaneFx;
+import martian.arcane.api.spell.CastResult;
 import martian.arcane.common.block.entity.machines.BlockEntitySpellCircle;
+import martian.arcane.integration.photon.ArcaneFx;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 
 public class SpellSpellCircleActivator extends AbstractSpell {
     public SpellSpellCircleActivator() {
-        super(2);
+        super(ArcaneStaticConfig.SpellMinLevels.ACTIVATOR);
     }
 
     @Override
-    public int getAuraCost(int level) {
-        return 16;
-    }
-
-    @Override
-    public void cast(CastContext c) {
+    public CastResult cast(CastContext c) {
         if (c.level.isClientSide)
-            return;
+            return CastResult.PASS;
 
-        if (c.source == ICastingSource.Type.WAND) {
-            CastContext.WandContext wandContext = (CastContext.WandContext) c;
-            HitResult hit = wandContext.raycast();
+        BlockPos pos = c.getTarget();
+        if (pos == null)
+            return CastResult.FAILED;
 
-            if (hit.getType() != HitResult.Type.BLOCK)
-                return;
-
-            BlockPos pos = ((BlockHitResult) hit).getBlockPos();
-            if (c.level.getBlockEntity(pos) instanceof BlockEntitySpellCircle spellCircle && !spellCircle.getActive()) {
-                new BlockEffect(ArcaneFx.ON_CAST_GRAVITY, c.level, pos).start();
-                new BlockEffect(ArcaneFx.SPELL_CIRCLE_INIT, c.level, pos).start();
-                spellCircle.setActive(true);
-                BlockHelpers.sync(spellCircle);
-            }
+        if (c.level.getBlockEntity(pos) instanceof BlockEntitySpellCircle spellCircle && !spellCircle.getActive()) {
+            ArcaneFx.ON_CAST_GRAVITY.goBlock(c.level, pos);
+            ArcaneFx.SPELL_CIRCLE_INIT.goBlock(c.level, pos);
+            spellCircle.setActive(true);
+            BlockHelpers.sync(spellCircle);
+            return new CastResult(ArcaneStaticConfig.SpellCosts.ACTIVATOR, false);
         }
+
+        return CastResult.FAILED;
     }
 }

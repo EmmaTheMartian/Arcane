@@ -12,13 +12,18 @@ public final class ArcaneStaticConfig {
         public static final int LARGE_AURAGLASS_BOTTLE = 64;
         public static final int EXTREME_AURAGLASS_BOTTLE = 128;
 
-        public static final int AURA_EXTRACTOR = 32;
-        public static final int AURA_INSERTER = 32;
-        public static final int IMPROVED_AURA_EXTRACTOR = 16;
-        public static final int IMPROVED_AURA_INSERTER = 16;
-        public static final int AURA_BASIN = 512;
+        public static final int AURA_EXTRACTORS = 16;
+        public static final int AURA_INSERTERS = 16;
 
-        public static final int COLLECTOR_MAX_AURA = 8;
+        public static final int COPPER_AURA_BASIN = 256;
+        public static final int LARIMAR_AURA_BASIN = 512;
+        public static final int AURACHALCUM_AURA_BASIN = 1024;
+        public static final int ELDRITCH_AURA_BASIN = 2048;
+
+        public static final int AURA_INFUSER = 32;
+        public static final int AURACHALCUM_INFUSER = 64;
+
+        public static final int COLLECTOR = 8;
 
         public static final int SPELL_CIRCLE_BASIC = 8;
         public static final int SPELL_CIRCLE_ADVANCED = 16;
@@ -27,17 +32,32 @@ public final class ArcaneStaticConfig {
         public static final int ENDERPACK = 8;
     }
 
+    public static final class AuraLoss {
+        public static final int COPPER_TIER = 4;
+        public static final int LARIMAR_TIER = 3;
+        public static final int AURACHALCUM_TIER = 2;
+        public static final int ELDRITCH_TIER = 1;
+    }
+
     // Rates are per tick unless otherwise specified
     public static final class Rates {
-        public static final int AURA_EXTRACTOR_RATE = 1;
-        public static final int AURA_INSERTER_RATE = 1;
-        public static final int IMPROVED_AURA_EXTRACTOR_RATE = 4;
-        public static final int IMPROVED_AURA_INSERTER_RATE = 4;
+        public static final int COPPER_AURA_EXTRACTOR_RATE = 1;
+        public static final int COPPER_AURA_INSERTER_RATE = 1;
+        public static final int LARIMAR_AURA_EXTRACTOR_RATE = 2;
+        public static final int LARIMAR_AURA_INSERTER_RATE = 2;
+        public static final int AURACHALCUM_AURA_EXTRACTOR_RATE = 4;
+        public static final int AURACHALCUM_AURA_INSERTER_RATE = 4;
+        public static final int ELDRITCH_AURA_EXTRACTOR_RATE = 8;
+        public static final int ELDRITCH_AURA_INSERTER_RATE = 8;
 
         public static final int SMALL_AURAGLASS_BOTTLE = 1;
         public static final int MEDIUM_AURAGLASS_BOTTLE = 2;
         public static final int LARGE_AURAGLASS_BOTTLE = 2;
         public static final int EXTREME_AURAGLASS_BOTTLE = 4;
+
+        // How often aura loss should occur. If this is set to `1` then machines will be drained as soon as they become
+        // idle. Arguably it is hilarious to see an entire Aura network die as soon it does
+        public static final int AURA_LOSS_TICKS = 10;  // 0.5s
     }
 
     // Machine speed is measured in ticks
@@ -53,4 +73,30 @@ public final class ArcaneStaticConfig {
     public static final class Consumption {
         public static final int ENDERPACK = 1;
     }
+
+    public static final class SpellMinLevels {
+        public static final int BREAKING = 1;
+        public static final int BUILDING = 1;
+        public static final int CLEANSING = 2;
+        public static final int CRAFTING = 1;
+        public static final int DASHING = 1;
+        public static final int HAMMERING = 2;
+        public static final int PRESERVATION = 2;
+        public static final int PURIFYING = 2;
+        public static final int ACTIVATOR = 2;
+    }
+
+    public static final class SpellCosts {
+        public static final int BREAKING = 1;  // Per block
+        public static final int BUILDING = 1;  // Per block
+        public static final int CLEANSING = 2;
+        public static final int CRAFTING = 1;
+        public static final int DASHING = 2;
+        public static final int HAMMERING = 4;
+        public static final int PRESERVATION = 4;
+        public static final int PURIFYING = 4;
+        public static final int ACTIVATOR = 16;
+    }
+
+    public static final int TICKS_UNTIL_CONSIDERED_IDLE = 80;  // 4s
 }

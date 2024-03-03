@@ -1,12 +1,21 @@
 package martian.arcane.datagen.client;
 
 import martian.arcane.ArcaneMod;
+import martian.arcane.common.block.BlockPedestal;
+import martian.arcane.common.block.machines.BlockAuraBasin;
+import martian.arcane.common.block.machines.BlockAuraExtractor;
+import martian.arcane.common.block.machines.BlockAuraInfuser;
+import martian.arcane.common.block.machines.BlockAuraInserter;
 import martian.arcane.common.registry.ArcaneBlocks;
+import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
+import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -20,25 +29,97 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        // Block Models
-        simpleTranslucent(ArcaneBlocks.AURAGLASS.get());
-        simpleTranslucent(ArcaneBlocks.CONJURED_BLOCK.get());
+        // Models
+        {
+            // Machines
+            withExistingParent(ArcaneBlocks.COPPER_AURA_EXTRACTOR.get(), ArcaneMod.id("block/base/aura_extractor"))
+                    .texture("0", ArcaneMod.id("block/machines/aura_extractor_copper"));
+            withExistingParent(ArcaneBlocks.LARIMAR_AURA_EXTRACTOR.get(), ArcaneMod.id("block/base/aura_extractor"))
+                    .texture("0", ArcaneMod.id("block/machines/aura_extractor_larimar"));
+            withExistingParent(ArcaneBlocks.AURACHALCUM_AURA_EXTRACTOR.get(), ArcaneMod.id("block/base/aura_extractor"))
+                    .texture("0", ArcaneMod.id("block/machines/aura_extractor_aurachalcum"));
 
-        topBottom(ArcaneBlocks.IGNIS_COLLECTOR.get(), texture("collectors/ignis_sides"), texture("collectors/top_and_bottom"));
-        topBottom(ArcaneBlocks.AQUA_COLLECTOR.get(), texture("collectors/aqua_sides"), texture("collectors/top_and_bottom"));
+            withExistingParent(ArcaneBlocks.COPPER_AURA_INSERTER.get(), ArcaneMod.id("block/base/aura_inserter"))
+                    .texture("0", ArcaneMod.id("block/machines/aura_inserter_copper"));
+            withExistingParent(ArcaneBlocks.LARIMAR_AURA_INSERTER.get(), ArcaneMod.id("block/base/aura_inserter"))
+                    .texture("0", ArcaneMod.id("block/machines/aura_inserter_larimar"));
+            withExistingParent(ArcaneBlocks.AURACHALCUM_AURA_INSERTER.get(), ArcaneMod.id("block/base/aura_inserter"))
+                    .texture("0", ArcaneMod.id("block/machines/aura_inserter_aurachalcum"));
 
-        cubeAll(ArcaneBlocks.SOUL_MAGMA.get());
+            withExistingParent(ArcaneBlocks.COPPER_AURA_BASIN.get(), ArcaneMod.id("block/base/aura_basin"))
+                    .texture("0", ArcaneMod.id("block/machines/aura_basin_copper"));
+            withExistingParent(ArcaneBlocks.LARIMAR_AURA_BASIN.get(), ArcaneMod.id("block/base/aura_basin"))
+                    .texture("0", ArcaneMod.id("block/machines/aura_basin_larimar"));
+            withExistingParent(ArcaneBlocks.AURACHALCUM_AURA_BASIN.get(), ArcaneMod.id("block/base/aura_basin"))
+                    .texture("0", ArcaneMod.id("block/machines/aura_basin_aurachalcum"));
+
+            // Generators
+            topBottom(ArcaneBlocks.IGNIS_COLLECTOR.get(), texture("machines/collectors/ignis_sides"), texture("machines/collectors/top_and_bottom"));
+            topBottom(ArcaneBlocks.AQUA_COLLECTOR.get(), texture("machines/collectors/aqua_sides"), texture("machines/collectors/top_and_bottom"));
+
+            // General Blocks
+            simpleTranslucent(ArcaneBlocks.AURAGLASS.get());
+            cubeAll(ArcaneBlocks.SOUL_MAGMA.get());
+
+            // Conjured Blocks
+            simpleTranslucent(ArcaneBlocks.CONJURED_BLOCK.get());
+
+            // Ores
+            cubeAll(ArcaneBlocks.LARIMAR_ORE.get());
+            cubeAll(ArcaneBlocks.FADING_LARIMAR_ORE.get());
+            cubeAll(ArcaneBlocks.FADED_LARIMAR_ORE.get());
+            cubeAll(ArcaneBlocks.DEEPSLATE_LARIMAR_ORE.get());
+            cubeAll(ArcaneBlocks.FADING_DEEPSLATE_LARIMAR_ORE.get());
+            cubeAll(ArcaneBlocks.FADED_DEEPSLATE_LARIMAR_ORE.get());
+
+            cubeAll(ArcaneBlocks.IDOCRASE_ORE.get());
+            cubeAll(ArcaneBlocks.DEEPSLATE_IDOCRASE_ORE.get());
+            cubeAll(ArcaneBlocks.NETHER_IDOCRASE_ORE.get());
+            cubeAll(ArcaneBlocks.BLACKSTONE_IDOCRASE_ORE.get());
+        }
 
         // Block States
-        makeBlockState(ArcaneBlocks.AURA_NODI);
-        makeBlockState(ArcaneBlocks.AURA_BASIN);
-        makeBlockState(ArcaneBlocks.AURA_INFUSER);
-        makeBlockState(ArcaneBlocks.IGNIS_COLLECTOR);
-        makeBlockState(ArcaneBlocks.AQUA_COLLECTOR);
-        makeBlockState(ArcaneBlocks.SOUL_MAGMA);
-        makeBlockState(ArcaneBlocks.PEDESTAL);
-        makeBlockState(ArcaneBlocks.CONJURED_CRAFTING_TABLE);
-        makeBlockState(ArcaneBlocks.SPELL_CIRCLE);
+        {
+            makeBlockState(ArcaneBlocks.AURA_NODI);
+            makeBlockState(ArcaneBlocks.SOUL_MAGMA);
+
+            // Machines
+            makeRotatableModel(ArcaneBlocks.COPPER_AURA_EXTRACTOR, BlockAuraExtractor.FACING, false);
+            makeRotatableModel(ArcaneBlocks.LARIMAR_AURA_EXTRACTOR, BlockAuraExtractor.FACING, false);
+            makeRotatableModel(ArcaneBlocks.AURACHALCUM_AURA_EXTRACTOR, BlockAuraExtractor.FACING, false);
+
+            makeRotatableModel(ArcaneBlocks.COPPER_AURA_INSERTER, BlockAuraInserter.FACING, false);
+            makeRotatableModel(ArcaneBlocks.LARIMAR_AURA_INSERTER, BlockAuraInserter.FACING, false);
+            makeRotatableModel(ArcaneBlocks.AURACHALCUM_AURA_INSERTER, BlockAuraInserter.FACING, false);
+
+            makeRotatableModel(ArcaneBlocks.COPPER_AURA_BASIN, BlockAuraBasin.FACING, true);
+            makeRotatableModel(ArcaneBlocks.LARIMAR_AURA_BASIN, BlockAuraBasin.FACING, true);
+            makeRotatableModel(ArcaneBlocks.AURACHALCUM_AURA_BASIN, BlockAuraBasin.FACING, true);
+
+            makeRotatableModel(ArcaneBlocks.AURA_INFUSER, BlockAuraInfuser.FACING, true);
+            makeRotatableModel(ArcaneBlocks.PEDESTAL, BlockPedestal.FACING, true);
+            makeBlockState(ArcaneBlocks.SPELL_CIRCLE);
+
+            // Generators
+            makeBlockState(ArcaneBlocks.IGNIS_COLLECTOR);
+            makeBlockState(ArcaneBlocks.AQUA_COLLECTOR);
+
+            // Conjured Blocks
+            makeBlockState(ArcaneBlocks.CONJURED_CRAFTING_TABLE);
+
+            // Ores
+            makeBlockState(ArcaneBlocks.LARIMAR_ORE);
+            makeBlockState(ArcaneBlocks.FADING_LARIMAR_ORE);
+            makeBlockState(ArcaneBlocks.FADED_LARIMAR_ORE);
+            makeBlockState(ArcaneBlocks.DEEPSLATE_LARIMAR_ORE);
+            makeBlockState(ArcaneBlocks.FADING_DEEPSLATE_LARIMAR_ORE);
+            makeBlockState(ArcaneBlocks.FADED_DEEPSLATE_LARIMAR_ORE);
+
+            makeBlockState(ArcaneBlocks.IDOCRASE_ORE);
+            makeBlockState(ArcaneBlocks.DEEPSLATE_IDOCRASE_ORE);
+            makeBlockState(ArcaneBlocks.NETHER_IDOCRASE_ORE);
+            makeBlockState(ArcaneBlocks.BLACKSTONE_IDOCRASE_ORE);
+        }
     }
 
     private void makeBlockState(RegistryObject<Block> block) {
@@ -46,6 +127,33 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
                 .part()
                 .modelFile(models().getExistingFile(modLoc(block.getId().getPath())))
                 .addModel();
+    }
+
+    private void makeRotatableModel(RegistryObject<Block> block, Property<Direction> property, boolean horizontal) {
+        ModelFile model = models().getExistingFile(modLoc(block.getId().getPath()));
+        getVariantBuilder(block.get()).forAllStates(state -> {
+            Direction facing = state.getValue(property);
+            if (horizontal && (facing == Direction.DOWN || facing == Direction.UP)) {
+                return ConfiguredModel.builder().modelFile(model).build();
+            }
+
+            int x = 0, y = 0;
+            switch (facing) {
+                case NORTH -> { x = 90; y = 180; }
+                case EAST -> { x = 90; y = 270; }
+                case SOUTH -> x = 90;
+                case WEST -> x = y = 90;
+                case UP -> x = 180;
+            }
+
+            if (horizontal) x = 0;
+
+            return ConfiguredModel.builder()
+                    .modelFile(model)
+                    .rotationX(x)
+                    .rotationY(y)
+                    .build();
+        });
     }
 
     private void simpleTranslucent(Block block) {
@@ -56,8 +164,8 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
         models().cubeBottomTop(name(block), sides, topAndBottom, topAndBottom);
     }
 
-    private void withTexture(Block block, ResourceLocation texture) {
-        models().cubeAll(name(block), texture);
+    private BlockModelBuilder withExistingParent(Block block, ResourceLocation parent) {
+        return models().withExistingParent(name(block), parent);
     }
 
     @SuppressWarnings("SameParameterValue")

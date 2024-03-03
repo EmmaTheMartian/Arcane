@@ -48,10 +48,8 @@ public class ItemEnderpack extends AbstractAuraItem {
     }
 
     public void tick(Entity entity) {
-        if (entity.level().isClientSide && entity instanceof Player && ArcaneKeybindings.OPEN_ENDERPACK.get().consumeClick()) {
-            System.out.println("B");
+        if (entity.level().isClientSide && entity instanceof Player && ArcaneKeybindings.OPEN_ENDERPACK.get().consumeClick())
             ArcaneNetworking.CHANNEL.sendToServer(new C2SPacketOpenEnderpack());
-        }
     }
 
     @ParametersAreNonnullByDefault

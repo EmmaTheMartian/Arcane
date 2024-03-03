@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    {
+      "item": "arcane:aura_inserter_copper"
+    }
+  ],
+  "result": {
+    "item": "arcane:aura_extractor_copper"
+  }
+}

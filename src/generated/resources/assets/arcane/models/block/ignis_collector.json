@@ -1,8 +1,8 @@
 {
   "parent": "minecraft:block/cube_bottom_top",
   "textures": {
-    "bottom": "arcane:block/collectors/top_and_bottom",
-    "side": "arcane:block/collectors/ignis_sides",
-    "top": "arcane:block/collectors/top_and_bottom"
+    "bottom": "arcane:block/machines/collectors/top_and_bottom",
+    "side": "arcane:block/machines/collectors/ignis_sides",
+    "top": "arcane:block/machines/collectors/top_and_bottom"
   }
 }

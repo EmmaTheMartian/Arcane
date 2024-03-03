@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "arcane:item/auraglass_shard"
+    "layer0": "arcane:item/resources/auraglass_shard"
   }
 }

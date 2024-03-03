@@ -2,6 +2,7 @@ package martian.arcane.common.block.entity.machines;
 
 import martian.arcane.ArcaneStaticConfig;
 import martian.arcane.ArcaneTags;
+import martian.arcane.api.block.BlockHelpers;
 import martian.arcane.api.NBTHelpers;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
 import martian.arcane.api.block.entity.IAuraInserter;
@@ -19,22 +20,23 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class BlockEntityAuraExtractor extends AbstractAuraBlockEntity {
-    private LazyOptional<IAuraStorage> cachedTarget;
-    public BlockPos targetPos;
+    private LazyOptional<IAuraStorage> cachedTarget = LazyOptional.empty();
+    private @Nullable BlockPos targetPos;
     public int extractRate;
 
-    public BlockEntityAuraExtractor(int maxAura, int extractRate, BlockPos pos, BlockState state) {
-        super(maxAura, false, false, ArcaneBlockEntities.AURA_EXTRACTOR.get(), pos, state);
+    public BlockEntityAuraExtractor(int maxAura, int auraLoss, int extractRate, BlockPos pos, BlockState state) {
+        super(maxAura, auraLoss, false, false, ArcaneBlockEntities.AURA_EXTRACTOR.get(), pos, state);
         this.extractRate = extractRate;
     }
 
     public BlockEntityAuraExtractor(BlockPos pos, BlockState state) {
-        super(ArcaneStaticConfig.Maximums.AURA_EXTRACTOR, false, false, ArcaneBlockEntities.AURA_EXTRACTOR.get(), pos, state);
-        this.extractRate = ArcaneStaticConfig.Rates.AURA_EXTRACTOR_RATE;
+        super(ArcaneStaticConfig.Maximums.AURA_EXTRACTORS, ArcaneStaticConfig.AuraLoss.COPPER_TIER, false, false, ArcaneBlockEntities.AURA_EXTRACTOR.get(), pos, state);
+        this.extractRate = ArcaneStaticConfig.Rates.COPPER_AURA_EXTRACTOR_RATE;
     }
 
     @Override
@@ -42,6 +44,8 @@ public class BlockEntityAuraExtractor extends AbstractAuraBlockEntity {
         super.saveAdditional(nbt);
         if (targetPos != null)
             NBTHelpers.putBlockPos(nbt, NBTHelpers.KEY_EXTRACTOR_TARGET_POS, targetPos);
+        else if (nbt.contains(NBTHelpers.KEY_EXTRACTOR_TARGET_POS))
+            nbt.remove(NBTHelpers.KEY_EXTRACTOR_TARGET_POS);
     }
 
     @Override
@@ -49,71 +53,69 @@ public class BlockEntityAuraExtractor extends AbstractAuraBlockEntity {
         super.load(nbt);
         if (nbt.contains(NBTHelpers.KEY_EXTRACTOR_TARGET_POS))
             targetPos = NBTHelpers.getBlockPos(nbt, NBTHelpers.KEY_EXTRACTOR_TARGET_POS);
+        else
+            targetPos = null;
     }
 
     @Override
     public List<Component> getText(List<Component> text, boolean detailed) {
-        boolean linked = targetPos != null;
-
-        if (linked) {
+        if (targetPos != null)
             text.add(Component.translatable("messages.arcane.linked_to")
                     .append(targetPos.toShortString()));
-        } else {
+        else
             text.add(Component.translatable("messages.arcane.not_linked")
                     .withStyle(ChatFormatting.DARK_RED));
-        }
 
         return super.getText(text, detailed);
     }
 
     public boolean validateTarget(Level level) {
+        if (targetPos == null)
+            return false;
         BlockState target = level.getBlockState(targetPos);
         return target.is(ArcaneTags.AURA_INSERTERS);
     }
 
     public static void setTarget(@NotNull BlockEntityAuraExtractor extractor, BlockEntityAuraInserter target) {
         extractor.targetPos = target.getBlockPos();
+        BlockHelpers.sync(extractor);
     }
 
     public static void removeTarget(@NotNull BlockEntityAuraExtractor extractor) {
         extractor.targetPos = null;
         extractor.cachedTarget = LazyOptional.empty();
+        BlockHelpers.sync(extractor);
     }
 
     public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T blockEntity) {
-        if (blockEntity instanceof BlockEntityAuraExtractor extractor) {
-            if (extractor.targetPos == null)
+        AbstractAuraBlockEntity.tick(level, pos, state, blockEntity);
+
+        if (!level.isClientSide && blockEntity instanceof BlockEntityAuraExtractor extractor) {
+            // If there is a redstone signal coming into this block then we stop now
+            if (level.hasNeighborSignal(pos))
                 return;
 
-            if (!extractor.validateTarget(level)) {
+            // If targetPos is null we need to clear the cachedTarget and sync the extractor
+            if (extractor.targetPos == null && extractor.cachedTarget.isPresent())
                 removeTarget(extractor);
-                level.sendBlockUpdated(pos, state, state, 2);
-                return;
-            }
-
-            LazyOptional<IAuraStorage> target;
-            if (extractor.cachedTarget == null) {
+            // Refresh the cached target if cachedTarget is not present but targetPos is
+            else if (!extractor.cachedTarget.isPresent() && extractor.targetPos != null) {
                 BlockEntity e = level.getBlockEntity(extractor.targetPos);
-                if (e instanceof IAuraInserter && extractor.cachedTarget == null) {
+                if (e instanceof IAuraInserter) {
                     LazyOptional<IAuraStorage> cap = e.getCapability(ArcaneCapabilities.AURA_STORAGE);
-                    if (cap.isPresent()) {
+                    if (cap.isPresent())
                         extractor.cachedTarget = cap;
-                    } else {
-                        return;
-                    }
-                }
+                } else
+                    removeTarget(extractor);
             }
-            target = extractor.cachedTarget;
 
-            if (!target.isPresent())
-                return;
+            if (extractor.targetPos != null && !extractor.validateTarget(level))
+                removeTarget(extractor);
 
+            // Extract aura from the target block
             extractor.mapAuraStorage(storage -> {
                 Direction facing = state.getValue(BlockAuraExtractor.FACING);
                 BlockPos extractFrom = pos.offset(facing.getStepX(), facing.getStepY(), facing.getStepZ());
-                if (!level.getBlockState(extractFrom).hasBlockEntity())
-                    return null;
-
                 BlockEntity e = level.getBlockEntity(extractFrom);
                 if (e == null)
                     return null;
@@ -122,8 +124,9 @@ public class BlockEntityAuraExtractor extends AbstractAuraBlockEntity {
                 if (cap.isPresent() && cap.resolve().isPresent())
                     storage.extractAuraFrom(cap.resolve().get(), extractor.extractRate);
 
-                // Send to the target inserter
-                storage.sendAuraTo(target.resolve().orElseThrow(), extractor.extractRate);
+                // Send aura to the target inserter if able
+                if (extractor.cachedTarget.isPresent())
+                    storage.sendAuraTo(extractor.cachedTarget.resolve().orElseThrow(), extractor.extractRate);
 
                 return null;
             });

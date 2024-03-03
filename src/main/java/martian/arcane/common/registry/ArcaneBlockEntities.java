@@ -21,13 +21,13 @@ public class ArcaneBlockEntities extends ArcaneRegistry {
 
     // Logistics
     public static final RegistryObject<BlockEntityType<BlockEntityAuraExtractor>> AURA_EXTRACTOR = REGISTER.register("be_aura_extractor",
-            () -> of(BlockEntityAuraExtractor::new, ArcaneBlocks.AURA_EXTRACTOR.get(), ArcaneBlocks.IMPROVED_AURA_EXTRACTOR.get()));
+            () -> of(BlockEntityAuraExtractor::new, ArcaneBlocks.COPPER_AURA_EXTRACTOR.get(), ArcaneBlocks.AURACHALCUM_AURA_EXTRACTOR.get()));
     public static final RegistryObject<BlockEntityType<BlockEntityAuraInserter>> AURA_INSERTER = REGISTER.register("be_aura_inserter",
-            () -> of(BlockEntityAuraInserter::new, ArcaneBlocks.AURA_INSERTER.get(), ArcaneBlocks.IMPROVED_AURA_INSERTER.get()));
+            () -> of(BlockEntityAuraInserter::new, ArcaneBlocks.COPPER_AURA_INSERTER.get(), ArcaneBlocks.AURACHALCUM_AURA_INSERTER.get()));
 
     // Storage
     public static final RegistryObject<BlockEntityType<BlockEntityAuraBasin>> AURA_BASIN = REGISTER.register("be_aura_basin",
-            () -> of(BlockEntityAuraBasin::new, ArcaneBlocks.AURA_BASIN.get()));
+            () -> of(BlockEntityAuraBasin::new, ArcaneBlocks.COPPER_AURA_BASIN.get()));
     public static final RegistryObject<BlockEntityType<BlockEntityPedestal>> PEDESTAL = REGISTER.register("be_pedestal",
             () -> of(BlockEntityPedestal::new, ArcaneBlocks.PEDESTAL.get()));
 

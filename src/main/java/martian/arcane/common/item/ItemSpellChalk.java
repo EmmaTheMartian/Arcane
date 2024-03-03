@@ -1,8 +1,7 @@
 package martian.arcane.common.item;
 
-import com.lowdragmc.photon.client.fx.BlockEffect;
-import martian.arcane.client.ArcaneFx;
 import martian.arcane.common.registry.ArcaneBlocks;
+import martian.arcane.integration.photon.ArcaneFx;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.context.UseOnContext;
@@ -18,7 +17,7 @@ public class ItemSpellChalk extends BlockItem {
     public InteractionResult useOn(@NotNull UseOnContext context) {
         InteractionResult res = super.useOn(context);
         if ((res == InteractionResult.CONSUME || res == InteractionResult.CONSUME_PARTIAL) && !context.getLevel().isClientSide)
-            new BlockEffect(ArcaneFx.SPELL_CIRCLE_PLACE, context.getLevel(), context.getClickedPos());
+            ArcaneFx.SPELL_CIRCLE_PLACE.goBlock(context.getLevel(), context.getClickedPos());
         return res;
     }
 }

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": {
+      "item": "arcane:copper_core"
+    },
+    "P": {
+      "item": "minecraft:spruce_planks"
+    }
+  },
+  "pattern": [
+    "  P",
+    " P ",
+    "C  "
+  ],
+  "result": {
+    "item": "arcane:wand_spruce"
+  },
+  "show_notification": true
+}

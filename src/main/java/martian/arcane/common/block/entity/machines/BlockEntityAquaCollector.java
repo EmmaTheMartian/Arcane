@@ -17,12 +17,12 @@ import java.util.List;
 public class BlockEntityAquaCollector extends AbstractAuraBlockEntity {
     private int ticksToNextCollect = 0;
 
-    public BlockEntityAquaCollector(int maxAura, BlockPos pos, BlockState state) {
-        super(maxAura, true, false, ArcaneBlockEntities.AQUA_COLLECTOR.get(), pos, state);
+    public BlockEntityAquaCollector(int maxAura, int auraLoss, BlockPos pos, BlockState state) {
+        super(maxAura, auraLoss, true, false, ArcaneBlockEntities.AQUA_COLLECTOR.get(), pos, state);
     }
 
     public BlockEntityAquaCollector(BlockPos pos, BlockState state) {
-        super(ArcaneStaticConfig.Maximums.COLLECTOR_MAX_AURA, true, false, ArcaneBlockEntities.AQUA_COLLECTOR.get(), pos, state);
+        super(ArcaneStaticConfig.Maximums.COLLECTOR, ArcaneStaticConfig.AuraLoss.COPPER_TIER, true, false, ArcaneBlockEntities.AQUA_COLLECTOR.get(), pos, state);
     }
 
     public List<Component> getText(List<Component> text, boolean detailed) {
@@ -58,7 +58,8 @@ public class BlockEntityAquaCollector extends AbstractAuraBlockEntity {
         return Math.floorDiv(sources, 2);
     }
 
-    public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState ignoredState, T blockEntity) {
+    public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T blockEntity) {
+        AbstractAuraBlockEntity.tick(level, pos, state, blockEntity);
         if (blockEntity instanceof BlockEntityAquaCollector collector) {
             if (++collector.ticksToNextCollect >= ArcaneStaticConfig.Speed.AQUA_COLLECTOR_SPEED) {
                 IAuraStorage aura = collector.getAuraStorage().orElseThrow();

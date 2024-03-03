@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "tag": "forge:ingots/copper"
+    },
+    "S": {
+      "tag": "forge:nuggets/iron"
+    }
+  },
+  "pattern": [
+    "  B",
+    " BS",
+    "BS "
+  ],
+  "result": {
+    "item": "arcane:gem_saw"
+  },
+  "show_notification": true
+}

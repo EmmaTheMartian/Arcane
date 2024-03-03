@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": {
+      "item": "arcane:copper_core"
+    },
+    "S": {
+      "tag": "forge:stone"
+    }
+  },
+  "pattern": [
+    "SSS",
+    " B "
+  ],
+  "result": {
+    "item": "arcane:aura_extractor_copper"
+  },
+  "show_notification": true
+}

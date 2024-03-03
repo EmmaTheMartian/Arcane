@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "arcane:polished_idocrase"
+    },
+    {
+      "tag": "forge:obsidian"
+    },
+    {
+      "tag": "forge:obsidian"
+    }
+  ],
+  "result": {
+    "count": 2,
+    "item": "arcane:raw_aurachalcum"
+  }
+}

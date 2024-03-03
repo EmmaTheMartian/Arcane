@@ -1,0 +1,13 @@
+{
+  "type": "arcane:pedestal",
+  "consume": true,
+  "input": {
+    "item": "arcane:polished_larimar"
+  },
+  "interaction_input": {
+    "item": "arcane:auraglass"
+  },
+  "result": {
+    "item": "arcane:larimar_core"
+  }
+}

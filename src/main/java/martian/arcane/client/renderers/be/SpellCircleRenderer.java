@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 public class SpellCircleRenderer implements BlockEntityRenderer<BlockEntitySpellCircle> {
-    private static final RenderType LAYER = RenderType.entityCutoutNoCull(ArcaneMod.id("textures/block/spell_circle/temporary.png"));
+    private static final RenderType LAYER = RenderType.entityCutoutNoCull(ArcaneMod.id("textures/block/machines/spell_circle/basic.png"));
     private final ModelPart circleBot, circleMid, circleTop;
 
     public SpellCircleRenderer(BlockEntityRendererProvider.Context ctx) {

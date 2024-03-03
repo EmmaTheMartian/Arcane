@@ -1,6 +1,6 @@
 package martian.arcane.api.block.entity;
 
-import martian.arcane.api.BlockHelpers;
+import martian.arcane.api.block.BlockHelpers;
 import martian.arcane.api.NBTHelpers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

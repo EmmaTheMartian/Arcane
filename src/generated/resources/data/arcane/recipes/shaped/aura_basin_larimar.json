@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": {
+      "item": "arcane:polished_larimar"
+    },
+    "C": {
+      "item": "arcane:larimar_core"
+    }
+  },
+  "pattern": [
+    "B B",
+    "B B",
+    "BCB"
+  ],
+  "result": {
+    "item": "arcane:aura_basin_larimar"
+  },
+  "show_notification": true
+}

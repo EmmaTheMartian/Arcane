@@ -1,5 +1,6 @@
 package martian.arcane.common.spell;
 
+import martian.arcane.ArcaneStaticConfig;
 import martian.arcane.api.recipe.SimpleContainer;
 import martian.arcane.api.spell.AbstractCraftingSpell;
 import martian.arcane.common.recipe.RecipeHammering;
@@ -9,12 +10,7 @@ import java.util.Optional;
 
 public class SpellHammering extends AbstractCraftingSpell<RecipeHammering> {
     public SpellHammering() {
-        super(2);
-    }
-
-    @Override
-    public int getAuraCost(int level) {
-        return 2;
+        super(ArcaneStaticConfig.SpellMinLevels.HAMMERING, ArcaneStaticConfig.SpellCosts.HAMMERING);
     }
 
     @Override

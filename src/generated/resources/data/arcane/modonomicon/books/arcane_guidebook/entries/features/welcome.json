@@ -1,0 +1,24 @@
+{
+  "background_u_index": 0,
+  "background_v_index": 0,
+  "category": "arcane:features",
+  "description": "",
+  "hide_while_locked": false,
+  "icon": {
+    "item": "minecraft:copper_ingot"
+  },
+  "name": "book.arcane.arcane_guidebook.features.welcome.name",
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "show_title_separator": true,
+      "text": "book.arcane.arcane_guidebook.features.welcome.welcome.text",
+      "title": "book.arcane.arcane_guidebook.features.welcome.welcome.title",
+      "use_markdown_in_title": false
+    }
+  ],
+  "show_when_any_parent_unlocked": false,
+  "x": -8,
+  "y": -3
+}

@@ -1,9 +1,0 @@
-{
-  "type": "arcane:hammering",
-  "input": {
-    "item": "minecraft:stone"
-  },
-  "result": {
-    "item": "minecraft:cobblestone"
-  }
-}

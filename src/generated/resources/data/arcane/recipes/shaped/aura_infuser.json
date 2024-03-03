@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": {
+      "tag": "forge:ingots/copper"
+    },
+    "C": {
+      "item": "arcane:copper_core"
+    },
+    "O": {
+      "tag": "forge:obsidian"
+    }
+  },
+  "pattern": [
+    "BCB",
+    " O ",
+    "OOO"
+  ],
+  "result": {
+    "item": "arcane:aura_infuser"
+  },
+  "show_notification": true
+}

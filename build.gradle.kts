@@ -10,13 +10,21 @@ plugins {
 object Properties {
     const val MC_VERSION = "1.20.1"
     const val FORGE_VERSION = "47.2.20"
-    const val JEI_VERSION = "15.2.0.27"
     const val PARCHMENT_VERSION = "1.20.1:2023.09.03"
+    const val JEI_VERSION = "15.2.0.27"
     const val EMI_VERSION = "1.1.0"
     const val JADE_VERSION = "5072729" // 1.20.1-forge-11.8.0
     const val LDLIB_VERSION = "1.0.24.a"
     const val PHOTON_VERSION = "1.0.7.a"
     const val CURIOS_VERSION = "5.7.0"
+    const val MODONOMICON_VERSION = "1.59.0"
+    const val CREATE_VERSION = "0.5.1.e-22"
+    const val FLYWHEEL_VERSION = "0.6.10-7"
+    const val REGISTRATE_VERSION = "MC1.20-1.3.3"
+
+    const val ENABLE_PHOTON = true
+    const val ENABLE_CURIOS = true
+    const val ENABLE_CREATE = true
 
     const val MOD_VERSION = "1.0.0"
     const val MOD_LICENSE = "MIT"
@@ -88,9 +96,17 @@ repositories {
     maven("https://maven.firstdarkdev.xyz/snapshots")
 
     // Curios
-    maven("https://maven.theillusivec4.top/") {
-        name = "Illusive Soulworks maven"
+    maven("https://maven.theillusivec4.top/") { name = "Illusive Soulworks maven" }
+
+    // Modonomicon
+    maven("https://dl.cloudsmith.io/public/klikli-dev/mods/maven/") {
+        mavenContent {
+            includeGroup("com.klikli_dev")
+        }
     }
+
+    // Create
+    maven("https://maven.tterrag.com/") { name = "tterrag maven" }
 }
 
 dependencies {
@@ -116,15 +132,37 @@ dependencies {
     modCompileOnly("curse.maven:jade-324717:${Properties.JADE_VERSION}")
     modRuntimeOnly("curse.maven:jade-324717:${Properties.JADE_VERSION}")
 
-    // LDLib
-    modImplementation("com.lowdragmc.ldlib:ldlib-forge-${Properties.MC_VERSION}:${Properties.LDLIB_VERSION}") { isTransitive = false }
-
-    // Photon
-    modImplementation("com.lowdragmc.photon:photon-forge-${Properties.MC_VERSION}:${Properties.PHOTON_VERSION}") { isTransitive = false }
+    // LDLib and Photon
+    val ldlib = "com.lowdragmc.ldlib:ldlib-forge-${Properties.MC_VERSION}:${Properties.LDLIB_VERSION}"
+    val photon = "com.lowdragmc.photon:photon-forge-${Properties.MC_VERSION}:${Properties.PHOTON_VERSION}"
+    modCompileOnly(ldlib) { isTransitive = false }
+    modCompileOnly(photon) { isTransitive = false }
+    if (Properties.ENABLE_PHOTON) {
+        modRuntimeOnly(ldlib) { isTransitive = false }
+        modRuntimeOnly(photon) { isTransitive = false }
+    }
 
     // Curios
     modCompileOnly("top.theillusivec4.curios:curios-forge:${Properties.CURIOS_VERSION}+${Properties.MC_VERSION}:api")
-    modRuntimeOnly("top.theillusivec4.curios:curios-forge:${Properties.CURIOS_VERSION}+${Properties.MC_VERSION}")
+    if (Properties.ENABLE_CURIOS) {
+        modRuntimeOnly("top.theillusivec4.curios:curios-forge:${Properties.CURIOS_VERSION}+${Properties.MC_VERSION}")
+    }
+
+    // Modonomicon
+    forgeRuntimeLibrary("org.commonmark:commonmark:0.21.0")
+    forgeRuntimeLibrary("org.commonmark:commonmark-ext-gfm-strikethrough:0.21.0")
+    forgeRuntimeLibrary("org.commonmark:commonmark-ext-ins:0.21.0")
+    modCompileOnly("com.klikli_dev:modonomicon-${Properties.MC_VERSION}-common:${Properties.MODONOMICON_VERSION}")
+    modImplementation("com.klikli_dev:modonomicon-${Properties.MC_VERSION}-forge:${Properties.MODONOMICON_VERSION}") { isTransitive = false }
+
+    // Create
+    if (Properties.ENABLE_CREATE) {
+        modRuntimeOnly("com.simibubi.create:create-${Properties.MC_VERSION}:${Properties.CREATE_VERSION}:slim") {
+            isTransitive = false
+        }
+        modRuntimeOnly("com.jozufozu.flywheel:flywheel-forge-${Properties.MC_VERSION}:${Properties.FLYWHEEL_VERSION}")
+        modRuntimeOnly("com.tterrag.registrate:Registrate:${Properties.REGISTRATE_VERSION}")
+    }
 }
 
 tasks.processResources {

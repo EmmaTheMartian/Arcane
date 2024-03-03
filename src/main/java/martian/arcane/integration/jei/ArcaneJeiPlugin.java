@@ -3,16 +3,17 @@ package martian.arcane.integration.jei;
 import martian.arcane.ArcaneMod;
 import martian.arcane.common.item.ItemSpellTablet;
 import martian.arcane.common.recipe.*;
-import martian.arcane.common.registry.*;
+import martian.arcane.common.registry.ArcaneBlocks;
+import martian.arcane.common.registry.ArcaneItems;
+import martian.arcane.common.registry.ArcaneRecipeTypes;
+import martian.arcane.common.registry.ArcaneSpells;
 import martian.arcane.integration.jei.categories.*;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
-import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
-import mezz.jei.api.runtime.IIngredientManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.nbt.CompoundTag;
@@ -31,9 +32,6 @@ public class ArcaneJeiPlugin implements IModPlugin {
 
     @Override
     public void registerRecipes(@NotNull IRecipeRegistration registry) {
-        IIngredientManager man = registry.getIngredientManager();
-        man.removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, ArcaneTabs.ARCANE_SPELLS_TAB.get().getDisplayItems());
-
         RecipeManager rm = getRecipeManager();
         if (rm == null) {
             ArcaneMod.LOGGER.error("Failed to get RecipeManager in ArcaneJeiPlugin#registerRecipes");

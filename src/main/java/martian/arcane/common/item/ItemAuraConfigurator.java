@@ -16,7 +16,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 
@@ -46,11 +45,8 @@ public class ItemAuraConfigurator extends Item {
             }
 
             BlockEntity l = level.getBlockEntity(hit.getBlockPos());
-            if (l instanceof BlockEntityAuraExtractor extractor) {
+            if (l instanceof BlockEntityAuraExtractor extractor)
                 BlockEntityAuraExtractor.removeTarget(extractor);
-                BlockState state = level.getBlockState(hit.getBlockPos());
-                level.sendBlockUpdated(hit.getBlockPos(), state, state, 2);
-            }
         }
 
         if (hit == null)
@@ -64,8 +60,6 @@ public class ItemAuraConfigurator extends Item {
 
                 if (e instanceof BlockEntityAuraExtractor extractor) {
                     BlockEntityAuraExtractor.setTarget(extractor, inserter);
-                    BlockState state = level.getBlockState(pos1);
-                    level.sendBlockUpdated(hit.getBlockPos(), state, state, 2);
                     player.sendSystemMessage(Component.translatable("messages.arcane.linked"));
                     nbt.putBoolean(NBTHelpers.KEY_CONFIGURATOR_HASP1, false);
                     return InteractionResultHolder.success(stack);
@@ -73,7 +67,11 @@ public class ItemAuraConfigurator extends Item {
             }
         } else {
             BlockEntity e = level.getBlockEntity(hit.getBlockPos());
-            if (e instanceof BlockEntityAuraExtractor) {
+            if (e instanceof BlockEntityAuraExtractor extractor) {
+                if (player.isCrouching()) {
+                    BlockEntityAuraExtractor.removeTarget(extractor);
+                    return InteractionResultHolder.success(stack);
+                }
                 nbt.putBoolean(NBTHelpers.KEY_CONFIGURATOR_HASP1, true);
                 NBTHelpers.putBlockPos(nbt, NBTHelpers.KEY_CONFIGURATOR_P1, hit.getBlockPos());
                 player.sendSystemMessage(Component.translatable("messages.arcane.selected"));

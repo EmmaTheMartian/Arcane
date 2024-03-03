@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "arcane:polished_larimar"
+    },
+    "C": {
+      "item": "arcane:larimar_core"
+    },
+    "W": {
+      "tag": "arcane:basic_wands"
+    }
+  },
+  "pattern": [
+    "  B",
+    " W ",
+    "C  "
+  ],
+  "result": {
+    "item": "arcane:wand_larimar"
+  },
+  "show_notification": true
+}

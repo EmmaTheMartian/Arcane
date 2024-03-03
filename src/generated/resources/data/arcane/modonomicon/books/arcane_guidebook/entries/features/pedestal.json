@@ -1,0 +1,49 @@
+{
+  "background_u_index": 0,
+  "background_v_index": 0,
+  "category": "arcane:features",
+  "condition": {
+    "type": "modonomicon:and",
+    "children": [
+      {
+        "type": "modonomicon:entry_read",
+        "entry_id": "arcane:features/welcome"
+      }
+    ]
+  },
+  "description": "",
+  "hide_while_locked": true,
+  "icon": {
+    "item": "arcane:aura_basin_copper"
+  },
+  "name": "book.arcane.arcane_guidebook.features.pedestal.name",
+  "pages": [
+    {
+      "type": "modonomicon:crafting_recipe",
+      "anchor": "",
+      "recipe_id_1": "arcane:shaped/pedestal",
+      "text": "book.arcane.arcane_guidebook.features.pedestal.pedestal.text",
+      "title1": "",
+      "title2": ""
+    },
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "show_title_separator": true,
+      "text": "book.arcane.arcane_guidebook.features.pedestal.put_me_on_a_pedestal.text",
+      "title": "book.arcane.arcane_guidebook.features.pedestal.put_me_on_a_pedestal.title",
+      "use_markdown_in_title": false
+    }
+  ],
+  "parents": [
+    {
+      "draw_arrow": true,
+      "entry": "arcane:features/welcome",
+      "line_enabled": true,
+      "line_reversed": false
+    }
+  ],
+  "show_when_any_parent_unlocked": false,
+  "x": -5,
+  "y": -3
+}

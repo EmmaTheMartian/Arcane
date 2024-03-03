@@ -1,8 +1,11 @@
 package martian.arcane.api.spell;
 
 import martian.arcane.api.Raycasting;
+import martian.arcane.api.capability.IAuraStorage;
+import martian.arcane.common.block.entity.machines.BlockEntitySpellCircle;
 import martian.arcane.common.item.ItemAuraWand;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -11,27 +14,18 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.jetbrains.annotations.Nullable;
 
-public class CastContext {
+public abstract class CastContext {
     public final Level level;
-    public final ICastingSource.Type source;
+    public final IAuraStorage aura;
+    public final ICastingSource source;
 
-    public CastContext(Level level, ICastingSource.Type source) {
+    public CastContext(Level level, IAuraStorage aura, ICastingSource source) {
         this.level = level;
+        this.aura = aura;
         this.source = source;
     }
 
-    @Nullable
-    public BlockPos getTarget() {
-        if (source == ICastingSource.Type.WAND) {
-            CastContext.WandContext wandContext = (CastContext.WandContext)this;
-            HitResult hit = wandContext.raycast();
-            if (hit.getType() == HitResult.Type.BLOCK)
-                return ((BlockHitResult)hit).getBlockPos();
-        } else if (source == ICastingSource.Type.SPELL_CIRCLE) {
-            return ((CastContext.SpellCircleContext)this).target;
-        }
-        return null;
-    }
+    public abstract @Nullable BlockPos getTarget();
 
     public static final class WandContext extends CastContext {
         public final Player caster;
@@ -39,8 +33,8 @@ public class CastContext {
         public final ItemStack castingStack;
         public final ItemAuraWand wand;
 
-        public WandContext(Level level, Player caster, InteractionHand castingHand, ItemStack castingStack, ItemAuraWand wand) {
-            super(level, ICastingSource.Type.WAND);
+        public WandContext(Level level, IAuraStorage aura, Player caster, InteractionHand castingHand, ItemStack castingStack, ItemAuraWand wand) {
+            super(level, aura, wand);
             this.caster = caster;
             this.castingHand = castingHand;
             this.castingStack = castingStack;
@@ -54,14 +48,31 @@ public class CastContext {
         public HitResult raycast() {
             return raycast(false);
         }
+
+        public @Nullable BlockPos getTarget() {
+            HitResult hit = raycast();
+            if (hit.getType() == HitResult.Type.BLOCK)
+                return ((BlockHitResult)hit).getBlockPos();
+            return null;
+        }
     }
 
     public static final class SpellCircleContext extends CastContext {
         public final BlockPos target;
 
-        public SpellCircleContext(Level level, BlockPos target) {
-            super(level, ICastingSource.Type.SPELL_CIRCLE);
+        public SpellCircleContext(Level level, IAuraStorage aura, BlockPos target, BlockEntitySpellCircle circle) {
+            super(level, aura, circle);
             this.target = target;
+        }
+
+        public SpellCircleContext(BlockEntitySpellCircle circle) {
+            //noinspection OptionalGetWithoutIsPresent
+            super(circle.getLevel(), circle.getAuraStorage().get(), circle);
+            this.target = circle.getBlockPos().below();
+        }
+
+        public @Nullable BlockPos getTarget() {
+            return target;
         }
     }
 }

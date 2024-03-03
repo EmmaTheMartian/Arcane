@@ -12,12 +12,11 @@ import martian.arcane.datagen.builders.PedestalRecipeBuilder;
 import martian.arcane.datagen.builders.PurifyingRecipeBuilder;
 import martian.arcane.datagen.util.RecipeDataHelper;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
+import net.minecraft.data.recipes.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -37,209 +36,234 @@ public class ArcaneRecipeProvider extends RecipeProvider {
     @Override
     protected void buildRecipes(@NotNull Consumer<FinishedRecipe> writer) {
         RecipeDataHelper helper = new RecipeDataHelper(writer, ArcaneMod.MODID, RecipeCategory.MISC);
+        helper.prefixesByProvider.put(CleansingRecipeBuilder.class, "cleansing");
+        helper.prefixesByProvider.put(HammeringRecipeBuilder.class, "hammering");
+        helper.prefixesByProvider.put(PurifyingRecipeBuilder.class, "purifying");
+        helper.prefixesByProvider.put(PedestalRecipeBuilder.class, "pedestal");
+        helper.prefixesByProvider.put(ShapelessRecipeBuilder.class, "shapeless");
+        helper.prefixesByProvider.put(ShapedRecipeBuilder.class, "shaped");
+        helper.prefixesByProvider.put(SimpleCookingRecipeBuilder.class, "cooking");
+
+        final TagKey<Item>
+                COPPER      = Tags.Items.INGOTS_COPPER,
+                IRON        = Tags.Items.INGOTS_IRON,
+                REDSTONE    = Tags.Items.DUSTS_REDSTONE,
+                GLASS       = Tags.Items.GLASS_COLORLESS,
+                STONE       = Tags.Items.STONE,
+                OBSIDIAN    = Tags.Items.OBSIDIAN
+        ;
+
+        final Ingredient
+                AURAGLASS           = ingOf(ArcaneBlocks.AURAGLASS.get().asItem()),
+                AURAGLASS_DUST      = ingOf(ArcaneItems.AURAGLASS_DUST.get()),
+                COPPER_CORE         = ingOf(ArcaneItems.COPPER_CORE.get()),
+                LARIMAR_CORE        = ingOf(ArcaneItems.LARIMAR_CORE.get()),
+                AURACHALCUM_CORE    = ingOf(ArcaneItems.AURACHALCUM_CORE.get()),
+                ELDRITCH_CORE       = ingOf(ArcaneItems.ELDRITCH_CORE.get()),
+                SPELL_CIRCLE_CORE   = ingOf(ArcaneItems.SPELL_CIRCLE_CORE.get()),
+                POLISHED_LARIMAR    = ingOf(ArcaneItems.POLISHED_LARIMAR.get()),
+                RAW_AURACHALCUM     = ingOf(ArcaneItems.RAW_AURACHALCUM.get()),
+                AURACHALCUM         = ingOf(ArcaneItems.AURACHALCUM.get()),
+                ELDRITCH_ALLOY      = ingOf(ArcaneItems.ELDRITCH_ALLOY.get())
+        ;
 
         // Materials
         {
-            helper.shapeless(ArcaneItems.BLUE_GOLD.get(), 4, Map.of(
-                    Ingredient.of(Items.GOLD_INGOT), 3,
-                    Ingredient.of(Tags.Items.INGOTS_IRON), 1
-            )).unlockedWith(Items.GOLD_INGOT).save();
-
             helper.shapeless(ArcaneItems.RAW_AURACHALCUM.get(), 2, Map.of(
-                    Ingredient.of(ArcaneItems.BLUE_GOLD.get()), 1,
-                    Ingredient.of(Items.OBSIDIAN), 1
-            )).unlockedWith(ArcaneItems.BLUE_GOLD.get()).save();
+                    ingOf(ArcaneItems.POLISHED_IDOCRASE.get()), 1,
+                    ingOf(OBSIDIAN), 2
+            )).unlockedWith(ArcaneItems.POLISHED_IDOCRASE.get()).save();
 
-            helper.shaped(ArcaneItems.BLUE_GOLD_CORE.get())
-                    .pattern(" G ", "GBG", " G ")
-                    .define('G', Tags.Items.GLASS_COLORLESS)
-                    .define('B', ArcaneItems.BLUE_GOLD.get())
-                    .unlockedWith(ArcaneItems.BLUE_GOLD.get())
-                    .save();
-
-            helper.shaped(ArcaneItems.AURACHALCUM_CORE.get())
-                    .pattern(" G ", "GBG", " G ")
-                    .define('G', Tags.Items.GLASS_COLORLESS)
-                    .define('B', ArcaneItems.AURACHALCUM.get())
-                    .unlockedWith(ArcaneItems.AURACHALCUM.get())
+            helper.shaped(ArcaneItems.COPPER_CORE.get())
+                    .pattern(" G ", "GCG", " G ")
+                    .define('G', GLASS)
+                    .define('C', COPPER)
+                    .unlockedWith(Items.COPPER_INGOT)
                     .save();
 
             helper.shaped(ArcaneItems.SPELL_CIRCLE_CORE.get())
                     .pattern(" A ", "ACA", " A ")
-                    .define('A', ArcaneItems.AURAGLASS_DUST.get())
-                    .define('C', ArcaneItems.AURACHALCUM_CORE.get())
+                    .define('A', AURAGLASS_DUST)
+                    .define('C', AURACHALCUM_CORE)
                     .unlockedWith(ArcaneItems.AURACHALCUM_CORE.get())
                     .save();
 
             // Hammering Recipes
-            HammeringRecipeBuilder.hammering(Ingredient.of(ArcaneBlocks.AURAGLASS.get().asItem()), ArcaneItems.AURAGLASS_SHARD.get(), 2)
-                    .unlockedBy("has_item", has(ArcaneBlocks.AURAGLASS.get().asItem()))
-                    .save(writer);
+            helper.wrap(HammeringRecipeBuilder.hammering(AURAGLASS, ArcaneItems.AURAGLASS_SHARD.get(), 2))
+                    .unlockedWith(ArcaneBlocks.AURAGLASS.get().asItem()).save();
 
-            HammeringRecipeBuilder.hammering(Ingredient.of(ArcaneItems.AURAGLASS_SHARD.get()), ArcaneItems.AURAGLASS_DUST.get(), 2)
-                    .unlockedBy("has_item", has(ArcaneItems.AURAGLASS_SHARD.get()))
-                    .save(writer);
+            helper.wrap(HammeringRecipeBuilder.hammering(ingOf(ArcaneItems.AURAGLASS_SHARD.get()), ArcaneItems.AURAGLASS_DUST.get(), 2))
+                    .unlockedWith(ArcaneItems.AURAGLASS_SHARD.get()).save();
 
-            PedestalRecipeBuilder.pedestalCrafting(Ingredient.of(ArcaneItems.ELDRITCH_ALLOY.get()), Ingredient.of(ArcaneBlocks.AURAGLASS.get().asItem()), true, ArcaneItems.ELDRITCH_CORE.get(), 1, null)
-                    .unlockedBy("has_item", has(ArcaneItems.ELDRITCH_ALLOY.get()))
-                    .save(writer);
+            // Pedestal Interaction Recipes
+            helper.wrap(PedestalRecipeBuilder.simpleRecipe(ingOf(COPPER), AURAGLASS, ArcaneItems.COPPER_CORE.get())).save();
+            helper.wrap(PedestalRecipeBuilder.simpleRecipe(ingOf(ArcaneItems.POLISHED_LARIMAR.get()), AURAGLASS, ArcaneItems.LARIMAR_CORE.get())).save();
+            helper.wrap(PedestalRecipeBuilder.simpleRecipe(ingOf(ArcaneItems.AURACHALCUM.get()), AURAGLASS, ArcaneItems.AURACHALCUM_CORE.get())).save();
+            helper.wrap(PedestalRecipeBuilder.simpleRecipe(ingOf(ArcaneItems.ELDRITCH_ALLOY.get()), AURAGLASS, ArcaneItems.ELDRITCH_CORE.get())).save();
+
+            // Gems
+            cutAndPolish(helper, ArcaneItems.RAW_LARIMAR.get(), ArcaneItems.CUT_LARIMAR.get(), ArcaneItems.POLISHED_LARIMAR.get());
+            cutAndPolish(helper, ArcaneItems.FADED_RAW_LARIMAR.get(), ArcaneItems.FADED_CUT_LARIMAR.get(), ArcaneItems.FADED_POLISHED_LARIMAR.get());
+            cutAndPolish(helper, ArcaneItems.RAW_IDOCRASE.get(), ArcaneItems.CUT_IDOCRASE.get(), ArcaneItems.POLISHED_IDOCRASE.get());
         }
 
         // Misc Utility Recipes
         {
-            helper.wrap(HammeringRecipeBuilder.hammering(Ingredient.of(Items.STONE), Items.COBBLESTONE, 1))
+            helper.wrap(HammeringRecipeBuilder.hammering(ingOf(STONE), Items.COBBLESTONE, 1))
                     .unlockedWith(Items.STONE).save();
 
-            helper.wrap(HammeringRecipeBuilder.hammering(Ingredient.of(Items.COBBLESTONE), Items.GRAVEL, 1))
+            helper.wrap(HammeringRecipeBuilder.hammering(ingOf(Items.COBBLESTONE), Items.GRAVEL, 1))
                     .unlockedWith(Items.COBBLESTONE).save();
 
-            helper.wrap(HammeringRecipeBuilder.hammering(Ingredient.of(Items.GRAVEL), Items.SAND, 1))
+            helper.wrap(HammeringRecipeBuilder.hammering(ingOf(Items.GRAVEL), Items.SAND, 1))
                     .unlockedWith(Items.GRAVEL).save();
 
-            helper.wrap(CleansingRecipeBuilder.cleansing(Ingredient.of(Items.GRAVEL), Items.FLINT, 1))
+            helper.wrap(CleansingRecipeBuilder.cleansing(ingOf(Items.GRAVEL), Items.FLINT, 1))
                     .unlockedWith(Items.GRAVEL).save();
         }
 
         // Blocks
         {
             helper.defaultCategory = RecipeCategory.REDSTONE;
-            helper.shaped(ArcaneBlocks.AURA_BASIN.get().asItem())
-                    .pattern("B B", "B B", "BBB")
-                    .define('B', ArcaneItems.BLUE_GOLD.get())
-                    .unlockedWith(ArcaneItems.BLUE_GOLD.get())
-                    .save();
-
-            helper.shaped(ArcaneBlocks.AURA_INFUSER.get().asItem())
-                    .pattern("BCB", "OOO")
-                    .define('B', ArcaneItems.BLUE_GOLD.get())
-                    .define('C', ArcaneItems.BLUE_GOLD_CORE.get())
-                    .define('O', Tags.Items.OBSIDIAN)
-                    .unlockedWith(ArcaneItems.BLUE_GOLD.get())
-                    .save();
 
             helper.shaped(ArcaneBlocks.IGNIS_COLLECTOR.get().asItem())
                     .pattern("GIG", "FCF", "GIG")
-                    .define('G', Tags.Items.GLASS_COLORLESS)
-                    .define('I', Tags.Items.INGOTS_IRON)
-                    .define('F', Items.FLINT)
-                    .define('C', ArcaneItems.BLUE_GOLD_CORE.get())
-                    .unlockedWith(ArcaneItems.BLUE_GOLD_CORE.get())
+                    .define('G', GLASS)
+                    .define('I', COPPER)
+                    .define('F', ingOf(Items.FLINT))
+                    .define('C', COPPER_CORE)
+                    .unlockedWith(ArcaneItems.COPPER_CORE.get())
                     .save();
 
             helper.shaped(ArcaneBlocks.AQUA_COLLECTOR.get().asItem())
                     .pattern("GIG", "ICI", "GWG")
-                    .define('G', Tags.Items.GLASS_COLORLESS)
-                    .define('I', Tags.Items.INGOTS_IRON)
-                    .define('W', Items.WATER_BUCKET)
-                    .define('C', ArcaneItems.BLUE_GOLD_CORE.get())
-                    .unlockedWith(ArcaneItems.BLUE_GOLD_CORE.get())
+                    .define('G', GLASS)
+                    .define('I', COPPER)
+                    .define('W', ingOf(Items.WATER_BUCKET))
+                    .define('C', COPPER_CORE)
+                    .unlockedWith(ArcaneItems.COPPER_CORE.get())
                     .save();
 
             helper.shaped(ArcaneBlocks.PEDESTAL.get().asItem())
-                    .pattern("BBB", " L ", " S ")
-                    .define('B', ArcaneItems.BLUE_GOLD.get())
-                    .define('L', Tags.Items.STONE)
-                    .define('S', Items.STONE_SLAB)
-                    .unlockedWith(ArcaneItems.BLUE_GOLD.get())
+                    .pattern("CBC", " S ", "SSS")
+                    .define('C', COPPER)
+                    .define('S', STONE)
+                    .define('B', COPPER_CORE)
+                    .unlockedWith(ArcaneItems.COPPER_CORE.get())
                     .save();
 
-            // Inserters and Extractors
-            helper.shaped(ArcaneBlocks.AURA_EXTRACTOR.get().asItem())
-                    .pattern(" B ", "SSS")
-                    .define('B', ArcaneItems.BLUE_GOLD.get())
-                    .define('S', Tags.Items.STONE)
-                    .unlockedWith(ArcaneItems.BLUE_GOLD.get())
-                    .save();
+            // Machines
+            {
+                helper.shaped(ArcaneBlocks.AURA_INFUSER.get().asItem())
+                        .pattern("BCB", " O ", "OOO")
+                        .define('B', COPPER)
+                        .define('C', COPPER_CORE)
+                        .define('O', OBSIDIAN)
+                        .unlockedWith(ArcaneItems.COPPER_CORE.get())
+                        .save();
 
-            helper.shaped(ArcaneBlocks.AURA_INSERTER.get().asItem())
-                    .pattern("SSS", " B ")
-                    .define('B', ArcaneItems.BLUE_GOLD.get())
-                    .define('S', Tags.Items.STONE)
-                    .unlockedWith(ArcaneItems.BLUE_GOLD.get())
-                    .save();
+                makeBasin(helper, ArcaneBlocks.COPPER_AURA_BASIN.get().asItem(), COPPER_CORE, Ingredient.of(COPPER));
+                makeBasin(helper, ArcaneBlocks.LARIMAR_AURA_BASIN.get().asItem(), LARIMAR_CORE, POLISHED_LARIMAR);
+                makeBasin(helper, ArcaneBlocks.AURACHALCUM_AURA_BASIN.get().asItem(), AURACHALCUM_CORE, AURACHALCUM);
 
-            helper.shaped(ArcaneBlocks.IMPROVED_AURA_EXTRACTOR.get().asItem())
-                    .pattern(" B ", "SSS")
-                    .define('B', ArcaneBlocks.AURA_EXTRACTOR.get().asItem())
-                    .define('S', ArcaneItems.AURACHALCUM.get())
-                    .unlockedWith(ArcaneItems.AURACHALCUM.get())
-                    .save();
+                makeExtractor(helper, ArcaneBlocks.COPPER_AURA_EXTRACTOR.get().asItem(), COPPER_CORE, Ingredient.of(STONE));
+                makeExtractor(helper, ArcaneBlocks.LARIMAR_AURA_EXTRACTOR.get().asItem(), LARIMAR_CORE, Ingredient.of(STONE));
+                makeExtractor(helper, ArcaneBlocks.AURACHALCUM_AURA_EXTRACTOR.get().asItem(), AURACHALCUM_CORE, Ingredient.of(OBSIDIAN));
 
-            helper.shaped(ArcaneBlocks.IMPROVED_AURA_INSERTER.get().asItem())
-                    .pattern("SSS", " B ")
-                    .define('B', ArcaneBlocks.AURA_INSERTER.get().asItem())
-                    .define('S', ArcaneItems.AURACHALCUM.get())
-                    .unlockedWith(ArcaneItems.AURACHALCUM.get())
-                    .save();
+                makeInserter(helper, ArcaneBlocks.COPPER_AURA_INSERTER.get().asItem(), COPPER_CORE, Ingredient.of(STONE));
+                makeInserter(helper, ArcaneBlocks.LARIMAR_AURA_INSERTER.get().asItem(), LARIMAR_CORE, Ingredient.of(STONE));
+                makeInserter(helper, ArcaneBlocks.AURACHALCUM_AURA_INSERTER.get().asItem(), AURACHALCUM_CORE, Ingredient.of(OBSIDIAN));
 
-            // Alt recipes for extractors and inserters
-            helper.swappable(ArcaneBlocks.AURA_EXTRACTOR.get().asItem(), ArcaneBlocks.AURA_INSERTER.get().asItem());
-            helper.swappable(ArcaneBlocks.IMPROVED_AURA_EXTRACTOR.get().asItem(), ArcaneBlocks.IMPROVED_AURA_INSERTER.get().asItem());
+                // Alt recipes for extractors and inserters
+                helper.swappable(ArcaneBlocks.COPPER_AURA_EXTRACTOR.get().asItem(), ArcaneBlocks.COPPER_AURA_INSERTER.get().asItem());
+                helper.swappable(ArcaneBlocks.LARIMAR_AURA_EXTRACTOR.get().asItem(), ArcaneBlocks.LARIMAR_AURA_INSERTER.get().asItem());
+                helper.swappable(ArcaneBlocks.AURACHALCUM_AURA_EXTRACTOR.get().asItem(), ArcaneBlocks.AURACHALCUM_AURA_INSERTER.get().asItem());
+            }
         }
 
         // Tools
         {
             helper.defaultCategory = RecipeCategory.TOOLS;
+
             helper.shaped(ArcaneItems.AURA_WRENCH.get())
-                    .pattern("B B", " B ", " B ")
-                    .define('B', ArcaneItems.BLUE_GOLD.get())
-                    .unlockedWith(ArcaneItems.BLUE_GOLD.get())
+                    .pattern("C C", " B ", " C ")
+                    .define('C', COPPER)
+                    .define('B', COPPER_CORE)
+                    .unlockedWith(ArcaneItems.COPPER_CORE.get())
                     .save();
 
             helper.shaped(ArcaneItems.AURA_CONFIGURATOR.get())
                     .pattern("B B", " I ", " B ")
-                    .define('B', ArcaneItems.BLUE_GOLD.get())
-                    .define('I', Tags.Items.INGOTS_IRON)
-                    .unlockedWith(ArcaneItems.BLUE_GOLD.get())
+                    .define('B', IRON)
+                    .define('I', COPPER_CORE)
+                    .unlockedWith(ArcaneItems.COPPER_CORE.get())
+                    .save();
+
+            helper.shaped(ArcaneItems.GEM_SAW.get())
+                    .pattern("  B", " BS", "BS ")
+                    .define('B', COPPER)
+                    .define('S', Tags.Items.NUGGETS_IRON)
+                    .unlockedWith(Items.COPPER_INGOT)
                     .save();
 
             helper.shaped(ArcaneItems.AURAOMETER.get())
-                    .pattern("R", "B", "B")
-                    .define('R', Tags.Items.DUSTS_REDSTONE)
-                    .define('B', ArcaneItems.BLUE_GOLD.get())
-                    .unlockedWith(ArcaneItems.BLUE_GOLD.get())
+                    .pattern("R", "C", "B")
+                    .define('R', REDSTONE)
+                    .define('B', COPPER_CORE)
+                    .define('C', COPPER)
+                    .unlockedWith(ArcaneItems.COPPER_CORE.get())
                     .save();
 
             helper.shapeless(ArcaneItems.ARCANE_BLEACH.get(), Map.of(
-                    Ingredient.of(Items.GLASS_BOTTLE), 1,
-                    Ingredient.of(Items.BONE_MEAL), 1,
-                    Ingredient.of(ArcaneItems.AURAGLASS_DUST.get()), 1
+                    ingOf(Items.GLASS_BOTTLE), 1,
+                    ingOf(Items.BONE_MEAL), 1,
+                    ingOf(ArcaneItems.AURAGLASS_DUST.get()), 1
             )).unlockedWith(ArcaneItems.AURAGLASS_DUST.get()).save();
 
             helper.shaped(ArcaneItems.SPELL_CHALK.get())
                     .pattern(" CB", "CSC", "BC ")
-                    .define('C', Items.CLAY_BALL)
-                    .define('B', Items.BONE_MEAL)
-                    .define('S', ArcaneItems.SPELL_CIRCLE_CORE.get())
+                    .define('C', ingOf(Items.CLAY_BALL))
+                    .define('B', ingOf(Items.BONE_MEAL))
+                    .define('S', SPELL_CIRCLE_CORE)
                     .unlockedWith(ArcaneItems.SPELL_CIRCLE_CORE.get())
+                    .save();
+
+            helper.shaped(ArcaneItems.ENDERPACK.get())
+                    .pattern(" P ")
+                    .pattern("LEL")
+                    .pattern("PPP")
+                    .define('P', POLISHED_LARIMAR)
+                    .define('L', Tags.Items.LEATHER)
+                    .define('E', ingOf(Items.ENDER_CHEST))
+                    .unlockedWith(ArcaneItems.POLISHED_LARIMAR.get())
                     .save();
 
             // Auraglass Bottles
             {
                 helper.shaped(ArcaneItems.AURAGLASS_BOTTLE.get())
                         .pattern("A A", " A ")
-                        .define('A', ArcaneBlocks.AURAGLASS.get().asItem())
+                        .define('A', AURAGLASS)
                         .unlockedWith(ArcaneBlocks.AURAGLASS.get().asItem())
                         .save();
 
                 helper.shaped(ArcaneItems.MEDIUM_AURAGLASS_BOTTLE.get())
                         .pattern("BAB", " B ")
-                        .define('A', ArcaneItems.AURAGLASS_BOTTLE.get())
-                        .define('B', ArcaneItems.BLUE_GOLD.get())
+                        .define('A', ingOf(ArcaneItems.AURAGLASS_BOTTLE.get()))
+                        .define('B', POLISHED_LARIMAR)
                         .unlockedWith(ArcaneItems.AURAGLASS_BOTTLE.get())
                         .save();
 
                 helper.shaped(ArcaneItems.LARGE_AURAGLASS_BOTTLE.get())
                         .pattern("BAB", " B ")
-                        .define('A', ArcaneItems.MEDIUM_AURAGLASS_BOTTLE.get())
-                        .define('B', ArcaneItems.BLUE_GOLD.get())
+                        .define('A', ingOf(ArcaneItems.MEDIUM_AURAGLASS_BOTTLE.get()))
+                        .define('B', AURACHALCUM)
                         .unlockedWith(ArcaneItems.MEDIUM_AURAGLASS_BOTTLE.get())
                         .save();
 
                 helper.shaped(ArcaneItems.EXTREME_AURAGLASS_BOTTLE.get())
                         .pattern("BAB", " B ")
-                        .define('A', ArcaneItems.LARGE_AURAGLASS_BOTTLE.get())
-                        .define('B', ArcaneItems.ELDRITCH_ALLOY.get())
+                        .define('A', ingOf(ArcaneItems.LARGE_AURAGLASS_BOTTLE.get()))
+                        .define('B', ELDRITCH_ALLOY)
                         .unlockedWith(ArcaneItems.LARGE_AURAGLASS_BOTTLE.get())
                         .save();
             }
@@ -258,35 +282,37 @@ public class ArcaneRecipeProvider extends RecipeProvider {
                 wands.put(Items.SPRUCE_PLANKS, ArcaneItems.WAND_SPRUCE.get());
                 wands.put(Items.WARPED_PLANKS, ArcaneItems.WAND_WARPED.get());
                 wands.put(Items.CRIMSON_PLANKS, ArcaneItems.WAND_CRIMSON.get());
+                wands.put(Items.COPPER_INGOT, ArcaneItems.WAND_COPPER.get());
                 wands.forEach((wandItem, output) -> helper.shaped(output)
                         .pattern("  P", " P ", "C  ")
-                        .define('C', ArcaneItems.BLUE_GOLD_CORE.get())
-                        .define('P', wandItem)
-                        .unlockedWith(ArcaneItems.BLUE_GOLD_CORE.get())
+                        .define('C', COPPER_CORE)
+                        .define('P', ingOf(wandItem))
+                        .unlockedWith(ArcaneItems.COPPER_CORE.get())
                         .save(itemKey(output).withPrefix("wands/")));
 
-                // Advanced and Mythical Wands
-                helper.shaped(ArcaneItems.WAND_BLUE_GOLD.get())
+                // Advanced Wands
+                helper.shaped(ArcaneItems.WAND_LARIMAR.get())
                         .pattern("  B", " W ", "C  ")
-                        .define('B', ArcaneItems.BLUE_GOLD.get())
-                        .define('C', ArcaneItems.BLUE_GOLD_CORE.get())
+                        .define('B', POLISHED_LARIMAR)
+                        .define('C', LARIMAR_CORE)
                         .define('W', ArcaneTags.BASIC_WANDS)
-                        .unlockedWith(ArcaneItems.BLUE_GOLD_CORE.get())
-                        .save(itemKey(ArcaneItems.WAND_BLUE_GOLD.get()).withPrefix("wands/"));
+                        .unlockedWith(ArcaneItems.LARIMAR_CORE.get())
+                        .save(itemKey(ArcaneItems.WAND_LARIMAR.get()).withPrefix("wands/"));
 
+                // Mythical Wands
                 helper.shaped(ArcaneItems.WAND_AURACHALCUM.get())
                         .pattern("  D", " W ", "C  ")
-                        .define('D', ArcaneItems.AURACHALCUM.get())
+                        .define('D', AURACHALCUM)
                         .define('W', ArcaneTags.ADVANCED_WANDS)
-                        .define('C', ArcaneItems.AURACHALCUM_CORE.get())
+                        .define('C', AURACHALCUM_CORE)
                         .unlockedWith(ArcaneItems.AURACHALCUM_CORE.get())
                         .save(itemKey(ArcaneItems.WAND_AURACHALCUM.get()).withPrefix("wands/"));
 
                 helper.shaped(ArcaneItems.WAND_ELDRITCH.get())
                         .pattern("  D", " W ", "C  ")
-                        .define('D', ArcaneItems.ELDRITCH_ALLOY.get())
+                        .define('D', ELDRITCH_ALLOY)
                         .define('W', ArcaneTags.ADVANCED_WANDS)
-                        .define('C', ArcaneItems.ELDRITCH_CORE.get())
+                        .define('C', ELDRITCH_CORE)
                         .unlockedWith(ArcaneItems.ELDRITCH_CORE.get())
                         .save(itemKey(ArcaneItems.WAND_ELDRITCH.get()).withPrefix("wands/"));
             }
@@ -306,7 +332,7 @@ public class ArcaneRecipeProvider extends RecipeProvider {
         {
             helper.defaultCategory = RecipeCategory.TOOLS;
 
-            helper.wrap(PedestalRecipeBuilder.pedestalCrafting(Ingredient.of(Items.CLAY_BALL), Ingredient.of(Items.PAPER), true, ArcaneItems.SPELL_TABLET.get(), 1, null))
+            helper.wrap(PedestalRecipeBuilder.pedestalCrafting(ingOf(Items.CLAY_BALL), ingOf(Items.PAPER), true, ArcaneItems.SPELL_TABLET.get(), 1, null))
                     .unlockedWith(ArcaneBlocks.PEDESTAL.get().asItem()).save();
 
             Map<ResourceLocation, Item> spellItems = new HashMap<>();
@@ -321,24 +347,73 @@ public class ArcaneRecipeProvider extends RecipeProvider {
             spellItems.forEach((id, item) -> {
                 CompoundTag tag = new CompoundTag();
                 tag.putString(NBTHelpers.KEY_SPELL, id.toString());
-                helper.wrap(PedestalRecipeBuilder.pedestalCrafting(Ingredient.of(ArcaneItems.SPELL_TABLET.get()), Ingredient.of(item), true, ArcaneItems.SPELL_TABLET.get(), 1, tag))
+                helper.wrap(PedestalRecipeBuilder.pedestalCrafting(ingOf(ArcaneItems.SPELL_TABLET.get()), ingOf(item), true, ArcaneItems.SPELL_TABLET.get(), 1, tag))
                         .unlockedWith(item).save(id.withPrefix("spell_tablets/"));
             });
         }
     }
 
+    private void cutAndPolish(RecipeDataHelper helper, Item raw, Item cut, Item polished) {
+        helper.shapeless(cut, 1)
+                .requires(raw)
+                .requires(ArcaneItems.GEM_SAW.get())
+                .unlockedWith(raw)
+                .save();
+
+        helper.shapeless(polished, 1)
+                .requires(cut)
+                .requires(ItemTags.SAND, 2)
+                .unlockedWith(cut)
+                .save();
+    }
+
+    private void makeBasin(RecipeDataHelper helper, Item result, Ingredient core, Ingredient base) {
+        helper.shaped(result)
+                .pattern("B B", "B B", "BCB")
+                .define('B', base)
+                .define('C', core)
+                .unlockedWith(core.getItems()[0].getItem())
+                .save();
+    }
+
+    private void makeInserter(RecipeDataHelper helper, Item result, Ingredient core, Ingredient base) {
+        helper.shaped(result)
+                .pattern(" B ", "SSS")
+                .define('B', core)
+                .define('S', base)
+                .unlockedWith(core.getItems()[0].getItem())
+                .save();
+    }
+
+    private void makeExtractor(RecipeDataHelper helper, Item result, Ingredient core, Ingredient base) {
+        helper.shaped(result)
+                .pattern("SSS", " B ")
+                .define('B', core)
+                .define('S', base)
+                .unlockedWith(core.getItems()[0].getItem())
+                .save();
+    }
+
     private void oreProcessingLine(RecipeDataHelper helper, Item raw, Item crushed, Item purified, Item ingot) {
-        helper.wrap(HammeringRecipeBuilder.hammering(Ingredient.of(raw), crushed, 1))
-                .unlockedWith(raw).save(new ResourceLocation(ArcaneMod.MODID, "ore_processing/hammering/" + itemKey(raw).getPath()));
+        helper.wrap(HammeringRecipeBuilder.hammering(ingOf(raw), crushed, 1))
+                .unlockedWith(raw).save(new ResourceLocation(ArcaneMod.MODID, "ore_processing/" + itemKey(raw).getPath()));
 
-        helper.wrap(PurifyingRecipeBuilder.purifying(Ingredient.of(crushed), purified, 2))
-                .unlockedWith(crushed).save(itemKey(crushed).withPrefix("ore_processing/purifying/"));
+        helper.wrap(PurifyingRecipeBuilder.purifying(ingOf(crushed), purified, 2))
+                .unlockedWith(crushed).save(itemKey(crushed).withPrefix("ore_processing/"));
 
-        helper.wrap(SimpleCookingRecipeBuilder.blasting(Ingredient.of(purified), RecipeCategory.MISC, ingot, 0.7f, 100))
-                .unlockedWith(raw).save(itemKey(purified).withPrefix("ore_processing/blasting/"));
+        helper.wrap(SimpleCookingRecipeBuilder.blasting(ingOf(purified), RecipeCategory.MISC, ingot, 0.7f, 100))
+                .unlockedWith(raw).save(itemKey(purified).withPrefix("ore_processing/"));
     }
 
     private ResourceLocation itemKey(Item item) {
         return ForgeRegistries.ITEMS.getKey(item);
+    }
+
+    private Ingredient ingOf(Item item) {
+        return Ingredient.of(item);
+    }
+
+    private Ingredient ingOf(TagKey<Item> item) {
+        return Ingredient.of(item);
     }
 }

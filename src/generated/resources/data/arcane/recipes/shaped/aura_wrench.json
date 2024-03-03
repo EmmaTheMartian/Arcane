@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "B": {
+      "item": "arcane:copper_core"
+    },
+    "C": {
+      "tag": "forge:ingots/copper"
+    }
+  },
+  "pattern": [
+    "C C",
+    " B ",
+    " C "
+  ],
+  "result": {
+    "item": "arcane:aura_wrench"
+  },
+  "show_notification": true
+}

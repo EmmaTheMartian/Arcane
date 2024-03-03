@@ -1,7 +1,6 @@
 package martian.arcane.datagen.client;
 
 import martian.arcane.ArcaneMod;
-import martian.arcane.common.item.ItemAuraWand;
 import martian.arcane.common.registry.ArcaneItems;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -10,7 +9,7 @@ import net.minecraft.world.item.Item;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 public class ArcaneItemModelProvider extends ItemModelProvider {
     public ArcaneItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
@@ -19,58 +18,100 @@ public class ArcaneItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        ArcaneItems.ITEMS.getEntries().forEach(itemHolder -> {
-            Item item = itemHolder.get();
-            if (item instanceof BlockItem && item != ArcaneItems.SPELL_CHALK.get())
-                blockItem(item);
-            else if (item instanceof ItemAuraWand)
-                itemWithTexturePath(item, "wands");
-            else if (
-                    item == ArcaneItems.CRUSHED_RAW_COPPER.get() ||
-                    item == ArcaneItems.CRUSHED_RAW_IRON.get() ||
-                    item == ArcaneItems.CRUSHED_RAW_GOLD.get() ||
-                    item == ArcaneItems.PURIFIED_RAW_COPPER.get() ||
-                    item == ArcaneItems.PURIFIED_RAW_IRON.get() ||
-                    item == ArcaneItems.PURIFIED_RAW_GOLD.get()
-            )
-                itemWithTexturePath(item, "dusts");
-            else if (item == ArcaneItems.CREATIVE_AURAGLASS_BOTTLE.get())
-                itemWithTexture(item, ArcaneMod.id("item/extreme_auraglass_bottle"));
-            else
-                basicItem(item);
-        });
+        // Tools
+        {
+            // Wands
+            for (RegistryObject<Item> wand : ArcaneItems.WANDS) {
+                handheld(wand, "wands/");
+            }
+
+            String path = "tools/";
+            item(ArcaneItems.AURAGLASS_BOTTLE, path);
+            item(ArcaneItems.MEDIUM_AURAGLASS_BOTTLE, path);
+            item(ArcaneItems.LARGE_AURAGLASS_BOTTLE, path);
+            item(ArcaneItems.EXTREME_AURAGLASS_BOTTLE, path);
+            item(ArcaneItems.CREATIVE_AURAGLASS_BOTTLE.get(), "tools/extreme_auraglass_bottle");
+
+            item(ArcaneItems.AURAOMETER, path);
+            item(ArcaneItems.AURA_WRENCH, path);
+            item(ArcaneItems.AURA_CONFIGURATOR, path);
+            item(ArcaneItems.SPELL_TABLET, path);
+            item(ArcaneItems.ARCANE_BLEACH, path);
+            item(ArcaneItems.SPELL_CHALK, path);
+            item(ArcaneItems.ENDERPACK, path);
+            item(ArcaneItems.AXOBOTTLE, path);
+            item(ArcaneItems.GUIDEBOOK, path);
+            item(ArcaneItems.GEM_SAW, path);
+        }
+
+        // Resources
+        {
+            String path = "resources/";
+            item(ArcaneItems.RAW_LARIMAR, path);
+            item(ArcaneItems.CUT_LARIMAR, path);
+            item(ArcaneItems.POLISHED_LARIMAR, path);
+            item(ArcaneItems.FADED_RAW_LARIMAR, path);
+            item(ArcaneItems.FADED_CUT_LARIMAR, path);
+            item(ArcaneItems.FADED_POLISHED_LARIMAR, path);
+            item(ArcaneItems.RAW_IDOCRASE, path);
+            item(ArcaneItems.CUT_IDOCRASE, path);
+            item(ArcaneItems.POLISHED_IDOCRASE, path);
+            item(ArcaneItems.RAW_AURACHALCUM, path);
+            item(ArcaneItems.AURACHALCUM, path);
+            item(ArcaneItems.ELDRITCH_ALLOY, path);
+
+            item(ArcaneItems.COPPER_CORE, path);
+            item(ArcaneItems.LARIMAR_CORE, path);
+            item(ArcaneItems.AURACHALCUM_CORE, path);
+            item(ArcaneItems.ELDRITCH_CORE, path);
+            item(ArcaneItems.SPELL_CIRCLE_CORE, path);
+
+            item(ArcaneItems.AURAGLASS_SHARD, path);
+            item(ArcaneItems.AURAGLASS_DUST, path);
+        }
+
+        // Ore Processing
+        {
+            String path = "dusts/";
+            item(ArcaneItems.CRUSHED_RAW_COPPER, path);
+            item(ArcaneItems.CRUSHED_RAW_IRON, path);
+            item(ArcaneItems.CRUSHED_RAW_GOLD, path);
+            item(ArcaneItems.PURIFIED_RAW_COPPER, path);
+            item(ArcaneItems.PURIFIED_RAW_IRON, path);
+            item(ArcaneItems.PURIFIED_RAW_GOLD, path);
+        }
+
+        // Block items
+        ArcaneItems.ITEMS.getEntries()
+                .stream()
+                .filter(item -> item.get() instanceof BlockItem && item != ArcaneItems.SPELL_CHALK)
+                .forEach(this::blockItem);
     }
 
-    private void blankItem(Item item) {
-        itemWithTexture(item, new ResourceLocation("minecraft", "item/amethyst_shard"));  // Why amethyst? Why not.
-    }
-
-    private void itemWithTexturePath(Item item, String path) {
-        getBuilder(item.toString())
-                .parent(new ModelFile.UncheckedModelFile("item/generated"))
-                .texture("layer0", namespace(item) + ":item/" + path + "/" + name(item));
-    }
-
-    private void itemWithTexture(Item item, ResourceLocation texture) {
-        getBuilder(item.toString())
-                .parent(new ModelFile.UncheckedModelFile("item/generated"))
+    private void build(String name, String parent, ResourceLocation texture) {
+        getBuilder(name)
+                .parent(new ModelFile.UncheckedModelFile(parent))
                 .texture("layer0", texture);
     }
 
-    private void blockItem(Item item) {
-        String path = name(item);
-        withExistingParent("item/" + path, new ResourceLocation(namespace(item), "block/" + path));
+    private void item(Item item, String path) {
+        build(item.toString(), "item/generated", ArcaneMod.id(path).withPrefix("item/"));
     }
 
-    public static ResourceLocation key(Item item) {
-        return ForgeRegistries.ITEMS.getKey(item);
+    private void item(RegistryObject<Item> item, String prefix) {
+        item(item.get(), item.getId().withPrefix(prefix).getPath());
     }
 
-    public static String name(Item item) {
-        return key(item).getPath();
+    private void handheld(Item item, String path) {
+        build(item.toString(), "item/handheld", ArcaneMod.id(path).withPrefix("item/"));
     }
 
-    public static String namespace(Item item) {
-        return key(item).getNamespace();
+    private void handheld(RegistryObject<Item> item, String prefix) {
+        handheld(item.get(), item.getId().withPrefix(prefix).getPath());
+    }
+
+    private void blockItem(RegistryObject<Item> item) {
+        String path = item.getId().getPath();
+        withExistingParent("item/" + path, new ResourceLocation(item.getId().getNamespace(), "block/" + path));
     }
 }

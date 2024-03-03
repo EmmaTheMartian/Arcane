@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "arcane:item/auraometer"
+    "layer0": "arcane:item/tools/auraometer"
   }
 }

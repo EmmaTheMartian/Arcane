@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import martian.arcane.common.registry.*;
 import martian.arcane.datagen.ArcaneDatagen;
 import martian.arcane.integration.curios.CuriosIntegration;
+import martian.arcane.integration.photon.PhotonIntegration;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.BlastFurnaceBlock;
 import net.minecraft.world.level.block.Blocks;
@@ -13,7 +14,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -68,9 +68,8 @@ public class ArcaneMod
     }
 
     private void setup(final FMLCommonSetupEvent event) {
-        if (ModList.get().isLoaded("curios")) {
-            CuriosIntegration.init();
-        }
+        CuriosIntegration.INSTANCE.load();
+        PhotonIntegration.INSTANCE.load();
     }
 
     public static int getIgnisGenAmountForState(BlockState state) {

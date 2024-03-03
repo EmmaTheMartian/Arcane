@@ -1,8 +1,8 @@
 {
   "parent": "minecraft:block/cube_bottom_top",
   "textures": {
-    "top": "arcane:block/spell_circle/temporary",
-    "bottom": "arcane:block/spell_circle/temporary",
+    "top": "arcane:block/machines/spell_circle/basic",
+    "bottom": "arcane:block/machines/spell_circle/basic",
     "sides": "minecraft:block/empty"
   }
 }

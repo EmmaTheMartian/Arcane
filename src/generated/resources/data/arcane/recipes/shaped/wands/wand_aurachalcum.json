@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "C": {
+      "item": "arcane:aurachalcum_core"
+    },
+    "D": {
+      "item": "arcane:aurachalcum"
+    },
+    "W": {
+      "tag": "arcane:advanced_wands"
+    }
+  },
+  "pattern": [
+    "  D",
+    " W ",
+    "C  "
+  ],
+  "result": {
+    "item": "arcane:wand_aurachalcum"
+  },
+  "show_notification": true
+}

@@ -35,10 +35,11 @@ public class ArcaneItemTagProvider extends ItemTagsProvider {
                 .add(ArcaneItems.WAND_OAK.get())
                 .add(ArcaneItems.WAND_SPRUCE.get())
                 .add(ArcaneItems.WAND_WARPED.get())
-                .add(ArcaneItems.WAND_CRIMSON.get());
+                .add(ArcaneItems.WAND_CRIMSON.get())
+                .add(ArcaneItems.WAND_COPPER.get());
 
         tag(ArcaneTags.ADVANCED_WANDS)
-                .add(ArcaneItems.WAND_BLUE_GOLD.get());
+                .add(ArcaneItems.WAND_LARIMAR.get());
 
         tag(ArcaneTags.MYSTICAL_WANDS)
                 .add(ArcaneItems.WAND_AURACHALCUM.get())
@@ -60,10 +61,20 @@ public class ArcaneItemTagProvider extends ItemTagsProvider {
                 .add(ArcaneItems.PURIFIED_RAW_GOLD.get());
 
         tag(forgeTag("ingots"))
-                .add(ArcaneItems.BLUE_GOLD.get())
-                .add(ArcaneItems.AURACHALCUM.get())
-                .add(ArcaneItems.AURACHALCUM.get())
                 .add(ArcaneItems.ELDRITCH_ALLOY.get());
+
+        tag(forgeTag("gems"))
+                .add(ArcaneItems.RAW_LARIMAR.get())
+                .add(ArcaneItems.CUT_LARIMAR.get())
+                .add(ArcaneItems.POLISHED_LARIMAR.get())
+                .add(ArcaneItems.FADED_RAW_LARIMAR.get())
+                .add(ArcaneItems.FADED_CUT_LARIMAR.get())
+                .add(ArcaneItems.FADED_POLISHED_LARIMAR.get())
+                .add(ArcaneItems.RAW_IDOCRASE.get())
+                .add(ArcaneItems.CUT_IDOCRASE.get())
+                .add(ArcaneItems.POLISHED_IDOCRASE.get())
+                .add(ArcaneItems.RAW_AURACHALCUM.get())
+                .add(ArcaneItems.AURACHALCUM.get());
 
         tag(forgeTag("dusts"))
                 .addTag(ArcaneTags.CRUSHED_DUSTS)

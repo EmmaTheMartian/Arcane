@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "arcane:block/aura_basin_larimar",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "arcane:block/aura_basin_larimar",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "arcane:block/aura_basin_larimar"
+    },
+    "facing=west": {
+      "model": "arcane:block/aura_basin_larimar",
+      "y": 90
+    }
+  }
+}

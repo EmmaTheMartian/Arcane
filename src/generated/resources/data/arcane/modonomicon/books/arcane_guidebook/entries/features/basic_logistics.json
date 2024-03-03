@@ -1,0 +1,58 @@
+{
+  "background_u_index": 0,
+  "background_v_index": 0,
+  "category": "arcane:features",
+  "condition": {
+    "type": "modonomicon:and",
+    "children": [
+      {
+        "type": "modonomicon:entry_read",
+        "entry_id": "arcane:features/basic_collectors"
+      }
+    ]
+  },
+  "description": "",
+  "hide_while_locked": true,
+  "icon": {
+    "item": "arcane:aura_extractor_copper"
+  },
+  "name": "book.arcane.arcane_guidebook.features.basic_logistics.name",
+  "pages": [
+    {
+      "type": "modonomicon:text",
+      "anchor": "",
+      "show_title_separator": true,
+      "text": "book.arcane.arcane_guidebook.features.basic_logistics.about.text",
+      "title": "book.arcane.arcane_guidebook.features.basic_logistics.about.title",
+      "use_markdown_in_title": false
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "anchor": "",
+      "recipe_id_1": "arcane:shaped/aura_extractor_copper",
+      "recipe_id_2": "arcane:shaped/aura_inserter_copper",
+      "text": "book.arcane.arcane_guidebook.features.basic_logistics.extractor_and_inserter.text",
+      "title1": "",
+      "title2": ""
+    },
+    {
+      "type": "modonomicon:crafting_recipe",
+      "anchor": "",
+      "recipe_id_1": "arcane:shaped/aura_wrench",
+      "text": "book.arcane.arcane_guidebook.features.basic_logistics.aurawrench.text",
+      "title1": "",
+      "title2": ""
+    }
+  ],
+  "parents": [
+    {
+      "draw_arrow": true,
+      "entry": "arcane:features/basic_collectors",
+      "line_enabled": true,
+      "line_reversed": false
+    }
+  ],
+  "show_when_any_parent_unlocked": false,
+  "x": -2,
+  "y": 0
+}

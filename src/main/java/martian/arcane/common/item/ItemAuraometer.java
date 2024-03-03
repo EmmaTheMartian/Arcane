@@ -1,5 +1,6 @@
 package martian.arcane.common.item;
 
+import martian.arcane.api.block.BlockHelpers;
 import martian.arcane.api.Raycasting;
 import martian.arcane.api.block.entity.IAuraometerOutput;
 import net.minecraft.network.chat.Component;
@@ -10,7 +11,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,6 +21,7 @@ public class ItemAuraometer extends Item {
         super(new Item.Properties().stacksTo(1));
     }
 
+    //TODO: Optimize! Preferably I do not want to trigger a block update every tick.
     @Override
     public void inventoryTick(@NotNull ItemStack stack, @NotNull Level level, @NotNull Entity holder, int slot, boolean isHeld) {
         if (holder instanceof Player player) {
@@ -29,10 +30,8 @@ public class ItemAuraometer extends Item {
                 return;
 
             BlockEntity entity = level.getBlockEntity(hit.getBlockPos());
-            if (entity instanceof IAuraometerOutput) {
-                BlockState state = level.getBlockState(hit.getBlockPos());
-                level.sendBlockUpdated(hit.getBlockPos(), state, state, 2);
-            }
+            if (entity instanceof IAuraometerOutput)
+                BlockHelpers.sync(entity);
         }
     }
 

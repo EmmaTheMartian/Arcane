@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "arcane:item/arcane_bleach"
+    "layer0": "arcane:item/tools/arcane_bleach"
   }
 }

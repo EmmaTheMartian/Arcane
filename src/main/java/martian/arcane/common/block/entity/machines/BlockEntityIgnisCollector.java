@@ -17,12 +17,12 @@ import java.util.List;
 public class BlockEntityIgnisCollector extends AbstractAuraBlockEntity {
     private int ticksToNextCollect = 0;
 
-    public BlockEntityIgnisCollector(int maxAura, BlockPos pos, BlockState state) {
-        super(maxAura, true, false, ArcaneBlockEntities.IGNIS_COLLECTOR.get(), pos, state);
+    public BlockEntityIgnisCollector(int maxAura, int auraLoss, BlockPos pos, BlockState state) {
+        super(maxAura, auraLoss, true, false, ArcaneBlockEntities.IGNIS_COLLECTOR.get(), pos, state);
     }
 
     public BlockEntityIgnisCollector(BlockPos pos, BlockState state) {
-        super(ArcaneStaticConfig.Maximums.COLLECTOR_MAX_AURA, true, false, ArcaneBlockEntities.IGNIS_COLLECTOR.get(), pos, state);
+        super(ArcaneStaticConfig.Maximums.COLLECTOR, ArcaneStaticConfig.AuraLoss.COPPER_TIER, true, false, ArcaneBlockEntities.IGNIS_COLLECTOR.get(), pos, state);
     }
 
     public List<Component> getText(List<Component> text, boolean detailed) {

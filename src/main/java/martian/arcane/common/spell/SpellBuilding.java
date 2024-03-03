@@ -1,60 +1,90 @@
 package martian.arcane.common.spell;
 
+import martian.arcane.ArcaneStaticConfig;
+import martian.arcane.api.block.AOEHelpers;
 import martian.arcane.api.spell.AbstractSpell;
 import martian.arcane.api.spell.CastContext;
-import martian.arcane.api.spell.ICastingSource;
+import martian.arcane.api.spell.CastResult;
 import martian.arcane.common.registry.ArcaneBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
+
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SpellBuilding extends AbstractSpell {
     public SpellBuilding() {
-        super(1);
+        super(ArcaneStaticConfig.SpellMinLevels.BUILDING);
     }
 
     @Override
-    public int getAuraCost(int level) {
-        return 1;
-    }
-
-    @Override
-    public void cast(CastContext c) {
+    public CastResult cast(CastContext c) {
         if (c.level.isClientSide)
-            return;
+            return CastResult.PASS;
 
-        BlockState state = ArcaneBlocks.CONJURED_BLOCK.get().defaultBlockState();
-        BlockPos pos = null;
+        AtomicInteger cost = new AtomicInteger(0);
+        BlockPos target = c.getTarget();
+        if (target == null)
+            return CastResult.FAILED;
 
-        if (c.source == ICastingSource.Type.WAND) {
-            CastContext.WandContext wandContext = (CastContext.WandContext)c;
-            HitResult hit = wandContext.raycast();
-            if (hit.getType() != HitResult.Type.BLOCK)
-                return;
+        BlockState toPlace = ArcaneBlocks.CONJURED_BLOCK.get().defaultBlockState();
 
-            BlockHitResult bHit = (BlockHitResult)hit;
-            pos = bHit.getBlockPos().relative(bHit.getDirection());
-            if (!c.level.isInWorldBounds(pos))
-                return;
+        if (c instanceof CastContext.WandContext wc) {
+            ItemStack offStack = wc.caster.getMainHandItem() == wc.castingStack
+                    ? wc.caster.getOffhandItem()
+                    : wc.caster.getMainHandItem();
+            AtomicBoolean usingOffStack = new AtomicBoolean(false);
 
-            ItemStack offStack = wandContext.caster.getMainHandItem() == ((CastContext.WandContext) c).castingStack
-                    ? wandContext.caster.getOffhandItem()
-                    : wandContext.caster.getMainHandItem();
-
-            if (offStack.getItem() instanceof BlockItem bi) {
-                state = bi.getBlock().defaultBlockState();
-                if (!wandContext.caster.isCreative())
-                    offStack.shrink(1);
+            if (!offStack.isEmpty() && offStack.getItem() instanceof BlockItem bi) {
+                toPlace = bi.getBlock().defaultBlockState();
+                usingOffStack.set(true);
             }
-        } else if (c.source == ICastingSource.Type.SPELL_CIRCLE) {
-            CastContext.SpellCircleContext spellCircleContext = (CastContext.SpellCircleContext)c;
-            pos = spellCircleContext.getTarget();
+
+            if (wc.raycast() instanceof BlockHitResult bHit) {
+                target = bHit.getBlockPos().relative(bHit.getDirection());
+                if (c.source.getCastLevel() == 1 || wc.caster.isCrouching()) {
+                    if (tryPlace(c.level, target, toPlace))
+                        cost.getAndAdd(ArcaneStaticConfig.SpellCosts.BUILDING);
+                } else {
+                    BlockState finalToPlace = toPlace;
+                    AOEHelpers.streamAOE(target, bHit.getDirection(), getRadius(c.source.getCastLevel())).forEach(pos -> {
+                        if (c.aura.getAura() - cost.get() <= 0 || (usingOffStack.get() && offStack.isEmpty()))
+                            return;
+
+                        if (tryPlace(c.level, pos, finalToPlace)) {
+                            cost.getAndAdd(ArcaneStaticConfig.SpellCosts.BUILDING);
+                            if (usingOffStack.get() && !wc.caster.isCreative())
+                                offStack.shrink(1);
+                        }
+                    });
+                }
+            } else {
+                return CastResult.FAILED;
+            }
+        } else if (tryPlace(c.level, target, toPlace)) {
+            cost.getAndAdd(ArcaneStaticConfig.SpellCosts.BUILDING);
         }
 
-        if (pos != null && c.level.getBlockState(pos).canBeReplaced())
-            c.level.setBlockAndUpdate(pos, state);
+        return new CastResult(cost.get(), false);
+    }
+
+    private static boolean tryPlace(Level level, BlockPos pos, BlockState toPlace) {
+        if (level.getBlockState(pos).canBeReplaced()) {
+            level.setBlockAndUpdate(pos, toPlace);
+            return true;
+        }
+        return false;
+    }
+
+    private static int getRadius(int level) {
+        return switch (level) {
+            case 2 -> 1;
+            case 3 -> 2;
+            default -> 0;
+        };
     }
 }

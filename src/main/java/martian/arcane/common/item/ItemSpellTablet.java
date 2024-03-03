@@ -37,6 +37,11 @@ public class ItemSpellTablet extends Item {
         }
     }
 
+    @Override
+    public boolean isFoil(ItemStack stack) {
+        return stack.isEnchanted() || hasSpell(stack);
+    }
+
     public static void setSpell(ItemStack stack, ResourceLocation id) {
         getNBT(stack).putString(NBTHelpers.KEY_SPELL, id.toString());
     }

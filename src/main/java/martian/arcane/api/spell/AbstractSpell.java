@@ -24,7 +24,5 @@ public abstract class AbstractSpell {
         return wand.level >= minLevel;
     }
 
-    public abstract int getAuraCost(int casterLevel);
-
-    public abstract void cast(CastContext context);
+    public abstract CastResult cast(CastContext context);
 }

@@ -1,0 +1,13 @@
+{
+  "type": "arcane:pedestal",
+  "consume": true,
+  "input": {
+    "tag": "forge:ingots/copper"
+  },
+  "interaction_input": {
+    "item": "arcane:auraglass"
+  },
+  "result": {
+    "item": "arcane:copper_core"
+  }
+}

@@ -3,6 +3,7 @@ package martian.arcane.datagen.builders;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import martian.arcane.common.registry.ArcaneRecipeTypes;
+import martian.arcane.datagen.util.RecipeDataHelper;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.CriterionTriggerInstance;
@@ -50,6 +51,10 @@ public class PedestalRecipeBuilder implements RecipeBuilder {
 
     public static PedestalRecipeBuilder pedestalCrafting(Ingredient input, Ingredient interactionInput, boolean consume, Item output, int count, @Nullable CompoundTag resultNbt) {
         return new PedestalRecipeBuilder(RecipeCategory.MISC, ArcaneRecipeTypes.PEDESTAL_SERIALIZER.get(), input, interactionInput, consume, output, count, resultNbt);
+    }
+
+    public static PedestalRecipeBuilder simpleRecipe(Ingredient input, Ingredient interactionInput, Item output) {
+        return pedestalCrafting(input, interactionInput, true, output, 1, null).unlockedBy("has_item", RecipeDataHelper.has(input.getItems()[0].getItem()));
     }
 
     public Item getResult() {
