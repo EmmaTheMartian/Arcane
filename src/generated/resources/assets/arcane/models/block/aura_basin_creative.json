@@ -1,0 +1,6 @@
+{
+  "parent": "arcane:block/base/aura_basin",
+  "textures": {
+    "0": "arcane:block/machines/aura_basin_copper"
+  }
+}

@@ -3,7 +3,13 @@
   "input": {
     "item": "minecraft:raw_gold"
   },
-  "result": {
-    "item": "arcane:crushed_raw_gold"
-  }
+  "results": [
+    {
+      "chance": 1.0,
+      "item": {
+        "Count": 1,
+        "id": "arcane:crushed_raw_gold"
+      }
+    }
+  ]
 }

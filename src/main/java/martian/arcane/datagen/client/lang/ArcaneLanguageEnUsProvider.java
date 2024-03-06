@@ -164,6 +164,7 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
             add("messages.arcane.selected", "Selected block");
             add("messages.arcane.pedestal_set_spell", "Spell set!");
             add("messages.arcane.invalid_wand_for_spell", "Invalid wand for spell.");
+            add("messages.arcane.chance", "Chance: ");
         }
 
         // GUI

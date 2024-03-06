@@ -1,81 +1,37 @@
 package martian.arcane.common.recipe;
 
-import com.google.gson.JsonObject;
 import martian.arcane.ArcaneMod;
+import martian.arcane.api.recipe.ISpellRecipe;
+import martian.arcane.api.recipe.RecipeOutput;
 import martian.arcane.api.recipe.SimpleContainer;
+import martian.arcane.api.recipe.SimpleRecipe;
 import martian.arcane.common.registry.ArcaneRecipeTypes;
-import net.minecraft.MethodsReturnNonnullByDefault;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Optional;
 
-// Input ItemStack must have a count of 1!
-@ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
-public class RecipeHammering implements Recipe<SimpleContainer> {
+public class RecipeHammering extends SimpleRecipe<SimpleContainer> implements ISpellRecipe {
     public static final String NAME = "hammering";
     public static final ResourceLocation ID = ArcaneMod.id(NAME);
 
-    public final ResourceLocation id;
-    public final ItemStack input;
-    public final ItemStack result;
-
-    public RecipeHammering(ResourceLocation id, ItemStack input, ItemStack result) {
-        this.id = id;
-        this.input = input;
-        this.result = result;
-    }
-
-    public ItemStack getResultItem() {
-        return result.copy();
+    public RecipeHammering(ResourceLocation id, Ingredient input, NonNullList<RecipeOutput> results) {
+        super(ArcaneRecipeTypes.HAMMERING.get(), id, input, results);
     }
 
     @Override
-    public ItemStack getResultItem(RegistryAccess registryAccess) {
-        return getResultItem();
+    public NonNullList<RecipeOutput> getRecipeOutput() {
+        return this.results;
     }
 
     @Override
-    public boolean matches(SimpleContainer container, Level level) {
-        return this.input.is(container.getItem().getItem());
-    }
-
-    @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return true;
-    }
-
-    @Override
-    public ResourceLocation getId() {
-        return id;
-    }
-
-    @Override
-    public RecipeSerializer<?> getSerializer() {
+    public @NotNull RecipeSerializer<?> getSerializer() {
         return new Serializer();
-    }
-
-    @Override
-    public RecipeType<?> getType() {
-        return ArcaneRecipeTypes.HAMMERING.get();
-    }
-
-    @Override
-    @Deprecated
-    public ItemStack assemble(SimpleContainer container, RegistryAccess registryAccess) {
-        throw new RuntimeException("Cannot invoke RecipeHammering#assemble(SimpleContainer, RegistryAccess)");
     }
 
     public static Optional<RecipeHammering> getRecipeFor(Level level, SimpleContainer container) {
@@ -89,23 +45,9 @@ public class RecipeHammering implements Recipe<SimpleContainer> {
         return level.getRecipeManager().getAllRecipesFor(ArcaneRecipeTypes.HAMMERING.get());
     }
 
-    public static class Serializer implements RecipeSerializer<RecipeHammering> {
-        @Override
-        public RecipeHammering fromJson(ResourceLocation id, JsonObject json) {
-            ItemStack input = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "input"));
-            ItemStack result = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
-            return new RecipeHammering(id, input, result);
-        }
-
-        @Override
-        public @Nullable RecipeHammering fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
-            return new RecipeHammering(id, buf.readItem(), buf.readItem());
-        }
-
-        @Override
-        public void toNetwork(FriendlyByteBuf buf, RecipeHammering recipe) {
-            buf.writeItemStack(recipe.input, false);
-            buf.writeItemStack(recipe.result, false);
+    public static class Serializer extends SimpleSerializer<RecipeHammering> {
+        public Serializer() {
+            super(RecipeHammering::new);
         }
     }
 }

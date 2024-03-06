@@ -3,8 +3,14 @@
   "input": {
     "item": "minecraft:glass"
   },
-  "result": {
-    "item": "arcane:auraglass"
-  },
+  "results": [
+    {
+      "chance": 1.0,
+      "item": {
+        "Count": 1,
+        "id": "arcane:auraglass"
+      }
+    }
+  ],
   "aura": 32
 }

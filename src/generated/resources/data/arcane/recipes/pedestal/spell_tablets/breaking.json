@@ -7,10 +7,13 @@
   "interaction_input": {
     "item": "minecraft:diamond_pickaxe"
   },
-  "result": {
-    "item": "arcane:spell_tablet",
-    "nbt": {
-      "arcane.spell": "arcane:breaking"
+  "results": [
+    {
+      "chance": 1.0,
+      "item": {
+        "Count": 1,
+        "id": "arcane:spell_tablet"
+      }
     }
-  }
+  ]
 }

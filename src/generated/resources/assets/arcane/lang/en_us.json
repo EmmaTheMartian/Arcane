@@ -136,6 +136,7 @@
   "messages.arcane.can_insert": "Aura Insertable?: ",
   "messages.arcane.cast_spell": "Casted spell",
   "messages.arcane.cast_timer": "Cast Timer: ",
+  "messages.arcane.chance": "Chance: ",
   "messages.arcane.crafting": "Crafting: ",
   "messages.arcane.generating": "Generating: ",
   "messages.arcane.holding": "Holding: ",

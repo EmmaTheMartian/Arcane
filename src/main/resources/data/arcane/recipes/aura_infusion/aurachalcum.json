@@ -3,8 +3,14 @@
   "input": {
     "item": "arcane:raw_aurachalcum"
   },
-  "result": {
-    "item": "arcane:aurachalcum"
-  },
+  "results": [
+    {
+      "chance": 1.0,
+      "item": {
+        "Count": 1,
+        "id": "arcane:aurachalcum"
+      }
+    }
+  ],
   "aura": 256
 }

@@ -21,10 +21,13 @@ object Properties {
     const val CREATE_VERSION = "0.5.1.e-22"
     const val FLYWHEEL_VERSION = "0.6.10-7"
     const val REGISTRATE_VERSION = "MC1.20-1.3.3"
+    const val KUBEJS_VERSION = "2001.6.5-build.2"
+    const val PROBEJS_VERSION = "5054324" // 5.9.3-forge
 
     const val ENABLE_PHOTON = true
     const val ENABLE_CURIOS = true
     const val ENABLE_CREATE = true
+    const val ENABLE_PROBEJS = true
 
     const val MOD_VERSION = "1.0.0"
     const val MOD_LICENSE = "MIT"
@@ -85,7 +88,7 @@ repositories {
     // EMI
     maven("https://maven.terraformersmc.com") { name = "TerraformersMC" }
 
-    // Jade
+    // Jade and ProbeJS
     maven("https://www.cursemaven.com") {
         mavenContent {
             includeGroup("curse.maven")
@@ -107,6 +110,13 @@ repositories {
 
     // Create
     maven("https://maven.tterrag.com/") { name = "tterrag maven" }
+
+    // KubeJS and Rhino
+    maven("https://maven.saps.dev/minecraft") {
+        mavenContent {
+            includeGroup("dev.latvian.mods")
+        }
+    }
 }
 
 dependencies {
@@ -162,6 +172,13 @@ dependencies {
         }
         modRuntimeOnly("com.jozufozu.flywheel:flywheel-forge-${Properties.MC_VERSION}:${Properties.FLYWHEEL_VERSION}")
         modRuntimeOnly("com.tterrag.registrate:Registrate:${Properties.REGISTRATE_VERSION}")
+    }
+
+    // KubeJS
+    modImplementation("dev.latvian.mods:kubejs-forge:${Properties.KUBEJS_VERSION}")
+    localRuntime("io.github.llamalad7:mixinextras-forge:0.3.5")
+    if (Properties.ENABLE_PROBEJS) {
+        modRuntimeOnly("curse.maven:probejs-585406:${Properties.PROBEJS_VERSION}")
     }
 }
 

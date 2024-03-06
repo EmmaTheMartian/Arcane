@@ -3,8 +3,13 @@
   "input": {
     "item": "arcane:crushed_raw_gold"
   },
-  "result": {
-    "count": 2,
-    "item": "arcane:purified_raw_gold"
-  }
+  "results": [
+    {
+      "chance": 1.0,
+      "item": {
+        "Count": 2,
+        "id": "arcane:purified_raw_gold"
+      }
+    }
+  ]
 }

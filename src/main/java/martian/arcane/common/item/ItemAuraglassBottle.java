@@ -1,6 +1,7 @@
 package martian.arcane.common.item;
 
 import martian.arcane.api.NBTHelpers;
+import martian.arcane.api.Raycasting;
 import martian.arcane.api.capability.IAuraStorage;
 import martian.arcane.api.item.AbstractAuraItem;
 import martian.arcane.common.registry.ArcaneCapabilities;
@@ -15,12 +16,15 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
+import java.util.Optional;
 
 public class ItemAuraglassBottle extends AbstractAuraItem {
     public final int pushRate;
@@ -42,6 +46,25 @@ public class ItemAuraglassBottle extends AbstractAuraItem {
             CompoundTag nbt = stack.getOrCreateTag();
             initNBT(nbt);
             nbt.putBoolean(NBTHelpers.KEY_ACTIVE, !nbt.getBoolean(NBTHelpers.KEY_ACTIVE));
+        } else {
+            BlockHitResult hit = Raycasting.blockRaycast(player, player.getBlockReach(), false);
+            if (hit == null)
+                return InteractionResultHolder.fail(stack);
+
+            BlockEntity e = level.getBlockEntity(hit.getBlockPos());
+            if (e == null)
+                return InteractionResultHolder.fail(stack);
+
+            e.getCapability(ArcaneCapabilities.AURA_STORAGE, null).map(blockAura -> {
+               if (blockAura.canInsert()) {
+                   mapAuraStorage(stack, bottleAura -> {
+                       bottleAura.sendAuraTo(blockAura, Integer.MAX_VALUE);
+                       return null;
+                   });
+               }
+
+               return Optional.empty();
+            });
         }
 
         return InteractionResultHolder.success(stack);

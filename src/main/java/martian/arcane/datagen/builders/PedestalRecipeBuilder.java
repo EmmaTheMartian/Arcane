@@ -1,24 +1,23 @@
 package martian.arcane.datagen.builders;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.mojang.serialization.JsonOps;
+import martian.arcane.api.ListHelpers;
+import martian.arcane.api.recipe.RecipeOutput;
 import martian.arcane.common.registry.ArcaneRecipeTypes;
-import martian.arcane.datagen.util.RecipeDataHelper;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.core.NonNullList;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtOps;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -34,31 +33,31 @@ public class PedestalRecipeBuilder implements RecipeBuilder {
     private final Ingredient input;
     private final Ingredient interactionInput;
     private final boolean consume;
-    private final Item result;
-    private final int count;
-    private final @Nullable CompoundTag resultNbt;
+    private final NonNullList<RecipeOutput.DataGenHolder> results;
 
-    public PedestalRecipeBuilder(RecipeCategory category, RecipeSerializer<?> type, Ingredient input, Ingredient interactionItem, boolean consume, Item result, int count, @Nullable CompoundTag resultNbt) {
+    public PedestalRecipeBuilder(RecipeCategory category, RecipeSerializer<?> type, Ingredient input, Ingredient interactionItem, boolean consume, NonNullList<RecipeOutput.DataGenHolder> results) {
         this.category = category;
         this.type = type;
         this.input = input;
         this.interactionInput = interactionItem;
         this.consume = consume;
-        this.result = result;
-        this.count = count;
-        this.resultNbt = resultNbt;
+        this.results = results;
     }
 
-    public static PedestalRecipeBuilder pedestalCrafting(Ingredient input, Ingredient interactionInput, boolean consume, Item output, int count, @Nullable CompoundTag resultNbt) {
-        return new PedestalRecipeBuilder(RecipeCategory.MISC, ArcaneRecipeTypes.PEDESTAL_SERIALIZER.get(), input, interactionInput, consume, output, count, resultNbt);
+    public static PedestalRecipeBuilder pedestalCrafting(Ingredient input, Ingredient interactionInput, boolean consume, NonNullList<RecipeOutput.DataGenHolder> results) {
+        return new PedestalRecipeBuilder(RecipeCategory.MISC, ArcaneRecipeTypes.PEDESTAL_SERIALIZER.get(), input, interactionInput, consume, results);
     }
 
-    public static PedestalRecipeBuilder simpleRecipe(Ingredient input, Ingredient interactionInput, Item output) {
-        return pedestalCrafting(input, interactionInput, true, output, 1, null).unlockedBy("has_item", RecipeDataHelper.has(input.getItems()[0].getItem()));
+    public static PedestalRecipeBuilder simpleRecipe(Ingredient input, Ingredient interactionInput, RecipeOutput.DataGenHolder output) {
+        return pedestalCrafting(input, interactionInput, true, ListHelpers.nonNullListOf(output));
+    }
+
+    public static PedestalRecipeBuilder simpleRecipe(Ingredient input, Ingredient interactionInput, Item output, int count) {
+        return simpleRecipe(input, interactionInput, new RecipeOutput.DataGenHolder(output, count, 1));
     }
 
     public Item getResult() {
-        return result;
+        return results.get(0).item();
     }
 
     public PedestalRecipeBuilder unlockedBy(String criterionName, CriterionTriggerInstance criterionTrigger) {
@@ -74,7 +73,7 @@ public class PedestalRecipeBuilder implements RecipeBuilder {
     public void save(Consumer<FinishedRecipe> finishedRecipeConsumer, ResourceLocation recipeId) {
         this.ensureValid(recipeId);
         this.advancement.parent(ROOT_RECIPE_ADVANCEMENT).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(recipeId)).rewards(net.minecraft.advancements.AdvancementRewards.Builder.recipe(recipeId)).requirements(RequirementsStrategy.OR);
-        finishedRecipeConsumer.accept(new PedestalRecipeBuilder.Result(recipeId, this.type, this.group == null ? "" : this.group, this.input, this.interactionInput, this.consume, this.result, this.count, this.resultNbt, this.advancement, recipeId.withPrefix("recipes/" + this.category.getFolderName() + "/")));
+        finishedRecipeConsumer.accept(new PedestalRecipeBuilder.Result(recipeId, this.type, this.group == null ? "" : this.group, this.input, this.interactionInput, this.consume, this.results, this.advancement, recipeId.withPrefix("recipes/" + this.category.getFolderName() + "/")));
     }
 
     private void ensureValid(ResourceLocation id) {
@@ -89,23 +88,19 @@ public class PedestalRecipeBuilder implements RecipeBuilder {
         private final Ingredient input;
         private final Ingredient interactionInput;
         private final boolean consume;
-        private final Item result;
-        private final int count;
-        private final @Nullable CompoundTag resultNbt;
+        private final NonNullList<RecipeOutput.DataGenHolder> results;
         private final Advancement.Builder advancement;
         private final ResourceLocation advancementId;
         private final RecipeSerializer<?> type;
 
-        public Result(ResourceLocation id, RecipeSerializer<?> type, String group, Ingredient input, Ingredient interactionInput, boolean consume, Item result, int count, @Nullable CompoundTag resultNbt, Advancement.Builder advancement, ResourceLocation advancementId) {
+        public Result(ResourceLocation id, RecipeSerializer<?> type, String group, Ingredient input, Ingredient interactionInput, boolean consume, NonNullList<RecipeOutput.DataGenHolder> results, Advancement.Builder advancement, ResourceLocation advancementId) {
             this.id = id;
             this.type = type;
             this.group = group;
             this.input = input;
             this.interactionInput = interactionInput;
             this.consume = consume;
-            this.result = result;
-            this.count = count;
-            this.resultNbt = resultNbt;
+            this.results = results;
             this.advancement = advancement;
             this.advancementId = advancementId;
         }
@@ -118,14 +113,9 @@ public class PedestalRecipeBuilder implements RecipeBuilder {
             json.add("interaction_input", this.interactionInput.toJson());
             json.addProperty("consume", this.consume);
 
-            JsonObject stack = new JsonObject();
-            //noinspection DataFlowIssue
-            stack.addProperty("item", ForgeRegistries.ITEMS.getKey(this.result).toString());
-            if (count > 1)
-                stack.addProperty("count", this.count);
-            if (resultNbt != null)
-                stack.add("nbt", NbtOps.INSTANCE.convertTo(JsonOps.INSTANCE, resultNbt));
-            json.add("result", stack);
+            JsonArray jsonResults = new JsonArray();
+            results.forEach(result -> jsonResults.add(result.toRecipeOutput().toJson()));
+            json.add("results", jsonResults);
         }
 
         public ResourceLocation getId() {

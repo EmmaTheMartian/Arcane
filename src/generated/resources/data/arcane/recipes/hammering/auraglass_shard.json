@@ -3,8 +3,20 @@
   "input": {
     "item": "arcane:auraglass"
   },
-  "result": {
-    "count": 2,
-    "item": "arcane:auraglass_shard"
-  }
+  "results": [
+    {
+      "chance": 1.0,
+      "item": {
+        "Count": 1,
+        "id": "arcane:auraglass_shard"
+      }
+    },
+    {
+      "chance": 0.5,
+      "item": {
+        "Count": 1,
+        "id": "arcane:auraglass_shard"
+      }
+    }
+  ]
 }

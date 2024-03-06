@@ -91,10 +91,6 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntityWithSingleIte
                 RecipeAuraInfusion recipe = optionalRecipe.get();
 
                 text.add(Component
-                        .translatable("messages.arcane.crafting")
-                        .append(recipe.result.getDisplayName()));
-
-                text.add(Component
                         .translatable("messages.arcane.infusing_progress")
                         .append(Integer.toString(auraProgress))
                         .append("/")
@@ -144,10 +140,11 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntityWithSingleIte
             IAuraStorage storage = infuser.getAuraStorage().orElseThrow();
 
             if (infuser.mode == InfusionMode.CRAFTING) {
-                //FIXME: Cache current recipe
+                //FIXME: Cache current recipe?
                 Optional<RecipeAuraInfusion> optionalRecipe = infuser.getRecipe(true);
                 if (optionalRecipe.isEmpty())
                     return;
+
                 RecipeAuraInfusion recipe = optionalRecipe.get();
 
                 if (storage.getAura() > 0 && infuser.auraProgress < recipe.aura) {

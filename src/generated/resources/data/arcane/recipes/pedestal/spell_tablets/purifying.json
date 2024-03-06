@@ -7,10 +7,13 @@
   "interaction_input": {
     "item": "minecraft:emerald"
   },
-  "result": {
-    "item": "arcane:spell_tablet",
-    "nbt": {
-      "arcane.spell": "arcane:purifying"
+  "results": [
+    {
+      "chance": 1.0,
+      "item": {
+        "Count": 1,
+        "id": "arcane:spell_tablet"
+      }
     }
-  }
+  ]
 }

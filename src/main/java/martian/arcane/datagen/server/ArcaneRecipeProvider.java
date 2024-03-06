@@ -2,7 +2,9 @@ package martian.arcane.datagen.server;
 
 import martian.arcane.ArcaneMod;
 import martian.arcane.ArcaneTags;
+import martian.arcane.api.ListHelpers;
 import martian.arcane.api.NBTHelpers;
+import martian.arcane.api.recipe.RecipeOutput;
 import martian.arcane.common.registry.ArcaneBlocks;
 import martian.arcane.common.registry.ArcaneItems;
 import martian.arcane.common.registry.ArcaneSpells;
@@ -18,6 +20,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.Tags;
@@ -62,7 +65,6 @@ public class ArcaneRecipeProvider extends RecipeProvider {
                 ELDRITCH_CORE       = ingOf(ArcaneItems.ELDRITCH_CORE.get()),
                 SPELL_CIRCLE_CORE   = ingOf(ArcaneItems.SPELL_CIRCLE_CORE.get()),
                 POLISHED_LARIMAR    = ingOf(ArcaneItems.POLISHED_LARIMAR.get()),
-                RAW_AURACHALCUM     = ingOf(ArcaneItems.RAW_AURACHALCUM.get()),
                 AURACHALCUM         = ingOf(ArcaneItems.AURACHALCUM.get()),
                 ELDRITCH_ALLOY      = ingOf(ArcaneItems.ELDRITCH_ALLOY.get())
         ;
@@ -89,17 +91,25 @@ public class ArcaneRecipeProvider extends RecipeProvider {
                     .save();
 
             // Hammering Recipes
-            helper.wrap(HammeringRecipeBuilder.hammering(AURAGLASS, ArcaneItems.AURAGLASS_SHARD.get(), 2))
-                    .unlockedWith(ArcaneBlocks.AURAGLASS.get().asItem()).save();
+            helper.wrap(HammeringRecipeBuilder.hammering(AURAGLASS, ListHelpers.nonNullListOf(
+                    new RecipeOutput.DataGenHolder(ArcaneItems.AURAGLASS_SHARD.get(), 1, 1),
+                    new RecipeOutput.DataGenHolder(ArcaneItems.AURAGLASS_SHARD.get(), 1, 0.5F)
+            ))).unlockedWith(ArcaneBlocks.AURAGLASS.get().asItem()).save();
 
-            helper.wrap(HammeringRecipeBuilder.hammering(ingOf(ArcaneItems.AURAGLASS_SHARD.get()), ArcaneItems.AURAGLASS_DUST.get(), 2))
-                    .unlockedWith(ArcaneItems.AURAGLASS_SHARD.get()).save();
+            helper.wrap(HammeringRecipeBuilder.hammering(ingOf(ArcaneItems.AURAGLASS_SHARD.get()), ListHelpers.nonNullListOf(
+                    new RecipeOutput.DataGenHolder(ArcaneItems.AURAGLASS_DUST.get(), 1, 1),
+                    new RecipeOutput.DataGenHolder(ArcaneItems.AURAGLASS_DUST.get(), 1, 0.5F)
+            ))).unlockedWith(ArcaneItems.AURAGLASS_SHARD.get()).save();
 
             // Pedestal Interaction Recipes
-            helper.wrap(PedestalRecipeBuilder.simpleRecipe(ingOf(COPPER), AURAGLASS, ArcaneItems.COPPER_CORE.get())).save();
-            helper.wrap(PedestalRecipeBuilder.simpleRecipe(ingOf(ArcaneItems.POLISHED_LARIMAR.get()), AURAGLASS, ArcaneItems.LARIMAR_CORE.get())).save();
-            helper.wrap(PedestalRecipeBuilder.simpleRecipe(ingOf(ArcaneItems.AURACHALCUM.get()), AURAGLASS, ArcaneItems.AURACHALCUM_CORE.get())).save();
-            helper.wrap(PedestalRecipeBuilder.simpleRecipe(ingOf(ArcaneItems.ELDRITCH_ALLOY.get()), AURAGLASS, ArcaneItems.ELDRITCH_CORE.get())).save();
+            helper.wrap(PedestalRecipeBuilder.simpleRecipe(ingOf(COPPER), AURAGLASS, ArcaneItems.COPPER_CORE.get(), 1))
+                    .unlockedWith(Items.COPPER_INGOT).save();
+            helper.wrap(PedestalRecipeBuilder.simpleRecipe(ingOf(ArcaneItems.POLISHED_LARIMAR.get()), AURAGLASS, ArcaneItems.LARIMAR_CORE.get(), 1))
+                    .unlockedWith(ArcaneItems.POLISHED_LARIMAR.get()).save();
+            helper.wrap(PedestalRecipeBuilder.simpleRecipe(ingOf(ArcaneItems.AURACHALCUM.get()), AURAGLASS, ArcaneItems.AURACHALCUM_CORE.get(), 1))
+                    .unlockedWith(ArcaneItems.AURACHALCUM.get()).save();
+            helper.wrap(PedestalRecipeBuilder.simpleRecipe(ingOf(ArcaneItems.ELDRITCH_ALLOY.get()), AURAGLASS, ArcaneItems.ELDRITCH_CORE.get(), 1))
+                    .unlockedWith(ArcaneItems.ELDRITCH_ALLOY.get()).save();
 
             // Gems
             cutAndPolish(helper, ArcaneItems.RAW_LARIMAR.get(), ArcaneItems.CUT_LARIMAR.get(), ArcaneItems.POLISHED_LARIMAR.get());
@@ -332,7 +342,7 @@ public class ArcaneRecipeProvider extends RecipeProvider {
         {
             helper.defaultCategory = RecipeCategory.TOOLS;
 
-            helper.wrap(PedestalRecipeBuilder.pedestalCrafting(ingOf(Items.CLAY_BALL), ingOf(Items.PAPER), true, ArcaneItems.SPELL_TABLET.get(), 1, null))
+            helper.wrap(PedestalRecipeBuilder.simpleRecipe(ingOf(Items.CLAY_BALL), ingOf(Items.PAPER), ArcaneItems.SPELL_TABLET.get(), 1))
                     .unlockedWith(ArcaneBlocks.PEDESTAL.get().asItem()).save();
 
             Map<ResourceLocation, Item> spellItems = new HashMap<>();
@@ -347,7 +357,8 @@ public class ArcaneRecipeProvider extends RecipeProvider {
             spellItems.forEach((id, item) -> {
                 CompoundTag tag = new CompoundTag();
                 tag.putString(NBTHelpers.KEY_SPELL, id.toString());
-                helper.wrap(PedestalRecipeBuilder.pedestalCrafting(ingOf(ArcaneItems.SPELL_TABLET.get()), ingOf(item), true, ArcaneItems.SPELL_TABLET.get(), 1, tag))
+                RecipeOutput.DataGenHolder holder = new RecipeOutput.DataGenHolder(new ItemStack(ArcaneItems.SPELL_TABLET.get(), 1, tag), 1);
+                helper.wrap(PedestalRecipeBuilder.simpleRecipe(ingOf(ArcaneItems.SPELL_TABLET.get()), ingOf(item), holder))
                         .unlockedWith(item).save(id.withPrefix("spell_tablets/"));
             });
         }

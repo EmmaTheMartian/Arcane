@@ -3,8 +3,14 @@
   "input": {
     "item": "minecraft:magma_block"
   },
-  "result": {
-    "item": "arcane:soul_magma"
-  },
+  "results": [
+    {
+      "chance": 1.0,
+      "item": {
+        "Count": 1,
+        "id": "arcane:soul_magma"
+      }
+    }
+  ],
   "aura": 128
 }

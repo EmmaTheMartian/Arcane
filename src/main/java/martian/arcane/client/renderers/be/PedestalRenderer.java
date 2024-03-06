@@ -1,7 +1,9 @@
 package martian.arcane.client.renderers.be;
 
+import com.klikli_dev.modonomicon.item.ModonomiconItem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import martian.arcane.client.renderers.BookModelRenderer;
 import martian.arcane.common.block.BlockPedestal;
 import martian.arcane.common.block.entity.BlockEntityPedestal;
 import net.minecraft.client.Minecraft;
@@ -15,7 +17,10 @@ import net.minecraft.world.level.Level;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 public class PedestalRenderer implements BlockEntityRenderer<BlockEntityPedestal> {
-    public PedestalRenderer(BlockEntityRendererProvider.Context ignored) {
+    public final BookModelRenderer bookRenderer;
+
+    public PedestalRenderer(BlockEntityRendererProvider.Context context) {
+        bookRenderer = new BookModelRenderer(context);
     }
 
     @Override
@@ -28,6 +33,12 @@ public class PedestalRenderer implements BlockEntityRenderer<BlockEntityPedestal
         if (!infuser.getItem().isEmpty()) {
             long time = level.getGameTime();
             float verticalOffset = Mth.sin((time + partialTick) / 10F) / 10F;
+
+            if (infuser.getItem().getItem() instanceof ModonomiconItem) {
+                BookModelRenderer.tick(bookRenderer, infuser.getLevel(), infuser.getBlockPos());
+                bookRenderer.render(partialTick, ps, buffer, light, overlay);
+                return;
+            }
 
             ps.pushPose();
             ps.translate(0.5F, 1F + verticalOffset, 0.5F);

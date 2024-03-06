@@ -2,7 +2,6 @@ package martian.arcane.common.block.machines;
 
 import martian.arcane.api.PropertyHelpers;
 import martian.arcane.api.block.AbstractAuraMachine;
-import martian.arcane.common.block.entity.BlockEntityPedestal;
 import martian.arcane.common.block.entity.machines.BlockEntityAuraInfuser;
 import martian.arcane.common.registry.ArcaneBlockEntities;
 import martian.arcane.common.registry.ArcaneItems;
@@ -96,8 +95,8 @@ public class BlockAuraInfuser extends AbstractAuraMachine {
     @ParametersAreNonnullByDefault
     public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         super.playerWillDestroy(level, pos, state, player);
-        if (level.getBlockEntity(pos) instanceof BlockEntityPedestal pedestal)
-            level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), pedestal.getItem()));
+        if (level.getBlockEntity(pos) instanceof BlockEntityAuraInfuser infuser)
+            level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), infuser.getItem()));
     }
 
     @Override

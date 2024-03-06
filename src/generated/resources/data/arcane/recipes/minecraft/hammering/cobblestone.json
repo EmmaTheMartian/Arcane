@@ -3,7 +3,13 @@
   "input": {
     "tag": "forge:stone"
   },
-  "result": {
-    "item": "minecraft:cobblestone"
-  }
+  "results": [
+    {
+      "chance": 1.0,
+      "item": {
+        "Count": 1,
+        "id": "minecraft:cobblestone"
+      }
+    }
+  ]
 }

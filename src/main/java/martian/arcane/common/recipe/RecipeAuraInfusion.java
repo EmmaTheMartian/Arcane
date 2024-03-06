@@ -2,41 +2,40 @@ package martian.arcane.common.recipe;
 
 import com.google.gson.JsonObject;
 import martian.arcane.ArcaneMod;
+import martian.arcane.api.item.ItemHelpers;
+import martian.arcane.api.recipe.RecipeOutput;
 import martian.arcane.api.recipe.SimpleContainer;
+import martian.arcane.api.recipe.SimpleRecipe;
 import martian.arcane.common.block.entity.machines.BlockEntityAuraInfuser;
 import martian.arcane.common.registry.ArcaneRecipeTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Optional;
 
-// Input ItemStack must have a count of 1!
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
-public class RecipeAuraInfusion implements Recipe<RecipeAuraInfusion.Container> {
+public class RecipeAuraInfusion extends SimpleRecipe<RecipeAuraInfusion.Container> {
     public static final String NAME = "aura_infusion";
     public static final ResourceLocation ID = ArcaneMod.id(NAME);
 
-    public final ResourceLocation id;
-    public final ItemStack input;
-    public final ItemStack result;
     public final int aura;
 
-    public RecipeAuraInfusion(ResourceLocation id, ItemStack input, ItemStack result, int aura) {
-        this.id = id;
-        this.input = input;
-        this.result = result;
+    public RecipeAuraInfusion(ResourceLocation id, Ingredient input, NonNullList<RecipeOutput> results, int aura) {
+        super(ArcaneRecipeTypes.AURA_INFUSION.get(), id, input, results);
         this.aura = aura;
     }
 
@@ -46,7 +45,7 @@ public class RecipeAuraInfusion implements Recipe<RecipeAuraInfusion.Container> 
     }
 
     public boolean matchesWithoutAuraCost(Container container, Level ignoredLevel) {
-        return this.input.is(container.getItem().getItem());
+        return this.input.test(container.getItem());
     }
 
     @Override
@@ -56,33 +55,29 @@ public class RecipeAuraInfusion implements Recipe<RecipeAuraInfusion.Container> 
     }
 
     public void assemble(BlockEntityAuraInfuser infuser) {
-        infuser.setItem(result.copy());
+        var stacks = results.stream()
+                .map(RecipeOutput::roll)
+                .filter(stack -> !stack.isEmpty())
+                .toList();
+
+        if (stacks.isEmpty())
+            return;
+
+        if (stacks.size() == 1) {
+            infuser.setItem(stacks.get(0));
+        } else {
+            infuser.setItem(ItemStack.EMPTY);
+            Level level = infuser.getLevel();
+            BlockPos pos = infuser.getBlockPos().above();
+            stacks.forEach(result -> ItemHelpers.addItemEntity(level, result, pos));
+        }
+
         infuser.auraProgress -= aura;
-    }
-
-    @Override
-    public boolean canCraftInDimensions(int w, int h) {
-        return true;
-    }
-
-    @Override
-    public ItemStack getResultItem(RegistryAccess access) {
-        return result.copy();
-    }
-
-    @Override
-    public ResourceLocation getId() {
-        return id;
     }
 
     @Override
     public RecipeSerializer<?> getSerializer() {
         return new Serializer();
-    }
-
-    @Override
-    public RecipeType<?> getType() {
-        return ArcaneRecipeTypes.AURA_INFUSION.get();
     }
 
     public static Optional<RecipeAuraInfusion> getRecipeFor(Level level, Container container) {
@@ -103,28 +98,33 @@ public class RecipeAuraInfusion implements Recipe<RecipeAuraInfusion.Container> 
     }
 
     public static class Serializer implements RecipeSerializer<RecipeAuraInfusion> {
-        public Serializer() {}
-
         @Override
+        @NotNull
         public RecipeAuraInfusion fromJson(ResourceLocation id, JsonObject json) {
-            ItemStack input = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "input"));
-            ItemStack output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
+            Ingredient input = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "input"));
+            NonNullList<RecipeOutput> results = NonNullList.create();
+            GsonHelper.getAsJsonArray(json, "results").forEach(result ->
+                    results.add(RecipeOutput.fromJson(result.getAsJsonObject())));
             int aura = GsonHelper.getAsInt(json, "aura");
-            return new RecipeAuraInfusion(id, input, output, aura);
+            return new RecipeAuraInfusion(id, input, results, aura);
         }
 
         @Override
-        public RecipeAuraInfusion fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
-            ItemStack input = buf.readItem();
-            ItemStack output = buf.readItem();
+        public @Nullable RecipeAuraInfusion fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
+            Ingredient input = Ingredient.fromNetwork(buf);
+            int resultsLength = buf.readInt();
+            NonNullList<RecipeOutput> results = NonNullList.create();
+            for (int i = 0; i < resultsLength; i++)
+                results.add(RecipeOutput.fromNetwork(buf));
             int aura = buf.readInt();
-            return new RecipeAuraInfusion(id, input, output, aura);
+            return new RecipeAuraInfusion(id, input, results, aura);
         }
 
         @Override
         public void toNetwork(FriendlyByteBuf buf, RecipeAuraInfusion recipe) {
-            buf.writeItemStack(recipe.input, false);
-            buf.writeItemStack(recipe.result, false);
+            recipe.input.toNetwork(buf);
+            buf.writeInt(recipe.results.size());
+            recipe.results.forEach(res -> res.toNetwork(buf));
             buf.writeInt(recipe.aura);
         }
     }

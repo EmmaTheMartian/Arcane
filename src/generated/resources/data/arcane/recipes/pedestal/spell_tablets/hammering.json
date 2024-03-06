@@ -7,10 +7,13 @@
   "interaction_input": {
     "item": "minecraft:iron_block"
   },
-  "result": {
-    "item": "arcane:spell_tablet",
-    "nbt": {
-      "arcane.spell": "arcane:hammering"
+  "results": [
+    {
+      "chance": 1.0,
+      "item": {
+        "Count": 1,
+        "id": "arcane:spell_tablet"
+      }
     }
-  }
+  ]
 }

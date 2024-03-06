@@ -1,11 +1,14 @@
 package martian.arcane.datagen.builders;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import martian.arcane.api.recipe.RecipeOutput;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.core.NonNullList;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeCategory;
@@ -13,7 +16,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -27,19 +29,18 @@ public abstract class AbstractSpellRecipeBuilder implements RecipeBuilder {
     private final RecipeCategory category;
     private final RecipeSerializer<?> type;
     private final Ingredient input;
-    private final Item result;
-    private final int count;
+    private final NonNullList<RecipeOutput.DataGenHolder> results;
 
-    public AbstractSpellRecipeBuilder(RecipeCategory category, RecipeSerializer<?> type, Ingredient input, Item result, int count) {
+    public AbstractSpellRecipeBuilder(RecipeCategory category, RecipeSerializer<?> type, Ingredient input, NonNullList<RecipeOutput.DataGenHolder> results) {
         this.category = category;
         this.type = type;
         this.input = input;
-        this.result = result;
-        this.count = count;
+        this.results = results;
+        assert !this.results.isEmpty();
     }
 
     public Item getResult() {
-        return result;
+        return results.get(0).item();
     }
 
     public AbstractSpellRecipeBuilder unlockedBy(String criterionName, CriterionTriggerInstance criterionTrigger) {
@@ -55,7 +56,7 @@ public abstract class AbstractSpellRecipeBuilder implements RecipeBuilder {
     public void save(Consumer<FinishedRecipe> finishedRecipeConsumer, ResourceLocation recipeId) {
         this.ensureValid(recipeId);
         this.advancement.parent(ROOT_RECIPE_ADVANCEMENT).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(recipeId)).rewards(net.minecraft.advancements.AdvancementRewards.Builder.recipe(recipeId)).requirements(RequirementsStrategy.OR);
-        finishedRecipeConsumer.accept(new AbstractSpellRecipeBuilder.Result(recipeId, this.type, this.group == null ? "" : this.group, this.input, this.result, this.count, this.advancement, recipeId.withPrefix("recipes/" + this.category.getFolderName() + "/")));
+        finishedRecipeConsumer.accept(new AbstractSpellRecipeBuilder.Result(recipeId, this.type, this.group == null ? "" : this.group, this.input, this.results, this.advancement, recipeId.withPrefix("recipes/" + this.category.getFolderName() + "/")));
     }
 
     private void ensureValid(ResourceLocation id) {
@@ -68,19 +69,17 @@ public abstract class AbstractSpellRecipeBuilder implements RecipeBuilder {
         private final ResourceLocation id;
         private final String group;
         private final Ingredient input;
-        private final Item result;
-        private final int count;
+        private final NonNullList<RecipeOutput.DataGenHolder> results;
         private final Advancement.Builder advancement;
         private final ResourceLocation advancementId;
         private final RecipeSerializer<?> type;
 
-        public Result(ResourceLocation id, RecipeSerializer<?> type, String group, Ingredient input, Item result, int count, Advancement.Builder advancement, ResourceLocation advancementId) {
+        public Result(ResourceLocation id, RecipeSerializer<?> type, String group, Ingredient input, NonNullList<RecipeOutput.DataGenHolder> results, Advancement.Builder advancement, ResourceLocation advancementId) {
             this.id = id;
             this.type = type;
             this.group = group;
             this.input = input;
-            this.result = result;
-            this.count = count;
+            this.results = results;
             this.advancement = advancement;
             this.advancementId = advancementId;
         }
@@ -91,12 +90,9 @@ public abstract class AbstractSpellRecipeBuilder implements RecipeBuilder {
 
             json.add("input", this.input.toJson());
 
-            JsonObject stack = new JsonObject();
-            //noinspection DataFlowIssue
-            stack.addProperty("item", ForgeRegistries.ITEMS.getKey(this.result).toString());
-            if (count > 1)
-                stack.addProperty("count", this.count);
-            json.add("result", stack);
+            JsonArray jsonResults = new JsonArray();
+            results.forEach(result -> jsonResults.add(result.toRecipeOutput().toJson()));
+            json.add("results", jsonResults);
         }
 
         public ResourceLocation getId() {

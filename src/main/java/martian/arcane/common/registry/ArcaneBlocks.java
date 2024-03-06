@@ -42,6 +42,7 @@ public class ArcaneBlocks extends ArcaneRegistry {
             COPPER_AURA_BASIN = register("aura_basin_copper", () -> new BlockAuraBasin(ArcaneStaticConfig.Maximums.COPPER_AURA_BASIN, ArcaneStaticConfig.AuraLoss.COPPER_TIER)),
             LARIMAR_AURA_BASIN = register("aura_basin_larimar", () -> new BlockAuraBasin(ArcaneStaticConfig.Maximums.LARIMAR_AURA_BASIN, ArcaneStaticConfig.AuraLoss.LARIMAR_TIER)),
             AURACHALCUM_AURA_BASIN = register("aura_basin_aurachalcum", () -> new BlockAuraBasin(ArcaneStaticConfig.Maximums.AURACHALCUM_AURA_BASIN, ArcaneStaticConfig.AuraLoss.AURACHALCUM_TIER)),
+            CREATIVE_AURA_BASIN = register("aura_basin_creative", () -> new BlockAuraBasin(Integer.MAX_VALUE, 0)),
 
             PEDESTAL = register("pedestal", BlockPedestal::new),
             AURA_INFUSER = register("aura_infuser", () -> new BlockAuraInfuser(ArcaneStaticConfig.Maximums.AURA_INFUSER, ArcaneStaticConfig.AuraLoss.COPPER_TIER)),

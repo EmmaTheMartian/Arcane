@@ -1,6 +1,7 @@
 package martian.arcane.integration.jei.categories;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import martian.arcane.api.recipe.RecipeOutput;
 import martian.arcane.integration.jei.ArcaneJeiPlugin;
 import martian.arcane.common.recipe.RecipeAuraInfusion;
 import martian.arcane.common.registry.ArcaneBlocks;
@@ -54,6 +55,7 @@ public class AuraInfusionCategory implements IRecipeCategory<RecipeAuraInfusion>
     public void draw(RecipeAuraInfusion recipe, IRecipeSlotsView slots, GuiGraphics gui, double mouseX, double mouseY) {
         RenderSystem.enableBlend();
         // 16733695 is the result of ChatFormatting.LIGHT_PURPLE.getColor()
+        // I have it hardcoded to prevent NPEs
         gui.drawString(Minecraft.getInstance().font, "Aura: %s".formatted(recipe.aura), 48, 34, 16733695);
         RenderSystem.disableBlend();
     }
@@ -62,9 +64,9 @@ public class AuraInfusionCategory implements IRecipeCategory<RecipeAuraInfusion>
     @ParametersAreNonnullByDefault
     public void setRecipe(IRecipeLayoutBuilder builder, RecipeAuraInfusion recipe, IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 32, 12)
-                .addItemStack(recipe.input);
+                .addIngredients(recipe.input);
 
         builder.addSlot(RecipeIngredientRole.OUTPUT, 96, 12)
-                .addItemStack(recipe.result);
+                .addItemStacks(recipe.results.stream().map(RecipeOutput::stack).toList());
     }
 }

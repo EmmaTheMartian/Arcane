@@ -7,10 +7,13 @@
   "interaction_input": {
     "item": "minecraft:water_bucket"
   },
-  "result": {
-    "item": "arcane:spell_tablet",
-    "nbt": {
-      "arcane.spell": "arcane:cleansing"
+  "results": [
+    {
+      "chance": 1.0,
+      "item": {
+        "Count": 1,
+        "id": "arcane:spell_tablet"
+      }
     }
-  }
+  ]
 }

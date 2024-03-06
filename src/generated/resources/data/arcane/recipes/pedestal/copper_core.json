@@ -7,7 +7,13 @@
   "interaction_input": {
     "item": "arcane:auraglass"
   },
-  "result": {
-    "item": "arcane:copper_core"
-  }
+  "results": [
+    {
+      "chance": 1.0,
+      "item": {
+        "Count": 1,
+        "id": "arcane:copper_core"
+      }
+    }
+  ]
 }

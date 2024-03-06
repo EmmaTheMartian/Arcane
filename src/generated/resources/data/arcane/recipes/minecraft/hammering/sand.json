@@ -3,7 +3,13 @@
   "input": {
     "item": "minecraft:gravel"
   },
-  "result": {
-    "item": "minecraft:sand"
-  }
+  "results": [
+    {
+      "chance": 1.0,
+      "item": {
+        "Count": 1,
+        "id": "minecraft:sand"
+      }
+    }
+  ]
 }

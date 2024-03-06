@@ -1,22 +1,22 @@
 package martian.arcane.api.spell;
 
 import martian.arcane.api.block.BlockHelpers;
+import martian.arcane.api.item.ItemHelpers;
+import martian.arcane.api.recipe.ISpellRecipe;
+import martian.arcane.api.recipe.RecipeOutput;
 import martian.arcane.api.recipe.SimpleContainer;
 import martian.arcane.common.block.entity.BlockEntityPedestal;
 import martian.arcane.integration.photon.ArcaneFx;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.Containers;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.ItemStackHandler;
 
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public abstract class AbstractCraftingSpell<T extends Recipe<?>> extends AbstractSpell {
+public abstract class AbstractCraftingSpell<T extends ISpellRecipe> extends AbstractSpell {
     public final int costPerCraft;
 
     public AbstractCraftingSpell(int minLevel, int costPerCraft) {
@@ -38,7 +38,19 @@ public abstract class AbstractCraftingSpell<T extends Recipe<?>> extends Abstrac
         if (c.level.getBlockEntity(pos) instanceof BlockEntityPedestal pedestal) {
             Optional<T> recipe = getRecipeFor(c.level, new SimpleContainer(pedestal.getItem()));
             recipe.ifPresent(r -> {
-                pedestal.setItem(r.getResultItem(c.level.registryAccess()));
+                var stacks = r.getRecipeOutput()
+                        .stream()
+                        .map(RecipeOutput::roll)
+                        .filter(stack -> !stack.isEmpty())
+                        .toList();
+
+                if (r.getRecipeOutput().size() == 1) {
+                    pedestal.setItem(stacks.get(0));
+                } else {
+                    pedestal.setItem(ItemStack.EMPTY);
+                    stacks.forEach(stack -> ItemHelpers.addItemEntity(c.level, stack, pos.above()));
+                }
+
                 BlockHelpers.sync(c.level, pos);
                 ArcaneFx.ON_CAST_GRAVITY.goBlock(c.level, pos.above());
                 didCraft.set(true);
@@ -49,13 +61,15 @@ public abstract class AbstractCraftingSpell<T extends Recipe<?>> extends Abstrac
             container.setItem(new ItemStack(item));
             Optional<T> recipe = getRecipeFor(c.level, container);
             recipe.ifPresent(r -> {
-                if (r.getResultItem(c.level.registryAccess()).getItem() instanceof BlockItem bi) {
-                    c.level.setBlockAndUpdate(pos, bi.getBlock().defaultBlockState());
-                } else {
-                    c.level.removeBlock(pos, false);
-                    Containers.dropItemStack(c.level, pos.getX(), pos.getY(), pos.getZ(), r.getResultItem(c.level.registryAccess()));
-                    ArcaneFx.ON_CAST_GRAVITY.goBlock(c.level, pos);
-                }
+                c.level.removeBlock(pos, false);
+
+                r.getRecipeOutput()
+                        .stream()
+                        .map(RecipeOutput::roll)
+                        .filter(stack -> !stack.isEmpty())
+                        .forEach(stack -> ItemHelpers.addItemEntity(c.level, stack, pos.above()));
+
+                ArcaneFx.ON_CAST_GRAVITY.goBlock(c.level, pos);
                 didCraft.set(true);
             });
         }

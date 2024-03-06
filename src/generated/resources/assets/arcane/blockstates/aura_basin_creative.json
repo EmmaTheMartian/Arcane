@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "arcane:block/aura_basin_creative",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "arcane:block/aura_basin_creative",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "arcane:block/aura_basin_creative"
+    },
+    "facing=west": {
+      "model": "arcane:block/aura_basin_creative",
+      "y": 90
+    }
+  }
+}

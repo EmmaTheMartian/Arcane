@@ -52,6 +52,8 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
                     .texture("0", ArcaneMod.id("block/machines/aura_basin_larimar"));
             withExistingParent(ArcaneBlocks.AURACHALCUM_AURA_BASIN.get(), ArcaneMod.id("block/base/aura_basin"))
                     .texture("0", ArcaneMod.id("block/machines/aura_basin_aurachalcum"));
+            withExistingParent(ArcaneBlocks.CREATIVE_AURA_BASIN.get(), ArcaneMod.id("block/base/aura_basin"))
+                    .texture("0", ArcaneMod.id("block/machines/aura_basin_copper"));
 
             // Generators
             topBottom(ArcaneBlocks.IGNIS_COLLECTOR.get(), texture("machines/collectors/ignis_sides"), texture("machines/collectors/top_and_bottom"));
@@ -95,6 +97,7 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
             makeRotatableModel(ArcaneBlocks.COPPER_AURA_BASIN, BlockAuraBasin.FACING, true);
             makeRotatableModel(ArcaneBlocks.LARIMAR_AURA_BASIN, BlockAuraBasin.FACING, true);
             makeRotatableModel(ArcaneBlocks.AURACHALCUM_AURA_BASIN, BlockAuraBasin.FACING, true);
+            makeRotatableModel(ArcaneBlocks.CREATIVE_AURA_BASIN, BlockAuraBasin.FACING, true);
 
             makeRotatableModel(ArcaneBlocks.AURA_INFUSER, BlockAuraInfuser.FACING, true);
             makeRotatableModel(ArcaneBlocks.PEDESTAL, BlockPedestal.FACING, true);

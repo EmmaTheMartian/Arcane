@@ -7,7 +7,13 @@
   "interaction_input": {
     "item": "minecraft:paper"
   },
-  "result": {
-    "item": "arcane:spell_tablet"
-  }
+  "results": [
+    {
+      "chance": 1.0,
+      "item": {
+        "Count": 1,
+        "id": "arcane:spell_tablet"
+      }
+    }
+  ]
 }
