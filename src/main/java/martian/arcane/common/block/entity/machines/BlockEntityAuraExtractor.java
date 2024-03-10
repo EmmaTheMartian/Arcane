@@ -2,8 +2,9 @@ package martian.arcane.common.block.entity.machines;
 
 import martian.arcane.ArcaneStaticConfig;
 import martian.arcane.ArcaneTags;
-import martian.arcane.api.block.BlockHelpers;
 import martian.arcane.api.NBTHelpers;
+import martian.arcane.api.Raycasting;
+import martian.arcane.api.block.BlockHelpers;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
 import martian.arcane.api.block.entity.IAuraInserter;
 import martian.arcane.api.capability.IAuraStorage;
@@ -22,11 +23,13 @@ import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BlockEntityAuraExtractor extends AbstractAuraBlockEntity {
-    private LazyOptional<IAuraStorage> cachedTarget = LazyOptional.empty();
-    private @Nullable BlockPos targetPos;
+    public LazyOptional<IAuraStorage> cachedTarget = LazyOptional.empty();
+    public List<BlockPos> blocksToWatch = new ArrayList<>();
+    public @Nullable BlockPos targetPos;
     public int extractRate;
 
     public BlockEntityAuraExtractor(int maxAura, int auraLoss, int extractRate, BlockPos pos, BlockState state) {
@@ -76,9 +79,16 @@ public class BlockEntityAuraExtractor extends AbstractAuraBlockEntity {
         return target.is(ArcaneTags.AURA_INSERTERS);
     }
 
-    public static void setTarget(@NotNull BlockEntityAuraExtractor extractor, BlockEntityAuraInserter target) {
+    public boolean hasObstructions(Level level) {
+        return blocksToWatch.stream()
+                .map(level::getBlockState)
+                .anyMatch(state -> state.is(ArcaneTags.BLOCKS_AURA_FLOW));
+    }
+
+    public static void setTarget(@NotNull BlockEntityAuraExtractor extractor, @NotNull BlockEntityAuraInserter target) {
         extractor.targetPos = target.getBlockPos();
         BlockHelpers.sync(extractor);
+        extractor.blocksToWatch = Raycasting.raycastAndGetBlockPositions(extractor.level, extractor.getBlockPos(), target.getBlockPos());
     }
 
     public static void removeTarget(@NotNull BlockEntityAuraExtractor extractor) {
@@ -111,6 +121,10 @@ public class BlockEntityAuraExtractor extends AbstractAuraBlockEntity {
 
             if (extractor.targetPos != null && !extractor.validateTarget(level))
                 removeTarget(extractor);
+
+            // Check for blocks that obstruct aura flow
+            if (extractor.hasObstructions(level))
+                return;
 
             // Extract aura from the target block
             extractor.mapAuraStorage(storage -> {

@@ -1,0 +1,13 @@
+{
+  "values": [
+    "minecraft:copper_block",
+    "minecraft:waxed_copper_block",
+    "minecraft:cut_copper",
+    "minecraft:waxed_cut_copper",
+    "minecraft:raw_copper_block",
+    "arcane:larimar_block",
+    "arcane:fading_larimar_block",
+    "arcane:faded_larimar_block",
+    "arcane:aurachalcum_block"
+  ]
+}

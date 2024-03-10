@@ -2,6 +2,8 @@ package martian.arcane.client.renderers.be;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import martian.arcane.client.ArcaneClient;
+import martian.arcane.client.ParticleHelper;
 import martian.arcane.common.block.BlockPedestal;
 import martian.arcane.common.block.entity.machines.BlockEntityAuraInfuser;
 import net.minecraft.client.Minecraft;
@@ -11,6 +13,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -34,6 +37,11 @@ public class AuraInfuserRenderer implements BlockEntityRenderer<BlockEntityAuraI
             ps.mulPose(infuser.getBlockState().getValue(BlockPedestal.FACING).getCounterClockWise().getRotation());
             ps.mulPose(Axis.YP.rotationDegrees(90));
             ps.mulPose(Axis.ZP.rotationDegrees(270));
+
+            // According to Ginger, this line will cause problems
+            if (infuser.isActive && ArcaneClient.isGameActive() && ArcaneClient.clientTicks % 8 == 0) {
+                ParticleHelper.addMagicParticle(level, infuser.getBlockPos().getCenter().add(0, 0.3D, 0), new Vec3(0, 0.7D, 0));
+            }
 
             Minecraft.getInstance().getItemRenderer().renderStatic(
                     infuser.getItem(),

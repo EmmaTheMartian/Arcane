@@ -3,13 +3,13 @@
   "category": "misc",
   "ingredients": [
     {
-      "tag": "forge:obsidian"
-    },
-    {
-      "tag": "forge:obsidian"
-    },
-    {
       "item": "arcane:polished_idocrase"
+    },
+    {
+      "tag": "forge:obsidian"
+    },
+    {
+      "tag": "forge:obsidian"
     }
   ],
   "result": {

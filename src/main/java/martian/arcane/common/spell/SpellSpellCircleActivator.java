@@ -15,6 +15,11 @@ public class SpellSpellCircleActivator extends AbstractSpell {
     }
 
     @Override
+    public int getCooldownTicks(CastContext c) {
+        return 60;
+    }
+
+    @Override
     public CastResult cast(CastContext c) {
         if (c.level.isClientSide)
             return CastResult.PASS;

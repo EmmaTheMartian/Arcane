@@ -14,6 +14,11 @@ public class SpellDashing extends AbstractSpell {
     }
 
     @Override
+    public int getCooldownTicks(CastContext c) {
+        return 10;
+    }
+
+    @Override
     public CastResult cast(CastContext c) {
         if (c instanceof CastContext.WandContext wc) {
             double m = getMultiplier(wc.wand);

@@ -1,5 +1,6 @@
 package martian.arcane.common.item;
 
+import martian.arcane.ArcaneStaticConfig;
 import martian.arcane.api.NBTHelpers;
 import martian.arcane.api.Raycasting;
 import martian.arcane.common.block.entity.machines.BlockEntityAuraExtractor;
@@ -34,13 +35,11 @@ public class ItemAuraConfigurator extends Item {
             return InteractionResultHolder.success(stack);
 
         CompoundTag nbt = stack.getOrCreateTag();
-        initNBT(nbt); // Init just-in-case
-
         BlockHitResult hit = Raycasting.blockRaycast(player, player.getBlockReach(), false);
 
         if (player.isCrouching()) {
             if (hit == null) {
-                nbt.putBoolean(NBTHelpers.KEY_CONFIGURATOR_HASP1, false);
+                nbt.remove(NBTHelpers.KEY_CONFIGURATOR_P1);
                 return InteractionResultHolder.success(stack);
             }
 
@@ -52,16 +51,24 @@ public class ItemAuraConfigurator extends Item {
         if (hit == null)
             return InteractionResultHolder.fail(stack);
 
-        if (nbt.getBoolean(NBTHelpers.KEY_CONFIGURATOR_HASP1)) {
+        if (nbt.contains(NBTHelpers.KEY_CONFIGURATOR_P1)) {
             BlockEntity l = level.getBlockEntity(hit.getBlockPos());
             if (l instanceof BlockEntityAuraInserter inserter) {
                 BlockPos pos1 = NBTHelpers.getBlockPos(nbt, NBTHelpers.KEY_CONFIGURATOR_P1);
                 BlockEntity e = level.getBlockEntity(pos1);
 
                 if (e instanceof BlockEntityAuraExtractor extractor) {
+                    if (!pos1.closerToCenterThan(l.getBlockPos().getCenter(), ArcaneStaticConfig.AURA_EXTRACTOR_MAX_DISTANCE)) {
+                        player.sendSystemMessage(Component
+                                .translatable("messages.arcane.distance_too_far")
+                                .withStyle(ChatFormatting.RED));
+
+                        return InteractionResultHolder.fail(stack);
+                    }
+
                     BlockEntityAuraExtractor.setTarget(extractor, inserter);
                     player.sendSystemMessage(Component.translatable("messages.arcane.linked"));
-                    nbt.putBoolean(NBTHelpers.KEY_CONFIGURATOR_HASP1, false);
+                    nbt.remove(NBTHelpers.KEY_CONFIGURATOR_P1);
                     return InteractionResultHolder.success(stack);
                 }
             }
@@ -70,9 +77,10 @@ public class ItemAuraConfigurator extends Item {
             if (e instanceof BlockEntityAuraExtractor extractor) {
                 if (player.isCrouching()) {
                     BlockEntityAuraExtractor.removeTarget(extractor);
+                    player.sendSystemMessage(Component.translatable("messages.arcane.unlinked"));
                     return InteractionResultHolder.success(stack);
                 }
-                nbt.putBoolean(NBTHelpers.KEY_CONFIGURATOR_HASP1, true);
+
                 NBTHelpers.putBlockPos(nbt, NBTHelpers.KEY_CONFIGURATOR_P1, hit.getBlockPos());
                 player.sendSystemMessage(Component.translatable("messages.arcane.selected"));
                 return InteractionResultHolder.success(stack);
@@ -86,18 +94,15 @@ public class ItemAuraConfigurator extends Item {
     public void appendHoverText(ItemStack stack, Level level, @NotNull List<Component> text, @NotNull TooltipFlag flags) {
         text.add(Component.translatable("item.arcane.aura_configurator.tooltip.1"));
         text.add(Component.translatable("item.arcane.aura_configurator.tooltip.2"));
-        CompoundTag nbt = stack.getOrCreateTag();
-        initNBT(nbt);
-        if (nbt.getBoolean(NBTHelpers.KEY_CONFIGURATOR_HASP1)) {
-            text.add(Component
-                    .translatable("messages.arcane.linking_from")
-                    .append(NBTHelpers.getBlockPos(nbt, NBTHelpers.KEY_CONFIGURATOR_P1).toShortString())
-                    .withStyle(ChatFormatting.AQUA));
+        if (stack.hasTag()) {
+            CompoundTag nbt = stack.getTag();
+            assert nbt != null;
+            if (nbt.contains(NBTHelpers.KEY_CONFIGURATOR_P1)) {
+                text.add(Component
+                        .translatable("messages.arcane.linking_from")
+                        .append(NBTHelpers.getBlockPos(nbt, NBTHelpers.KEY_CONFIGURATOR_P1).toShortString())
+                        .withStyle(ChatFormatting.AQUA));
+            }
         }
-    }
-
-    public static void initNBT(CompoundTag nbt) {
-        NBTHelpers.init(nbt, NBTHelpers.KEY_CONFIGURATOR_HASP1, (nbt_, key) -> nbt.putBoolean(key, false));
-        NBTHelpers.init(nbt, NBTHelpers.KEY_CONFIGURATOR_P1, (nbt_, key) -> NBTHelpers.putBlockPos(nbt, key, new BlockPos(0, 0, 0)));
     }
 }

@@ -13,7 +13,6 @@ public final class NBTHelpers {
     public static final String KEY_MAX_AURA = ArcaneMod.MODID + ".maxAura";
     public static final String KEY_AURA_EXTRACTABLE = ArcaneMod.MODID + ".canExtractAura";
     public static final String KEY_AURA_INSERTABLE = ArcaneMod.MODID + ".canInsertAura";
-    public static final String KEY_CONFIGURATOR_HASP1 = ArcaneMod.MODID + ".configurator.hasp1";
     public static final String KEY_CONFIGURATOR_P1 = ArcaneMod.MODID + ".configurator.p1";
     public static final String KEY_EXTRACTOR_TARGET_POS = ArcaneMod.MODID + ".targetPos";
     public static final String KEY_STACK = ArcaneMod.MODID + ".stack";

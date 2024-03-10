@@ -24,5 +24,9 @@ public abstract class AbstractSpell {
         return wand.level >= minLevel;
     }
 
+    public int getCooldownTicks(CastContext context) {
+        return 20;
+    }
+
     public abstract CastResult cast(CastContext context);
 }

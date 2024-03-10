@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 public class BlockHelpers {
     public static void sync(Level level, BlockPos pos) {
@@ -25,5 +26,9 @@ public class BlockHelpers {
                 return false;
         } while (pos.getY() < level.getHeight());
         return true;
+    }
+
+    public static BlockPos posFromVec(Vec3 vec) {
+        return new BlockPos(Math.round((float)vec.x), Math.round((float)vec.y), Math.round((float)vec.z));
     }
 }

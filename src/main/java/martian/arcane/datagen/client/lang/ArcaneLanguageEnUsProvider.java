@@ -132,6 +132,11 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
             addBlock(ArcaneBlocks.DEEPSLATE_IDOCRASE_ORE, "Deepslate Idocrase Ore");
             addBlock(ArcaneBlocks.NETHER_IDOCRASE_ORE, "Idocrase Ore");
             addBlock(ArcaneBlocks.BLACKSTONE_IDOCRASE_ORE, "Idocrase-Guilded Blackstone");
+
+            addBlock(ArcaneBlocks.FADED_LARIMAR_BLOCK, "Faded Larimar Block");
+            addBlock(ArcaneBlocks.FADING_LARIMAR_BLOCK, "Fading Larimar Block");
+            addBlock(ArcaneBlocks.LARIMAR_BLOCK, "Larimar Block");
+            addBlock(ArcaneBlocks.AURACHALCUM_BLOCK, "Aurachalcum Block");
         }
 
         // Messages
@@ -165,6 +170,8 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
             add("messages.arcane.pedestal_set_spell", "Spell set!");
             add("messages.arcane.invalid_wand_for_spell", "Invalid wand for spell.");
             add("messages.arcane.chance", "Chance: ");
+            add("messages.arcane.distance_too_far", "Distance too far!");
+            add("messages.arcane.unlinked", "Unlinked");
         }
 
         // GUI

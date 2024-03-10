@@ -1,6 +1,7 @@
 package martian.arcane;
 
 import com.mojang.logging.LogUtils;
+import martian.arcane.client.ArcaneClient;
 import martian.arcane.common.registry.*;
 import martian.arcane.datagen.ArcaneDatagen;
 import martian.arcane.integration.curios.CuriosIntegration;
@@ -64,6 +65,7 @@ public class ArcaneMod
 
         modBus.addListener(this::setup);
         modBus.addListener(EventPriority.LOWEST, ArcaneDatagen::gatherData);
+        modBus.addListener(ArcaneClient::setup);
 
         forgeBus.register(this);
     }

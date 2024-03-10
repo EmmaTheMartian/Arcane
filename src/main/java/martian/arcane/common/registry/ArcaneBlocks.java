@@ -74,7 +74,17 @@ public class ArcaneBlocks extends ArcaneRegistry {
             IDOCRASE_ORE = register("idocrase_ore", () -> new Block(BlockBehaviour.Properties.copy(Blocks.GOLD_ORE))),
             DEEPSLATE_IDOCRASE_ORE = register("deepslate_idocrase_ore", () -> new Block(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_GOLD_ORE))),
             NETHER_IDOCRASE_ORE = register("nether_idocrase_ore", () -> new Block(BlockBehaviour.Properties.copy(Blocks.NETHER_GOLD_ORE))),
-            BLACKSTONE_IDOCRASE_ORE = register("blackstone_idocrase_ore", () -> new Block(BlockBehaviour.Properties.copy(Blocks.GILDED_BLACKSTONE)))
+            BLACKSTONE_IDOCRASE_ORE = register("blackstone_idocrase_ore", () -> new Block(BlockBehaviour.Properties.copy(Blocks.GILDED_BLACKSTONE))),
+
+            // Storage blocks
+            FADED_LARIMAR_BLOCK = register("faded_larimar_block", () ->
+                    new BasicLarimarBlock(null, BlockBehaviour.Properties.copy(Blocks.COPPER_BLOCK))),
+            FADING_LARIMAR_BLOCK = register("fading_larimar_block", () ->
+                    new BasicLarimarBlock(null, BlockBehaviour.Properties.copy(Blocks.COPPER_BLOCK))),
+            LARIMAR_BLOCK = register("larimar_block", () ->
+                    new BasicLarimarBlock(null, BlockBehaviour.Properties.copy(Blocks.COPPER_BLOCK))),
+
+            AURACHALCUM_BLOCK = register("aurachalcum_block", () -> new Block(BlockBehaviour.Properties.copy(Blocks.DIAMOND_BLOCK)))
     ;
 
     private static RegistryObject<Block> register(String id, Supplier<Block> sup) {

@@ -22,15 +22,19 @@ import java.util.List;
 public class AuraometerOverlay implements IGuiOverlay {
     private final Minecraft minecraft = Minecraft.getInstance();
 
+    public static boolean isHoldingAuraometer(Player player) {
+        ItemStack main = player.getMainHandItem();
+        ItemStack off = player.getOffhandItem();
+        return main.is(ArcaneItems.AURAOMETER.get()) || off.is(ArcaneItems.AURAOMETER.get());
+    }
+
     @Override
     public void render(ForgeGui forgeGui, GuiGraphics guiGraphics, float partialTicks, int width, int height) {
         final Player player = minecraft.player;
         if (player == null)
             return;
 
-        ItemStack main = player.getMainHandItem();
-        ItemStack off = player.getOffhandItem();
-        boolean holdingAuraometer = main.is(ArcaneItems.AURAOMETER.get()) || off.is(ArcaneItems.AURAOMETER.get());
+        boolean holdingAuraometer = isHoldingAuraometer(player);
 
         if (holdingAuraometer) {
             final Level level = minecraft.level;

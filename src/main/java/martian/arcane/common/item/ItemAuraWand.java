@@ -36,16 +36,19 @@ public class ItemAuraWand extends AbstractAuraItem implements ICastingSource {
     @NotNull
     public InteractionResultHolder<ItemStack> use(@NotNull Level level, @NotNull Player player, @NotNull InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        IAuraStorage aura = getAuraStorage(stack).orElseThrow();
 
-        if (!hasSpell(stack))
+        if (player.getCooldowns().isOnCooldown(this) || !hasSpell(stack))
             return InteractionResultHolder.fail(stack);
 
         AbstractSpell spell = getSpell(stack);
         if (spell == null)
             return InteractionResultHolder.fail(stack);
 
-        CastResult result = spell.cast(new CastContext.WandContext(level, aura, player, hand, stack, this));
+        IAuraStorage aura = getAuraStorage(stack).orElseThrow();
+        CastContext.WandContext ctx = new CastContext.WandContext(level, aura, player, hand, stack, this);
+
+        player.getCooldowns().addCooldown(this, spell.getCooldownTicks(ctx));
+        CastResult result = spell.cast(ctx);
         aura.removeAura(result.auraToConsume());
 
         return InteractionResultHolder.success(stack);

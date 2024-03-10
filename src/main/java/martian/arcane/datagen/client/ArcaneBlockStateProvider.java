@@ -78,6 +78,12 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
             cubeAll(ArcaneBlocks.DEEPSLATE_IDOCRASE_ORE.get());
             cubeAll(ArcaneBlocks.NETHER_IDOCRASE_ORE.get());
             cubeAll(ArcaneBlocks.BLACKSTONE_IDOCRASE_ORE.get());
+
+            // Storage Blocks
+            cubeAll(ArcaneBlocks.FADED_LARIMAR_BLOCK.get());
+            cubeAll(ArcaneBlocks.FADING_LARIMAR_BLOCK.get());
+            cubeAll(ArcaneBlocks.LARIMAR_BLOCK.get());
+            cubeAll(ArcaneBlocks.AURACHALCUM_BLOCK.get());
         }
 
         // Block States
@@ -122,6 +128,12 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
             makeBlockState(ArcaneBlocks.DEEPSLATE_IDOCRASE_ORE);
             makeBlockState(ArcaneBlocks.NETHER_IDOCRASE_ORE);
             makeBlockState(ArcaneBlocks.BLACKSTONE_IDOCRASE_ORE);
+
+            // Storage Blocks
+            makeBlockState(ArcaneBlocks.FADED_LARIMAR_BLOCK);
+            makeBlockState(ArcaneBlocks.FADING_LARIMAR_BLOCK);
+            makeBlockState(ArcaneBlocks.LARIMAR_BLOCK);
+            makeBlockState(ArcaneBlocks.AURACHALCUM_BLOCK);
         }
     }
 

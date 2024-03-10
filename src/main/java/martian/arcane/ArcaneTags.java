@@ -18,4 +18,5 @@ public class ArcaneTags {
     public static final TagKey<Block> AURA_INSERTERS = TagKey.create(Registries.BLOCK, ArcaneMod.id("aura_inserters"));
     public static final TagKey<Block> AURA_BASINS = TagKey.create(Registries.BLOCK, ArcaneMod.id("aura_basins"));
     public static final TagKey<Block> AURA_WRENCH_BREAKABLE = TagKey.create(Registries.BLOCK, ArcaneMod.id("aura_wrench_breakable"));
+    public static final TagKey<Block> BLOCKS_AURA_FLOW = TagKey.create(Registries.BLOCK, ArcaneMod.id("blocks_aura_flow"));
 }

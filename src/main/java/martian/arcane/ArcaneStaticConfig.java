@@ -18,7 +18,6 @@ public final class ArcaneStaticConfig {
         public static final int COPPER_AURA_BASIN = 256;
         public static final int LARIMAR_AURA_BASIN = 512;
         public static final int AURACHALCUM_AURA_BASIN = 1024;
-        public static final int ELDRITCH_AURA_BASIN = 2048;
 
         public static final int AURA_INFUSER = 32;
         public static final int AURACHALCUM_INFUSER = 64;
@@ -36,7 +35,6 @@ public final class ArcaneStaticConfig {
         public static final int COPPER_TIER = 4;
         public static final int LARIMAR_TIER = 3;
         public static final int AURACHALCUM_TIER = 2;
-        public static final int ELDRITCH_TIER = 1;
     }
 
     // Rates are per tick unless otherwise specified
@@ -47,8 +45,6 @@ public final class ArcaneStaticConfig {
         public static final int LARIMAR_AURA_INSERTER_RATE = 2;
         public static final int AURACHALCUM_AURA_EXTRACTOR_RATE = 4;
         public static final int AURACHALCUM_AURA_INSERTER_RATE = 4;
-        public static final int ELDRITCH_AURA_EXTRACTOR_RATE = 8;
-        public static final int ELDRITCH_AURA_INSERTER_RATE = 8;
 
         public static final int SMALL_AURAGLASS_BOTTLE = 1;
         public static final int MEDIUM_AURAGLASS_BOTTLE = 2;
@@ -98,5 +94,6 @@ public final class ArcaneStaticConfig {
         public static final int ACTIVATOR = 16;
     }
 
+    public static final double AURA_EXTRACTOR_MAX_DISTANCE = 10.0d;  // In blocks
     public static final int TICKS_UNTIL_CONSIDERED_IDLE = 80;  // 4s
 }

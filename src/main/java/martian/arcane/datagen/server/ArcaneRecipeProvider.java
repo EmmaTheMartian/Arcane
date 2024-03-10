@@ -65,6 +65,7 @@ public class ArcaneRecipeProvider extends RecipeProvider {
                 ELDRITCH_CORE       = ingOf(ArcaneItems.ELDRITCH_CORE.get()),
                 SPELL_CIRCLE_CORE   = ingOf(ArcaneItems.SPELL_CIRCLE_CORE.get()),
                 POLISHED_LARIMAR    = ingOf(ArcaneItems.POLISHED_LARIMAR.get()),
+                FADED_LARIMAR       = ingOf(ArcaneItems.FADED_POLISHED_LARIMAR.get()),
                 AURACHALCUM         = ingOf(ArcaneItems.AURACHALCUM.get()),
                 ELDRITCH_ALLOY      = ingOf(ArcaneItems.ELDRITCH_ALLOY.get())
         ;
@@ -115,6 +116,11 @@ public class ArcaneRecipeProvider extends RecipeProvider {
             cutAndPolish(helper, ArcaneItems.RAW_LARIMAR.get(), ArcaneItems.CUT_LARIMAR.get(), ArcaneItems.POLISHED_LARIMAR.get());
             cutAndPolish(helper, ArcaneItems.FADED_RAW_LARIMAR.get(), ArcaneItems.FADED_CUT_LARIMAR.get(), ArcaneItems.FADED_POLISHED_LARIMAR.get());
             cutAndPolish(helper, ArcaneItems.RAW_IDOCRASE.get(), ArcaneItems.CUT_IDOCRASE.get(), ArcaneItems.POLISHED_IDOCRASE.get());
+
+            // Storage Blocks
+            storageBlock(helper, FADED_LARIMAR, ArcaneBlocks.FADED_LARIMAR_BLOCK.get().asItem());
+            storageBlock(helper, POLISHED_LARIMAR, ArcaneBlocks.LARIMAR_BLOCK.get().asItem());
+            storageBlock(helper, AURACHALCUM, ArcaneBlocks.AURACHALCUM_BLOCK.get().asItem());
         }
 
         // Misc Utility Recipes
@@ -362,6 +368,14 @@ public class ArcaneRecipeProvider extends RecipeProvider {
                         .unlockedWith(item).save(id.withPrefix("spell_tablets/"));
             });
         }
+    }
+
+    private void storageBlock(RecipeDataHelper helper, Ingredient of, Item output) {
+        helper.shaped(output)
+                .pattern("AAA", "AAA", "AAA")
+                .define('A', of)
+                .unlockedWith(of.getItems()[0].getItem())
+                .save();
     }
 
     private void cutAndPolish(RecipeDataHelper helper, Item raw, Item cut, Item polished) {

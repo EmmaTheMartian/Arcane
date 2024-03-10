@@ -29,6 +29,10 @@
     "arcane:idocrase_ore",
     "arcane:deepslate_idocrase_ore",
     "arcane:nether_idocrase_ore",
-    "arcane:blackstone_idocrase_ore"
+    "arcane:blackstone_idocrase_ore",
+    "arcane:faded_larimar_block",
+    "arcane:fading_larimar_block",
+    "arcane:larimar_block",
+    "arcane:aurachalcum_block"
   ]
 }

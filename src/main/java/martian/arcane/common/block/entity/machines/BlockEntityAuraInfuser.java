@@ -34,6 +34,7 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntityWithSingleIte
 
     public InfusionMode mode = InfusionMode.INSERT_AURA;
     public int auraProgress = 0;
+    public boolean isActive = false;
 
     public BlockEntityAuraInfuser(int maxAura, int auraLoss, BlockPos pos, BlockState state) {
         super(maxAura, auraLoss, false, true, ArcaneBlockEntities.AURA_INFUSER.get(), pos, state);
@@ -47,6 +48,7 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntityWithSingleIte
     public void saveAdditional(@NotNull CompoundTag nbt) {
         nbt.putInt(NBTHelpers.KEY_AURA_PROGRESS, auraProgress);
         nbt.putString(NBTHelpers.KEY_MODE, mode.toString());
+        nbt.putBoolean(NBTHelpers.KEY_ACTIVE, isActive);
         super.saveAdditional(nbt);
     }
 
@@ -55,6 +57,7 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntityWithSingleIte
         super.load(nbt);
         auraProgress = nbt.getInt(NBTHelpers.KEY_AURA_PROGRESS);
         mode = InfusionMode.valueOf(nbt.getString(NBTHelpers.KEY_MODE));
+        isActive = nbt.getBoolean(NBTHelpers.KEY_ACTIVE);
     }
 
     @Override
@@ -63,6 +66,7 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntityWithSingleIte
         CompoundTag nbt = super.getUpdateTag();
         nbt.putInt(NBTHelpers.KEY_AURA_PROGRESS, auraProgress);
         nbt.putString(NBTHelpers.KEY_MODE, mode.toString());
+        nbt.putBoolean(NBTHelpers.KEY_ACTIVE, isActive);
         return nbt;
     }
 
@@ -71,6 +75,7 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntityWithSingleIte
         CompoundTag nbt = getUpdateTag();
         auraProgress = nbt.getInt(NBTHelpers.KEY_AURA_PROGRESS);
         mode = InfusionMode.valueOf(nbt.getString(NBTHelpers.KEY_MODE));
+        isActive = nbt.getBoolean(NBTHelpers.KEY_ACTIVE);
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
@@ -145,6 +150,9 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntityWithSingleIte
                 if (optionalRecipe.isEmpty())
                     return;
 
+                if (!infuser.isActive)
+                    infuser.isActive = true;
+
                 RecipeAuraInfusion recipe = optionalRecipe.get();
 
                 if (storage.getAura() > 0 && infuser.auraProgress < recipe.aura) {
@@ -158,6 +166,7 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntityWithSingleIte
 
                 if (infuser.auraProgress >= recipe.aura) {
                     recipe.assemble(infuser);
+                    infuser.isActive = false;
                     level.sendBlockUpdated(pos, state, state, 2);
                 }
             } else if (infuser.mode == InfusionMode.INSERT_AURA) {
@@ -165,9 +174,8 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntityWithSingleIte
                 LazyOptional<IAuraStorage> cap = item.getCapability(ArcaneCapabilities.AURA_STORAGE);
                 if (cap.isPresent()) {
                     IAuraStorage aura = cap.resolve().orElseThrow();
-                    if (aura.getAura() < aura.getMaxAura()) {
+                    if (aura.getAura() < aura.getMaxAura())
                         infuser.getAuraStorage().get().sendAuraTo(aura, 1);
-                    }
                 }
             }
         }

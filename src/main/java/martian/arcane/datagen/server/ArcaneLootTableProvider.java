@@ -75,6 +75,12 @@ public class ArcaneLootTableProvider extends LootTableProvider {
             ore(ArcaneBlocks.DEEPSLATE_IDOCRASE_ORE.get(), ArcaneItems.RAW_IDOCRASE.get());
             ore(ArcaneBlocks.NETHER_IDOCRASE_ORE.get(), ArcaneItems.RAW_IDOCRASE.get());
             ore(ArcaneBlocks.BLACKSTONE_IDOCRASE_ORE.get(), ArcaneItems.RAW_IDOCRASE.get());
+
+            // Storage Blocks
+            dropSelf(ArcaneBlocks.LARIMAR_BLOCK.get());
+            dropSelf(ArcaneBlocks.FADING_LARIMAR_BLOCK.get());
+            dropSelf(ArcaneBlocks.FADED_LARIMAR_BLOCK.get());
+            dropSelf(ArcaneBlocks.AURACHALCUM_BLOCK.get());
         }
 
         private void ore(Block block, Item item) {
