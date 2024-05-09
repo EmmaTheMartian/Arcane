@@ -112,7 +112,7 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
             addBlock(ArcaneBlocks.AURA_INFUSER, "Aura Infuser");
             addBlock(ArcaneBlocks.PEDESTAL, "Pedestal");
 
-            addBlock(ArcaneBlocks.IGNIS_COLLECTOR, "Ignis Collector");
+            addBlock(ArcaneBlocks.HEAT_COLLECTOR, "Ignis Collector");
             addBlock(ArcaneBlocks.AQUA_COLLECTOR, "Aqua Collector");
 
             addBlock(ArcaneBlocks.AURAGLASS, "Auraglass");
@@ -142,6 +142,8 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
         // Messages
         {
             add("messages.arcane.aura", "Aura: ");
+            add("messages.arcane.en", "En: ");
+            add("messages.arcane.elemental_energy", "Elemental Energy: ");
             add("messages.arcane.holding", "Holding: ");
             add("messages.arcane.mode", "Mode: ");
             add("messages.arcane.crafting", "Crafting: ");

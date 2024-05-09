@@ -2,7 +2,7 @@ package martian.arcane.common.item;
 
 import martian.arcane.api.NBTHelpers;
 import martian.arcane.api.Raycasting;
-import martian.arcane.api.capability.IAuraStorage;
+import martian.arcane.api.capability.aura.IAuraStorage;
 import martian.arcane.api.item.AbstractAuraItem;
 import martian.arcane.common.registry.ArcaneCapabilities;
 import net.minecraft.ChatFormatting;

@@ -2,8 +2,15 @@ package martian.arcane.common.registry;
 
 import martian.arcane.ArcaneMod;
 import martian.arcane.api.ArcaneRegistry;
-import martian.arcane.common.block.entity.*;
-import martian.arcane.common.block.entity.machines.*;
+import martian.arcane.common.block.aura.basin.BlockEntityAuraBasin;
+import martian.arcane.common.block.aura.extractor.BlockEntityAuraExtractor;
+import martian.arcane.common.block.aura.infuser.BlockEntityAuraInfuser;
+import martian.arcane.common.block.aura.inserter.BlockEntityAuraInserter;
+import martian.arcane.common.block.aura.generators.heat.BlockEntityIgnisCollector;
+import martian.arcane.common.block.etc.auranodi.BlockEntityAuraNodi;
+import martian.arcane.common.block.aura.generators.water.BlockEntityAquaCollector;
+import martian.arcane.common.block.pedestal.BlockEntityPedestal;
+import martian.arcane.common.block.spellcircle.BlockEntitySpellCircle;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -40,8 +47,8 @@ public class ArcaneBlockEntities extends ArcaneRegistry {
             () -> of(BlockEntitySpellCircle::new, ArcaneBlocks.SPELL_CIRCLE.get()));
 
     // Generators
-    public static final RegistryObject<BlockEntityType<BlockEntityIgnisCollector>> IGNIS_COLLECTOR = REGISTER.register("be_ignis_collector",
-            () -> of(BlockEntityIgnisCollector::new, ArcaneBlocks.IGNIS_COLLECTOR.get()));
+    public static final RegistryObject<BlockEntityType<BlockEntityIgnisCollector>> HEAT_COLLECTOR = REGISTER.register("be_heat_collector",
+            () -> of(BlockEntityIgnisCollector::new, ArcaneBlocks.HEAT_COLLECTOR.get()));
     public static final RegistryObject<BlockEntityType<BlockEntityAquaCollector>> AQUA_COLLECTOR = REGISTER.register("be_aqua_collector",
             () -> of(BlockEntityAquaCollector::new, ArcaneBlocks.AQUA_COLLECTOR.get()));
 

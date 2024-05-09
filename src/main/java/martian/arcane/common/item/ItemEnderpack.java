@@ -25,7 +25,7 @@ public class ItemEnderpack extends AbstractAuraItem {
     private static final Component CONTAINER_TITLE = Component.translatable("container.arcane.enderpack");
 
     public ItemEnderpack() {
-        super(ArcaneStaticConfig.Maximums.ENDERPACK, false, true, new Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+        super(ArcaneStaticConfig.AuraMaximums.ENDERPACK, false, true, new Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
     }
 
     public static InteractionResultHolder<ItemStack> open(ItemStack stack, Level level, Player player) {

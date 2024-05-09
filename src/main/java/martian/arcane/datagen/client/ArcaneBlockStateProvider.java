@@ -1,11 +1,11 @@
 package martian.arcane.datagen.client;
 
 import martian.arcane.ArcaneMod;
-import martian.arcane.common.block.BlockPedestal;
-import martian.arcane.common.block.machines.BlockAuraBasin;
-import martian.arcane.common.block.machines.BlockAuraExtractor;
-import martian.arcane.common.block.machines.BlockAuraInfuser;
-import martian.arcane.common.block.machines.BlockAuraInserter;
+import martian.arcane.common.block.pedestal.BlockPedestal;
+import martian.arcane.common.block.aura.basin.BlockAuraBasin;
+import martian.arcane.common.block.aura.extractor.BlockAuraExtractor;
+import martian.arcane.common.block.aura.infuser.BlockAuraInfuser;
+import martian.arcane.common.block.aura.inserter.BlockAuraInserter;
 import martian.arcane.common.registry.ArcaneBlocks;
 import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
@@ -56,7 +56,7 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
                     .texture("0", ArcaneMod.id("block/machines/aura_basin_copper"));
 
             // Generators
-            topBottom(ArcaneBlocks.IGNIS_COLLECTOR.get(), texture("machines/collectors/ignis_sides"), texture("machines/collectors/top_and_bottom"));
+            topBottom(ArcaneBlocks.HEAT_COLLECTOR.get(), texture("machines/collectors/ignis_sides"), texture("machines/collectors/top_and_bottom"));
             topBottom(ArcaneBlocks.AQUA_COLLECTOR.get(), texture("machines/collectors/aqua_sides"), texture("machines/collectors/top_and_bottom"));
 
             // General Blocks
@@ -110,7 +110,7 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
             makeBlockState(ArcaneBlocks.SPELL_CIRCLE);
 
             // Generators
-            makeBlockState(ArcaneBlocks.IGNIS_COLLECTOR);
+            makeBlockState(ArcaneBlocks.HEAT_COLLECTOR);
             makeBlockState(ArcaneBlocks.AQUA_COLLECTOR);
 
             // Conjured Blocks

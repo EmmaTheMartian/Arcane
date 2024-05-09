@@ -1,7 +1,7 @@
 package martian.arcane.client;
 
 import martian.arcane.ArcaneMod;
-import martian.arcane.client.renderers.be.SpellCircleRenderer;
+import martian.arcane.common.block.spellcircle.SpellCircleRenderer;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 

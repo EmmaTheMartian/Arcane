@@ -1,7 +1,7 @@
 package martian.arcane.api.item;
 
-import martian.arcane.api.capability.AuraStorageItemProvider;
-import martian.arcane.api.capability.IAuraStorage;
+import martian.arcane.api.capability.aura.AuraStorageItemProvider;
+import martian.arcane.api.capability.aura.IAuraStorage;
 import martian.arcane.common.registry.ArcaneCapabilities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;

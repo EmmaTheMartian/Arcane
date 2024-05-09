@@ -61,7 +61,7 @@ public class ArcaneLootTableProvider extends LootTableProvider {
             dropSelf(ArcaneBlocks.AURA_INFUSER.get());
 
             // Generators
-            dropSelf(ArcaneBlocks.IGNIS_COLLECTOR.get());
+            dropSelf(ArcaneBlocks.HEAT_COLLECTOR.get());
             dropSelf(ArcaneBlocks.AQUA_COLLECTOR.get());
 
             // Ores

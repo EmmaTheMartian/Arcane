@@ -24,6 +24,10 @@ public final class NBTHelpers {
     public static final String KEY_TICKS_TO_NEXT = ArcaneMod.MODID + ".ticksToNext";
     public static final String KEY_CAST_RATE = ArcaneMod.MODID + ".castRate";
     public static final String KEY_HAS_SIGNAL = ArcaneMod.MODID + ".hasSignal";
+    public static final String KEY_EN = ArcaneMod.MODID + ".en";
+    public static final String KEY_MAX_EN = ArcaneMod.MODID + ".maxEn";
+    public static final String KEY_EN_EXTRACTABLE = ArcaneMod.MODID + ".canExtractEn";
+    public static final String KEY_EN_INSERTABLE = ArcaneMod.MODID + ".canInsertEn";
 
     public static void putBlockPos(CompoundTag nbt, String key, BlockPos pos) {
         nbt.putIntArray(key, new int[]{pos.getX(), pos.getY(), pos.getZ()});

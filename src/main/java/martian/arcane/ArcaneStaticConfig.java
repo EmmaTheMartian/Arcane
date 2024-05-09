@@ -2,7 +2,7 @@ package martian.arcane;
 
 //TODO: Change this to be configurable in the TOML config file or serverdefaults
 public final class ArcaneStaticConfig {
-    public static final class Maximums {
+    public static final class AuraMaximums {
         public static final int BASIC_WAND = 16;
         public static final int ADVANCED_WAND = 32;
         public static final int MYSTIC_WAND = 64;

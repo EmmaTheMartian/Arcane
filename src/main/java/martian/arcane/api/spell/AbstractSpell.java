@@ -1,6 +1,6 @@
 package martian.arcane.api.spell;
 
-import martian.arcane.common.item.ItemAuraWand;
+import martian.arcane.common.item.wand.ItemAuraWand;
 import martian.arcane.common.registry.ArcaneSpells;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;

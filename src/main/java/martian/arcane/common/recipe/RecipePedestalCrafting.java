@@ -6,7 +6,7 @@ import martian.arcane.api.item.ItemHelpers;
 import martian.arcane.api.recipe.RecipeOutput;
 import martian.arcane.api.recipe.SimpleContainer;
 import martian.arcane.api.recipe.SimpleRecipe;
-import martian.arcane.common.block.entity.BlockEntityPedestal;
+import martian.arcane.common.block.pedestal.BlockEntityPedestal;
 import martian.arcane.common.registry.ArcaneRecipeTypes;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;

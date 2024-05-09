@@ -2,7 +2,7 @@ package martian.arcane.integration.jade;
 
 import martian.arcane.ArcaneMod;
 import martian.arcane.api.block.entity.IAuraometerOutput;
-import martian.arcane.api.capability.IAuraStorage;
+import martian.arcane.api.capability.aura.IAuraStorage;
 import martian.arcane.common.registry.ArcaneCapabilities;
 import martian.arcane.common.registry.ArcaneItems;
 import net.minecraft.ChatFormatting;

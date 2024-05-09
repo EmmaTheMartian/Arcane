@@ -23,6 +23,7 @@ object Properties {
     const val REGISTRATE_VERSION = "MC1.20-1.3.3"
     const val KUBEJS_VERSION = "2001.6.5-build.2"
     const val PROBEJS_VERSION = "5054324" // 5.9.3-forge
+//    const val GECKOLIB_VERSION = "4.2.2"
 
     const val ENABLE_PHOTON = true
     const val ENABLE_CURIOS = true
@@ -117,6 +118,14 @@ repositories {
             includeGroup("dev.latvian.mods")
         }
     }
+
+    // GeckoLib
+//    maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/") {
+//        mavenContent {
+//            includeGroupByRegex("software\\.bernie.*")
+//            includeGroup("com.eliotlash.mclib")
+//        }
+//    }
 }
 
 dependencies {
@@ -180,6 +189,9 @@ dependencies {
     if (Properties.ENABLE_PROBEJS) {
         modRuntimeOnly("curse.maven:probejs-585406:${Properties.PROBEJS_VERSION}")
     }
+
+    // GeckoLib
+//    modImplementation("software.bernie.geckolib:geckolib-forge-${Properties.MC_VERSION}:${Properties.GECKOLIB_VERSION}")
 }
 
 tasks.processResources {

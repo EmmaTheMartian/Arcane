@@ -1,7 +1,7 @@
 package martian.arcane.common.registry;
 
 import martian.arcane.api.ArcaneRegistry;
-import martian.arcane.api.capability.IAuraStorage;
+import martian.arcane.api.capability.aura.IAuraStorage;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;

@@ -142,7 +142,7 @@ public class ArcaneRecipeProvider extends RecipeProvider {
         {
             helper.defaultCategory = RecipeCategory.REDSTONE;
 
-            helper.shaped(ArcaneBlocks.IGNIS_COLLECTOR.get().asItem())
+            helper.shaped(ArcaneBlocks.HEAT_COLLECTOR.get().asItem())
                     .pattern("GIG", "FCF", "GIG")
                     .define('G', GLASS)
                     .define('I', COPPER)

@@ -4,7 +4,6 @@ import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -15,19 +14,9 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.BiFunction;
 
-public abstract class AbstractAuraMachine extends Block implements EntityBlock {
-    private final BiFunction<BlockPos, BlockState, BlockEntity> beSupplier;
-
+public abstract class AbstractAuraMachine extends BlockWithEntity {
     public AbstractAuraMachine(BlockBehaviour.Properties properties, BiFunction<BlockPos, BlockState, BlockEntity> beSupplier) {
-        super(properties);
-        this.beSupplier = beSupplier;
-    }
-
-    @Override
-    @NotNull
-    @ParametersAreNonnullByDefault
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return beSupplier.apply(pos, state);
+        super(properties, beSupplier);
     }
 
     @Override

@@ -1,11 +1,10 @@
 package martian.arcane.api.spell;
 
 import martian.arcane.api.Raycasting;
-import martian.arcane.api.capability.IAuraStorage;
-import martian.arcane.common.block.entity.machines.BlockEntitySpellCircle;
-import martian.arcane.common.item.ItemAuraWand;
+import martian.arcane.api.capability.aura.IAuraStorage;
+import martian.arcane.common.block.spellcircle.BlockEntitySpellCircle;
+import martian.arcane.common.item.wand.ItemAuraWand;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;

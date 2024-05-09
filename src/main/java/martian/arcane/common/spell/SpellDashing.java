@@ -4,7 +4,7 @@ import martian.arcane.ArcaneStaticConfig;
 import martian.arcane.api.spell.AbstractSpell;
 import martian.arcane.api.spell.CastContext;
 import martian.arcane.api.spell.CastResult;
-import martian.arcane.common.item.ItemAuraWand;
+import martian.arcane.common.item.wand.ItemAuraWand;
 import martian.arcane.integration.photon.ArcaneFx;
 import net.minecraft.world.phys.Vec3;
 

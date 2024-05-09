@@ -5,7 +5,7 @@ import martian.arcane.api.block.BlockHelpers;
 import martian.arcane.api.spell.AbstractSpell;
 import martian.arcane.api.spell.CastContext;
 import martian.arcane.api.spell.CastResult;
-import martian.arcane.common.block.entity.machines.BlockEntitySpellCircle;
+import martian.arcane.common.block.spellcircle.BlockEntitySpellCircle;
 import martian.arcane.integration.photon.ArcaneFx;
 import net.minecraft.core.BlockPos;
 
