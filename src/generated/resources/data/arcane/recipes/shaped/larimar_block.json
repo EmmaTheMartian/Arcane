@@ -12,7 +12,7 @@
     "AAA"
   ],
   "result": {
-    "item": "arcane:larimar_block"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "arcane:larimar_block"
+  }
 }

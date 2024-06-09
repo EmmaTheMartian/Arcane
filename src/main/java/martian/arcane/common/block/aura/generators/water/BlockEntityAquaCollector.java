@@ -2,7 +2,6 @@ package martian.arcane.common.block.aura.generators.water;
 
 import martian.arcane.ArcaneStaticConfig;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
-import martian.arcane.api.capability.aura.IAuraStorage;
 import martian.arcane.common.registry.ArcaneBlockEntities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -62,8 +61,7 @@ public class BlockEntityAquaCollector extends AbstractAuraBlockEntity {
         AbstractAuraBlockEntity.tick(level, pos, state, blockEntity);
         if (blockEntity instanceof BlockEntityAquaCollector collector) {
             if (++collector.ticksToNextCollect >= ArcaneStaticConfig.Speed.AQUA_COLLECTOR_SPEED) {
-                IAuraStorage aura = collector.getAuraStorage().orElseThrow();
-                aura.addAura(getAuraToGenerate(level, pos));
+                collector.mapAuraStorage(aura -> aura.addAura(getAuraToGenerate(level, pos)));
                 collector.ticksToNextCollect = 0;
             }
         }

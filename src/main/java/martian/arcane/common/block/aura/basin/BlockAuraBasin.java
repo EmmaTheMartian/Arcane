@@ -39,7 +39,6 @@ public class BlockAuraBasin extends AbstractAuraMachine {
         return defaultBlockState().setValue(FACING, context.getHorizontalDirection());
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     @ParametersAreNonnullByDefault
     @NotNull

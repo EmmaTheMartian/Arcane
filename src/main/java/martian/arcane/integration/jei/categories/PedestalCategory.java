@@ -1,5 +1,6 @@
 package martian.arcane.integration.jei.categories;
 
+/*
 import martian.arcane.api.recipe.RecipeOutput;
 import martian.arcane.common.recipe.RecipePedestalCrafting;
 import martian.arcane.common.registry.ArcaneBlocks;
@@ -71,3 +72,5 @@ public class PedestalCategory implements IRecipeCategory<RecipePedestalCrafting>
         });
     }
 }
+
+ */

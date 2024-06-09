@@ -40,7 +40,6 @@ public class BlockAuraExtractor extends AbstractAuraMachine {
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.DOWN));
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     @ParametersAreNonnullByDefault
     @NotNull

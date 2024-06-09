@@ -24,8 +24,7 @@ public class WeatherableBlock extends Block {
     public WeatherableBlock(@Nullable Supplier<BlockState> nextBlock, Properties properties) {
         super(properties);
         this.nextBlock = nextBlock;
-        registerDefaultState(defaultBlockState()
-                .setValue(WAXED, false));
+        registerDefaultState(defaultBlockState().setValue(WAXED, false));
     }
 
     @Override
@@ -40,7 +39,6 @@ public class WeatherableBlock extends Block {
 
     @Override
     @ParametersAreNonnullByDefault
-    @SuppressWarnings("deprecation")
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (random.nextInt(0, weatherChanceEachRandomTick) == 0)
             level.setBlockAndUpdate(pos, Objects.requireNonNull(nextBlock).get());

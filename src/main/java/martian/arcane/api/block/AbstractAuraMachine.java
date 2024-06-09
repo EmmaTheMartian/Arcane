@@ -26,23 +26,20 @@ public abstract class AbstractAuraMachine extends BlockWithEntity {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public boolean hasAnalogOutputSignal(@NotNull BlockState state) {
         return true;
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     @ParametersAreNonnullByDefault
     public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
         if (level.getBlockEntity(pos) instanceof AbstractAuraBlockEntity machine)
-            return Math.round(machine.mapAuraStorage(aura -> (float)aura.getAura() / aura.getMaxAura() * 15F).orElseThrow());
+            return Math.round(machine.mapAuraStorage(aura -> (float)aura.getAura() / aura.getMaxAura() * 15F));
         return 0;
     }
 
     @Override
     @ParametersAreNonnullByDefault
-    @SuppressWarnings("deprecation")
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block fromBlock, BlockPos fromPos, boolean isMoving) {
         super.neighborChanged(state, level, pos, fromBlock, fromPos, isMoving);
         if (

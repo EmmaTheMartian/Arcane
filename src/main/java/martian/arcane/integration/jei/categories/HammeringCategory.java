@@ -1,5 +1,6 @@
 package martian.arcane.integration.jei.categories;
 
+/*
 import martian.arcane.api.recipe.RecipeOutput;
 import martian.arcane.common.recipe.RecipeHammering;
 import martian.arcane.integration.jei.ArcaneJeiPlugin;
@@ -25,3 +26,5 @@ public class HammeringCategory extends AbstractSpellCategory<RecipeHammering> {
         return recipe.results;
     }
 }
+
+ */

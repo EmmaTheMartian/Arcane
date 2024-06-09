@@ -17,7 +17,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
-
 import java.util.function.BiFunction;
 
 public class ArcaneBookFeaturesProvider extends CategoryProvider {
@@ -166,7 +165,7 @@ public class ArcaneBookFeaturesProvider extends CategoryProvider {
     }
 
     // Entry Helpers
-    private BookEntryModel createEntry(Item icon, char loc, BookPageModel... pages) {
+    private BookEntryModel createEntry(Item icon, char loc, BookPageModel<?>... pages) {
         return BookEntryModel.create(ArcaneMod.id(context().categoryId() + "/" + context().entryId()), context().entryName())
                 .withIcon(icon)
                 .withLocation(entryMap().get(loc))
@@ -181,41 +180,37 @@ public class ArcaneBookFeaturesProvider extends CategoryProvider {
     // Page Builders
     private BookSpotlightPageModel simpleSpotlightPage(String id, Ingredient spotlight, String text) {
         context().page(id);
-        var page = BookSpotlightPageModel.builder()
+        var page = BookSpotlightPageModel.create()
                 .withItem(spotlight)
-                .withText(context().pageText())
-                .build();
+                .withText(context().pageText());
         lang().add(context().pageText(), text);
         return page;
     }
 
     private BookCraftingRecipePageModel simpleCraftingPage(String id, ResourceLocation recipeId, String text) {
         context().page(id);
-        var page = BookCraftingRecipePageModel.builder()
+        var page = BookCraftingRecipePageModel.create()
                 .withRecipeId1(recipeId)
-                .withText(context().pageText())
-                .build();
+                .withText(context().pageText());
         lang().add(context().pageText(), text);
         return page;
     }
 
     private BookCraftingRecipePageModel simpleCraftingPage(String id, ResourceLocation recipeId, ResourceLocation recipeId2, String text) {
         context().page(id);
-        var page = BookCraftingRecipePageModel.builder()
+        var page = BookCraftingRecipePageModel.create()
                 .withRecipeId1(recipeId)
                 .withRecipeId2(recipeId2)
-                .withText(context().pageText())
-                .build();
+                .withText(context().pageText());
         lang().add(context().pageText(), text);
         return page;
     }
 
     private BookTextPageModel simpleTextPage(String id, String title, String text) {
         context().page(id);
-        var page = BookTextPageModel.builder()
+        var page = BookTextPageModel.create()
                 .withTitle(context().pageTitle())
-                .withText(context().pageText())
-                .build();
+                .withText(context().pageText());
         lang().add(context().pageTitle(), title);
         lang().add(context().pageText(), text);
         return page;
@@ -229,6 +224,6 @@ public class ArcaneBookFeaturesProvider extends CategoryProvider {
     }
 
     private BookAndConditionModel requiresReadEntry(BookEntryModel entry) {
-        return BookAndConditionModel.builder().withChildren(BookEntryReadConditionModel.builder().withEntry(entry.getId()).build()).build();
+        return BookAndConditionModel.create().withChildren(BookEntryReadConditionModel.create().withEntry(entry.getId()));
     }
 }

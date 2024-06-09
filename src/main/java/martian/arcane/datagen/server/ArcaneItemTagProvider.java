@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -60,10 +60,10 @@ public class ArcaneItemTagProvider extends ItemTagsProvider {
                 .add(ArcaneItems.PURIFIED_RAW_IRON.get())
                 .add(ArcaneItems.PURIFIED_RAW_GOLD.get());
 
-        tag(forgeTag("ingots"))
+        tag(commonTag("ingots"))
                 .add(ArcaneItems.ELDRITCH_ALLOY.get());
 
-        tag(forgeTag("gems"))
+        tag(commonTag("gems"))
                 .add(ArcaneItems.RAW_LARIMAR.get())
                 .add(ArcaneItems.CUT_LARIMAR.get())
                 .add(ArcaneItems.POLISHED_LARIMAR.get())
@@ -76,24 +76,24 @@ public class ArcaneItemTagProvider extends ItemTagsProvider {
                 .add(ArcaneItems.RAW_AURACHALCUM.get())
                 .add(ArcaneItems.AURACHALCUM.get());
 
-        tag(forgeTag("dusts"))
+        tag(commonTag("dusts"))
                 .addTag(ArcaneTags.CRUSHED_DUSTS)
                 .addTag(ArcaneTags.PURIFIED_DUSTS);
 
-        tag(forgeTag("dusts/copper"))
+        tag(commonTag("dusts/copper"))
                 .add(ArcaneItems.CRUSHED_RAW_COPPER.get())
                 .add(ArcaneItems.PURIFIED_RAW_COPPER.get());
 
-        tag(forgeTag("dusts/iron"))
+        tag(commonTag("dusts/iron"))
                 .add(ArcaneItems.CRUSHED_RAW_IRON.get())
                 .add(ArcaneItems.PURIFIED_RAW_IRON.get());
 
-        tag(forgeTag("dusts/gold"))
+        tag(commonTag("dusts/gold"))
                 .add(ArcaneItems.CRUSHED_RAW_GOLD.get())
                 .add(ArcaneItems.PURIFIED_RAW_GOLD.get());
     }
 
-    private static TagKey<Item> forgeTag(String location) {
-        return TagKey.create(Registries.ITEM, new ResourceLocation("forge", location));
+    private static TagKey<Item> commonTag(String location) {
+        return TagKey.create(Registries.ITEM, new ResourceLocation("c", location));
     }
 }

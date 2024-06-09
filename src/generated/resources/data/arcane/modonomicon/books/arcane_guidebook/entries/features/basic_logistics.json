@@ -21,6 +21,9 @@
     {
       "type": "modonomicon:text",
       "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
       "show_title_separator": true,
       "text": "book.arcane.arcane_guidebook.features.basic_logistics.about.text",
       "title": "book.arcane.arcane_guidebook.features.basic_logistics.about.title",
@@ -29,6 +32,9 @@
     {
       "type": "modonomicon:crafting_recipe",
       "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
       "recipe_id_1": "arcane:shaped/aura_extractor_copper",
       "recipe_id_2": "arcane:shaped/aura_inserter_copper",
       "text": "book.arcane.arcane_guidebook.features.basic_logistics.extractor_and_inserter.text",
@@ -38,6 +44,9 @@
     {
       "type": "modonomicon:crafting_recipe",
       "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
       "recipe_id_1": "arcane:shaped/aura_wrench",
       "text": "book.arcane.arcane_guidebook.features.basic_logistics.aurawrench.text",
       "title1": "",

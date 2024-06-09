@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "arcane:aura_inserter_aurachalcum"
-            ]
+            "items": "arcane:aura_inserter_aurachalcum"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_item",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_item"
     ]
   ],
   "rewards": {
     "recipes": [
       "arcane:shapeless/aura_extractor_aurachalcum_swappable"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

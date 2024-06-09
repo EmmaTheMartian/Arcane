@@ -6,7 +6,7 @@
       "item": "arcane:aurachalcum_core"
     },
     "S": {
-      "tag": "forge:obsidian"
+      "tag": "c:obsidians"
     }
   },
   "pattern": [
@@ -14,7 +14,7 @@
     "SSS"
   ],
   "result": {
-    "item": "arcane:aura_inserter_aurachalcum"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "arcane:aura_inserter_aurachalcum"
+  }
 }

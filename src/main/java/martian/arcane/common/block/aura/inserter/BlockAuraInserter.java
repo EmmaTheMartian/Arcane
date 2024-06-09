@@ -41,7 +41,6 @@ public class BlockAuraInserter extends AbstractAuraMachine {
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.DOWN));
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     @ParametersAreNonnullByDefault
     @NotNull
@@ -65,7 +64,6 @@ public class BlockAuraInserter extends AbstractAuraMachine {
         return defaultBlockState().setValue(FACING, context.getClickedFace().getOpposite());
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     @NotNull
     public RenderShape getRenderShape(@NotNull BlockState state) {

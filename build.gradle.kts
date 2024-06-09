@@ -4,51 +4,18 @@ import java.time.format.DateTimeFormatter
 
 plugins {
     id("maven-publish")
-    id("dev.architectury.loom") version "1.4-SNAPSHOT"
+    id("dev.architectury.loom") version "1.6-SNAPSHOT"
 }
 
-object Properties {
-    const val MC_VERSION = "1.20.1"
-    const val FORGE_VERSION = "47.2.20"
-    const val PARCHMENT_VERSION = "1.20.1:2023.09.03"
-    const val JEI_VERSION = "15.2.0.27"
-    const val EMI_VERSION = "1.1.0"
-    const val JADE_VERSION = "5072729" // 1.20.1-forge-11.8.0
-    const val LDLIB_VERSION = "1.0.24.a"
-    const val PHOTON_VERSION = "1.0.7.a"
-    const val CURIOS_VERSION = "5.7.0"
-    const val MODONOMICON_VERSION = "1.59.0"
-    const val CREATE_VERSION = "0.5.1.e-22"
-    const val FLYWHEEL_VERSION = "0.6.10-7"
-    const val REGISTRATE_VERSION = "MC1.20-1.3.3"
-    const val KUBEJS_VERSION = "2001.6.5-build.2"
-    const val PROBEJS_VERSION = "5054324" // 5.9.3-forge
-//    const val GECKOLIB_VERSION = "4.2.2"
+fun prop(id: String): String = property(id) as String
 
-    const val ENABLE_PHOTON = true
-    const val ENABLE_CURIOS = true
-    const val ENABLE_CREATE = true
-    const val ENABLE_PROBEJS = true
-
-    const val MOD_VERSION = "1.0.0"
-    const val MOD_LICENSE = "MIT"
-    const val MOD_ID = "arcane"
-    const val MOD_AUTHORS = "EmmaTheMartian"
-    const val MOD_NAME = "Arcane"
-    const val MOD_DESC = "Harness aura for magical automation!"
-
-    const val MAVEN_GROUP = "martian.arcane"
-    const val ARCHIVES_BASE_NAME = "arcane"
-}
-
-base.archivesName = Properties.ARCHIVES_BASE_NAME
-
-version = Properties.MOD_VERSION
-group = Properties.MAVEN_GROUP
+base.archivesName = prop("archives_base_name")
+version = prop("mod_version")
+group = prop("maven_group")
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
     withSourcesJar()
 }
 
@@ -60,7 +27,7 @@ loom {
 
         register("data") {
             data()
-            programArgs("--all", "--mod", Properties.MOD_ID,
+            programArgs("--all", "--mod", prop("mod_id"),
                     "--output", file("src/generated/resources/").absolutePath,
                     "--existing", file("src/main/resources/").absolutePath)
         }
@@ -77,17 +44,14 @@ sourceSets {
 }
 
 repositories {
-    // Parchment
-    maven("https://maven.parchmentmc.org") { name = "ParchmentMC" }
-
-    // JEI
-    maven("https://maven.blamejared.com/") { name = "Jared's maven" }
-
-    // JEI Mirror (backup)
-    maven("https://modmaven.dev") { name = "ModMaven" }
-
-    // EMI
-    maven("https://maven.terraformersmc.com") { name = "TerraformersMC" }
+    maven("https://maven.neoforged.net")
+    maven("https://maven.parchmentmc.org")
+    maven("https://maven.blamejared.com/") // JEI
+    maven("https://modmaven.dev") // JEI Mirror
+    maven("https://maven.terraformersmc.com") // EMI
+    maven("https://maven.tterrag.com/") // Create
+    maven("https://maven.firstdarkdev.xyz/snapshots") // LDLib and Photon
+    maven("https://maven.theillusivec4.top/") // Curios
 
     // Jade and ProbeJS
     maven("https://www.cursemaven.com") {
@@ -96,21 +60,12 @@ repositories {
         }
     }
 
-    // LDLib and Photon
-    maven("https://maven.firstdarkdev.xyz/snapshots")
-
-    // Curios
-    maven("https://maven.theillusivec4.top/") { name = "Illusive Soulworks maven" }
-
     // Modonomicon
     maven("https://dl.cloudsmith.io/public/klikli-dev/mods/maven/") {
         mavenContent {
             includeGroup("com.klikli_dev")
         }
     }
-
-    // Create
-    maven("https://maven.tterrag.com/") { name = "tterrag maven" }
 
     // KubeJS and Rhino
     maven("https://maven.saps.dev/minecraft") {
@@ -129,90 +84,95 @@ repositories {
 }
 
 dependencies {
-    minecraft("com.mojang:minecraft:${Properties.MC_VERSION}")
+    minecraft("com.mojang:minecraft:${prop("mc_version")}")
 
     mappings(loom.layered {
         officialMojangMappings()
-        parchment("org.parchmentmc.data:parchment-${Properties.PARCHMENT_VERSION}@zip")
+        parchment("org.parchmentmc.data:parchment-${prop("parchment_version")}@zip")
     })
 
-    forge("net.minecraftforge:forge:${Properties.MC_VERSION}-${Properties.FORGE_VERSION}")
+    neoForge("net.neoforged:neoforge:${prop("neoforge_version")}")
 
     // JEI
-    modCompileOnlyApi("mezz.jei:jei-${Properties.MC_VERSION}-common-api:${Properties.JEI_VERSION}") { isTransitive = false }
-    modCompileOnlyApi("mezz.jei:jei-${Properties.MC_VERSION}-forge-api:${Properties.JEI_VERSION}") { isTransitive = false }
-    modRuntimeOnly("mezz.jei:jei-${Properties.MC_VERSION}-forge:${Properties.JEI_VERSION}") { isTransitive = false }
+    /*
+    modCompileOnlyApi("mezz.jei:jei-${prop("mc_version")}-common-api:${prop("jei_version")}") { isTransitive = false }
+    modCompileOnlyApi("mezz.jei:jei-${prop("mc_version")}-forge-api:${prop("jei_version")}") { isTransitive = false }
+    modRuntimeOnly("mezz.jei:jei-${prop("mc_version")}-forge:${prop("jei_version")}") { isTransitive = false }
+     */
 
     // EMI
-    modCompileOnly("dev.emi:emi-forge:${Properties.EMI_VERSION}+${Properties.MC_VERSION}:api")
-    modRuntimeOnly("dev.emi:emi-forge:${Properties.EMI_VERSION}+${Properties.MC_VERSION}")
+    modCompileOnly("dev.emi:emi-neoforge:${prop("emi_version")}+${prop("mc_version")}:api")
+    modRuntimeOnly("dev.emi:emi-neoforge:${prop("emi_version")}+${prop("mc_version")}")
 
     // Jade
-    modCompileOnly("curse.maven:jade-324717:${Properties.JADE_VERSION}")
-    modRuntimeOnly("curse.maven:jade-324717:${Properties.JADE_VERSION}")
+    modCompileOnly("curse.maven:jade-324717:${prop("jade_version")}")
+    modRuntimeOnly("curse.maven:jade-324717:${prop("jade_version")}")
 
     // LDLib and Photon
-    val ldlib = "com.lowdragmc.ldlib:ldlib-forge-${Properties.MC_VERSION}:${Properties.LDLIB_VERSION}"
-    val photon = "com.lowdragmc.photon:photon-forge-${Properties.MC_VERSION}:${Properties.PHOTON_VERSION}"
+    /*
+    val ldlib = "com.lowdragmc.ldlib:ldlib-forge-${prop("mc_version")}:${prop("ldlib_version")}"
+    val photon = "com.lowdragmc.photon:photon-forge-${prop("mc_version")}:${prop("photon_version")}"
     modCompileOnly(ldlib) { isTransitive = false }
     modCompileOnly(photon) { isTransitive = false }
-    if (Properties.ENABLE_PHOTON) {
+    if (prop("enable_photon").toBoolean()) {
         modRuntimeOnly(ldlib) { isTransitive = false }
         modRuntimeOnly(photon) { isTransitive = false }
     }
+    */
 
     // Curios
-    modCompileOnly("top.theillusivec4.curios:curios-forge:${Properties.CURIOS_VERSION}+${Properties.MC_VERSION}:api")
-    if (Properties.ENABLE_CURIOS) {
-        modRuntimeOnly("top.theillusivec4.curios:curios-forge:${Properties.CURIOS_VERSION}+${Properties.MC_VERSION}")
+    modCompileOnly("top.theillusivec4.curios:curios-neoforge:${prop("curios_version")}+${prop("mc_version")}:api")
+    if (prop("enable_curios").toBoolean()) {
+        modRuntimeOnly("top.theillusivec4.curios:curios-neoforge:${prop("curios_version")}+${prop("mc_version")}")
     }
 
     // Modonomicon
-    forgeRuntimeLibrary("org.commonmark:commonmark:0.21.0")
-    forgeRuntimeLibrary("org.commonmark:commonmark-ext-gfm-strikethrough:0.21.0")
-    forgeRuntimeLibrary("org.commonmark:commonmark-ext-ins:0.21.0")
-    modCompileOnly("com.klikli_dev:modonomicon-${Properties.MC_VERSION}-common:${Properties.MODONOMICON_VERSION}")
-    modImplementation("com.klikli_dev:modonomicon-${Properties.MC_VERSION}-forge:${Properties.MODONOMICON_VERSION}") { isTransitive = false }
+    forgeRuntimeLibrary("org.commonmark:commonmark:0.22.0")
+    forgeRuntimeLibrary("org.commonmark:commonmark-ext-gfm-strikethrough:0.22.0")
+    forgeRuntimeLibrary("org.commonmark:commonmark-ext-ins:0.22.0")
+    modCompileOnly("com.klikli_dev:modonomicon-${prop("mc_version")}-common:${prop("modonomicon_version")}")
+    modImplementation("com.klikli_dev:modonomicon-${prop("mc_version")}-neoforge:${prop("modonomicon_version")}") { isTransitive = false }
 
     // Create
-    if (Properties.ENABLE_CREATE) {
-        modRuntimeOnly("com.simibubi.create:create-${Properties.MC_VERSION}:${Properties.CREATE_VERSION}:slim") {
+    /*
+    if (prop("enable_create").toBoolean()) {
+        modRuntimeOnly("com.simibubi.create:create-${prop("mc_version")}:${prop("create_version")}:slim") {
             isTransitive = false
         }
-        modRuntimeOnly("com.jozufozu.flywheel:flywheel-forge-${Properties.MC_VERSION}:${Properties.FLYWHEEL_VERSION}")
-        modRuntimeOnly("com.tterrag.registrate:Registrate:${Properties.REGISTRATE_VERSION}")
+        modRuntimeOnly("com.jozufozu.flywheel:flywheel-forge-${prop("mc_version")}:${prop("flywheel_version")}")
+        modRuntimeOnly("com.tterrag.registrate:Registrate:${prop("registrate_version")}")
     }
 
     // KubeJS
-    modImplementation("dev.latvian.mods:kubejs-forge:${Properties.KUBEJS_VERSION}")
+    modImplementation("dev.latvian.mods:kubejs-forge:${prop("kubejs_version")}")
     localRuntime("io.github.llamalad7:mixinextras-forge:0.3.5")
-    if (Properties.ENABLE_PROBEJS) {
-        modRuntimeOnly("curse.maven:probejs-585406:${Properties.PROBEJS_VERSION}")
+    if (prop("enable_probejs").toBoolean()) {
+        modRuntimeOnly("curse.maven:probejs-585406:${prop("probejs_version")}")
     }
+     */
 
     // GeckoLib
-//    modImplementation("software.bernie.geckolib:geckolib-forge-${Properties.MC_VERSION}:${Properties.GECKOLIB_VERSION}")
+//    modImplementation("software.bernie.geckolib:geckolib-forge-${prop("mc_version")}:${prop("geckolib_version")}")
 }
 
-tasks.processResources {
-    inputs.property("mod_version", Properties.MOD_VERSION)
-    inputs.property("mod_license", Properties.MOD_LICENSE)
-    inputs.property("mod_name", Properties.MOD_NAME)
-    inputs.property("mod_authors", Properties.MOD_AUTHORS)
-    inputs.property("mod_description", Properties.MOD_DESC)
-    inputs.property("mod_id", Properties.MOD_ID)
+tasks.withType<ProcessResources>().configureEach {
+    val props = mutableMapOf(
+        "mod_id" to prop("mod_id"),
+        "mod_license" to prop("mod_license"),
+        "mod_version" to prop("mod_version"),
+        "mod_name" to prop("mod_name"),
+        "mod_authors" to prop("mod_authors"),
+        "neoforge_version" to prop("neoforge_version"),
+        "minecraft_version" to prop("mc_version"),
+    )
 
-    filesMatching("META-INF/mods.toml") {
-        expand("mod_version" to Properties.MOD_VERSION,
-                "mod_license" to Properties.MOD_LICENSE,
-                "mod_name" to Properties.MOD_NAME,
-                "mod_authors" to Properties.MOD_AUTHORS,
-                "mod_description" to Properties.MOD_DESC,
-                "mod_id" to Properties.MOD_ID)
-    }
+    println("processResources properties:")
+    println(props)
 
-    filesMatching("pack.mcmeta") {
-        expand("mod_id" to Properties.MOD_ID)
+    inputs.properties(props)
+
+    filesMatching(listOf("META-INF/neoforge.mods.toml", "pack.mcmeta")) {
+        expand(props)
     }
 }
 
@@ -223,12 +183,12 @@ tasks.withType(JavaCompile::class) {
 tasks.jar {
     manifest {
         attributes(
-            "Specification-Title" to Properties.MOD_ID,
-            "Specification-Vendor" to Properties.MOD_AUTHORS,
+            "Specification-Title" to prop("mod_id"),
+            "Specification-Vendor" to prop("mod_authors"),
             "Specification-Version" to "1",
-            "Implementation-Title" to Properties.MOD_NAME,
-            "Implementation-Version" to Properties.MOD_VERSION,
-            "Implementation-Vendor" to Properties.MOD_AUTHORS,
+            "Implementation-Title" to prop("mod_name"),
+            "Implementation-Version" to prop("mod_version"),
+            "Implementation-Vendor" to prop("mod_authors"),
             "Implementation-Timestamp" to DateTimeFormatter.ISO_DATE_TIME
         )
     }

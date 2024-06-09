@@ -3,7 +3,7 @@
   "category": "equipment",
   "key": {
     "B": {
-      "tag": "forge:ingots/iron"
+      "tag": "c:ingots/iron"
     },
     "I": {
       "item": "arcane:copper_core"
@@ -15,7 +15,7 @@
     " B "
   ],
   "result": {
-    "item": "arcane:aura_configurator"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "arcane:aura_configurator"
+  }
 }

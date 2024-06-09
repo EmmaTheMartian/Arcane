@@ -1,16 +1,30 @@
 package martian.arcane.api.recipe;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.mojang.serialization.JsonOps;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.util.GsonHelper;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Random;
 
 public record RecipeOutput(ItemStack stack, float chance) {
+    public RecipeOutput(Item item, int count, float chance) {
+        this(new ItemStack(item, count), chance);
+    }
+
+    public static final Codec<RecipeOutput> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+            ItemStack.OPTIONAL_CODEC.fieldOf("stack").forGetter(RecipeOutput::stack),
+            Codec.FLOAT.fieldOf("chance").forGetter(RecipeOutput::chance)
+    ).apply(instance, RecipeOutput::new));
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, RecipeOutput> STREAM_CODEC = StreamCodec.composite(
+            ItemStack.OPTIONAL_STREAM_CODEC, RecipeOutput::stack,
+            ByteBufCodecs.FLOAT, RecipeOutput::chance,
+            RecipeOutput::new);
+
     private static final Random random = new Random();
 
     public ItemStack roll() {
@@ -26,29 +40,12 @@ public record RecipeOutput(ItemStack stack, float chance) {
         return stack.copyWithCount(count);
     }
 
-    public JsonElement toJson() {
-        JsonObject o = new JsonObject();
-        o.add("item", ItemStack.CODEC.encodeStart(JsonOps.INSTANCE, stack).getOrThrow(false, errorMessage -> {}));
-        o.addProperty("chance", chance);
-        return o;
+    public ItemStack getStack() {
+        return stack;
     }
 
-    public void toNetwork(FriendlyByteBuf buf) {
-        buf.writeItem(stack);
-        buf.writeFloat(chance);
-    }
-
-    public static RecipeOutput fromJson(JsonObject o) {
-        return new RecipeOutput(
-                ItemStack.CODEC.decode(JsonOps.INSTANCE, o.getAsJsonObject("item"))
-                        .getOrThrow(false, errorMessage -> {})
-                        .getFirst(),
-                GsonHelper.getAsFloat(o, "chance")
-        );
-    }
-
-    public static RecipeOutput fromNetwork(FriendlyByteBuf buf) {
-        return new RecipeOutput(buf.readItem(), buf.readFloat());
+    public float getChance() {
+        return chance;
     }
 
     public static final class DataGenHolder {

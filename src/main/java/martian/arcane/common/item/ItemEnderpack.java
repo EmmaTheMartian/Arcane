@@ -1,10 +1,10 @@
+
 package martian.arcane.common.item;
 
 import martian.arcane.ArcaneStaticConfig;
 import martian.arcane.api.item.AbstractAuraItem;
 import martian.arcane.client.ArcaneKeybindings;
-import martian.arcane.common.networking.c2s.C2SPacketOpenEnderpack;
-import martian.arcane.common.registry.ArcaneNetworking;
+import martian.arcane.common.networking.c2s.C2SOpenEnderpackPayload;
 import net.minecraft.network.chat.Component;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -17,9 +17,11 @@ import net.minecraft.world.inventory.PlayerEnderChestContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ItemEnderpack extends AbstractAuraItem {
     private static final Component CONTAINER_TITLE = Component.translatable("container.arcane.enderpack");
@@ -29,9 +31,12 @@ public class ItemEnderpack extends AbstractAuraItem {
     }
 
     public static InteractionResultHolder<ItemStack> open(ItemStack stack, Level level, Player player) {
-        return ((ItemEnderpack)stack.getItem()).mapAuraStorage(stack, storage -> {
-            if (storage.getAura() < ArcaneStaticConfig.Consumption.ENDERPACK)
-                return InteractionResultHolder.fail(stack);
+        AtomicReference<InteractionResultHolder<ItemStack>> result = new AtomicReference<>();
+        ((ItemEnderpack)stack.getItem()).mutateAuraStorage(stack, storage -> {
+            if (storage.getAura() < ArcaneStaticConfig.Consumption.ENDERPACK) {
+                result.set(InteractionResultHolder.fail(stack));
+                return storage;
+            }
 
             if (!level.isClientSide) {
                 storage.removeAura(ArcaneStaticConfig.Consumption.ENDERPACK);
@@ -43,13 +48,15 @@ public class ItemEnderpack extends AbstractAuraItem {
                 player.awardStat(Stats.OPEN_ENDERCHEST);
             }
 
-            return InteractionResultHolder.consume(stack);
-        }).orElseThrow();
+            result.set(InteractionResultHolder.consume(stack));
+            return storage;
+        });
+        return result.get();
     }
 
     public void tick(Entity entity) {
         if (entity.level().isClientSide && entity instanceof Player && ArcaneKeybindings.OPEN_ENDERPACK.get().consumeClick())
-            ArcaneNetworking.CHANNEL.sendToServer(new C2SPacketOpenEnderpack());
+            PacketDistributor.sendToServer(new C2SOpenEnderpackPayload());
     }
 
     @ParametersAreNonnullByDefault

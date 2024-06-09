@@ -2,40 +2,29 @@ package martian.arcane.common.registry;
 
 import martian.arcane.ArcaneMod;
 import martian.arcane.api.ArcaneRegistry;
+import martian.arcane.api.recipe.ArcaneRecipeType;
 import martian.arcane.common.recipe.*;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 @SuppressWarnings("unused")
 public class ArcaneRecipeTypes extends ArcaneRegistry {
-    public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, ArcaneMod.MODID);
-    public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(ForgeRegistries.RECIPE_TYPES, ArcaneMod.MODID);
+    public ArcaneRecipeTypes() { super(TYPES, SERIALIZERS); }
 
-    public static final RegistryObject<RecipeSerializer<RecipeAuraInfusion>> AURA_INFUSION_SERIALIZER =
-            RECIPE_SERIALIZERS.register(RecipeAuraInfusion.NAME, RecipeAuraInfusion.Serializer::new);
-    public static final RegistryObject<RecipeType<RecipeAuraInfusion>> AURA_INFUSION =
-            RECIPE_TYPES.register(RecipeAuraInfusion.NAME, () -> RecipeType.simple(RecipeAuraInfusion.ID));
+    private static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS = DeferredRegister.create(BuiltInRegistries.RECIPE_SERIALIZER, ArcaneMod.MODID);
+    private static final DeferredRegister<RecipeType<?>> TYPES = DeferredRegister.create(BuiltInRegistries.RECIPE_TYPE, ArcaneMod.MODID);
 
-    public static final RegistryObject<RecipeSerializer<RecipeHammering>> HAMMERING_SERIALIZER =
-            RECIPE_SERIALIZERS.register(RecipeHammering.NAME, RecipeHammering.Serializer::new);
-    public static final RegistryObject<RecipeType<RecipeHammering>> HAMMERING =
-            RECIPE_TYPES.register(RecipeHammering.NAME, () -> RecipeType.simple(RecipeHammering.ID));
+    public static final AuraInfusionType AURA_INFUSION = create("aura_infusion", RecipeAuraInfusion.TYPE);
+    public static final SpellRecipeType HAMMERING = create("hammering", new SpellRecipeType());
+    public static final SpellRecipeType CLEANSING = create("cleansing", new SpellRecipeType());
+    public static final SpellRecipeType PURIFYING = create("purifying", new SpellRecipeType());
+    public static final RecipePedestalType PEDESTAL = create("pedestal", RecipePedestalCrafting.TYPE);
 
-    public static final RegistryObject<RecipeSerializer<RecipeCleansing>> CLEANSING_SERIALIZER =
-            RECIPE_SERIALIZERS.register(RecipeCleansing.NAME, RecipeCleansing.Serializer::new);
-    public static final RegistryObject<RecipeType<RecipeCleansing>> CLEANSING =
-            RECIPE_TYPES.register(RecipeCleansing.NAME, () -> RecipeType.simple(RecipeCleansing.ID));
-
-    public static final RegistryObject<RecipeSerializer<RecipePurifying>> PURIFYING_SERIALIZER =
-            RECIPE_SERIALIZERS.register(RecipePurifying.NAME, RecipePurifying.Serializer::new);
-    public static final RegistryObject<RecipeType<RecipePurifying>> PURIFYING =
-            RECIPE_TYPES.register(RecipePurifying.NAME, () -> RecipeType.simple(RecipePurifying.ID));
-
-    public static final RegistryObject<RecipeSerializer<RecipePedestalCrafting>> PEDESTAL_SERIALIZER =
-            RECIPE_SERIALIZERS.register(RecipePedestalCrafting.NAME, RecipePedestalCrafting.Serializer::new);
-    public static final RegistryObject<RecipeType<RecipePedestalCrafting>> PEDESTAL =
-            RECIPE_TYPES.register(RecipePedestalCrafting.NAME, () -> RecipeType.simple(RecipePedestalCrafting.ID));
+    private static <T extends ArcaneRecipeType<?>> T create(String name, T it) {
+        SERIALIZERS.register(name, () -> it);
+        TYPES.register(name, () -> it);
+        return it;
+    }
 }

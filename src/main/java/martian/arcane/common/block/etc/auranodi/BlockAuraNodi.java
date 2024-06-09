@@ -16,7 +16,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 public class BlockAuraNodi extends Block implements EntityBlock {
     public BlockAuraNodi() {
-        super(BlockBehaviour.Properties.copy(Blocks.GLASS).noCollission());
+        super(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).noCollission());
     }
 
     @Nullable

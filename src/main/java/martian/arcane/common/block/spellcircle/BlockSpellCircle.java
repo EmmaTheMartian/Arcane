@@ -6,7 +6,7 @@ import martian.arcane.common.registry.ArcaneBlockEntities;
 import martian.arcane.common.registry.ArcaneItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -29,34 +29,33 @@ public class BlockSpellCircle extends AbstractAuraMachine {
                 new BlockEntitySpellCircle(maxAura, castRateTicks, castingLevel, pos, state));
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    @NotNull
     @ParametersAreNonnullByDefault
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    @NotNull
+    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (level.isClientSide)
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
 
         ItemStack held = player.getItemInHand(hand);
         BlockEntitySpellCircle circle = (BlockEntitySpellCircle) level.getBlockEntity(pos);
 
         if (held.isEmpty() || circle == null)
-            return InteractionResult.FAIL;
+            return ItemInteractionResult.FAIL;
 
         if (held.is(ArcaneItems.SPELL_TABLET.get()) && !circle.hasSpell()) {
-            circle.setSpell(ItemSpellTablet.getSpell(held));
+            circle.setSpell(ItemSpellTablet.getSpellId(held));
             held.shrink(1);
-            return InteractionResult.CONSUME;
+            return ItemInteractionResult.CONSUME;
         } else if (held.is(ArcaneItems.ARCANE_BLEACH.get()) && circle.hasSpell()) {
             circle.setSpell(null);
             held.shrink(1);
-            return InteractionResult.CONSUME;
+            circle.setActive(false);
+            return ItemInteractionResult.CONSUME;
         }
 
-        return InteractionResult.PASS;
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
-    @SuppressWarnings("deprecation")
     @ParametersAreNonnullByDefault
     public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
         return 1.0F;
@@ -69,7 +68,6 @@ public class BlockSpellCircle extends AbstractAuraMachine {
 
     @Override
     @NotNull
-    @SuppressWarnings("deprecation")
     public RenderShape getRenderShape(@NotNull BlockState state) {
         return RenderShape.ENTITYBLOCK_ANIMATED;
     }

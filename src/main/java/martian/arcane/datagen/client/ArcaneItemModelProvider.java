@@ -6,10 +6,11 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.client.model.generators.ItemModelProvider;
-import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.client.model.generators.ItemModelProvider;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredItem;
 
 public class ArcaneItemModelProvider extends ItemModelProvider {
     public ArcaneItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
@@ -21,7 +22,7 @@ public class ArcaneItemModelProvider extends ItemModelProvider {
         // Tools
         {
             // Wands
-            for (RegistryObject<Item> wand : ArcaneItems.WANDS) {
+            for (DeferredItem<?> wand : ArcaneItems.WANDS) {
                 handheld(wand, "wands/");
             }
 
@@ -98,7 +99,7 @@ public class ArcaneItemModelProvider extends ItemModelProvider {
         build(item.toString(), "item/generated", ArcaneMod.id(path).withPrefix("item/"));
     }
 
-    private void item(RegistryObject<Item> item, String prefix) {
+    private void item(DeferredItem<?> item, String prefix) {
         item(item.get(), item.getId().withPrefix(prefix).getPath());
     }
 
@@ -106,11 +107,11 @@ public class ArcaneItemModelProvider extends ItemModelProvider {
         build(item.toString(), "item/handheld", ArcaneMod.id(path).withPrefix("item/"));
     }
 
-    private void handheld(RegistryObject<Item> item, String prefix) {
+    private void handheld(DeferredItem<?> item, String prefix) {
         handheld(item.get(), item.getId().withPrefix(prefix).getPath());
     }
 
-    private void blockItem(RegistryObject<Item> item) {
+    private void blockItem(DeferredHolder<Item, ?> item) {
         String path = item.getId().getPath();
         withExistingParent("item/" + path, new ResourceLocation(item.getId().getNamespace(), "block/" + path));
     }

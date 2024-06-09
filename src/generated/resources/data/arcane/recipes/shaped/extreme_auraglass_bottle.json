@@ -14,7 +14,7 @@
     " B "
   ],
   "result": {
-    "item": "arcane:extreme_auraglass_bottle"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "arcane:extreme_auraglass_bottle"
+  }
 }

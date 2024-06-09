@@ -21,6 +21,9 @@
     {
       "type": "modonomicon:crafting_recipe",
       "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
       "recipe_id_1": "arcane:shaped/pedestal",
       "text": "book.arcane.arcane_guidebook.features.pedestal.pedestal.text",
       "title1": "",
@@ -29,6 +32,9 @@
     {
       "type": "modonomicon:text",
       "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
       "show_title_separator": true,
       "text": "book.arcane.arcane_guidebook.features.pedestal.put_me_on_a_pedestal.text",
       "title": "book.arcane.arcane_guidebook.features.pedestal.put_me_on_a_pedestal.title",

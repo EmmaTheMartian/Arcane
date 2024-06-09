@@ -18,7 +18,7 @@
     "C  "
   ],
   "result": {
-    "item": "arcane:wand_eldritch"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "arcane:wand_eldritch"
+  }
 }

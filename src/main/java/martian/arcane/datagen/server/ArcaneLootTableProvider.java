@@ -2,6 +2,7 @@ package martian.arcane.datagen.server;
 
 import martian.arcane.common.registry.ArcaneBlocks;
 import martian.arcane.common.registry.ArcaneItems;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
@@ -11,18 +12,18 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
-import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
 public class ArcaneLootTableProvider extends LootTableProvider {
-    public ArcaneLootTableProvider(PackOutput output) {
+    public ArcaneLootTableProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
         super(output, Set.of(), List.of(
                 new SubProviderEntry(BlockLoot::new, LootContextParamSets.BLOCK)
-        ));
+        ), registries);
     }
 
     private static class BlockLoot extends BlockLootSubProvider {
@@ -35,8 +36,8 @@ public class ArcaneLootTableProvider extends LootTableProvider {
         protected Iterable<Block> getKnownBlocks() {
             return ArcaneBlocks.BLOCKS.getEntries()
                     .stream()
-                    .flatMap(RegistryObject::stream)
-                    ::iterator;
+                    .map(it -> (Block) it.value())
+                    .toList();
         }
 
         @Override
@@ -88,7 +89,7 @@ public class ArcaneLootTableProvider extends LootTableProvider {
         }
 
         @Override
-        public void generate(@NotNull BiConsumer<ResourceLocation, LootTable.Builder> consumer) {
+        public void generate(HolderLookup.@NotNull Provider registries, BiConsumer<net.minecraft.resources.ResourceKey<LootTable>, LootTable.Builder> consumer) {
             generate();
             map.forEach(consumer);
         }

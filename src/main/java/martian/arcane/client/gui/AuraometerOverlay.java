@@ -4,8 +4,8 @@ import martian.arcane.api.Raycasting;
 import martian.arcane.api.block.entity.IAuraometerOutput;
 import martian.arcane.common.registry.ArcaneItems;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -13,13 +13,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AuraometerOverlay implements IGuiOverlay {
+public class AuraometerOverlay implements LayeredDraw.Layer {
     private final Minecraft minecraft = Minecraft.getInstance();
 
     public static boolean isHoldingAuraometer(Player player) {
@@ -29,7 +28,7 @@ public class AuraometerOverlay implements IGuiOverlay {
     }
 
     @Override
-    public void render(ForgeGui forgeGui, GuiGraphics guiGraphics, float partialTicks, int width, int height) {
+    public void render(@NotNull GuiGraphics gui, float partialTicks) {
         final Player player = minecraft.player;
         if (player == null)
             return;
@@ -40,12 +39,11 @@ public class AuraometerOverlay implements IGuiOverlay {
             final Level level = minecraft.level;
             assert level != null;
 
-            int x = width / 2 + 4;
-            int y = height / 2 + 4;
-            final Font font = forgeGui.getFont();
+            int x = gui.guiWidth() / 2 + 4;
+            int y = gui.guiHeight() / 2 + 4;
             List<Component> text = new ArrayList<>();
 
-            BlockHitResult hit = Raycasting.blockRaycast(player, player.getBlockReach(), false);
+            BlockHitResult hit = Raycasting.blockRaycast(player, player.blockInteractionRange(), false);
             if (hit == null)
                 return;
 
@@ -57,8 +55,8 @@ public class AuraometerOverlay implements IGuiOverlay {
             if (be instanceof IAuraometerOutput beAo) {
                 text = beAo.getText(text, player.isCrouching());
                 for (Component c : text) {
-                    guiGraphics.drawString(font, c, x, y, 0xFFFFFF, true);
-                    y += font.lineHeight + 2;
+                    gui.drawString(Minecraft.getInstance().font, c, x, y, 0xFFFFFF, true);
+                    y += Minecraft.getInstance().font.lineHeight + 2;
                 }
             }
         }

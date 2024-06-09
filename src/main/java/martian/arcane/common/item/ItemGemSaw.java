@@ -3,6 +3,9 @@ package martian.arcane.common.item;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.ParametersAreNonnullByDefault;
 
 public class ItemGemSaw extends Item {
     private static final RandomSource random = RandomSource.create();
@@ -12,15 +15,15 @@ public class ItemGemSaw extends Item {
     }
 
     @Override
-    public boolean hasCraftingRemainingItem(ItemStack stack) {
+    public boolean hasCraftingRemainingItem(@NotNull ItemStack stack) {
         return true;
     }
 
     @Override
+    @NotNull
     public ItemStack getCraftingRemainingItem(ItemStack stack) {
         ItemStack s = stack.copy();
-        if (s.hurt(1, random, null))
-            return ItemStack.EMPTY;
+        s.hurtAndBreak(1, random, null, () -> {});
         return s;
     }
 }

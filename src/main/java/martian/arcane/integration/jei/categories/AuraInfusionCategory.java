@@ -1,5 +1,6 @@
 package martian.arcane.integration.jei.categories;
 
+/*
 import com.mojang.blaze3d.systems.RenderSystem;
 import martian.arcane.api.recipe.RecipeOutput;
 import martian.arcane.integration.jei.ArcaneJeiPlugin;
@@ -70,3 +71,5 @@ public class AuraInfusionCategory implements IRecipeCategory<RecipeAuraInfusion>
                 .addItemStacks(recipe.results.stream().map(RecipeOutput::stack).toList());
     }
 }
+
+ */

@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "minecraft:raw_copper"
-            ]
+            "items": "minecraft:raw_copper"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_item",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_item"
     ]
   ],
   "rewards": {
     "recipes": [
       "arcane:cooking/ore_processing/purified_raw_copper"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

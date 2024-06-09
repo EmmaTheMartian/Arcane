@@ -1,5 +1,6 @@
 package martian.arcane.integration.kubejs.recipe;
 
+/*
 import dev.latvian.mods.kubejs.item.InputItem;
 import dev.latvian.mods.kubejs.item.OutputItem;
 import dev.latvian.mods.kubejs.recipe.RecipeKey;
@@ -12,3 +13,5 @@ public interface BasicRecipeSchema {
 
     RecipeSchema SCHEMA = new RecipeSchema(ArcaneRecipeJS.class, ArcaneRecipeJS::new, RESULTS, INPUT);
 }
+
+ */

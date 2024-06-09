@@ -12,7 +12,7 @@
     "AAA"
   ],
   "result": {
-    "item": "arcane:aurachalcum_block"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "arcane:aurachalcum_block"
+  }
 }

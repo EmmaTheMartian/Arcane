@@ -1,5 +1,6 @@
 package martian.arcane.integration.jei;
 
+/*
 import martian.arcane.ArcaneMod;
 import martian.arcane.common.item.ItemSpellTablet;
 import martian.arcane.common.recipe.*;
@@ -86,3 +87,5 @@ public class ArcaneJeiPlugin implements IModPlugin {
     public static final RecipeType<RecipeCleansing> CLEANSING = new RecipeType<>(RecipeCleansing.ID, RecipeCleansing.class);
     public static final RecipeType<RecipePurifying> PURIFYING = new RecipeType<>(RecipePurifying.ID, RecipePurifying.class);
 }
+
+ */

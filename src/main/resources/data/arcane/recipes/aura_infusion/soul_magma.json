@@ -6,8 +6,7 @@
   "results": [
     {
       "chance": 1.0,
-      "item": {
-        "Count": 1,
+      "stack": {
         "id": "arcane:soul_magma"
       }
     }

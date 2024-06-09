@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "arcane:cut_idocrase"
-            ]
+            "items": "arcane:cut_idocrase"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_item",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_item"
     ]
   ],
   "rewards": {
     "recipes": [
       "arcane:shapeless/polished_idocrase"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

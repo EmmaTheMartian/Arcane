@@ -6,10 +6,10 @@
       "item": "arcane:copper_core"
     },
     "C": {
-      "tag": "forge:ingots/copper"
+      "tag": "c:ingots/copper"
     },
     "R": {
-      "tag": "forge:dusts/redstone"
+      "tag": "c:dusts/redstone"
     }
   },
   "pattern": [
@@ -18,7 +18,7 @@
     "B"
   ],
   "result": {
-    "item": "arcane:auraometer"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "arcane:auraometer"
+  }
 }

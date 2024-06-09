@@ -1,5 +1,6 @@
 package martian.arcane.integration.kubejs;
 
+/*
 import dev.latvian.mods.kubejs.KubeJSPlugin;
 import dev.latvian.mods.kubejs.recipe.schema.RegisterRecipeSchemasEvent;
 import martian.arcane.ArcaneMod;
@@ -20,3 +21,5 @@ public class ArcaneKubePlugin extends KubeJSPlugin {
         ;
     }
 }
+
+ */

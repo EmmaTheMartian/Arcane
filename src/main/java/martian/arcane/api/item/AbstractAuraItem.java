@@ -1,53 +1,54 @@
 package martian.arcane.api.item;
 
-import martian.arcane.api.capability.aura.AuraStorageItemProvider;
-import martian.arcane.api.capability.aura.IAuraStorage;
-import martian.arcane.common.registry.ArcaneCapabilities;
+import martian.arcane.api.aura.AuraRecord;
+import martian.arcane.api.aura.IMutableAuraStorage;
+import martian.arcane.common.registry.ArcaneDataComponents;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FastColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
-import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 public abstract class AbstractAuraItem extends Item {
-    private final int maxAura;
-    private final boolean extractable;
-    private final boolean receivable;
+    private final int defaultMaxAura;
+    private final boolean defaultExtractable, defaultInsertable;
 
-    public AbstractAuraItem(int maxAura, boolean extractable, boolean receivable, Item.Properties properties) {
+    public AbstractAuraItem(int maxAura, boolean extractable, boolean insertable, Item.Properties properties) {
         super(properties);
-        this.maxAura = maxAura;
-        this.extractable = extractable;
-        this.receivable = receivable;
+        this.defaultMaxAura = maxAura;
+        this.defaultExtractable = extractable;
+        this.defaultInsertable = insertable;
     }
 
-    // Capability
-    @Override
-    @Nullable
-    public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return new AuraStorageItemProvider(stack, maxAura, extractable, receivable);
+    // Aura storage
+    public AuraRecord getAuraStorage(@NotNull ItemStack stack) {
+        if (!stack.has(ArcaneDataComponents.AURA))
+            stack.set(ArcaneDataComponents.AURA, new AuraRecord(defaultMaxAura, 0, defaultExtractable, defaultInsertable));
+        return stack.get(ArcaneDataComponents.AURA);
     }
 
-    public Optional<IAuraStorage> getAuraStorage(@NotNull ItemStack stack) {
-        return stack.getCapability(ArcaneCapabilities.AURA_STORAGE).resolve();
+    public <U> U mapAuraStorage(ItemStack stack, Function<? super AuraRecord, ? extends U> func) {
+        return func.apply(getAuraStorage(stack));
     }
 
-    public <U> Optional<U> mapAuraStorage(ItemStack stack, Function<? super IAuraStorage, ? extends U> func) {
-        return getAuraStorage(stack).map(func);
+    public void voidMapAuraStorage(ItemStack stack, Consumer<? super AuraRecord> func) {
+        func.accept(getAuraStorage(stack));
+    }
+
+    public void mutateAuraStorage(ItemStack stack, UnaryOperator<IMutableAuraStorage> func) {
+        stack.set(ArcaneDataComponents.AURA, new AuraRecord(func.apply(getAuraStorage(stack).unfreeze())));
     }
 
     public boolean canExtractFrom(ItemStack stack) {
-        return mapAuraStorage(stack, IAuraStorage::canExtract).orElse(false);
+        return mapAuraStorage(stack, AuraRecord::canExtract);
     }
 
     // Durability bar thingy
@@ -58,7 +59,7 @@ public abstract class AbstractAuraItem extends Item {
 
     @Override
     public int getBarWidth(@NotNull ItemStack stack) {
-        return Math.round(mapAuraStorage(stack, aura -> aura.getAura() * 13.0F / aura.getMaxAura()).orElse(1F));
+        return Math.round(mapAuraStorage(stack, aura -> aura.aura() * 13.0F / aura.maxAura()));
     }
 
     private static final int color_highAura = FastColor.ARGB32.color(155, 50, 155, 255);
@@ -66,14 +67,14 @@ public abstract class AbstractAuraItem extends Item {
 
     @Override
     public int getBarColor(@NotNull ItemStack stack) {
-        return mapAuraStorage(stack, aura -> (float)aura.getAura() / aura.getMaxAura() >= 0.5F ? color_highAura : color_lowAura)
-                .orElse(color_highAura);
+        return mapAuraStorage(stack, aura -> (float)aura.aura() / aura.maxAura() >= 0.5F ? color_highAura : color_lowAura);
     }
 
     // Tooltip
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> text, @NotNull TooltipFlag flags) {
-        super.appendHoverText(stack, level, text, flags);
+    @ParametersAreNonnullByDefault
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> text, TooltipFlag flag) {
+        super.appendHoverText(stack, context, text, flag);
         mapAuraStorage(stack, aura -> {
             text.add(Component
                     .translatable("messages.arcane.aura")

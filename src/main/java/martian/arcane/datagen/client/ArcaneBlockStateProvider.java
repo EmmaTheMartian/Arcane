@@ -8,17 +8,17 @@ import martian.arcane.common.block.aura.infuser.BlockAuraInfuser;
 import martian.arcane.common.block.aura.inserter.BlockAuraInserter;
 import martian.arcane.common.registry.ArcaneBlocks;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraftforge.client.model.generators.BlockModelBuilder;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
-import net.minecraftforge.client.model.generators.ConfiguredModel;
-import net.minecraftforge.client.model.generators.ModelFile;
-import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.client.model.generators.BlockModelBuilder;
+import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
+import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
+import net.neoforged.neoforge.client.model.generators.ModelFile;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.registries.DeferredBlock;
 
 public class ArcaneBlockStateProvider extends BlockStateProvider {
     private static final ResourceLocation TRANSLUCENT = new ResourceLocation("translucent");
@@ -137,14 +137,14 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
         }
     }
 
-    private void makeBlockState(RegistryObject<Block> block) {
+    private void makeBlockState(DeferredBlock<?> block) {
         getMultipartBuilder(block.get())
                 .part()
                 .modelFile(models().getExistingFile(modLoc(block.getId().getPath())))
                 .addModel();
     }
 
-    private void makeRotatableModel(RegistryObject<Block> block, Property<Direction> property, boolean horizontal) {
+    private void makeRotatableModel(DeferredBlock<?> block, Property<Direction> property, boolean horizontal) {
         ModelFile model = models().getExistingFile(modLoc(block.getId().getPath()));
         getVariantBuilder(block.get()).forAllStates(state -> {
             Direction facing = state.getValue(property);
@@ -198,7 +198,7 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
     }
 
     private ResourceLocation key(Block block) {
-        return ForgeRegistries.BLOCKS.getKey(block);
+        return BuiltInRegistries.BLOCK.getKey(block);
     }
 
     private String name(Block block) {

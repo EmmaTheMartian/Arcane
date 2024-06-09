@@ -21,6 +21,9 @@
     {
       "type": "modonomicon:text",
       "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
       "show_title_separator": true,
       "text": "book.arcane.arcane_guidebook.features.about_aura.about.text",
       "title": "book.arcane.arcane_guidebook.features.about_aura.about.title",
@@ -29,6 +32,9 @@
     {
       "type": "modonomicon:text",
       "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
       "show_title_separator": true,
       "text": "book.arcane.arcane_guidebook.features.about_aura.about2.text",
       "title": "book.arcane.arcane_guidebook.features.about_aura.about2.title",

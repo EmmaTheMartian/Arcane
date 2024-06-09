@@ -7,7 +7,7 @@ import martian.arcane.common.registry.ArcaneItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -48,7 +48,6 @@ public class BlockAuraInfuser extends AbstractAuraMachine {
         return defaultBlockState().setValue(FACING, context.getHorizontalDirection());
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     @ParametersAreNonnullByDefault
     @NotNull
@@ -62,21 +61,18 @@ public class BlockAuraInfuser extends AbstractAuraMachine {
         return !level.isClientSide && type == ArcaneBlockEntities.AURA_INFUSER.get() ? BlockEntityAuraInfuser::tick : null;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    @NotNull
     @ParametersAreNonnullByDefault
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+    @NotNull
+    public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         if (level.isClientSide) {
-            return InteractionResult.SUCCESS;
+            return ItemInteractionResult.SUCCESS;
         }
 
         if (level.getBlockEntity(pos) instanceof BlockEntityAuraInfuser infuser) {
-            ItemStack stack = player.getItemInHand(hand);
-
-            if (stack.is(ArcaneItems.AURA_WRENCH.get())) {
+            /*if (stack.is(ArcaneItems.AURA_WRENCH.get())) {
                 infuser.nextMode();
-            } else if (!infuser.getItem().isEmpty()) {
+            } else */if (!infuser.getItem().isEmpty()) {
                 player.getInventory().placeItemBackInInventory(infuser.getItem());
                 infuser.setItem(ItemStack.EMPTY);
             } else if (!stack.isEmpty() && infuser.getItem().isEmpty()) {
@@ -87,15 +83,17 @@ public class BlockAuraInfuser extends AbstractAuraMachine {
             level.sendBlockUpdated(pos, state, state, 2);
         }
 
-        return InteractionResult.CONSUME;
+        return ItemInteractionResult.CONSUME;
     }
 
     @Override
     @ParametersAreNonnullByDefault
-    public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+    @NotNull
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         super.playerWillDestroy(level, pos, state, player);
         if (level.getBlockEntity(pos) instanceof BlockEntityAuraInfuser infuser)
             level.addFreshEntity(new ItemEntity(level, pos.getX(), pos.getY(), pos.getZ(), infuser.getItem()));
+        return state;
     }
 
     @Override

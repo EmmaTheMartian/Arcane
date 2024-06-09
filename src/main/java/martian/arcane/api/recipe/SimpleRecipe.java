@@ -1,38 +1,35 @@
 package martian.arcane.api.recipe;
 
-import com.google.gson.JsonObject;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import org.apache.commons.lang3.function.TriFunction;
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.function.BiFunction;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public abstract class SimpleRecipe<T extends SimpleContainer> implements Recipe<T> {
-    private final RecipeType<?> type;
-    public final ResourceLocation id;
     public final Ingredient input;
     public final NonNullList<RecipeOutput> results;
 
-    public SimpleRecipe(RecipeType<?> type, ResourceLocation id, Ingredient input, NonNullList<RecipeOutput> results) {
-        this.type = type;
-        this.id = id;
+    public SimpleRecipe(Ingredient input, NonNullList<RecipeOutput> results) {
         this.input = input;
         this.results = results;
+    }
+
+    public final Ingredient input() {
+        return input;
+    }
+
+    public final NonNullList<RecipeOutput> results() {
+        return results;
     }
 
     public NonNullList<ItemStack> getResultItems() {
@@ -43,8 +40,8 @@ public abstract class SimpleRecipe<T extends SimpleContainer> implements Recipe<
 
     @Override
     @Deprecated
-    public ItemStack getResultItem(RegistryAccess registryAccess) {
-        return results.get(0).stack();
+    public ItemStack getResultItem(HolderLookup.Provider registries) {
+        return results.getFirst().stack();
     }
 
     @Override
@@ -58,69 +55,49 @@ public abstract class SimpleRecipe<T extends SimpleContainer> implements Recipe<
     }
 
     @Override
-    public ResourceLocation getId() {
-        return id;
-    }
-
-    @Override
-    public RecipeType<?> getType() {
-        return type;
-    }
-
-    @Override
     @Deprecated
-    public ItemStack assemble(SimpleContainer container, RegistryAccess registryAccess) throws RuntimeException {
-        throw new RuntimeException("Cannot invoke SimpleRecipe#assemble(SimpleContainer, RegistryAccess)");
+    public ItemStack assemble(SimpleContainer container, HolderLookup.Provider registries) throws RuntimeException {
+        throw new RuntimeException("Cannot invoke SimpleRecipe#assemble(SimpleContainer, HolderLookup.Provider)");
     }
 
     public static abstract class SimpleSerializer<R extends SimpleRecipe<?>> implements RecipeSerializer<R> {
-        private final TriFunction<ResourceLocation, Ingredient, NonNullList<RecipeOutput>, R> recipeFunc;
+        private final BiFunction<Ingredient, NonNullList<RecipeOutput>, R> recipeFunc;
 
-        public SimpleSerializer(TriFunction<ResourceLocation, Ingredient, NonNullList<RecipeOutput>, R> recipeFunc) {
+        public SimpleSerializer(BiFunction<Ingredient, NonNullList<RecipeOutput>, R> recipeFunc) {
             this.recipeFunc = recipeFunc;
+
+            CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+                    Ingredient.CODEC_NONEMPTY.fieldOf("input").forGetter(R::input),
+                    NonNullList.codecOf(RecipeOutput.CODEC).fieldOf("results").forGetter(R::results)
+            ).apply(instance, recipeFunc));
         }
 
-        @Override
-        @NotNull
-        public R fromJson(ResourceLocation id, JsonObject json) {
-            SerializerDataHolder holder = SerializerDataHolder.fromJson(json);
-            return recipeFunc.apply(id, holder.input, holder.results);
+        public final MapCodec<R> CODEC;
+        public final StreamCodec<RegistryFriendlyByteBuf, R> STREAM_CODEC = StreamCodec.of(this::toNetwork, this::fromNetwork);
+
+        public void toNetwork(RegistryFriendlyByteBuf buf, R recipe) {
+            Ingredient.CONTENTS_STREAM_CODEC.encode(buf, recipe.input);
+            buf.writeInt(recipe.results.size());
+            recipe.results.forEach(res -> RecipeOutput.STREAM_CODEC.encode(buf, res));
         }
 
-        @Override
-        public @Nullable R fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
-            SerializerDataHolder holder = SerializerDataHolder.fromNetwork(buf);
-            return recipeFunc.apply(id, holder.input, holder.results);
-        }
-
-        @Override
-        public void toNetwork(FriendlyByteBuf buf, R recipe) {
-            new SerializerDataHolder(recipe.input, recipe.results).toNetwork(buf);
-        }
-    }
-
-    public record SerializerDataHolder(Ingredient input, NonNullList<RecipeOutput> results) {
-        public void toNetwork(FriendlyByteBuf buf) {
-            input.toNetwork(buf);
-            buf.writeInt(results.size());
-            results.forEach(res -> res.toNetwork(buf));
-        }
-
-        public static SerializerDataHolder fromJson(JsonObject json) {
-            Ingredient input = Ingredient.fromJson(GsonHelper.getAsJsonObject(json, "input"));
-            NonNullList<RecipeOutput> results = NonNullList.create();
-            GsonHelper.getAsJsonArray(json, "results").forEach(result ->
-                    results.add(RecipeOutput.fromJson(result.getAsJsonObject())));
-            return new SerializerDataHolder(input, results);
-        }
-
-        public static SerializerDataHolder fromNetwork(FriendlyByteBuf buf) {
-            Ingredient input = Ingredient.fromNetwork(buf);
+        public R fromNetwork(RegistryFriendlyByteBuf buf) {
+            Ingredient input = Ingredient.CONTENTS_STREAM_CODEC.decode(buf);
             int resultsLength = buf.readInt();
             NonNullList<RecipeOutput> results = NonNullList.create();
             for (int i = 0; i < resultsLength; i++)
-                results.add(RecipeOutput.fromNetwork(buf));
-            return new SerializerDataHolder(input, results);
+                results.add(RecipeOutput.STREAM_CODEC.decode(buf));
+            return this.recipeFunc.apply(input, results);
+        }
+
+        @Override
+        public MapCodec<R> codec() {
+            return CODEC;
+        }
+
+        @Override
+        public StreamCodec<RegistryFriendlyByteBuf, R> streamCodec() {
+            return STREAM_CODEC;
         }
     }
 }

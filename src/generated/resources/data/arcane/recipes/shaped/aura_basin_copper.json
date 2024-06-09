@@ -3,7 +3,7 @@
   "category": "redstone",
   "key": {
     "B": {
-      "tag": "forge:ingots/copper"
+      "tag": "c:ingots/copper"
     },
     "C": {
       "item": "arcane:copper_core"
@@ -15,7 +15,7 @@
     "BCB"
   ],
   "result": {
-    "item": "arcane:aura_basin_copper"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "arcane:aura_basin_copper"
+  }
 }

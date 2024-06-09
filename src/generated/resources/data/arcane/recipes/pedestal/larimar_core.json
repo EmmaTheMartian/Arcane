@@ -1,17 +1,17 @@
 {
   "type": "arcane:pedestal",
-  "consume": true,
+  "consumeInteractionItem": true,
   "input": {
     "item": "arcane:polished_larimar"
   },
-  "interaction_input": {
+  "interactionItem": {
     "item": "arcane:auraglass"
   },
   "results": [
     {
       "chance": 1.0,
-      "item": {
-        "Count": 1,
+      "stack": {
+        "count": 1,
         "id": "arcane:larimar_core"
       }
     }

@@ -6,10 +6,10 @@
       "item": "arcane:copper_core"
     },
     "G": {
-      "tag": "forge:glass/colorless"
+      "tag": "c:glass_blocks/colorless"
     },
     "I": {
-      "tag": "forge:ingots/copper"
+      "tag": "c:ingots/copper"
     },
     "W": {
       "item": "minecraft:water_bucket"
@@ -21,7 +21,7 @@
     "GWG"
   ],
   "result": {
-    "item": "arcane:aqua_collector"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "arcane:aqua_collector"
+  }
 }

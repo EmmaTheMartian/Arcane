@@ -1,5 +1,6 @@
 package martian.arcane.integration.jei.categories;
 
+/*
 import martian.arcane.ArcaneTags;
 import martian.arcane.api.recipe.RecipeOutput;
 import martian.arcane.common.registry.ArcaneItems;
@@ -94,3 +95,5 @@ public abstract class AbstractSpellCategory<T extends Recipe<?>> implements IRec
                         .withStyle(ChatFormatting.GOLD));
     }
 }
+
+ */

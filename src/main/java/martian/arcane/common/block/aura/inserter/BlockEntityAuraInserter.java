@@ -2,19 +2,16 @@ package martian.arcane.common.block.aura.inserter;
 
 import martian.arcane.ArcaneStaticConfig;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
-import martian.arcane.api.block.entity.IAuraInserter;
-import martian.arcane.api.capability.aura.IAuraStorage;
+import martian.arcane.api.aura.IMutableAuraStorage;
 import martian.arcane.common.block.aura.extractor.BlockAuraExtractor;
 import martian.arcane.common.registry.ArcaneBlockEntities;
-import martian.arcane.common.registry.ArcaneCapabilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.util.LazyOptional;
 
-public class BlockEntityAuraInserter extends AbstractAuraBlockEntity implements IAuraInserter {
+public class BlockEntityAuraInserter extends AbstractAuraBlockEntity {
     public int insertRate;
 
     public BlockEntityAuraInserter(int maxAura, int auraLoss, int insertRate, BlockPos pos, BlockState state) {
@@ -44,14 +41,8 @@ public class BlockEntityAuraInserter extends AbstractAuraBlockEntity implements 
             if (e == null)
                 return;
 
-            LazyOptional<IAuraStorage> storage = e.getCapability(ArcaneCapabilities.AURA_STORAGE);
-            if (!storage.isPresent())
-                return;
-
-            inserter.mapAuraStorage(aura -> {
-                aura.sendAuraTo(storage.resolve().orElseThrow(), inserter.insertRate);
-                return null;
-            });
+            if (e instanceof IMutableAuraStorage eAura)
+                inserter.voidMapAuraStorage(aura -> aura.sendAuraTo(eAura, inserter.insertRate));
         }
     }
 }

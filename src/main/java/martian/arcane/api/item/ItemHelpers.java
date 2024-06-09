@@ -7,7 +7,7 @@ import net.minecraft.world.level.Level;
 
 public class ItemHelpers {
     public static void addItemEntity(Level level, ItemStack stack, double x, double y, double z) {
-        level.addFreshEntity(new ItemEntity(level, x, y ,z, stack));
+        level.addFreshEntity(new ItemEntity(level, x, y, z, stack));
     }
 
     public static void addItemEntity(Level level, ItemStack stack, BlockPos pos) {

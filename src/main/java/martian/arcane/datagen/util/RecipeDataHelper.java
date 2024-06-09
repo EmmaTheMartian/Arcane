@@ -1,24 +1,24 @@
 package martian.arcane.datagen.util;
 
-import net.minecraft.advancements.critereon.ContextAwarePredicate;
+import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
-import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
+import java.util.Optional;
 
 public class RecipeDataHelper {
-    private final @NotNull Consumer<FinishedRecipe> writer;
+    private final RecipeOutput writer;
     private final String modid;
     // If true, recipes that would have an ID of- for example- "minecraft:stone" would become "arcane:minecraft/stone"
     // to prevent the generated data from having a folder for "minecraft" too. This applies to all namespaces, not just
@@ -28,7 +28,7 @@ public class RecipeDataHelper {
     // Used to add prefixes to recipe IDs based on their provider.
     public Map<Class<?>, String> prefixesByProvider = new HashMap<>();
 
-    public RecipeDataHelper(@NotNull Consumer<FinishedRecipe> writer, String modid, RecipeCategory defaultCategory) {
+    public RecipeDataHelper(RecipeOutput writer, String modid, RecipeCategory defaultCategory) {
         this.writer = writer;
         this.modid = modid;
         this.defaultCategory = defaultCategory;
@@ -43,11 +43,11 @@ public class RecipeDataHelper {
         return shaped(output, 1);
     }
 
+    // Shapeless
     public BuilderWrapper<ShapelessRecipeBuilder> shapeless(Item output, int count) {
         return new BuilderWrapper<>(new ShapelessRecipeBuilder(defaultCategory, output, count), this);
     }
 
-    // Shapeless
     public BuilderWrapper<ShapelessRecipeBuilder> shapeless(Item output) {
         return shapeless(output, 1);
     }
@@ -177,18 +177,18 @@ public class RecipeDataHelper {
     }
 
     public static ResourceLocation itemKey(Item item) {
-        return ForgeRegistries.ITEMS.getKey(item);
+        return BuiltInRegistries.ITEM.getKey(item);
     }
 
-    public static InventoryChangeTrigger.TriggerInstance has(ItemLike item) {
+    public static Criterion<InventoryChangeTrigger.TriggerInstance> has(ItemLike item) {
         return inventoryTrigger(ItemPredicate.Builder.item().of(new ItemLike[]{item}).build());
     }
 
-    public static InventoryChangeTrigger.TriggerInstance has(TagKey<Item> tag) {
+    public static Criterion<InventoryChangeTrigger.TriggerInstance> has(TagKey<Item> tag) {
         return inventoryTrigger(ItemPredicate.Builder.item().of(tag).build());
     }
 
-    public static InventoryChangeTrigger.TriggerInstance inventoryTrigger(ItemPredicate... predicates) {
-        return new InventoryChangeTrigger.TriggerInstance(ContextAwarePredicate.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, predicates);
+    public static Criterion<InventoryChangeTrigger.TriggerInstance> inventoryTrigger(ItemPredicate... predicates) {
+        return CriteriaTriggers.INVENTORY_CHANGED.createCriterion(new InventoryChangeTrigger.TriggerInstance(Optional.empty(), InventoryChangeTrigger.TriggerInstance.Slots.ANY, List.of(predicates)));
     }
 }

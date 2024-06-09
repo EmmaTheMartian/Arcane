@@ -9,23 +9,24 @@ import martian.arcane.common.item.wand.ItemAuraWand;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
-import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredItem;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
 public class ArcaneItems extends ArcaneRegistry {
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, ArcaneMod.MODID);
+    public ArcaneItems() { super(ITEMS); }
+
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(ArcaneMod.MODID);
 
     // Shorthands
     private static final Supplier<Item> BASIC_WAND_SUPPLIER = () -> new ItemAuraWand(ArcaneStaticConfig.AuraMaximums.BASIC_WAND, 1, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
     private static final Supplier<Item> ADVANCED_WAND_SUPPLIER = () -> new ItemAuraWand(ArcaneStaticConfig.AuraMaximums.ADVANCED_WAND, 2, new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
     private static final Supplier<Item> MYSTICAL_WAND_SUPPLIER = () -> new ItemAuraWand(ArcaneStaticConfig.AuraMaximums.MYSTIC_WAND, 3, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 
-    public static final RegistryObject<Item>
+    public static final DeferredItem<?>
             // Tools
             // Auraglass Bottles
             AURAGLASS_BOTTLE = register("auraglass_bottle", () -> new ItemAuraglassBottle(ArcaneStaticConfig.AuraMaximums.SMALL_AURAGLASS_BOTTLE, ArcaneStaticConfig.Rates.SMALL_AURAGLASS_BOTTLE)),
@@ -93,7 +94,7 @@ public class ArcaneItems extends ArcaneRegistry {
             PURIFIED_RAW_GOLD = basicItem("purified_raw_gold")
     ;
 
-    public static final ImmutableList<RegistryObject<Item>> WANDS = ImmutableList.of(
+    public static final ImmutableList<DeferredItem<?>> WANDS = ImmutableList.of(
             WAND_ACACIA,
             WAND_BAMBOO,
             WAND_BIRCH,
@@ -112,19 +113,19 @@ public class ArcaneItems extends ArcaneRegistry {
     );
 
     // Helpers
-    private static RegistryObject<Item> register(String id, Supplier<Item> sup) {
+    private static DeferredItem<?> register(String id, Supplier<Item> sup) {
         return ITEMS.register(id, sup);
     }
 
-    private static RegistryObject<Item> register(String id, Item.Properties properties) {
+    private static DeferredItem<?> register(String id, Item.Properties properties) {
         return ITEMS.register(id, () -> new Item(properties));
     }
 
-    private static RegistryObject<Item> basicItem(String id) {
+    private static DeferredItem<?> basicItem(String id) {
         return register(id, new Item.Properties());
     }
 
-    public static RegistryObject<Item> blockItem(String id, RegistryObject<Block> block) {
+    public static DeferredItem<?> blockItem(String id, DeferredBlock<?> block) {
         return register(id, () -> new BlockItem(block.get(), new Item.Properties()));
     }
 }

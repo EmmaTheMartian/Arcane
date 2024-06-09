@@ -1,12 +1,11 @@
 package martian.arcane.common.item;
 
-import martian.arcane.api.NBTHelpers;
 import martian.arcane.api.Raycasting;
-import martian.arcane.api.capability.aura.IAuraStorage;
+import martian.arcane.api.aura.AuraRecord;
+import martian.arcane.api.aura.IMutableAuraStorage;
 import martian.arcane.api.item.AbstractAuraItem;
-import martian.arcane.common.registry.ArcaneCapabilities;
+import martian.arcane.common.registry.ArcaneDataComponents;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -18,20 +17,14 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
-import java.util.Optional;
 
 public class ItemAuraglassBottle extends AbstractAuraItem {
-    public final int pushRate;
-
     public ItemAuraglassBottle(int maxAura, int pushRate) {
-        super(maxAura, true, true, new Item.Properties().stacksTo(1));
-        this.pushRate = pushRate;
+        super(maxAura, true, true, new Item.Properties().stacksTo(1).component(ArcaneDataComponents.ACTIVE, false).component(ArcaneDataComponents.PUSH_RATE, pushRate));
     }
 
     @Override
@@ -43,11 +36,9 @@ public class ItemAuraglassBottle extends AbstractAuraItem {
             return InteractionResultHolder.success(stack);
 
         if (player.isCrouching()) {
-            CompoundTag nbt = stack.getOrCreateTag();
-            initNBT(nbt);
-            nbt.putBoolean(NBTHelpers.KEY_ACTIVE, !nbt.getBoolean(NBTHelpers.KEY_ACTIVE));
+            stack.set(ArcaneDataComponents.ACTIVE, Boolean.FALSE.equals(stack.get(ArcaneDataComponents.ACTIVE)));
         } else {
-            BlockHitResult hit = Raycasting.blockRaycast(player, player.getBlockReach(), false);
+            BlockHitResult hit = Raycasting.blockRaycast(player, player.blockInteractionRange(), false);
             if (hit == null)
                 return InteractionResultHolder.fail(stack);
 
@@ -55,16 +46,12 @@ public class ItemAuraglassBottle extends AbstractAuraItem {
             if (e == null)
                 return InteractionResultHolder.fail(stack);
 
-            e.getCapability(ArcaneCapabilities.AURA_STORAGE, null).map(blockAura -> {
-               if (blockAura.canInsert()) {
-                   mapAuraStorage(stack, bottleAura -> {
-                       bottleAura.sendAuraTo(blockAura, Integer.MAX_VALUE);
-                       return null;
-                   });
-               }
-
-               return Optional.empty();
-            });
+            if (e instanceof IMutableAuraStorage eAura && eAura.canInsert()) {
+                mutateAuraStorage(stack, bottleAura -> {
+                    bottleAura.sendAuraTo(eAura, Integer.MAX_VALUE);
+                    return bottleAura;
+                });
+            }
         }
 
         return InteractionResultHolder.success(stack);
@@ -86,14 +73,15 @@ public class ItemAuraglassBottle extends AbstractAuraItem {
             if (held.isEmpty())
                 return;
 
-            LazyOptional<IAuraStorage> heldCap = held.getCapability(ArcaneCapabilities.AURA_STORAGE);
-
-            if (heldCap.isPresent()) {
-                IAuraStorage heldAura = heldCap.resolve().orElseThrow();
-                if (heldAura.canInsert()) {
-                    mapAuraStorage(stack, bottleAura -> {
-                        bottleAura.sendAuraTo(heldAura, getPushRate(stack));
-                        return null;
+            if (held.has(ArcaneDataComponents.AURA)) {
+                AuraRecord heldAuraRecord = held.get(ArcaneDataComponents.AURA);
+                if (heldAuraRecord != null && heldAuraRecord.canInsert()) {
+                    mutateAuraStorage(stack, bottleAura -> {
+                        mutateAuraStorage(held, heldAura -> {
+                            bottleAura.sendAuraTo(heldAura, getPushRate(stack));
+                            return heldAura;
+                        });
+                        return bottleAura;
                     });
                 }
             }
@@ -101,8 +89,9 @@ public class ItemAuraglassBottle extends AbstractAuraItem {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> text, @NotNull TooltipFlag flags) {
-        super.appendHoverText(stack, level, text, flags);
+    @ParametersAreNonnullByDefault
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> text, TooltipFlag flag) {
+        super.appendHoverText(stack, context, text, flag);
 
         text.add(Component
                 .translatable("messages.arcane.push_rate")
@@ -111,23 +100,18 @@ public class ItemAuraglassBottle extends AbstractAuraItem {
     }
 
     public int getPushRate(ItemStack stack) {
-        CompoundTag nbt = stack.getOrCreateTag();
-        initNBT(nbt);
-        return nbt.getInt(NBTHelpers.KEY_PUSH_RATE);
+        if (stack.has(ArcaneDataComponents.PUSH_RATE)) {
+            //noinspection DataFlowIssue
+            return stack.get(ArcaneDataComponents.PUSH_RATE);
+        }
+        return 0;
     }
 
     public boolean isActive(ItemStack stack) {
-        CompoundTag nbt = stack.getOrCreateTag();
-        initNBT(nbt);
-        return nbt.getBoolean(NBTHelpers.KEY_ACTIVE);
-    }
-
-    public void initNBT(CompoundTag nbt) {
-        initNBT(nbt, pushRate);
-    }
-
-    public static void initNBT(CompoundTag nbt, int pushRate) {
-        NBTHelpers.init(nbt, NBTHelpers.KEY_ACTIVE, (_nbt, key) -> nbt.putBoolean(key, false));
-        NBTHelpers.init(nbt, NBTHelpers.KEY_PUSH_RATE, (_nbt, key) -> nbt.putInt(key, pushRate));
+        if (stack.has(ArcaneDataComponents.ACTIVE)) {
+            //noinspection DataFlowIssue
+            return stack.get(ArcaneDataComponents.ACTIVE);
+        }
+        return false;
     }
 }

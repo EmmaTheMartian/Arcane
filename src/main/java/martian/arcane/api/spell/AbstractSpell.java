@@ -1,9 +1,11 @@
 package martian.arcane.api.spell;
 
 import martian.arcane.common.item.wand.ItemAuraWand;
-import martian.arcane.common.registry.ArcaneSpells;
+import martian.arcane.common.registry.ArcaneRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+
+import java.util.Objects;
 
 public abstract class AbstractSpell {
     public final int minLevel;
@@ -13,11 +15,11 @@ public abstract class AbstractSpell {
     }
 
     public Component getSpellName() {
-        return Component.translatable("spell." + ArcaneSpells.getId(this).toShortLanguageKey() + ".name");
+        return Component.translatable("spell." + Objects.requireNonNull(ArcaneRegistries.SPELLS.getKey(this)).toShortLanguageKey() + ".name");
     }
 
     public Component getItemName(ItemAuraWand item, ItemStack stack) {
-        return Component.translatable("spell." + ArcaneSpells.getId(this).toShortLanguageKey() + ".name.item");
+        return Component.translatable("spell." + Objects.requireNonNull(ArcaneRegistries.SPELLS.getKey(this)).toShortLanguageKey() + ".name.item");
     }
 
     public boolean isValidWand(ItemAuraWand wand) {

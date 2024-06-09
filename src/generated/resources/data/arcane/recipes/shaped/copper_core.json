@@ -3,10 +3,10 @@
   "category": "misc",
   "key": {
     "C": {
-      "tag": "forge:ingots/copper"
+      "tag": "c:ingots/copper"
     },
     "G": {
-      "tag": "forge:glass/colorless"
+      "tag": "c:glass_blocks/colorless"
     }
   },
   "pattern": [
@@ -15,7 +15,7 @@
     " G "
   ],
   "result": {
-    "item": "arcane:copper_core"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "arcane:copper_core"
+  }
 }

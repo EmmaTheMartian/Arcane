@@ -18,7 +18,7 @@
     "C  "
   ],
   "result": {
-    "item": "arcane:wand_aurachalcum"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "arcane:wand_aurachalcum"
+  }
 }

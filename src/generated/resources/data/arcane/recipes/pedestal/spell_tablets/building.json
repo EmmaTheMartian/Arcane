@@ -1,17 +1,20 @@
 {
   "type": "arcane:pedestal",
-  "consume": true,
+  "consumeInteractionItem": true,
   "input": {
     "item": "arcane:spell_tablet"
   },
-  "interaction_input": {
+  "interactionItem": {
     "item": "minecraft:bricks"
   },
   "results": [
     {
       "chance": 1.0,
-      "item": {
-        "Count": 1,
+      "stack": {
+        "components": {
+          "arcane:spell": "arcane:building"
+        },
+        "count": 1,
         "id": "arcane:spell_tablet"
       }
     }

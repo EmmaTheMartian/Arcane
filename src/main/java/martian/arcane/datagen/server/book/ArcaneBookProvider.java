@@ -4,11 +4,14 @@ import com.klikli_dev.modonomicon.api.datagen.BookProvider;
 import com.klikli_dev.modonomicon.api.datagen.ModonomiconLanguageProvider;
 import com.klikli_dev.modonomicon.api.datagen.book.BookModel;
 import martian.arcane.ArcaneMod;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 
+import java.util.concurrent.CompletableFuture;
+
 public class ArcaneBookProvider extends BookProvider {
-    public ArcaneBookProvider(PackOutput packOutput, ModonomiconLanguageProvider lang) {
-        super("arcane_guidebook", packOutput, ArcaneMod.MODID, lang);
+    public ArcaneBookProvider(PackOutput packOutput, CompletableFuture<HolderLookup.Provider> registries, ModonomiconLanguageProvider lang) {
+        super("arcane_guidebook", packOutput, registries, ArcaneMod.MODID, lang);
     }
 
     @Override

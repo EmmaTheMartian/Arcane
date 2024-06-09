@@ -1,5 +1,6 @@
 package martian.arcane.integration.kubejs.recipe;
 
+/*
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import dev.latvian.mods.kubejs.item.InputItem;
@@ -58,3 +59,5 @@ public class ArcaneRecipeJS extends RecipeJS {
         return super.readOutputItem(from);
     }
 }
+
+ */

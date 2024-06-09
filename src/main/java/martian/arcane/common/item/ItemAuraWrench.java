@@ -14,6 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
 public class ItemAuraWrench extends Item {
@@ -28,7 +29,7 @@ public class ItemAuraWrench extends Item {
         if (level.isClientSide)
             return InteractionResultHolder.success(stack);
 
-        BlockHitResult hit = Raycasting.blockRaycast(player, player.getBlockReach(), false);
+        BlockHitResult hit = Raycasting.blockRaycast(player, player.blockInteractionRange(), false);
 
         if (player.isCrouching() && hit != null) {
             BlockState hitState = level.getBlockState(hit.getBlockPos());
@@ -43,7 +44,9 @@ public class ItemAuraWrench extends Item {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, Level level, @NotNull List<Component> text, @NotNull TooltipFlag flags) {
+    @ParametersAreNonnullByDefault
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> text, TooltipFlag flag) {
+        super.appendHoverText(stack, context, text, flag);
         text.add(Component.translatable("item.arcane.aura_wrench.tooltip"));
     }
 }

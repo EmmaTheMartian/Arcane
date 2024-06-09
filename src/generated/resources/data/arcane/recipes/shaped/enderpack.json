@@ -6,7 +6,7 @@
       "item": "minecraft:ender_chest"
     },
     "L": {
-      "tag": "forge:leather"
+      "tag": "c:leathers"
     },
     "P": {
       "item": "arcane:polished_larimar"
@@ -18,7 +18,7 @@
     "PPP"
   ],
   "result": {
-    "item": "arcane:enderpack"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "arcane:enderpack"
+  }
 }

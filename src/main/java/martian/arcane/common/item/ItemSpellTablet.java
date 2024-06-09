@@ -1,20 +1,21 @@
 package martian.arcane.common.item;
 
-import martian.arcane.api.NBTHelpers;
 import martian.arcane.api.spell.AbstractSpell;
-import martian.arcane.common.registry.ArcaneSpells;
+import martian.arcane.common.registry.ArcaneDataComponents;
+import martian.arcane.common.registry.ArcaneRegistries;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
+import java.util.Objects;
 
 public class ItemSpellTablet extends Item {
     public ItemSpellTablet() {
@@ -22,10 +23,12 @@ public class ItemSpellTablet extends Item {
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, Level level, @NotNull List<Component> text, @NotNull TooltipFlag flags) {
+    @ParametersAreNonnullByDefault
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> text, @NotNull TooltipFlag flag) {
+        super.appendHoverText(stack, context, text, flag);
         text.add(Component.translatable("item.arcane.spell_tablet.tooltip"));
         if (hasSpell(stack)) {
-            AbstractSpell spell = ArcaneSpells.getSpellById(getSpell(stack));
+            AbstractSpell spell = getSpellOrThrow(stack);
             text.add(Component
                     .translatable("messages.arcane.spell")
                     .append(spell.getSpellName())
@@ -42,26 +45,29 @@ public class ItemSpellTablet extends Item {
         return stack.isEnchanted() || hasSpell(stack);
     }
 
-    public static void setSpell(ItemStack stack, ResourceLocation id) {
-        getNBT(stack).putString(NBTHelpers.KEY_SPELL, id.toString());
+    public static void setSpell(ResourceLocation newSpell, ItemStack stack) {
+        stack.set(ArcaneDataComponents.SPELL, newSpell);
+        if (!stack.has(DataComponents.CUSTOM_NAME))
+            stack.set(DataComponents.CUSTOM_NAME, getSpellOrThrow(stack).getSpellName());
+    }
+
+    public static AbstractSpell getSpell(ItemStack stack) {
+        return ArcaneRegistries.SPELLS.get(getSpellId(stack));
+    }
+
+    public static AbstractSpell getSpellOrThrow(ItemStack stack) {
+        return Objects.requireNonNull(ArcaneRegistries.SPELLS.get(getSpellId(stack)));
+    }
+
+    public static void removeSpell(ItemStack stack) {
+        stack.remove(ArcaneDataComponents.SPELL);
     }
 
     public static boolean hasSpell(ItemStack stack) {
-        return !getNBT(stack).getString(NBTHelpers.KEY_SPELL).equals("null");
+        return getSpellId(stack) != null;
     }
 
-    public static CompoundTag getNBT(ItemStack stack) {
-        CompoundTag tag = stack.getOrCreateTag();
-        initNBT(tag);
-        return tag;
-    }
-
-    public static @Nullable ResourceLocation getSpell(ItemStack stack) {
-        String id = getNBT(stack).getString(NBTHelpers.KEY_SPELL);
-        return id.equals("null") ? null : ResourceLocation.of(id, ':');
-    }
-
-    public static void initNBT(CompoundTag nbt) {
-        NBTHelpers.init(nbt, NBTHelpers.KEY_SPELL, (nbt_, key) -> nbt.putString(key, "null"));
+    public static @Nullable ResourceLocation getSpellId(ItemStack stack) {
+        return stack.get(ArcaneDataComponents.SPELL);
     }
 }

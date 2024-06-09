@@ -21,6 +21,9 @@
     {
       "type": "modonomicon:text",
       "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
       "show_title_separator": true,
       "text": "book.arcane.arcane_guidebook.features.basic_collectors.about.text",
       "title": "book.arcane.arcane_guidebook.features.basic_collectors.about.title",
@@ -29,6 +32,9 @@
     {
       "type": "modonomicon:crafting_recipe",
       "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
       "recipe_id_1": "arcane:shaped/ignis_collector",
       "recipe_id_2": "arcane:shaped/aqua_collector",
       "text": "book.arcane.arcane_guidebook.features.basic_collectors.collector.text",

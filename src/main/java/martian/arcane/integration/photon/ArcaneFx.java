@@ -1,10 +1,6 @@
 package martian.arcane.integration.photon;
 
-import com.lowdragmc.photon.client.fx.FXHelper;
-import martian.arcane.ArcaneMod;
-import net.minecraftforge.common.util.LazyOptional;
-
-import java.util.Objects;
+//import com.lowdragmc.photon.client.fx.FXHelper;
 
 public class ArcaneFx {
     public static final FallbackFX ON_CAST = get("on_cast");
@@ -14,6 +10,7 @@ public class ArcaneFx {
     public static final FallbackFX SPELL_CIRCLE_INIT = get("spell_circle_init");
 
     private static FallbackFX get(String id) {
-        return new FallbackFX(PhotonIntegration.INSTANCE.isLoaded() ? FXHelper.getFX(ArcaneMod.id(id)) : null);
+        return new FallbackFX();
+//        return new FallbackFX(PhotonIntegration.INSTANCE.isLoaded() ? FXHelper.getFX(ArcaneMod.id(id)) : null);
     }
 }

@@ -10,6 +10,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -35,7 +36,8 @@ public class Raycasting {
         Vec3 origin = from.getCenter();
         Vec3 target = to.getCenter();
 
-        ClipContext context = new ClipContext(origin, target, ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, null);
+//        ClipContext context = new ClipContext(origin, target, ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, null);
+        ClipContext context = new ClipContext(origin, target, ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, CollisionContext.empty());
 
         BlockGetter.traverseBlocks(origin, target, context,
                 (ctx, pos) -> {

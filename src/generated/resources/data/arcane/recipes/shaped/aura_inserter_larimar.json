@@ -6,7 +6,7 @@
       "item": "arcane:larimar_core"
     },
     "S": {
-      "tag": "forge:stone"
+      "tag": "c:stones"
     }
   },
   "pattern": [
@@ -14,7 +14,7 @@
     "SSS"
   ],
   "result": {
-    "item": "arcane:aura_inserter_larimar"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "arcane:aura_inserter_larimar"
+  }
 }

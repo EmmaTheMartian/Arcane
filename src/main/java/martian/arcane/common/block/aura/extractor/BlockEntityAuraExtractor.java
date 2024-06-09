@@ -6,20 +6,18 @@ import martian.arcane.api.NBTHelpers;
 import martian.arcane.api.Raycasting;
 import martian.arcane.api.block.BlockHelpers;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
-import martian.arcane.api.block.entity.IAuraInserter;
-import martian.arcane.api.capability.aura.IAuraStorage;
+import martian.arcane.api.aura.IMutableAuraStorage;
 import martian.arcane.common.block.aura.inserter.BlockEntityAuraInserter;
 import martian.arcane.common.registry.ArcaneBlockEntities;
-import martian.arcane.common.registry.ArcaneCapabilities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -27,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BlockEntityAuraExtractor extends AbstractAuraBlockEntity {
-    public LazyOptional<IAuraStorage> cachedTarget = LazyOptional.empty();
+    public @Nullable IMutableAuraStorage target = null;
     public List<BlockPos> blocksToWatch = new ArrayList<>();
     public @Nullable BlockPos targetPos;
     public int extractRate;
@@ -43,8 +41,8 @@ public class BlockEntityAuraExtractor extends AbstractAuraBlockEntity {
     }
 
     @Override
-    public void saveAdditional(@NotNull CompoundTag nbt) {
-        super.saveAdditional(nbt);
+    public void saveAdditional(@NotNull CompoundTag nbt, HolderLookup.@NotNull Provider provider) {
+        super.saveAdditional(nbt, provider);
         if (targetPos != null)
             NBTHelpers.putBlockPos(nbt, NBTHelpers.KEY_EXTRACTOR_TARGET_POS, targetPos);
         else if (nbt.contains(NBTHelpers.KEY_EXTRACTOR_TARGET_POS))
@@ -52,8 +50,8 @@ public class BlockEntityAuraExtractor extends AbstractAuraBlockEntity {
     }
 
     @Override
-    public void load(@NotNull CompoundTag nbt) {
-        super.load(nbt);
+    public void loadAdditional(@NotNull CompoundTag nbt, HolderLookup.@NotNull Provider provider) {
+        super.loadAdditional(nbt, provider);
         if (nbt.contains(NBTHelpers.KEY_EXTRACTOR_TARGET_POS))
             targetPos = NBTHelpers.getBlockPos(nbt, NBTHelpers.KEY_EXTRACTOR_TARGET_POS);
         else
@@ -93,7 +91,8 @@ public class BlockEntityAuraExtractor extends AbstractAuraBlockEntity {
 
     public static void removeTarget(@NotNull BlockEntityAuraExtractor extractor) {
         extractor.targetPos = null;
-        extractor.cachedTarget = LazyOptional.empty();
+        extractor.target = null;
+        extractor.blocksToWatch.clear();
         BlockHelpers.sync(extractor);
     }
 
@@ -106,16 +105,14 @@ public class BlockEntityAuraExtractor extends AbstractAuraBlockEntity {
                 return;
 
             // If targetPos is null we need to clear the cachedTarget and sync the extractor
-            if (extractor.targetPos == null && extractor.cachedTarget.isPresent())
+            if (extractor.targetPos == null && extractor.target != null)
                 removeTarget(extractor);
             // Refresh the cached target if cachedTarget is not present but targetPos is
-            else if (!extractor.cachedTarget.isPresent() && extractor.targetPos != null) {
+            else if (extractor.target == null && extractor.targetPos != null) {
                 BlockEntity e = level.getBlockEntity(extractor.targetPos);
-                if (e instanceof IAuraInserter) {
-                    LazyOptional<IAuraStorage> cap = e.getCapability(ArcaneCapabilities.AURA_STORAGE);
-                    if (cap.isPresent())
-                        extractor.cachedTarget = cap;
-                } else
+                if (e instanceof IMutableAuraStorage be)
+                    extractor.target = be;
+                else
                     removeTarget(extractor);
             }
 
@@ -134,13 +131,12 @@ public class BlockEntityAuraExtractor extends AbstractAuraBlockEntity {
                 if (e == null)
                     return null;
 
-                LazyOptional<IAuraStorage> cap = e.getCapability(ArcaneCapabilities.AURA_STORAGE);
-                if (cap.isPresent() && cap.resolve().isPresent())
-                    storage.extractAuraFrom(cap.resolve().get(), extractor.extractRate);
+                if (e instanceof IMutableAuraStorage eAura)
+                    storage.extractAuraFrom(eAura, extractor.extractRate);
 
                 // Send aura to the target inserter if able
-                if (extractor.cachedTarget.isPresent())
-                    storage.sendAuraTo(extractor.cachedTarget.resolve().orElseThrow(), extractor.extractRate);
+                if (extractor.target != null)
+                    storage.sendAuraTo(extractor.target, extractor.extractRate);
 
                 return null;
             });

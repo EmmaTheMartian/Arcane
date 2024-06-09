@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "arcane:medium_auraglass_bottle"
-            ]
+            "items": "arcane:medium_auraglass_bottle"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_item",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_item"
     ]
   ],
   "rewards": {
     "recipes": [
       "arcane:shaped/large_auraglass_bottle"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

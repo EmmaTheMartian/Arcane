@@ -1,26 +1,30 @@
 package martian.arcane.common.item.wand;
 
-import martian.arcane.api.NBTHelpers;
-import martian.arcane.api.capability.aura.IAuraStorage;
 import martian.arcane.api.item.AbstractAuraItem;
 import martian.arcane.api.spell.AbstractSpell;
 import martian.arcane.api.spell.CastContext;
 import martian.arcane.api.spell.CastResult;
 import martian.arcane.api.spell.ICastingSource;
-import martian.arcane.common.registry.ArcaneSpells;
+import martian.arcane.common.registry.ArcaneBlocks;
+import martian.arcane.common.registry.ArcaneDataComponents;
+import martian.arcane.common.registry.ArcaneItems;
+import martian.arcane.common.registry.ArcaneRegistries;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Objects;
 
@@ -28,7 +32,7 @@ public class ItemAuraWand extends AbstractAuraItem implements ICastingSource {
     public final int level;
 
     public ItemAuraWand(int maxAura, int level, Properties properties) {
-        super(maxAura, false, true, properties);
+        super(maxAura, false, true, properties.component(ArcaneDataComponents.SPELL.get(), null));
         this.level = level;
     }
 
@@ -44,19 +48,22 @@ public class ItemAuraWand extends AbstractAuraItem implements ICastingSource {
         if (spell == null)
             return InteractionResultHolder.fail(stack);
 
-        IAuraStorage aura = getAuraStorage(stack).orElseThrow();
-        CastContext.WandContext ctx = new CastContext.WandContext(level, aura, player, hand, stack, this);
+        mutateAuraStorage(stack, aura -> {
+            CastContext.WandContext ctx = new CastContext.WandContext(level, aura, player, hand, stack, this);
+            player.getCooldowns().addCooldown(this, spell.getCooldownTicks(ctx));
 
-        player.getCooldowns().addCooldown(this, spell.getCooldownTicks(ctx));
-        CastResult result = spell.cast(ctx);
-        aura.removeAura(result.auraToConsume());
+            CastResult result = spell.cast(ctx);
+            aura.removeAura(result.auraToConsume());
+            return aura;
+        });
 
         return InteractionResultHolder.success(stack);
     }
 
     @Override
-    public void appendHoverText(@NotNull ItemStack stack, @Nullable Level level, @NotNull List<Component> text, @NotNull TooltipFlag flags) {
-        super.appendHoverText(stack, level, text, flags);
+    @ParametersAreNonnullByDefault
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> text, TooltipFlag flag) {
+        super.appendHoverText(stack, context, text, flag);
 
         if (hasSpell(stack))
             text.add(Component
@@ -73,18 +80,17 @@ public class ItemAuraWand extends AbstractAuraItem implements ICastingSource {
 
     // Spell casting stuffs
     public void setSpell(ResourceLocation newSpell, ItemStack stack) {
-        CompoundTag nbt = getNBT(stack);
-        nbt.putString(NBTHelpers.KEY_SPELL, newSpell.toString());
-        if (!stack.hasCustomHoverName())
-            stack.setHoverName(getSpellOrThrow(stack).getItemName(this, stack));
+        stack.set(ArcaneDataComponents.SPELL, newSpell);
+        if (!stack.has(DataComponents.CUSTOM_NAME))
+            stack.set(DataComponents.CUSTOM_NAME, getSpellOrThrow(stack).getItemName(this, stack));
     }
 
     public @Nullable AbstractSpell getSpell(ItemStack stack) {
-        return ArcaneSpells.getSpellById(getSpellId(stack));
+        return ArcaneRegistries.SPELLS.get(getSpellId(stack));
     }
 
     public AbstractSpell getSpellOrThrow(ItemStack stack) {
-        return Objects.requireNonNull(ArcaneSpells.getSpellById(getSpellId(stack)));
+        return Objects.requireNonNull(ArcaneRegistries.SPELLS.get(getSpellId(stack)));
     }
 
     @Override
@@ -94,8 +100,7 @@ public class ItemAuraWand extends AbstractAuraItem implements ICastingSource {
 
     // Static methods
     public static void removeSpell(ItemStack stack) {
-        CompoundTag nbt = getNBT(stack);
-        nbt.remove(NBTHelpers.KEY_SPELL);
+        stack.remove(ArcaneDataComponents.SPELL);
     }
 
     public static boolean hasSpell(ItemStack stack) {
@@ -103,14 +108,12 @@ public class ItemAuraWand extends AbstractAuraItem implements ICastingSource {
     }
 
     public static @Nullable ResourceLocation getSpellId(ItemStack stack) {
-        CompoundTag nbt = getNBT(stack);
-        if (!nbt.contains(NBTHelpers.KEY_SPELL))
-            return null;
-        String s = nbt.getString(NBTHelpers.KEY_SPELL);
-        return s.equals("null") ? null : ResourceLocation.of(s, ':');
+        return stack.get(ArcaneDataComponents.SPELL);
     }
 
-    public static CompoundTag getNBT(ItemStack stack) {
-        return stack.getOrCreateTag();
+    public static ItemStack oakWandOfSpell(ResourceLocation spell) {
+        ItemStack stack = new ItemStack(ArcaneItems.WAND_OAK.get());
+        stack.set(ArcaneDataComponents.SPELL, spell);
+        return stack;
     }
 }

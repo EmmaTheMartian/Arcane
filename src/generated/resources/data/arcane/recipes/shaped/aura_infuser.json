@@ -3,13 +3,13 @@
   "category": "redstone",
   "key": {
     "B": {
-      "tag": "forge:ingots/copper"
+      "tag": "c:ingots/copper"
     },
     "C": {
       "item": "arcane:copper_core"
     },
     "O": {
-      "tag": "forge:obsidian"
+      "tag": "c:obsidians"
     }
   },
   "pattern": [
@@ -18,7 +18,7 @@
     "OOO"
   ],
   "result": {
-    "item": "arcane:aura_infuser"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "arcane:aura_infuser"
+  }
 }

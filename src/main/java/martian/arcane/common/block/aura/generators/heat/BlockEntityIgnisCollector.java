@@ -3,7 +3,6 @@ package martian.arcane.common.block.aura.generators.heat;
 import martian.arcane.ArcaneMod;
 import martian.arcane.ArcaneStaticConfig;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
-import martian.arcane.api.capability.aura.IAuraStorage;
 import martian.arcane.common.registry.ArcaneBlockEntities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -42,8 +41,7 @@ public class BlockEntityIgnisCollector extends AbstractAuraBlockEntity {
     public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState ignoredState, T blockEntity) {
         if (blockEntity instanceof BlockEntityIgnisCollector collector) {
             if (++collector.ticksToNextCollect >= ArcaneStaticConfig.Speed.IGNIS_COLLECTOR_SPEED) {
-                IAuraStorage aura = collector.getAuraStorage().orElseThrow();
-                aura.addAura(getAuraToGenerate(level, pos));
+                collector.addAura(getAuraToGenerate(level, pos));
                 collector.ticksToNextCollect = 0;
             }
         }

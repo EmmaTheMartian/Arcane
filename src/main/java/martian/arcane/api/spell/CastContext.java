@@ -1,7 +1,7 @@
 package martian.arcane.api.spell;
 
 import martian.arcane.api.Raycasting;
-import martian.arcane.api.capability.aura.IAuraStorage;
+import martian.arcane.api.aura.IAuraStorage;
 import martian.arcane.common.block.spellcircle.BlockEntitySpellCircle;
 import martian.arcane.common.item.wand.ItemAuraWand;
 import net.minecraft.core.BlockPos;
@@ -65,9 +65,7 @@ public abstract class CastContext {
         }
 
         public SpellCircleContext(BlockEntitySpellCircle circle) {
-            //noinspection OptionalGetWithoutIsPresent
-            super(circle.getLevel(), circle.getAuraStorage().get(), circle);
-            this.target = circle.getBlockPos().below();
+            this(circle.getLevel(), circle, circle.getBlockPos().below(), circle);
         }
 
         public @Nullable BlockPos getTarget() {

@@ -15,7 +15,7 @@
     "BCB"
   ],
   "result": {
-    "item": "arcane:aura_basin_aurachalcum"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "arcane:aura_basin_aurachalcum"
+  }
 }

@@ -4,8 +4,6 @@ import com.klikli_dev.modonomicon.item.ModonomiconItem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import martian.arcane.client.renderers.BookModelRenderer;
-import martian.arcane.common.block.pedestal.BlockPedestal;
-import martian.arcane.common.block.pedestal.BlockEntityPedestal;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;

@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "arcane:faded_cut_larimar"
-            ]
+            "items": "arcane:faded_cut_larimar"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_item",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_item"
     ]
   ],
   "rewards": {
     "recipes": [
       "arcane:shapeless/faded_polished_larimar"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

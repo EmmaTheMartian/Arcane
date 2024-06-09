@@ -15,7 +15,7 @@
     "C  "
   ],
   "result": {
-    "item": "arcane:wand_warped"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "arcane:wand_warped"
+  }
 }

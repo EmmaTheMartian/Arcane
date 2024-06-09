@@ -21,6 +21,7 @@ public final class ArcaneStaticConfig {
 
         public static final int AURA_INFUSER = 32;
         public static final int AURACHALCUM_INFUSER = 64;
+        public static final int PEDESTAL = 32;
 
         public static final int COLLECTOR = 8;
 

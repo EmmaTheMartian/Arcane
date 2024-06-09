@@ -3,10 +3,10 @@
   "category": "equipment",
   "key": {
     "B": {
-      "tag": "forge:ingots/copper"
+      "tag": "c:ingots/copper"
     },
     "S": {
-      "tag": "forge:nuggets/iron"
+      "tag": "c:nuggets/iron"
     }
   },
   "pattern": [
@@ -15,7 +15,7 @@
     "BS "
   ],
   "result": {
-    "item": "arcane:gem_saw"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "arcane:gem_saw"
+  }
 }

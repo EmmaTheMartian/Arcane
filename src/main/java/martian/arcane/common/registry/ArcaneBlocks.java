@@ -17,23 +17,23 @@ import martian.arcane.common.block.aura.generators.water.BlockAquaCollector;
 import martian.arcane.common.block.spellcircle.BlockSpellCircle;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.GlassBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredBlock;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.function.Supplier;
 
 @SuppressWarnings("unused")
 public class ArcaneBlocks extends ArcaneRegistry {
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, ArcaneMod.MODID);
+    public ArcaneBlocks() { super(BLOCKS); }
 
-    public static final RegistryObject<Block>
+    public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(ArcaneMod.MODID);
+
+    public static final DeferredBlock<?>
             AURA_NODI = register("aura_nodi", BlockAuraNodi::new),
 
             // General Blocks
-            AURAGLASS = register("auraglass", () -> new GlassBlock(BlockBehaviour.Properties.copy(Blocks.GLASS).noOcclusion())),
+            AURAGLASS = register("auraglass", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).noOcclusion())),
             SOUL_MAGMA = register("soul_magma", BlockSoulMagma::new),
 
             // Aura Machines
@@ -50,7 +50,7 @@ public class ArcaneBlocks extends ArcaneRegistry {
             AURACHALCUM_AURA_BASIN = register("aura_basin_aurachalcum", () -> new BlockAuraBasin(ArcaneStaticConfig.AuraMaximums.AURACHALCUM_AURA_BASIN, ArcaneStaticConfig.AuraLoss.AURACHALCUM_TIER)),
             CREATIVE_AURA_BASIN = register("aura_basin_creative", () -> new BlockAuraBasin(Integer.MAX_VALUE, 0)),
 
-            PEDESTAL = register("pedestal", BlockPedestal::new),
+            PEDESTAL = register("pedestal", () -> new BlockPedestal(ArcaneStaticConfig.AuraMaximums.PEDESTAL, ArcaneStaticConfig.AuraLoss.COPPER_TIER)),
             AURA_INFUSER = register("aura_infuser", () -> new BlockAuraInfuser(ArcaneStaticConfig.AuraMaximums.AURA_INFUSER, ArcaneStaticConfig.AuraLoss.COPPER_TIER)),
             SPELL_CIRCLE = register("spell_circle", () -> new BlockSpellCircle(ArcaneStaticConfig.AuraMaximums.SPELL_CIRCLE_BASIC, ArcaneStaticConfig.Speed.SPELL_CIRCLE_BASIC, 1)),
 
@@ -59,42 +59,42 @@ public class ArcaneBlocks extends ArcaneRegistry {
             AQUA_COLLECTOR = register("aqua_collector", () -> new BlockAquaCollector(ArcaneStaticConfig.AuraMaximums.COLLECTOR, ArcaneStaticConfig.AuraLoss.COPPER_TIER)),
 
             // Conjured Blocks
-            CONJURED_BLOCK = register("conjured_block", () -> new Block(BlockBehaviour.Properties.copy(Blocks.GLASS).instabreak().noParticlesOnBreak())),
+            CONJURED_BLOCK = register("conjured_block", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).instabreak())),
             CONJURED_CRAFTING_TABLE = register("conjured_crafting_table", BlockConjuredCraftingTable::new),
 
             // Ores
             FADED_LARIMAR_ORE = register("faded_larimar_ore", () ->
-                    new BasicLarimarBlock(null, BlockBehaviour.Properties.copy(Blocks.COPPER_ORE))),
+                    new BasicLarimarBlock(null, BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_ORE))),
             FADING_LARIMAR_ORE = register("fading_larimar_ore", () ->
-                    new BasicLarimarBlock(() -> FADED_LARIMAR_ORE.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.COPPER_ORE))),
+                    new BasicLarimarBlock(() -> FADED_LARIMAR_ORE.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_ORE))),
             LARIMAR_ORE = register("larimar_ore", () ->
-                    new BasicLarimarBlock(() -> FADING_LARIMAR_ORE.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.COPPER_ORE))),
+                    new BasicLarimarBlock(() -> FADING_LARIMAR_ORE.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_ORE))),
 
             FADED_DEEPSLATE_LARIMAR_ORE = register("faded_deepslate_larimar_ore", () ->
-                    new BasicLarimarBlock(null, BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_COPPER_ORE))),
+                    new BasicLarimarBlock(null, BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_COPPER_ORE))),
             FADING_DEEPSLATE_LARIMAR_ORE = register("fading_deepslate_larimar_ore", () ->
-                    new BasicLarimarBlock(() -> FADED_DEEPSLATE_LARIMAR_ORE.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_COPPER_ORE))),
+                    new BasicLarimarBlock(() -> FADED_DEEPSLATE_LARIMAR_ORE.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_COPPER_ORE))),
             DEEPSLATE_LARIMAR_ORE = register("deepslate_larimar_ore", () ->
-                    new BasicLarimarBlock(() -> FADING_DEEPSLATE_LARIMAR_ORE.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_COPPER_ORE))),
+                    new BasicLarimarBlock(() -> FADING_DEEPSLATE_LARIMAR_ORE.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_COPPER_ORE))),
 
-            IDOCRASE_ORE = register("idocrase_ore", () -> new Block(BlockBehaviour.Properties.copy(Blocks.GOLD_ORE))),
-            DEEPSLATE_IDOCRASE_ORE = register("deepslate_idocrase_ore", () -> new Block(BlockBehaviour.Properties.copy(Blocks.DEEPSLATE_GOLD_ORE))),
-            NETHER_IDOCRASE_ORE = register("nether_idocrase_ore", () -> new Block(BlockBehaviour.Properties.copy(Blocks.NETHER_GOLD_ORE))),
-            BLACKSTONE_IDOCRASE_ORE = register("blackstone_idocrase_ore", () -> new Block(BlockBehaviour.Properties.copy(Blocks.GILDED_BLACKSTONE))),
+            IDOCRASE_ORE = register("idocrase_ore", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GOLD_ORE))),
+            DEEPSLATE_IDOCRASE_ORE = register("deepslate_idocrase_ore", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_GOLD_ORE))),
+            NETHER_IDOCRASE_ORE = register("nether_idocrase_ore", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.NETHER_GOLD_ORE))),
+            BLACKSTONE_IDOCRASE_ORE = register("blackstone_idocrase_ore", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GILDED_BLACKSTONE))),
 
             // Storage blocks
             FADED_LARIMAR_BLOCK = register("faded_larimar_block", () ->
-                    new BasicLarimarBlock(null, BlockBehaviour.Properties.copy(Blocks.COPPER_BLOCK))),
+                    new BasicLarimarBlock(null, BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK))),
             FADING_LARIMAR_BLOCK = register("fading_larimar_block", () ->
-                    new BasicLarimarBlock(null, BlockBehaviour.Properties.copy(Blocks.COPPER_BLOCK))),
+                    new BasicLarimarBlock(() -> FADED_LARIMAR_BLOCK.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK))),
             LARIMAR_BLOCK = register("larimar_block", () ->
-                    new BasicLarimarBlock(null, BlockBehaviour.Properties.copy(Blocks.COPPER_BLOCK))),
+                    new BasicLarimarBlock(() -> FADING_LARIMAR_BLOCK.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK))),
 
-            AURACHALCUM_BLOCK = register("aurachalcum_block", () -> new Block(BlockBehaviour.Properties.copy(Blocks.DIAMOND_BLOCK)))
+            AURACHALCUM_BLOCK = register("aurachalcum_block", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_BLOCK)))
     ;
 
-    private static RegistryObject<Block> register(String id, Supplier<Block> sup) {
-        RegistryObject<Block> reg = BLOCKS.register(id, sup);
+    private static DeferredBlock<?> register(String id, Supplier<Block> sup) {
+        DeferredBlock<?> reg = BLOCKS.register(id, sup);
 
         // The spell circle has its own, custom, fancy-shmancy BlockItem
         if (!id.equals("spell_circle"))

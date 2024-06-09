@@ -13,7 +13,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 public class BlockSoulMagma extends MagmaBlock {
     public BlockSoulMagma() {
-        super(BlockBehaviour.Properties.copy(Blocks.MAGMA_BLOCK));
+        super(BlockBehaviour.Properties.ofFullCopy(Blocks.MAGMA_BLOCK));
     }
 
     @Override

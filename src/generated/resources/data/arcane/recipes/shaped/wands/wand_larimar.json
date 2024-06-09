@@ -18,7 +18,7 @@
     "C  "
   ],
   "result": {
-    "item": "arcane:wand_larimar"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "arcane:wand_larimar"
+  }
 }

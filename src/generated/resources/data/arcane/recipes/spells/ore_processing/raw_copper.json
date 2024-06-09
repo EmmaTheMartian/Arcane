@@ -1,0 +1,15 @@
+{
+  "type": "arcane:hammering",
+  "input": {
+    "item": "minecraft:raw_copper"
+  },
+  "results": [
+    {
+      "chance": 1.0,
+      "stack": {
+        "count": 1,
+        "id": "arcane:crushed_raw_copper"
+      }
+    }
+  ]
+}

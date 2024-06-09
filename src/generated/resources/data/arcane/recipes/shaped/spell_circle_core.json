@@ -15,7 +15,7 @@
     " A "
   ],
   "result": {
-    "item": "arcane:spell_circle_core"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "arcane:spell_circle_core"
+  }
 }

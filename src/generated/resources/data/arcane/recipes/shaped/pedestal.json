@@ -6,10 +6,10 @@
       "item": "arcane:copper_core"
     },
     "C": {
-      "tag": "forge:ingots/copper"
+      "tag": "c:ingots/copper"
     },
     "S": {
-      "tag": "forge:stone"
+      "tag": "c:stones"
     }
   },
   "pattern": [
@@ -18,7 +18,7 @@
     "SSS"
   ],
   "result": {
-    "item": "arcane:pedestal"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "arcane:pedestal"
+  }
 }

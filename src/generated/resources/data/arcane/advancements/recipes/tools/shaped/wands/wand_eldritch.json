@@ -5,9 +5,7 @@
       "conditions": {
         "items": [
           {
-            "items": [
-              "arcane:eldritch_core"
-            ]
+            "items": "arcane:eldritch_core"
           }
         ]
       },
@@ -22,14 +20,13 @@
   },
   "requirements": [
     [
-      "has_item",
-      "has_the_recipe"
+      "has_the_recipe",
+      "has_item"
     ]
   ],
   "rewards": {
     "recipes": [
       "arcane:shaped/wands/wand_eldritch"
     ]
-  },
-  "sends_telemetry_event": false
+  }
 }

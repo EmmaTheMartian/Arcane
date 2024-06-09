@@ -155,7 +155,7 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
             add("messages.arcane.linking_from", "Linking From: ");
             add("messages.arcane.spell", "Spell: ");
             add("messages.arcane.no_spell", "No Spell!");
-            add("messages.arcane.not_active", "No Spell!");
+            add("messages.arcane.not_active", "Not Active!");
             add("messages.arcane.can_extract", "Aura Extractable?: ");
             add("messages.arcane.can_insert", "Aura Insertable?: ");
             add("messages.arcane.wand_level", "Wand Level: ");
@@ -183,6 +183,12 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
             add("gui.arcane.jei.hammering", "Hammering");
             add("gui.arcane.jei.cleansing", "Cleansing");
             add("gui.arcane.jei.purifying", "Purifying");
+
+            add("emi.category.arcane.aura_infusion", "Aura Infusion");
+            add("emi.category.arcane.pedestal", "Pedestal Interaction");
+            add("emi.category.arcane.spell_hammering", "Hammering");
+            add("emi.category.arcane.spell_cleansing", "Cleansing");
+            add("emi.category.arcane.spell_purifying", "Purifying");
 
             add("config.jade.plugin_arcane.jade_auraometer_provider", "Auraometer");
 

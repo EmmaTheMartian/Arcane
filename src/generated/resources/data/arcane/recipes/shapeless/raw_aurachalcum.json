@@ -6,14 +6,14 @@
       "item": "arcane:polished_idocrase"
     },
     {
-      "tag": "forge:obsidian"
+      "tag": "c:obsidians"
     },
     {
-      "tag": "forge:obsidian"
+      "tag": "c:obsidians"
     }
   ],
   "result": {
     "count": 2,
-    "item": "arcane:raw_aurachalcum"
+    "id": "arcane:raw_aurachalcum"
   }
 }

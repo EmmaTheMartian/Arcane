@@ -15,7 +15,7 @@
     "C  "
   ],
   "result": {
-    "item": "arcane:wand_mangrove"
-  },
-  "show_notification": true
+    "count": 1,
+    "id": "arcane:wand_mangrove"
+  }
 }

@@ -1,6 +1,6 @@
 package martian.arcane.api.integration;
 
-import net.minecraftforge.fml.ModList;
+import net.neoforged.fml.ModList;
 
 public abstract class AbstractIntegration {
     private boolean isLoaded = false;

@@ -12,6 +12,9 @@
     {
       "type": "modonomicon:text",
       "anchor": "",
+      "condition": {
+        "type": "modonomicon:none"
+      },
       "show_title_separator": true,
       "text": "book.arcane.arcane_guidebook.features.welcome.welcome.text",
       "title": "book.arcane.arcane_guidebook.features.welcome.welcome.title",

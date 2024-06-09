@@ -1,7 +1,10 @@
 package martian.arcane;
 
 import com.mojang.logging.LogUtils;
+import martian.arcane.api.ArcaneRegistry;
 import martian.arcane.client.ArcaneClient;
+import martian.arcane.common.networking.c2s.C2SOpenEnderpackPayload;
+import martian.arcane.common.networking.s2c.S2CSyncAuraAttachment;
 import martian.arcane.common.registry.*;
 import martian.arcane.datagen.ArcaneDatagen;
 import martian.arcane.integration.curios.CuriosIntegration;
@@ -13,14 +16,12 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.FurnaceBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.EventPriority;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import org.slf4j.Logger;
 
 import java.util.HashMap;
@@ -35,20 +36,37 @@ public class ArcaneMod
 
     public static Map<Function<BlockState, Boolean>, Integer> ignisGenerationAmounts = new HashMap<>();
 
-    public ArcaneMod() {
-        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
-        IEventBus forgeBus = MinecraftForge.EVENT_BUS;
+    public ArcaneMod(IEventBus modBus) {
+//        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ArcaneConfig.SPEC);
 
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ArcaneConfig.SPEC);
+        new ArcaneDataComponents();
+        new ArcaneDataAttachments();
+        new ArcaneBlocks();
+        new ArcaneBlockEntities();
+        new ArcaneItems();
+        new ArcaneSpells();
+        new ArcaneRecipeTypes();
+        new ArcaneTabs();
+        ArcaneRegistry.registerAll(modBus);
 
-        ArcaneBlocks.BLOCKS.register(modBus);
-        ArcaneItems.ITEMS.register(modBus);
-        ArcaneBlockEntities.REGISTER.register(modBus);
-        ArcaneRecipeTypes.RECIPE_TYPES.register(modBus);
-        ArcaneRecipeTypes.RECIPE_SERIALIZERS.register(modBus);
-        ArcaneTabs.TABS.register(modBus);
-        ArcaneSpells.REGISTER.register(modBus);
-        ArcaneNetworking.init();
+        modBus.addListener(FMLCommonSetupEvent.class, event -> {
+            CuriosIntegration.INSTANCE.load();
+            PhotonIntegration.INSTANCE.load();
+            KubeJSIntegration.INSTANCE.load();
+        });
+
+        modBus.addListener(RegisterPayloadHandlersEvent.class, event -> {
+            final PayloadRegistrar registrar = event.registrar("1");
+            registrar.playToServer(C2SOpenEnderpackPayload.TYPE, C2SOpenEnderpackPayload.CODEC, C2SOpenEnderpackPayload::handler);
+            registrar.playBidirectional(S2CSyncAuraAttachment.TYPE, S2CSyncAuraAttachment.CODEC, S2CSyncAuraAttachment::handler);
+        });
+
+        modBus.addListener(ArcaneRegistries::registerRegisters);
+        modBus.addListener(ArcaneTabs::buildTabContents);
+        modBus.addListener(ArcaneDatagen::gatherData);
+
+        if (FMLEnvironment.dist.isClient())
+            ArcaneClient.setup(modBus);
 
         // TODO: Replace this with something data-driven.
         //  Once I update to NeoForge, this can become a data map. I am unsure of what to use on Fabric though.
@@ -62,18 +80,6 @@ public class ArcaneMod
         ignisGenerationAmounts.put(state -> state.is(Blocks.SOUL_CAMPFIRE) && state.getValue(CampfireBlock.LIT), 2);
         ignisGenerationAmounts.put(state -> state.is(Blocks.LAVA), 2);
         ignisGenerationAmounts.put(state -> state.is(ArcaneBlocks.SOUL_MAGMA.get()), 3);
-
-        modBus.addListener(this::setup);
-        modBus.addListener(EventPriority.LOWEST, ArcaneDatagen::gatherData);
-        modBus.addListener(ArcaneClient::setup);
-
-        forgeBus.register(this);
-    }
-
-    private void setup(final FMLCommonSetupEvent event) {
-        CuriosIntegration.INSTANCE.load();
-        PhotonIntegration.INSTANCE.load();
-        KubeJSIntegration.INSTANCE.load();
     }
 
     public static int getIgnisGenAmountForState(BlockState state) {

@@ -8,10 +8,11 @@ import martian.arcane.api.spell.CastContext;
 import martian.arcane.api.spell.CastResult;
 import martian.arcane.api.spell.ICastingSource;
 import martian.arcane.common.registry.ArcaneBlockEntities;
-import martian.arcane.common.registry.ArcaneSpells;
+import martian.arcane.common.registry.ArcaneRegistries;
 import martian.arcane.integration.photon.ArcaneFx;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
@@ -25,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Objects;
 
 public class BlockEntitySpellCircle extends AbstractAuraBlockEntity implements ICastingSource {
     private int castRateTicks;
@@ -52,7 +54,7 @@ public class BlockEntitySpellCircle extends AbstractAuraBlockEntity implements I
         if (isActive && hasSpell()) {
             text.add(Component
                     .translatable("messages.arcane.spell")
-                    .append(ArcaneSpells.getSpellById(spellId).getSpellName())
+                    .append(Objects.requireNonNull(ArcaneRegistries.SPELLS.get(spellId)).getSpellName())
                     .withStyle(ChatFormatting.LIGHT_PURPLE));
 
             text.add(Component
@@ -80,12 +82,14 @@ public class BlockEntitySpellCircle extends AbstractAuraBlockEntity implements I
 
     protected void tick() {
         if (level != null && hasSpell() && isActive && --ticksToNextCast <= 0) {
-            CastResult result = ArcaneSpells.getSpellById(spellId).cast(new CastContext.SpellCircleContext(this));
+            CastResult result = Objects.requireNonNull(ArcaneRegistries.SPELLS.get(spellId)).cast(new CastContext.SpellCircleContext(this));
             mapAuraStorage(storage -> storage.removeAura(result.auraToConsume()));
             if (!result.failed())
                 ArcaneFx.ON_CAST_GRAVITY.goBlock(level, getBlockPos());
 
             ticksToNextCast = castRateTicks;
+            var state = level.getBlockState(getBlockPos());
+            level.sendBlockUpdated(getBlockPos(), state, state, 2);
         }
     }
 
@@ -122,18 +126,18 @@ public class BlockEntitySpellCircle extends AbstractAuraBlockEntity implements I
     public int getCastingLevel() { return castingLevel; }
 
     @Override
-    public void saveAdditional(@NotNull CompoundTag nbt) {
+    public void saveAdditional(@NotNull CompoundTag nbt, HolderLookup.@NotNull Provider provider) {
         nbt.putString(NBTHelpers.KEY_SPELL, spellId == null ? "null" : spellId.toString());
         nbt.putInt(NBTHelpers.KEY_LEVEL, castingLevel);
         nbt.putInt(NBTHelpers.KEY_TICKS_TO_NEXT, ticksToNextCast);
         nbt.putInt(NBTHelpers.KEY_CAST_RATE, castRateTicks);
         nbt.putBoolean(NBTHelpers.KEY_ACTIVE, isActive);
-        super.saveAdditional(nbt);
+        super.saveAdditional(nbt, provider);
     }
 
     @Override
-    public void load(@NotNull CompoundTag nbt) {
-        super.load(nbt);
+    public void loadAdditional(@NotNull CompoundTag nbt, HolderLookup.@NotNull Provider provider) {
+        super.loadAdditional(nbt, provider);
         String id = nbt.getString(NBTHelpers.KEY_SPELL);
         spellId = id.equals("null") ? null : ResourceLocation.of(id, ':');
         castingLevel = nbt.getInt(NBTHelpers.KEY_LEVEL);
@@ -144,8 +148,8 @@ public class BlockEntitySpellCircle extends AbstractAuraBlockEntity implements I
 
     @Override
     @NotNull
-    public CompoundTag getUpdateTag() {
-        CompoundTag nbt = super.getUpdateTag();
+    public CompoundTag getUpdateTag(HolderLookup.@NotNull Provider provider) {
+        CompoundTag nbt = super.getUpdateTag(provider);
         nbt.putString(NBTHelpers.KEY_SPELL, spellId == null ? "null" : spellId.toString());
         nbt.putInt(NBTHelpers.KEY_LEVEL, castingLevel);
         nbt.putInt(NBTHelpers.KEY_TICKS_TO_NEXT, ticksToNextCast);
@@ -156,7 +160,8 @@ public class BlockEntitySpellCircle extends AbstractAuraBlockEntity implements I
 
     @Override
     public Packet<ClientGamePacketListener> getUpdatePacket() {
-        CompoundTag nbt = getUpdateTag();
+        assert level != null;
+        CompoundTag nbt = getUpdateTag(level.registryAccess());
         String id = nbt.getString(NBTHelpers.KEY_SPELL);
         spellId = id.equals("null") ? null : ResourceLocation.of(id, ':');
         castingLevel = nbt.getInt(NBTHelpers.KEY_LEVEL);
