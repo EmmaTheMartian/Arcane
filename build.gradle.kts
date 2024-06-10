@@ -75,12 +75,12 @@ repositories {
     }
 
     // GeckoLib
-//    maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/") {
-//        mavenContent {
-//            includeGroupByRegex("software\\.bernie.*")
-//            includeGroup("com.eliotlash.mclib")
-//        }
-//    }
+    maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/") {
+        mavenContent {
+            includeGroupByRegex("software\\.bernie.*")
+            includeGroup("com.eliotlash.mclib")
+        }
+    }
 }
 
 dependencies {
@@ -152,7 +152,7 @@ dependencies {
      */
 
     // GeckoLib
-//    modImplementation("software.bernie.geckolib:geckolib-forge-${prop("mc_version")}:${prop("geckolib_version")}")
+    modImplementation("software.bernie.geckolib:geckolib-neoforge-${prop("mc_version")}:${prop("geckolib_version")}")
 }
 
 tasks.withType<ProcessResources>().configureEach {

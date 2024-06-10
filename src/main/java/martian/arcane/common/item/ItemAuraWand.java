@@ -1,14 +1,15 @@
 package martian.arcane.common.item;
 
+import martian.arcane.ArcaneMod;
 import martian.arcane.api.item.AbstractAuraItem;
 import martian.arcane.api.spell.AbstractSpell;
 import martian.arcane.api.spell.CastContext;
-import martian.arcane.api.spell.CastResult;
 import martian.arcane.api.spell.ICastingSource;
 import martian.arcane.common.registry.ArcaneDataComponents;
 import martian.arcane.common.registry.ArcaneItems;
 import martian.arcane.common.registry.ArcaneRegistries;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -19,16 +20,31 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
+import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.animatable.client.GeoRenderProvider;
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.animation.AnimatableManager;
+import software.bernie.geckolib.animation.AnimationController;
+import software.bernie.geckolib.animation.PlayState;
+import software.bernie.geckolib.animation.RawAnimation;
+import software.bernie.geckolib.model.DefaultedItemGeoModel;
+import software.bernie.geckolib.renderer.GeoItemRenderer;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 
-public class ItemAuraWand extends AbstractAuraItem implements ICastingSource {
+public class ItemAuraWand extends AbstractAuraItem implements ICastingSource, GeoItem {
+    public static final DefaultedItemGeoModel<ItemAuraWand> MODEL = new DefaultedItemGeoModel<>(ArcaneMod.id("wand_oak"));
+    private static final RawAnimation ANIM_IDLE = RawAnimation.begin().thenLoop("animation.model.idle");
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
     public final int level;
 
     public ItemAuraWand(int maxAura, int level, Properties properties) {
+        //noinspection DataFlowIssue
         super(maxAura, false, true, properties.component(ArcaneDataComponents.SPELL.get(), null));
         this.level = level;
     }
@@ -101,6 +117,31 @@ public class ItemAuraWand extends AbstractAuraItem implements ICastingSource {
         return level;
     }
 
+    // GeoItem implementations
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "Idle", 0, state -> PlayState.CONTINUE));
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return cache;
+    }
+
+    @Override
+    public void createGeoRenderer(Consumer<GeoRenderProvider> consumer) {
+        consumer.accept(new GeoRenderProvider() {
+            private Renderer renderer;
+
+            @Override
+            public @NotNull BlockEntityWithoutLevelRenderer getGeoItemRenderer() {
+                if (renderer == null)
+                    renderer = new Renderer();
+                return renderer;
+            }
+        });
+    }
+
     // Static methods
     public static void removeSpell(ItemStack stack) {
         stack.remove(ArcaneDataComponents.SPELL);
@@ -118,5 +159,12 @@ public class ItemAuraWand extends AbstractAuraItem implements ICastingSource {
         ItemStack stack = new ItemStack(ArcaneItems.WAND_OAK.get());
         stack.set(ArcaneDataComponents.SPELL, spell);
         return stack;
+    }
+
+    // Renderer
+    public static class Renderer extends GeoItemRenderer<ItemAuraWand> {
+        public Renderer() {
+            super(MODEL);
+        }
     }
 }
