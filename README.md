@@ -14,6 +14,7 @@ A Minecraft mod allowing you to harness natural aura in the world!
 
 **Required:**
 - [Modonomicon](https://modrinth.com/mod/modonomicon)
+- [Curios API](https://modrinth.com/mod/curios)
 
 **Recommended:**
 - ~~[Photon](https://modrinth.com/mod/photon-editor)~~ (Not on 1.20.6 yet)
@@ -21,4 +22,3 @@ A Minecraft mod allowing you to harness natural aura in the world!
 - ~~[JEI](https://modrinth.com/mod/jei)~~ (Not on 1.20.6 yet)
 - [EMI](https://modrinth.com/mod/emi)
 - [Jade](https://modrinth.com/mod/jade)
-- [Curios API](https://modrinth.com/mod/curios)

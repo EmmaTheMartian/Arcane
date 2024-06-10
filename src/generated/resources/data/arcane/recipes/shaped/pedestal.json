@@ -13,9 +13,9 @@
     }
   },
   "pattern": [
-    "CBC",
+    "SSS",
     " S ",
-    "SSS"
+    "CBC"
   ],
   "result": {
     "count": 1,

@@ -145,7 +145,7 @@ public class ArcaneRecipeProvider extends BetterRecipeProvider {
 
             // Machines
             shaped(ArcaneBlocks.PEDESTAL.get().asItem())
-                    .pattern("CBC", " S ", "SSS")
+                    .pattern("SSS", " S ", "CBC")
                     .define('C', COPPER)
                     .define('S', DEEPSLATE)
                     .define('B', COPPER_CORE)
