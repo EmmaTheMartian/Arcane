@@ -22,9 +22,43 @@ public class SpellBuilding extends AbstractSpell {
     }
 
     @Override
+    public int getAuraCost(CastContext c) {
+        AtomicInteger cost = new AtomicInteger(0);
+        BlockPos target = c.getTarget();
+        if (target == null)
+            return 0;
+
+        BlockState toPlace = ArcaneBlocks.CONJURED_BLOCK.get().defaultBlockState();
+
+        if (c instanceof CastContext.WandContext wc) {
+            if (wc.raycast() instanceof BlockHitResult bHit) {
+                target = bHit.getBlockPos().relative(bHit.getDirection());
+                if (c.source.getCastLevel() == 1 || wc.caster.isCrouching()) {
+                    if (canPlace(c.level, target))
+                        cost.getAndAdd(ArcaneStaticConfig.SpellCosts.BUILDING);
+                } else {
+                    AOEHelpers.streamAOE(target, bHit.getDirection(), getRadius(c.source.getCastLevel())).forEach(pos -> {
+                        if (c.aura.getAura() - cost.get() <= 0)
+                            return;
+
+                        if (canPlace(c.level, pos))
+                            cost.getAndAdd(ArcaneStaticConfig.SpellCosts.BUILDING);
+                    });
+                }
+            } else {
+                return 0;
+            }
+        } else if (canPlace(c.level, target)) {
+            cost.getAndAdd(ArcaneStaticConfig.SpellCosts.BUILDING);
+        }
+
+        return cost.get();
+    }
+
+    @Override
     public CastResult cast(CastContext c) {
         if (c.level.isClientSide)
-            return CastResult.PASS;
+            return CastResult.SUCCESS;
 
         AtomicInteger cost = new AtomicInteger(0);
         BlockPos target = c.getTarget();
@@ -65,15 +99,19 @@ public class SpellBuilding extends AbstractSpell {
             } else {
                 return CastResult.FAILED;
             }
-        } else if (tryPlace(c.level, target, toPlace)) {
-            cost.getAndAdd(ArcaneStaticConfig.SpellCosts.BUILDING);
+        } else {
+            tryPlace(c.level, target, toPlace);
         }
 
-        return new CastResult(cost.get(), false);
+        return CastResult.SUCCESS;
+    }
+
+    private static boolean canPlace(Level level, BlockPos pos) {
+        return level.getBlockState(pos).canBeReplaced();
     }
 
     private static boolean tryPlace(Level level, BlockPos pos, BlockState toPlace) {
-        if (level.getBlockState(pos).canBeReplaced()) {
+        if (canPlace(level, pos)) {
             level.setBlockAndUpdate(pos, toPlace);
             return true;
         }

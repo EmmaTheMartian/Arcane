@@ -27,9 +27,14 @@ public class CraftingSpell extends AbstractSpell {
     }
 
     @Override
+    public int getAuraCost(CastContext c) {
+        return costPerCraft;
+    }
+
+    @Override
     public CastResult cast(CastContext c) {
         if (c.level.isClientSide)
-            return CastResult.PASS;
+            return CastResult.SUCCESS;
 
         BlockPos pos = c.getTarget();
         if (pos == null)
@@ -76,6 +81,6 @@ public class CraftingSpell extends AbstractSpell {
             });
         }
 
-        return didCraft.get() ? new CastResult(costPerCraft, false) : CastResult.FAILED;
+        return new CastResult(didCraft.get());
     }
 }

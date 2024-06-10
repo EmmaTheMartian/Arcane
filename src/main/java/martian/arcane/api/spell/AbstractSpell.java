@@ -1,6 +1,6 @@
 package martian.arcane.api.spell;
 
-import martian.arcane.common.item.wand.ItemAuraWand;
+import martian.arcane.common.item.ItemAuraWand;
 import martian.arcane.common.registry.ArcaneRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -29,6 +29,8 @@ public abstract class AbstractSpell {
     public int getCooldownTicks(CastContext context) {
         return 20;
     }
+
+    public abstract int getAuraCost(CastContext context);
 
     public abstract CastResult cast(CastContext context);
 }

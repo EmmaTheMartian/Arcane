@@ -7,7 +7,7 @@ import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
 import martian.arcane.ArcaneMod;
-import martian.arcane.common.item.wand.ItemAuraWand;
+import martian.arcane.common.item.ItemAuraWand;
 import martian.arcane.common.recipe.SpellRecipe;
 import martian.arcane.common.recipe.SpellRecipeType;
 import martian.arcane.common.registry.ArcaneBlocks;

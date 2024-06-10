@@ -34,7 +34,6 @@ public class SpellCircleRenderer implements BlockEntityRenderer<BlockEntitySpell
     @Override
     @ParametersAreNonnullByDefault
     public void render(BlockEntitySpellCircle be, float partialTick, PoseStack stack, MultiBufferSource buffer, int packedLight, int packedOverlay) {
-
         VertexConsumer consumer = buffer.getBuffer(LAYER);
         float tick = be.getActive() ? ArcaneClient.clientTicks + partialTick : 0;
         int light = be.getActive() ? LightTexture.FULL_BRIGHT : packedLight;

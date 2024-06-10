@@ -4,16 +4,14 @@ import martian.arcane.ArcaneMod;
 import martian.arcane.ArcaneStaticConfig;
 import martian.arcane.api.ArcaneRegistry;
 import martian.arcane.api.block.BasicLarimarBlock;
-import martian.arcane.common.block.aura.basin.BlockAuraBasin;
-import martian.arcane.common.block.aura.extractor.BlockAuraExtractor;
-import martian.arcane.common.block.aura.infuser.BlockAuraInfuser;
-import martian.arcane.common.block.aura.inserter.BlockAuraInserter;
-import martian.arcane.common.block.aura.generators.heat.BlockIgnisCollector;
-import martian.arcane.common.block.etc.auranodi.BlockAuraNodi;
-import martian.arcane.common.block.etc.BlockConjuredCraftingTable;
+import martian.arcane.common.block.basin.BlockAuraBasin;
+import martian.arcane.common.block.connector.BlockAuraConnector;
+import martian.arcane.common.block.infuser.BlockAuraInfuser;
+import martian.arcane.common.block.generators.heat.BlockIgnisCollector;
+import martian.arcane.common.block.BlockConjuredCraftingTable;
 import martian.arcane.common.block.pedestal.BlockPedestal;
-import martian.arcane.common.block.etc.BlockSoulMagma;
-import martian.arcane.common.block.aura.generators.water.BlockAquaCollector;
+import martian.arcane.common.block.BlockSoulMagma;
+import martian.arcane.common.block.generators.water.BlockAquaCollector;
 import martian.arcane.common.block.spellcircle.BlockSpellCircle;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -30,28 +28,15 @@ public class ArcaneBlocks extends ArcaneRegistry {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(ArcaneMod.MODID);
 
     public static final DeferredBlock<?>
-            AURA_NODI = register("aura_nodi", BlockAuraNodi::new),
-
             // General Blocks
             AURAGLASS = register("auraglass", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).noOcclusion())),
             SOUL_MAGMA = register("soul_magma", BlockSoulMagma::new),
 
-            // Aura Machines
-            COPPER_AURA_EXTRACTOR = register("aura_extractor_copper", () -> new BlockAuraExtractor(ArcaneStaticConfig.AuraMaximums.AURA_EXTRACTORS, ArcaneStaticConfig.AuraLoss.COPPER_TIER, ArcaneStaticConfig.Rates.COPPER_AURA_EXTRACTOR_RATE)),
-            LARIMAR_AURA_EXTRACTOR = register("aura_extractor_larimar", () -> new BlockAuraExtractor(ArcaneStaticConfig.AuraMaximums.AURA_EXTRACTORS, ArcaneStaticConfig.AuraLoss.LARIMAR_TIER, ArcaneStaticConfig.Rates.LARIMAR_AURA_EXTRACTOR_RATE)),
-            AURACHALCUM_AURA_EXTRACTOR = register("aura_extractor_aurachalcum", () -> new BlockAuraExtractor(ArcaneStaticConfig.AuraMaximums.AURA_EXTRACTORS, ArcaneStaticConfig.AuraLoss.AURACHALCUM_TIER, ArcaneStaticConfig.Rates.AURACHALCUM_AURA_EXTRACTOR_RATE)),
-
-            COPPER_AURA_INSERTER = register("aura_inserter_copper", () -> new BlockAuraInserter(ArcaneStaticConfig.AuraMaximums.AURA_INSERTERS, ArcaneStaticConfig.AuraLoss.COPPER_TIER, ArcaneStaticConfig.Rates.COPPER_AURA_INSERTER_RATE)),
-            LARIMAR_AURA_INSERTER = register("aura_inserter_larimar", () -> new BlockAuraInserter(ArcaneStaticConfig.AuraMaximums.AURA_INSERTERS, ArcaneStaticConfig.AuraLoss.LARIMAR_TIER, ArcaneStaticConfig.Rates.LARIMAR_AURA_INSERTER_RATE)),
-            AURACHALCUM_AURA_INSERTER = register("aura_inserter_aurachalcum", () -> new BlockAuraInserter(ArcaneStaticConfig.AuraMaximums.AURA_INSERTERS, ArcaneStaticConfig.AuraLoss.AURACHALCUM_TIER, ArcaneStaticConfig.Rates.AURACHALCUM_AURA_INSERTER_RATE)),
-
-            COPPER_AURA_BASIN = register("aura_basin_copper", () -> new BlockAuraBasin(ArcaneStaticConfig.AuraMaximums.COPPER_AURA_BASIN, ArcaneStaticConfig.AuraLoss.COPPER_TIER)),
-            LARIMAR_AURA_BASIN = register("aura_basin_larimar", () -> new BlockAuraBasin(ArcaneStaticConfig.AuraMaximums.LARIMAR_AURA_BASIN, ArcaneStaticConfig.AuraLoss.LARIMAR_TIER)),
-            AURACHALCUM_AURA_BASIN = register("aura_basin_aurachalcum", () -> new BlockAuraBasin(ArcaneStaticConfig.AuraMaximums.AURACHALCUM_AURA_BASIN, ArcaneStaticConfig.AuraLoss.AURACHALCUM_TIER)),
-            CREATIVE_AURA_BASIN = register("aura_basin_creative", () -> new BlockAuraBasin(Integer.MAX_VALUE, 0)),
-
-            PEDESTAL = register("pedestal", () -> new BlockPedestal(ArcaneStaticConfig.AuraMaximums.PEDESTAL, ArcaneStaticConfig.AuraLoss.COPPER_TIER)),
-            AURA_INFUSER = register("aura_infuser", () -> new BlockAuraInfuser(ArcaneStaticConfig.AuraMaximums.AURA_INFUSER, ArcaneStaticConfig.AuraLoss.COPPER_TIER)),
+            // Aura machines
+            AURA_CONNECTOR = register("aura_connector", BlockAuraConnector::new),
+            AURA_BASIN = register("aura_basin", BlockAuraBasin::new),
+            PEDESTAL = register("pedestal", () -> new BlockPedestal(ArcaneStaticConfig.AuraMaximums.PEDESTAL)),
+            AURA_INFUSER = register("aura_infuser", BlockAuraInfuser::new),
             SPELL_CIRCLE = register("spell_circle", () -> new BlockSpellCircle(ArcaneStaticConfig.AuraMaximums.SPELL_CIRCLE_BASIC, ArcaneStaticConfig.Speed.SPELL_CIRCLE_BASIC, 1)),
 
             // Elemental Energy Machines

@@ -14,20 +14,13 @@ public final class ArcaneStaticConfig {
 
         public static final int AURA_EXTRACTORS = 16;
         public static final int AURA_INSERTERS = 16;
-
-        public static final int COPPER_AURA_BASIN = 256;
-        public static final int LARIMAR_AURA_BASIN = 512;
-        public static final int AURACHALCUM_AURA_BASIN = 1024;
-
+        public static final int AURA_BASIN = 256;
         public static final int AURA_INFUSER = 32;
-        public static final int AURACHALCUM_INFUSER = 64;
         public static final int PEDESTAL = 32;
 
         public static final int COLLECTOR = 8;
 
         public static final int SPELL_CIRCLE_BASIC = 8;
-        public static final int SPELL_CIRCLE_ADVANCED = 16;
-        public static final int SPELL_CIRCLE_MYSTIC = 32;
 
         public static final int ENDERPACK = 8;
     }
@@ -40,12 +33,9 @@ public final class ArcaneStaticConfig {
 
     // Rates are per tick unless otherwise specified
     public static final class Rates {
-        public static final int COPPER_AURA_EXTRACTOR_RATE = 1;
-        public static final int COPPER_AURA_INSERTER_RATE = 1;
-        public static final int LARIMAR_AURA_EXTRACTOR_RATE = 2;
-        public static final int LARIMAR_AURA_INSERTER_RATE = 2;
-        public static final int AURACHALCUM_AURA_EXTRACTOR_RATE = 4;
-        public static final int AURACHALCUM_AURA_INSERTER_RATE = 4;
+        public static final int COPPER_AURA_CONNECTOR_RATE = 1;
+        public static final int LARIMAR_AURA_CONNECTOR_RATE = 2;
+        public static final int AURACHALCUM_AURA_CONNECTOR_RATE = 4;
 
         public static final int SMALL_AURAGLASS_BOTTLE = 1;
         public static final int MEDIUM_AURAGLASS_BOTTLE = 2;
@@ -63,8 +53,6 @@ public final class ArcaneStaticConfig {
         public static final int AQUA_COLLECTOR_SPEED = 40;   // 2s
 
         public static final int SPELL_CIRCLE_BASIC = 80;     // 4s
-        public static final int SPELL_CIRCLE_ADVANCED = 60;  // 3s
-        public static final int SPELL_CIRCLE_MYSTIC = 40;    // 2s
     }
 
     public static final class Consumption {

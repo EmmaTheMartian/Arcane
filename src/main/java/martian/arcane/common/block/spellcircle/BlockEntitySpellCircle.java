@@ -36,14 +36,14 @@ public class BlockEntitySpellCircle extends AbstractAuraBlockEntity implements I
     private @Nullable ResourceLocation spellId = null;
 
     public BlockEntitySpellCircle(int maxAura, int castRateTicks, int castingLevel, BlockPos pos, BlockState state) {
-        super(maxAura, 0, false, true, ArcaneBlockEntities.SPELL_CIRCLE.get(), pos, state);
+        super(maxAura, false, true, ArcaneBlockEntities.SPELL_CIRCLE.get(), pos, state);
         this.castRateTicks = castRateTicks;
         this.ticksToNextCast = this.castRateTicks;
         this.castingLevel = castingLevel;
     }
 
     public BlockEntitySpellCircle(BlockPos pos, BlockState state) {
-        super(ArcaneStaticConfig.AuraMaximums.SPELL_CIRCLE_BASIC, 0, false, true, ArcaneBlockEntities.SPELL_CIRCLE.get(), pos, state);
+        super(ArcaneStaticConfig.AuraMaximums.SPELL_CIRCLE_BASIC, false, true, ArcaneBlockEntities.SPELL_CIRCLE.get(), pos, state);
         this.castRateTicks = ArcaneStaticConfig.Speed.SPELL_CIRCLE_BASIC;
         this.ticksToNextCast = this.castRateTicks;
         this.castingLevel = 1;
@@ -82,10 +82,15 @@ public class BlockEntitySpellCircle extends AbstractAuraBlockEntity implements I
 
     protected void tick() {
         if (level != null && hasSpell() && isActive && --ticksToNextCast <= 0) {
-            CastResult result = Objects.requireNonNull(ArcaneRegistries.SPELLS.get(spellId)).cast(new CastContext.SpellCircleContext(this));
-            mapAuraStorage(storage -> storage.removeAura(result.auraToConsume()));
-            if (!result.failed())
-                ArcaneFx.ON_CAST_GRAVITY.goBlock(level, getBlockPos());
+            var spell = Objects.requireNonNull(ArcaneRegistries.SPELLS.get(spellId));
+            var con = new CastContext.SpellCircleContext(this);
+            int cost = spell.getAuraCost(con);
+            if (getAura() >= cost) {
+                CastResult result = spell.cast(con);
+                removeAura(cost);
+                if (!result.failed())
+                    ArcaneFx.ON_CAST_GRAVITY.goBlock(level, getBlockPos());
+            }
 
             ticksToNextCast = castRateTicks;
             var state = level.getBlockState(getBlockPos());

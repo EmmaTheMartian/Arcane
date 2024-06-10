@@ -18,15 +18,22 @@ import java.util.List;
 
 public class BlockEntityPedestal extends AbstractAuraBlockEntityWithSingleItem implements IAuraometerOutput {
     public BlockEntityPedestal(BlockPos pos, BlockState state) {
-        super(ArcaneStaticConfig.AuraMaximums.PEDESTAL, ArcaneStaticConfig.AuraLoss.COPPER_TIER, false, true, ArcaneBlockEntities.PEDESTAL.get(), pos, state);
+        super(ArcaneStaticConfig.AuraMaximums.PEDESTAL, false, true, ArcaneBlockEntities.PEDESTAL.get(), pos, state);
     }
 
-    public BlockEntityPedestal(int maxAura, int auraLoss, BlockPos pos, BlockState state) {
-        super(maxAura, auraLoss, false, true, ArcaneBlockEntities.PEDESTAL.get(), pos, state);
+    public BlockEntityPedestal(int maxAura, BlockPos pos, BlockState state) {
+        super(maxAura, false, true, ArcaneBlockEntities.PEDESTAL.get(), pos, state);
+    }
+
+    @Override
+    public boolean isUpgradable() {
+        return true;
     }
 
     @Override
     public List<Component> getText(List<Component> text, boolean detailed) {
+        super.getText(text, detailed);
+
         if (!getItem().isEmpty()) {
             text.add(Component
                     .translatable("messages.arcane.holding")

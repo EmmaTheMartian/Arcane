@@ -1,11 +1,10 @@
 package martian.arcane.datagen.client;
 
 import martian.arcane.ArcaneMod;
+import martian.arcane.common.block.connector.BlockAuraConnector;
 import martian.arcane.common.block.pedestal.BlockPedestal;
-import martian.arcane.common.block.aura.basin.BlockAuraBasin;
-import martian.arcane.common.block.aura.extractor.BlockAuraExtractor;
-import martian.arcane.common.block.aura.infuser.BlockAuraInfuser;
-import martian.arcane.common.block.aura.inserter.BlockAuraInserter;
+import martian.arcane.common.block.basin.BlockAuraBasin;
+import martian.arcane.common.block.infuser.BlockAuraInfuser;
 import martian.arcane.common.registry.ArcaneBlocks;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -32,28 +31,17 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
         // Models
         {
             // Machines
-            withExistingParent(ArcaneBlocks.COPPER_AURA_EXTRACTOR.get(), ArcaneMod.id("block/base/aura_extractor"))
-                    .texture("0", ArcaneMod.id("block/machines/aura_extractor_copper"));
-            withExistingParent(ArcaneBlocks.LARIMAR_AURA_EXTRACTOR.get(), ArcaneMod.id("block/base/aura_extractor"))
-                    .texture("0", ArcaneMod.id("block/machines/aura_extractor_larimar"));
-            withExistingParent(ArcaneBlocks.AURACHALCUM_AURA_EXTRACTOR.get(), ArcaneMod.id("block/base/aura_extractor"))
-                    .texture("0", ArcaneMod.id("block/machines/aura_extractor_aurachalcum"));
+//            withExistingParent(ArcaneBlocks.AURA_CONNECTOR.get(), ArcaneMod.id("block/"))
+//                    .texture("0", ArcaneMod.id("block/machines/aura_extractors/copper"));
 
-            withExistingParent(ArcaneBlocks.COPPER_AURA_INSERTER.get(), ArcaneMod.id("block/base/aura_inserter"))
-                    .texture("0", ArcaneMod.id("block/machines/aura_inserter_copper"));
-            withExistingParent(ArcaneBlocks.LARIMAR_AURA_INSERTER.get(), ArcaneMod.id("block/base/aura_inserter"))
-                    .texture("0", ArcaneMod.id("block/machines/aura_inserter_larimar"));
-            withExistingParent(ArcaneBlocks.AURACHALCUM_AURA_INSERTER.get(), ArcaneMod.id("block/base/aura_inserter"))
-                    .texture("0", ArcaneMod.id("block/machines/aura_inserter_aurachalcum"));
-
-            withExistingParent(ArcaneBlocks.COPPER_AURA_BASIN.get(), ArcaneMod.id("block/base/aura_basin"))
-                    .texture("0", ArcaneMod.id("block/machines/aura_basin_copper"));
-            withExistingParent(ArcaneBlocks.LARIMAR_AURA_BASIN.get(), ArcaneMod.id("block/base/aura_basin"))
-                    .texture("0", ArcaneMod.id("block/machines/aura_basin_larimar"));
-            withExistingParent(ArcaneBlocks.AURACHALCUM_AURA_BASIN.get(), ArcaneMod.id("block/base/aura_basin"))
-                    .texture("0", ArcaneMod.id("block/machines/aura_basin_aurachalcum"));
-            withExistingParent(ArcaneBlocks.CREATIVE_AURA_BASIN.get(), ArcaneMod.id("block/base/aura_basin"))
-                    .texture("0", ArcaneMod.id("block/machines/aura_basin_copper"));
+//            withExistingParent(ArcaneBlocks.AURA_BASIN.get(), ArcaneMod.id("block/aura_basin"))
+//                    .texture("0", ArcaneMod.id("block/machines/aura_basin_copper"));
+//            withExistingParent(ArcaneBlocks.LARIMAR_AURA_BASIN.get(), ArcaneMod.id("block/base/aura_basin"))
+//                    .texture("0", ArcaneMod.id("block/machines/aura_basin_larimar"));
+//            withExistingParent(ArcaneBlocks.AURACHALCUM_AURA_BASIN.get(), ArcaneMod.id("block/base/aura_basin"))
+//                    .texture("0", ArcaneMod.id("block/machines/aura_basin_aurachalcum"));
+//            withExistingParent(ArcaneBlocks.CREATIVE_AURA_BASIN.get(), ArcaneMod.id("block/base/aura_basin"))
+//                    .texture("0", ArcaneMod.id("block/machines/aura_basin_copper"));
 
             // Generators
             topBottom(ArcaneBlocks.HEAT_COLLECTOR.get(), texture("machines/collectors/ignis_sides"), texture("machines/collectors/top_and_bottom"));
@@ -88,23 +76,11 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
 
         // Block States
         {
-            makeBlockState(ArcaneBlocks.AURA_NODI);
             makeBlockState(ArcaneBlocks.SOUL_MAGMA);
 
             // Machines
-            makeRotatableModel(ArcaneBlocks.COPPER_AURA_EXTRACTOR, BlockAuraExtractor.FACING, false);
-            makeRotatableModel(ArcaneBlocks.LARIMAR_AURA_EXTRACTOR, BlockAuraExtractor.FACING, false);
-            makeRotatableModel(ArcaneBlocks.AURACHALCUM_AURA_EXTRACTOR, BlockAuraExtractor.FACING, false);
-
-            makeRotatableModel(ArcaneBlocks.COPPER_AURA_INSERTER, BlockAuraInserter.FACING, false);
-            makeRotatableModel(ArcaneBlocks.LARIMAR_AURA_INSERTER, BlockAuraInserter.FACING, false);
-            makeRotatableModel(ArcaneBlocks.AURACHALCUM_AURA_INSERTER, BlockAuraInserter.FACING, false);
-
-            makeRotatableModel(ArcaneBlocks.COPPER_AURA_BASIN, BlockAuraBasin.FACING, true);
-            makeRotatableModel(ArcaneBlocks.LARIMAR_AURA_BASIN, BlockAuraBasin.FACING, true);
-            makeRotatableModel(ArcaneBlocks.AURACHALCUM_AURA_BASIN, BlockAuraBasin.FACING, true);
-            makeRotatableModel(ArcaneBlocks.CREATIVE_AURA_BASIN, BlockAuraBasin.FACING, true);
-
+            makeRotatableModel(ArcaneBlocks.AURA_CONNECTOR, BlockAuraConnector.FACING, false);
+            makeRotatableModel(ArcaneBlocks.AURA_BASIN, BlockAuraBasin.FACING, true);
             makeRotatableModel(ArcaneBlocks.AURA_INFUSER, BlockAuraInfuser.FACING, true);
             makeRotatableModel(ArcaneBlocks.PEDESTAL, BlockPedestal.FACING, true);
             makeBlockState(ArcaneBlocks.SPELL_CIRCLE);

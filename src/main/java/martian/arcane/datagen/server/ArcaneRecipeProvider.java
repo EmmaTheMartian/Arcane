@@ -178,22 +178,12 @@ public class ArcaneRecipeProvider extends BetterRecipeProvider {
                         .unlockedWith(ArcaneItems.COPPER_CORE.get())
                         .save();
 
-                makeBasin(ArcaneBlocks.COPPER_AURA_BASIN.get().asItem(), COPPER_CORE, Ingredient.of(COPPER));
-                makeBasin(ArcaneBlocks.LARIMAR_AURA_BASIN.get().asItem(), LARIMAR_CORE, POLISHED_LARIMAR);
-                makeBasin(ArcaneBlocks.AURACHALCUM_AURA_BASIN.get().asItem(), AURACHALCUM_CORE, AURACHALCUM);
+                makeBasin(ArcaneBlocks.AURA_BASIN.asItem(), COPPER_CORE, Ingredient.of(COPPER));
+                makeExtractor(ArcaneBlocks.AURA_CONNECTOR.asItem(), COPPER_CORE, Ingredient.of(STONE));
 
-                makeExtractor(ArcaneBlocks.COPPER_AURA_EXTRACTOR.get().asItem(), COPPER_CORE, Ingredient.of(STONE));
-                makeExtractor(ArcaneBlocks.LARIMAR_AURA_EXTRACTOR.get().asItem(), LARIMAR_CORE, Ingredient.of(STONE));
-                makeExtractor(ArcaneBlocks.AURACHALCUM_AURA_EXTRACTOR.get().asItem(), AURACHALCUM_CORE, Ingredient.of(OBSIDIAN));
-
-                makeInserter(ArcaneBlocks.COPPER_AURA_INSERTER.get().asItem(), COPPER_CORE, Ingredient.of(STONE));
-                makeInserter(ArcaneBlocks.LARIMAR_AURA_INSERTER.get().asItem(), LARIMAR_CORE, Ingredient.of(STONE));
-                makeInserter(ArcaneBlocks.AURACHALCUM_AURA_INSERTER.get().asItem(), AURACHALCUM_CORE, Ingredient.of(OBSIDIAN));
-
-                // Alt recipes for extractors and inserters
-                swappable(ArcaneBlocks.COPPER_AURA_EXTRACTOR.get().asItem(), ArcaneBlocks.COPPER_AURA_INSERTER.get().asItem());
-                swappable(ArcaneBlocks.LARIMAR_AURA_EXTRACTOR.get().asItem(), ArcaneBlocks.LARIMAR_AURA_INSERTER.get().asItem());
-                swappable(ArcaneBlocks.AURACHALCUM_AURA_EXTRACTOR.get().asItem(), ArcaneBlocks.AURACHALCUM_AURA_INSERTER.get().asItem());
+//                makeBasin(ArcaneBlocks.COPPER_AURA_BASIN.get().asItem(), COPPER_CORE, Ingredient.of(COPPER));
+//                makeBasin(ArcaneBlocks.LARIMAR_AURA_BASIN.get().asItem(), LARIMAR_CORE, POLISHED_LARIMAR);
+//                makeBasin(ArcaneBlocks.AURACHALCUM_AURA_BASIN.get().asItem(), AURACHALCUM_CORE, AURACHALCUM);
             }
         }
 

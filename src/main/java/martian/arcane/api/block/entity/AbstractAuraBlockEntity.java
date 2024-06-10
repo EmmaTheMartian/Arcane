@@ -1,6 +1,8 @@
 package martian.arcane.api.block.entity;
 
 import martian.arcane.ArcaneStaticConfig;
+import martian.arcane.api.IMachineTierable;
+import martian.arcane.api.MachineTier;
 import martian.arcane.api.NBTHelpers;
 import martian.arcane.api.aura.AuraStorage;
 import martian.arcane.api.aura.IAuraStorage;
@@ -32,17 +34,18 @@ import java.util.function.Function;
  * If you use AbstractAuraBlockEntity.getData(ArcaneDataAttachments.AURA) to modify aura, make sure to invoke
  * AbstractAuraBlockEntity.markChanged() afterward.
  */
-public abstract class AbstractAuraBlockEntity extends BlockEntity implements IAuraometerOutput, IMutableAuraStorage {
+public abstract class AbstractAuraBlockEntity extends BlockEntity implements IAuraometerOutput, IMutableAuraStorage, IMachineTierable {
     protected Lazy<AuraStorage> auraStorageCache = Lazy.of(() -> getData(ArcaneDataAttachments.AURA));
-    public final int auraLossWhenIdle;
+    public final int defaultMaxAura;
     public int ticksUntilIdle = ArcaneStaticConfig.TICKS_UNTIL_CONSIDERED_IDLE;
     public int ticksUntilNextAuraLoss = ArcaneStaticConfig.Rates.AURA_LOSS_TICKS;
     public boolean hasSignal = false;
 
-    public AbstractAuraBlockEntity(int maxAura, int auraLossWhenIdle, boolean extractable, boolean receivable, BlockEntityType<?> type, BlockPos pos, BlockState state) {
+    public AbstractAuraBlockEntity(int maxAura, boolean extractable, boolean receivable, BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
-        this.auraLossWhenIdle = auraLossWhenIdle;
-        this.setData(ArcaneDataAttachments.AURA.get(), new AuraStorage(maxAura, extractable, receivable));
+        defaultMaxAura = maxAura;
+        setData(ArcaneDataAttachments.MACHINE_TIER, MachineTier.COPPER);
+        setData(ArcaneDataAttachments.AURA, new AuraStorage(maxAura, extractable, receivable));
     }
 
     @Override
@@ -69,7 +72,26 @@ public abstract class AbstractAuraBlockEntity extends BlockEntity implements IAu
                 .append(Integer.toString(getAuraStorage().getMaxAura()))
                 .withStyle(ChatFormatting.LIGHT_PURPLE)
         );
+        if (isUpgradable())
+            text.add(Component
+                    .translatable("messages.arcane.tier")
+                    .append(getTier().getName()));
         return text;
+    }
+
+    // Default implementations for IMachineTierable
+    public MachineTier getTier() {
+        return getData(ArcaneDataAttachments.MACHINE_TIER);
+    }
+
+    public boolean upgradeTo(MachineTier newTier) {
+        setData(ArcaneDataAttachments.MACHINE_TIER, newTier);
+        setMaxAura(newTier.getMaxAuraForMachine(defaultMaxAura));
+        return true;
+    }
+
+    public boolean isUpgradable() {
+        return false;
     }
 
     // Aura management
@@ -132,10 +154,14 @@ public abstract class AbstractAuraBlockEntity extends BlockEntity implements IAu
     public void extractAuraFrom(IMutableAuraStorage other, int maxExtract) {
         getAuraStorage().extractAuraFrom(other, maxExtract);
         markChanged();
+        if (other instanceof AbstractAuraBlockEntity)
+            ((AbstractAuraBlockEntity) other).markChanged();
     }
     public void sendAuraTo(IMutableAuraStorage other, int maxPush) {
         getAuraStorage().sendAuraTo(other, maxPush);
         markChanged();
+        if (other instanceof AbstractAuraBlockEntity)
+            ((AbstractAuraBlockEntity) other).markChanged();
     }
     public int addAura(int value) {
         int overflow = getAuraStorage().addAura(value);
@@ -193,7 +219,7 @@ public abstract class AbstractAuraBlockEntity extends BlockEntity implements IAu
 
     public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T entity) {
         if (!level.isClientSide && entity instanceof AbstractAuraBlockEntity machine && --machine.ticksUntilIdle <= 0 && --machine.ticksUntilNextAuraLoss <= 0) {
-            machine.removeAuraNoUpdate(machine.auraLossWhenIdle);
+            machine.removeAuraNoUpdate(machine.getTier().auraLoss());
             machine.ticksUntilNextAuraLoss = ArcaneStaticConfig.Rates.AURA_LOSS_TICKS;
         }
     }

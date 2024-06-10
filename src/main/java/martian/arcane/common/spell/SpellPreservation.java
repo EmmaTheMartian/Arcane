@@ -15,9 +15,19 @@ public class SpellPreservation extends AbstractSpell {
     }
 
     @Override
+    public int getAuraCost(CastContext c) {
+        BlockPos pos = c.getTarget();
+        if (pos == null)
+            return 0;
+
+        BlockState state = c.level.getBlockState(pos);
+        return state.getBlock() instanceof IPreservable ? ArcaneStaticConfig.SpellCosts.PRESERVATION : 0;
+    }
+
+    @Override
     public CastResult cast(CastContext c) {
         if (c.level.isClientSide)
-            return CastResult.PASS;
+            return CastResult.SUCCESS;
 
         BlockPos pos = c.getTarget();
         if (pos == null)
@@ -27,7 +37,7 @@ public class SpellPreservation extends AbstractSpell {
         if (state.getBlock() instanceof IPreservable preservable) {
             ArcaneFx.ON_CAST_GRAVITY.goBlock(c.level, pos.above());
             preservable.onPreserve(c.level, pos, state, c);
-            return new CastResult(ArcaneStaticConfig.SpellCosts.PRESERVATION, false);
+            return CastResult.SUCCESS;
         }
 
         return CastResult.FAILED;

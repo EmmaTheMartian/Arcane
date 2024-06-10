@@ -85,7 +85,7 @@ public class ArcaneBookFeaturesProvider extends CategoryProvider {
         var putMeOnAPedestal = simpleTextPage("put_me_on_a_pedestal", "", """
                 Now that you have a Pedestal, please put me on it. It is so much more comfortable there than in your hand.""");
 
-        return createEntry(ArcaneBlocks.COPPER_AURA_BASIN.get().asItem(), loc, pedestal, putMeOnAPedestal);
+        return createEntry(ArcaneBlocks.AURA_BASIN.get().asItem(), loc, pedestal, putMeOnAPedestal);
     }
 
     private BookEntryModel makeAboutAuraEntry(char loc) {
@@ -121,7 +121,7 @@ public class ArcaneBookFeaturesProvider extends CategoryProvider {
         var jadeTip = simpleTextPage("jade_tip", "Tip", """
                 If you have the Jade mod installed, just having the Auraometer in your inventory lets you see details in the Jade view.""");
 
-        return createEntry(ArcaneBlocks.COPPER_AURA_BASIN.get().asItem(), loc, copper, basin, auraometer, jadeTip);
+        return createEntry(ArcaneBlocks.AURA_BASIN.get().asItem(), loc, copper, basin, auraometer, jadeTip);
     }
 
     private BookEntryModel makeBasicCollectorsEntry(char loc) {
@@ -150,7 +150,7 @@ public class ArcaneBookFeaturesProvider extends CategoryProvider {
         var aurawrench = simpleCraftingPage("aurawrench", ArcaneMod.id("shaped/aura_wrench"), """
                 The Aurawrench can be used to bind an Extractor to an Inserter to send Aura. First, click the Extractor, then the Inserter.""");
 
-        return createEntry(ArcaneBlocks.COPPER_AURA_EXTRACTOR.get().asItem(), loc, about, extractorAndInserter, aurawrench);
+        return createEntry(ArcaneBlocks.AURA_CONNECTOR.get().asItem(), loc, about, extractorAndInserter, aurawrench);
     }
 
     private BookEntryModel makeBasicWandEntry(char loc) {

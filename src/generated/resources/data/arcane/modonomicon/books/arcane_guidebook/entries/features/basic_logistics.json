@@ -14,7 +14,7 @@
   "description": "",
   "hide_while_locked": true,
   "icon": {
-    "item": "arcane:aura_extractor_copper"
+    "item": "arcane:aura_connector"
   },
   "name": "book.arcane.arcane_guidebook.features.basic_logistics.name",
   "pages": [

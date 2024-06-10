@@ -49,20 +49,11 @@ public class ArcaneBlockTagProvider extends BlockTagsProvider {
                 .add(ArcaneBlocks.FADED_LARIMAR_BLOCK.get())
                 .add(ArcaneBlocks.AURACHALCUM_BLOCK.get());
 
-        tag(ArcaneTags.AURA_EXTRACTORS)
-                .add(ArcaneBlocks.COPPER_AURA_EXTRACTOR.get())
-                .add(ArcaneBlocks.LARIMAR_AURA_EXTRACTOR.get())
-                .add(ArcaneBlocks.AURACHALCUM_AURA_EXTRACTOR.get());
-
-        tag(ArcaneTags.AURA_INSERTERS)
-                .add(ArcaneBlocks.COPPER_AURA_INSERTER.get())
-                .add(ArcaneBlocks.LARIMAR_AURA_INSERTER.get())
-                .add(ArcaneBlocks.AURACHALCUM_AURA_INSERTER.get());
-
         tag(ArcaneTags.AURA_BASINS)
-                .add(ArcaneBlocks.COPPER_AURA_BASIN.get())
-                .add(ArcaneBlocks.LARIMAR_AURA_BASIN.get())
-                .add(ArcaneBlocks.AURACHALCUM_AURA_BASIN.get());
+                .add(ArcaneBlocks.AURA_BASIN.get());
+//                .add(ArcaneBlocks.COPPER_AURA_BASIN.get())
+//                .add(ArcaneBlocks.LARIMAR_AURA_BASIN.get())
+//                .add(ArcaneBlocks.AURACHALCUM_AURA_BASIN.get());
 
         tag(ArcaneTags.BLOCKS_AURA_FLOW)
                 .add(Blocks.COPPER_BLOCK)

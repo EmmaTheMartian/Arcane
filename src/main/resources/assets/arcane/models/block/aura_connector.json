@@ -1,0 +1,74 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"0": "arcane:block/machines/aura_connectors/copper",
+		"particle": "arcane:block/machines/aura_connectors/copper"
+	},
+	"elements": [
+		{
+			"name": "Base1",
+			"from": [1, 0, 1],
+			"to": [15, 1, 15],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7, 0, 7]},
+			"faces": {
+				"north": {"uv": [5.5, 6, 9, 6.25], "texture": "#0"},
+				"east": {"uv": [5.5, 6.25, 9, 6.5], "texture": "#0"},
+				"south": {"uv": [6.5, 0, 10, 0.25], "texture": "#0"},
+				"west": {"uv": [6.5, 0.25, 10, 0.5], "texture": "#0"},
+				"up": {"uv": [3.5, 3.5, 0, 0], "texture": "#0"},
+				"down": {"uv": [3.5, 3.5, 0, 7], "texture": "#0"}
+			}
+		},
+		{
+			"name": "Base2",
+			"from": [2, 1, 2],
+			"to": [14, 2, 14],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7, 1, 7]},
+			"faces": {
+				"north": {"uv": [6.5, 0.5, 9.5, 0.75], "texture": "#0"},
+				"east": {"uv": [6.5, 0.75, 9.5, 1], "texture": "#0"},
+				"south": {"uv": [6.5, 1, 9.5, 1.25], "texture": "#0"},
+				"west": {"uv": [6.5, 1.25, 9.5, 1.5], "texture": "#0"},
+				"up": {"uv": [6.5, 3, 3.5, 0], "texture": "#0"},
+				"down": {"uv": [6.5, 3, 3.5, 6], "texture": "#0"}
+			}
+		},
+		{
+			"name": "Base3",
+			"from": [6, 2, 6],
+			"to": [10, 3, 10],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7, 2, 7]},
+			"faces": {
+				"north": {"uv": [6.5, 1.5, 7.5, 1.75], "texture": "#0"},
+				"east": {"uv": [6.5, 1.75, 7.5, 2], "texture": "#0"},
+				"south": {"uv": [6.5, 2, 7.5, 2.25], "texture": "#0"},
+				"west": {"uv": [6.5, 2.25, 7.5, 2.5], "texture": "#0"},
+				"up": {"uv": [4.5, 7, 3.5, 6], "texture": "#0"},
+				"down": {"uv": [5.5, 6, 4.5, 7], "texture": "#0"}
+			}
+		},
+		{
+			"name": "Gem",
+			"from": [7, 4, 7],
+			"to": [9, 6, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7, 4, 7]},
+			"faces": {
+				"north": {"uv": [6.5, 2.5, 7, 3], "texture": "#0"},
+				"east": {"uv": [6.5, 3, 7, 3.5], "texture": "#0"},
+				"south": {"uv": [6.5, 3.5, 7, 4], "texture": "#0"},
+				"west": {"uv": [6.5, 4, 7, 4.5], "texture": "#0"},
+				"up": {"uv": [7, 5, 6.5, 4.5], "texture": "#0"},
+				"down": {"uv": [7, 5, 6.5, 5.5], "texture": "#0"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "VoxelShapes",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [0, 1, 2, 3]
+		}
+	]
+}

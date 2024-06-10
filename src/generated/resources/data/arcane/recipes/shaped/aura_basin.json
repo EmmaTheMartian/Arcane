@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "B": {
+      "tag": "c:ingots/copper"
+    },
+    "C": {
+      "item": "arcane:copper_core"
+    }
+  },
+  "pattern": [
+    "B B",
+    "B B",
+    "BCB"
+  ],
+  "result": {
+    "count": 1,
+    "id": "arcane:aura_basin"
+  }
+}

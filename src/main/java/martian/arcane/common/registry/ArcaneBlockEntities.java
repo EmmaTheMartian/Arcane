@@ -2,13 +2,11 @@ package martian.arcane.common.registry;
 
 import martian.arcane.ArcaneMod;
 import martian.arcane.api.ArcaneRegistry;
-import martian.arcane.common.block.aura.basin.BlockEntityAuraBasin;
-import martian.arcane.common.block.aura.extractor.BlockEntityAuraExtractor;
-import martian.arcane.common.block.aura.infuser.BlockEntityAuraInfuser;
-import martian.arcane.common.block.aura.inserter.BlockEntityAuraInserter;
-import martian.arcane.common.block.aura.generators.heat.BlockEntityIgnisCollector;
-import martian.arcane.common.block.etc.auranodi.BlockEntityAuraNodi;
-import martian.arcane.common.block.aura.generators.water.BlockEntityAquaCollector;
+import martian.arcane.common.block.basin.BlockEntityAuraBasin;
+import martian.arcane.common.block.connector.BlockEntityAuraConnector;
+import martian.arcane.common.block.infuser.BlockEntityAuraInfuser;
+import martian.arcane.common.block.generators.heat.BlockEntityIgnisCollector;
+import martian.arcane.common.block.generators.water.BlockEntityAquaCollector;
 import martian.arcane.common.block.pedestal.BlockEntityPedestal;
 import martian.arcane.common.block.spellcircle.BlockEntitySpellCircle;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -28,10 +26,8 @@ public class ArcaneBlockEntities extends ArcaneRegistry {
     private static final DeferredRegister<BlockEntityType<?>> REGISTER = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, ArcaneMod.MODID);
 
     static {
-        AURA_NODI = register("be_aura_nodi", () -> of(BlockEntityAuraNodi::new, ArcaneBlocks.AURA_NODI.get()));
-        AURA_EXTRACTOR = register("be_aura_extractor", () -> of(BlockEntityAuraExtractor::new, ArcaneBlocks.COPPER_AURA_EXTRACTOR.get(), ArcaneBlocks.AURACHALCUM_AURA_EXTRACTOR.get()));
-        AURA_INSERTER = register("be_aura_inserter", () -> of(BlockEntityAuraInserter::new, ArcaneBlocks.COPPER_AURA_INSERTER.get(), ArcaneBlocks.AURACHALCUM_AURA_INSERTER.get()));
-        AURA_BASIN = register("be_aura_basin", () -> of(BlockEntityAuraBasin::new, ArcaneBlocks.COPPER_AURA_BASIN.get()));
+        AURA_CONNECTOR = register("be_aura_connector", () -> of(BlockEntityAuraConnector::new, ArcaneBlocks.AURA_CONNECTOR.get()));
+        AURA_BASIN = register("be_aura_basin", () -> of(BlockEntityAuraBasin::new, ArcaneBlocks.AURA_BASIN.get()));
         PEDESTAL = register("be_pedestal", () -> of(BlockEntityPedestal::new, ArcaneBlocks.PEDESTAL.get()));
         AURA_INFUSER = register("be_aura_infuser", () -> of(BlockEntityAuraInfuser::new, ArcaneBlocks.AURA_INFUSER.get()));
         SPELL_CIRCLE = register("be_spell_circle", () -> of(BlockEntitySpellCircle::new, ArcaneBlocks.SPELL_CIRCLE.get()));
@@ -39,9 +35,7 @@ public class ArcaneBlockEntities extends ArcaneRegistry {
         AQUA_COLLECTOR = register("be_aqua_collector", () -> of(BlockEntityAquaCollector::new, ArcaneBlocks.AQUA_COLLECTOR.get()));
     }
 
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityAuraNodi>> AURA_NODI;
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityAuraExtractor>> AURA_EXTRACTOR;
-    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityAuraInserter>> AURA_INSERTER;
+    public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityAuraConnector>> AURA_CONNECTOR;
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityAuraBasin>> AURA_BASIN;
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityPedestal>> PEDESTAL;
     public static final DeferredHolder<BlockEntityType<?>, BlockEntityType<BlockEntityAuraInfuser>> AURA_INFUSER;

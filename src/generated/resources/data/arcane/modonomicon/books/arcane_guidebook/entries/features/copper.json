@@ -14,7 +14,7 @@
   "description": "",
   "hide_while_locked": true,
   "icon": {
-    "item": "arcane:aura_basin_copper"
+    "item": "arcane:aura_basin"
   },
   "name": "book.arcane.arcane_guidebook.features.copper.name",
   "pages": [

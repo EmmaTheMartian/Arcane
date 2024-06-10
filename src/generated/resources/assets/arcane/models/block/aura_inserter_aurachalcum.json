@@ -1,6 +1,0 @@
-{
-  "parent": "arcane:block/base/aura_inserter",
-  "textures": {
-    "0": "arcane:block/machines/aura_inserter_aurachalcum"
-  }
-}

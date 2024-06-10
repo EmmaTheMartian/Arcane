@@ -18,8 +18,8 @@ public class AbstractAuraBlockEntityWithSingleItem extends AbstractAuraBlockEnti
     protected ItemStack stack = ItemStack.EMPTY;
     public boolean hasSignal = false;
 
-    public AbstractAuraBlockEntityWithSingleItem(int maxAura, int auraLoss, boolean extractable, boolean receivable, BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(maxAura, auraLoss, extractable, receivable, type, pos, state);
+    public AbstractAuraBlockEntityWithSingleItem(int maxAura, boolean extractable, boolean receivable, BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(maxAura, extractable, receivable, type, pos, state);
     }
 
     public ItemStack getItem() {

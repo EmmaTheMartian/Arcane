@@ -55,6 +55,10 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
             addItem(ArcaneItems.AXOBOTTLE, "Axobottle");
             addItem(ArcaneItems.GEM_SAW, "Gem Saw");
 
+            addItem(ArcaneItems.UPGRADE_KIT_COPPER, "Copper Machine Parts");
+            addItem(ArcaneItems.UPGRADE_KIT_LARIMAR, "Larimar Machine Parts");
+            addItem(ArcaneItems.UPGRADE_KIT_AURACHALCUM, "Aurachalcum Machine Parts");
+
             // Resources
             addItem(ArcaneItems.RAW_LARIMAR, "Raw Larimar");
             addItem(ArcaneItems.CUT_LARIMAR, "Cut Larimar");
@@ -95,23 +99,10 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
 
         // Blocks
         {
-            addBlock(ArcaneBlocks.AURA_NODI, "Aura Nodi");
-
-            addBlock(ArcaneBlocks.COPPER_AURA_EXTRACTOR, "Copper Aura Extractor");
-            addBlock(ArcaneBlocks.LARIMAR_AURA_EXTRACTOR, "Larimar Aura Extractor");
-            addBlock(ArcaneBlocks.AURACHALCUM_AURA_EXTRACTOR, "Aurachalcum Aura Extractor");
-
-            addBlock(ArcaneBlocks.COPPER_AURA_INSERTER, "Copper Aura Inserter");
-            addBlock(ArcaneBlocks.LARIMAR_AURA_INSERTER, "Larimar Aura Inserter");
-            addBlock(ArcaneBlocks.AURACHALCUM_AURA_INSERTER, "Aurachalcum Aura Inserter");
-
-            addBlock(ArcaneBlocks.COPPER_AURA_BASIN, "Copper Aura Basin");
-            addBlock(ArcaneBlocks.LARIMAR_AURA_BASIN, "Larimar Aura Basin");
-            addBlock(ArcaneBlocks.AURACHALCUM_AURA_BASIN, "Aurachalcum Aura Basin");
-
+            addBlock(ArcaneBlocks.AURA_CONNECTOR, "Aura Connector");
+            addBlock(ArcaneBlocks.AURA_BASIN, "Aura Basin");
             addBlock(ArcaneBlocks.AURA_INFUSER, "Aura Infuser");
             addBlock(ArcaneBlocks.PEDESTAL, "Pedestal");
-
             addBlock(ArcaneBlocks.HEAT_COLLECTOR, "Ignis Collector");
             addBlock(ArcaneBlocks.AQUA_COLLECTOR, "Aqua Collector");
 
@@ -142,8 +133,6 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
         // Messages
         {
             add("messages.arcane.aura", "Aura: ");
-            add("messages.arcane.en", "En: ");
-            add("messages.arcane.elemental_energy", "Elemental Energy: ");
             add("messages.arcane.holding", "Holding: ");
             add("messages.arcane.mode", "Mode: ");
             add("messages.arcane.crafting", "Crafting: ");
@@ -174,6 +163,7 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
             add("messages.arcane.chance", "Chance: ");
             add("messages.arcane.distance_too_far", "Distance too far!");
             add("messages.arcane.unlinked", "Unlinked");
+            add("messages.arcane.tier", "Tier: ");
         }
 
         // GUI
@@ -233,6 +223,13 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
             add("spell.arcane.purifying.name.item", "Arcane Purification");
             add("spell.arcane.activator.name.item", "Arcane Activation");
             add("spell.arcane.preservation.name.item", "Arcane Preservation");
+        }
+
+        // Machine tiers
+        {
+            add("arcane.machine_tier.arcane.copper.name", "Copper");
+            add("arcane.machine_tier.arcane.larimar.name", "Larimar");
+            add("arcane.machine_tier.arcane.aurachalcum.name", "Aurachalcum");
         }
     }
 }

@@ -2,18 +2,15 @@ package martian.arcane.client;
 
 import martian.arcane.ArcaneMod;
 import martian.arcane.client.gui.AuraometerOverlay;
-import martian.arcane.common.block.aura.extractor.ExtractorLinkingRenderer;
-import martian.arcane.common.block.aura.infuser.AuraInfuserRenderer;
+import martian.arcane.common.block.connector.ConnectorLinkRenderer;
+import martian.arcane.common.block.infuser.AuraInfuserRenderer;
 import martian.arcane.common.block.pedestal.PedestalRenderer;
 import martian.arcane.common.block.spellcircle.SpellCircleRenderer;
 import martian.arcane.common.registry.ArcaneBlockEntities;
 import net.minecraft.client.Minecraft;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.client.event.ClientTickEvent;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
-import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.client.event.*;
 import net.neoforged.neoforge.common.NeoForge;
 
 @SuppressWarnings("unused")
@@ -36,7 +33,7 @@ public class ArcaneClient {
 
         clientTicks++;
 
-        ExtractorLinkingRenderer.tick();
+        ConnectorLinkRenderer.tick();
     }
 
     public static void registerGuiOverlays(RegisterGuiLayersEvent event) {

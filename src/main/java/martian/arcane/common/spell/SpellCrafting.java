@@ -15,9 +15,14 @@ public class SpellCrafting extends AbstractSpell {
     }
 
     @Override
+    public int getAuraCost(CastContext c) {
+        return ArcaneStaticConfig.SpellCosts.CRAFTING;
+    }
+
+    @Override
     public CastResult cast(CastContext c) {
         if (c.level.isClientSide)
-            return CastResult.PASS;
+            return CastResult.SUCCESS;
 
         BlockPos pos = c.getTarget();
         if (pos == null)
@@ -36,6 +41,6 @@ public class SpellCrafting extends AbstractSpell {
             return CastResult.FAILED;
 
         c.level.setBlockAndUpdate(pos, ArcaneBlocks.CONJURED_CRAFTING_TABLE.get().defaultBlockState());
-        return new CastResult(ArcaneStaticConfig.SpellCosts.CRAFTING, false);
+        return CastResult.SUCCESS;
     }
 }

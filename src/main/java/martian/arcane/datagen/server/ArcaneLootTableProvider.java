@@ -46,17 +46,13 @@ public class ArcaneLootTableProvider extends LootTableProvider {
             dropSelf(ArcaneBlocks.SOUL_MAGMA.get());
 
             // Machines
-            dropSelf(ArcaneBlocks.COPPER_AURA_EXTRACTOR.get());
-            dropSelf(ArcaneBlocks.LARIMAR_AURA_EXTRACTOR.get());
-            dropSelf(ArcaneBlocks.AURACHALCUM_AURA_EXTRACTOR.get());
+//            dropSelf(ArcaneBlocks.COPPER_AURA_BASIN.get());
+//            dropSelf(ArcaneBlocks.LARIMAR_AURA_BASIN.get());
+//            dropSelf(ArcaneBlocks.AURACHALCUM_AURA_BASIN.get());
 
-            dropSelf(ArcaneBlocks.COPPER_AURA_INSERTER.get());
-            dropSelf(ArcaneBlocks.LARIMAR_AURA_INSERTER.get());
-            dropSelf(ArcaneBlocks.AURACHALCUM_AURA_INSERTER.get());
+            dropSelf(ArcaneBlocks.AURA_CONNECTOR.get());
 
-            dropSelf(ArcaneBlocks.COPPER_AURA_BASIN.get());
-            dropSelf(ArcaneBlocks.LARIMAR_AURA_BASIN.get());
-            dropSelf(ArcaneBlocks.AURACHALCUM_AURA_BASIN.get());
+            dropSelf(ArcaneBlocks.AURA_BASIN.get());
 
             dropSelf(ArcaneBlocks.PEDESTAL.get());
             dropSelf(ArcaneBlocks.AURA_INFUSER.get());

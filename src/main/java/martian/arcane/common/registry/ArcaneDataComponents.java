@@ -3,6 +3,7 @@ package martian.arcane.common.registry;
 import com.mojang.serialization.Codec;
 import martian.arcane.ArcaneMod;
 import martian.arcane.api.ArcaneRegistry;
+import martian.arcane.api.MachineTier;
 import martian.arcane.api.aura.AuraRecord;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentType;
@@ -32,6 +33,9 @@ public class ArcaneDataComponents extends ArcaneRegistry {
 
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> PUSH_RATE = register("push_rate", builder ->
             builder.persistent(Codec.INT));
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<MachineTier>> MACHINE_TIER = register("machine_tier", builder ->
+            builder.persistent(MachineTier.CODEC));
 
     private static <T> DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(String name, UnaryOperator<DataComponentType.Builder<T>> func) {
         return REGISTER.register(name, () -> func.apply(DataComponentType.builder()).build());

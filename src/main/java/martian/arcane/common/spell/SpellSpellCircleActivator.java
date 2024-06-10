@@ -20,9 +20,14 @@ public class SpellSpellCircleActivator extends AbstractSpell {
     }
 
     @Override
+    public int getAuraCost(CastContext c) {
+        return ArcaneStaticConfig.SpellCosts.ACTIVATOR;
+    }
+
+    @Override
     public CastResult cast(CastContext c) {
         if (c.level.isClientSide)
-            return CastResult.PASS;
+            return CastResult.SUCCESS;
 
         BlockPos pos = c.getTarget();
         if (pos == null)
@@ -33,7 +38,7 @@ public class SpellSpellCircleActivator extends AbstractSpell {
             ArcaneFx.SPELL_CIRCLE_INIT.goBlock(c.level, pos);
             spellCircle.setActive(true);
             BlockHelpers.sync(spellCircle);
-            return new CastResult(ArcaneStaticConfig.SpellCosts.ACTIVATOR, false);
+            return CastResult.SUCCESS;
         }
 
         return CastResult.FAILED;

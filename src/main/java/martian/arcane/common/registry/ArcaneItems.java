@@ -4,8 +4,9 @@ import com.google.common.collect.ImmutableList;
 import martian.arcane.ArcaneMod;
 import martian.arcane.ArcaneStaticConfig;
 import martian.arcane.api.ArcaneRegistry;
+import martian.arcane.api.MachineTier;
 import martian.arcane.common.item.*;
-import martian.arcane.common.item.wand.ItemAuraWand;
+import martian.arcane.common.item.ItemAuraWand;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
@@ -61,6 +62,10 @@ public class ArcaneItems extends ArcaneRegistry {
             AXOBOTTLE = basicItem("axobottle"),
             GUIDEBOOK = register("guidebook", ItemGuidebook::new),
             GEM_SAW = register("gem_saw", ItemGemSaw::new),
+
+            UPGRADE_KIT_COPPER = register("upgrade_kit_copper", () -> new ItemUpgradeKit(MachineTier.COPPER)),
+            UPGRADE_KIT_LARIMAR = register("upgrade_kit_larimar", () -> new ItemUpgradeKit(MachineTier.LARIMAR)),
+            UPGRADE_KIT_AURACHALCUM = register("upgrade_kit_aurachalcum", () -> new ItemUpgradeKit(MachineTier.AURACHALCUM)),
 
             // Resources
             RAW_LARIMAR = basicItem("raw_larimar"),

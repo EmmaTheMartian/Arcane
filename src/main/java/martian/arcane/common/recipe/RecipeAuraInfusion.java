@@ -1,17 +1,14 @@
 package martian.arcane.common.recipe;
 
-import martian.arcane.ArcaneMod;
 import martian.arcane.api.item.ItemHelpers;
 import martian.arcane.api.recipe.RecipeOutput;
 import martian.arcane.api.recipe.SimpleContainer;
 import martian.arcane.api.recipe.SimpleRecipe;
-import martian.arcane.common.block.aura.infuser.BlockEntityAuraInfuser;
-import martian.arcane.common.registry.ArcaneRecipeTypes;
+import martian.arcane.common.block.infuser.BlockEntityAuraInfuser;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;

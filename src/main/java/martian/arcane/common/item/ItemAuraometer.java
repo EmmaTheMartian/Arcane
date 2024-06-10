@@ -3,8 +3,8 @@ package martian.arcane.common.item;
 import martian.arcane.api.block.BlockHelpers;
 import martian.arcane.api.Raycasting;
 import martian.arcane.api.block.entity.IAuraometerOutput;
-import martian.arcane.common.block.aura.extractor.ExtractorLinkingRenderer;
-import martian.arcane.common.block.aura.extractor.BlockEntityAuraExtractor;
+import martian.arcane.common.block.connector.BlockEntityAuraConnector;
+import martian.arcane.common.block.connector.ConnectorLinkRenderer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -54,9 +54,9 @@ public class ItemAuraometer extends Item {
             return InteractionResultHolder.success(stack);
 
         if (player.isCrouching() && hit == null) {
-            ExtractorLinkingRenderer.selectedExtractors.clear();
-        } else if (hit != null && level.getBlockEntity(hit.getBlockPos()) instanceof BlockEntityAuraExtractor extractor) {
-            ExtractorLinkingRenderer.selectedExtractors.add(extractor.getBlockPos());
+            ConnectorLinkRenderer.selectedConnectors.clear();
+        } else if (hit != null && level.getBlockEntity(hit.getBlockPos()) instanceof BlockEntityAuraConnector connector) {
+            ConnectorLinkRenderer.selectedConnectors.add(connector.getBlockPos());
         }
 
         return InteractionResultHolder.success(stack);
