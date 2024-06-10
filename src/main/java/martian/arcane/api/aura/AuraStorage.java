@@ -2,8 +2,12 @@ package martian.arcane.api.aura;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import martian.arcane.common.registry.ArcaneDataComponents;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ItemStack;
+
+import java.util.function.Supplier;
 
 public class AuraStorage implements IMutableAuraStorage {
     public static final Codec<AuraStorage> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -154,5 +158,11 @@ public class AuraStorage implements IMutableAuraStorage {
     @Override
     public int hashCode() {
         return freeze().hashCode();
+    }
+
+    public static AuraRecord getOrCreate(ItemStack stack, Supplier<AuraRecord> defaultAuraStorage) {
+        if (!stack.has(ArcaneDataComponents.AURA))
+            stack.set(ArcaneDataComponents.AURA, defaultAuraStorage.get());
+        return stack.get(ArcaneDataComponents.AURA);
     }
 }

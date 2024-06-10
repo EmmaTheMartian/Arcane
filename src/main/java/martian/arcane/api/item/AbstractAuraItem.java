@@ -1,6 +1,7 @@
 package martian.arcane.api.item;
 
 import martian.arcane.api.aura.AuraRecord;
+import martian.arcane.api.aura.AuraStorage;
 import martian.arcane.api.aura.IMutableAuraStorage;
 import martian.arcane.common.registry.ArcaneDataComponents;
 import net.minecraft.ChatFormatting;
@@ -22,7 +23,7 @@ public abstract class AbstractAuraItem extends Item {
     private final boolean defaultExtractable, defaultInsertable;
 
     public AbstractAuraItem(int maxAura, boolean extractable, boolean insertable, Item.Properties properties) {
-        super(properties);
+        super(properties.component(ArcaneDataComponents.AURA, new AuraRecord(maxAura, 0, extractable, insertable)));
         this.defaultMaxAura = maxAura;
         this.defaultExtractable = extractable;
         this.defaultInsertable = insertable;
@@ -30,9 +31,7 @@ public abstract class AbstractAuraItem extends Item {
 
     // Aura storage
     public AuraRecord getAuraStorage(@NotNull ItemStack stack) {
-        if (!stack.has(ArcaneDataComponents.AURA))
-            stack.set(ArcaneDataComponents.AURA, new AuraRecord(defaultMaxAura, 0, defaultExtractable, defaultInsertable));
-        return stack.get(ArcaneDataComponents.AURA);
+        return AuraStorage.getOrCreate(stack, () -> new AuraRecord(defaultMaxAura, 0, defaultExtractable, defaultInsertable));
     }
 
     public <U> U mapAuraStorage(ItemStack stack, Function<? super AuraRecord, ? extends U> func) {
