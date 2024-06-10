@@ -3,13 +3,13 @@
   "category": "misc",
   "ingredients": [
     {
-      "tag": "c:obsidians"
-    },
-    {
-      "tag": "c:obsidians"
-    },
-    {
       "item": "arcane:polished_idocrase"
+    },
+    {
+      "tag": "c:obsidians"
+    },
+    {
+      "tag": "c:obsidians"
     }
   ],
   "result": {

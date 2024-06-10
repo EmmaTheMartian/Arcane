@@ -3,7 +3,7 @@
   "category": "redstone",
   "key": {
     "B": {
-      "tag": "c:ingots/copper"
+      "item": "minecraft:deepslate_bricks"
     },
     "C": {
       "item": "arcane:copper_core"

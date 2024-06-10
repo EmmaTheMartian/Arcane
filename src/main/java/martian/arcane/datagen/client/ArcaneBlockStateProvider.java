@@ -30,22 +30,9 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
     protected void registerStatesAndModels() {
         // Models
         {
-            // Machines
-//            withExistingParent(ArcaneBlocks.AURA_CONNECTOR.get(), ArcaneMod.id("block/"))
-//                    .texture("0", ArcaneMod.id("block/machines/aura_extractors/copper"));
-
-//            withExistingParent(ArcaneBlocks.AURA_BASIN.get(), ArcaneMod.id("block/aura_basin"))
-//                    .texture("0", ArcaneMod.id("block/machines/aura_basin_copper"));
-//            withExistingParent(ArcaneBlocks.LARIMAR_AURA_BASIN.get(), ArcaneMod.id("block/base/aura_basin"))
-//                    .texture("0", ArcaneMod.id("block/machines/aura_basin_larimar"));
-//            withExistingParent(ArcaneBlocks.AURACHALCUM_AURA_BASIN.get(), ArcaneMod.id("block/base/aura_basin"))
-//                    .texture("0", ArcaneMod.id("block/machines/aura_basin_aurachalcum"));
-//            withExistingParent(ArcaneBlocks.CREATIVE_AURA_BASIN.get(), ArcaneMod.id("block/base/aura_basin"))
-//                    .texture("0", ArcaneMod.id("block/machines/aura_basin_copper"));
-
             // Generators
-            topBottom(ArcaneBlocks.HEAT_COLLECTOR.get(), texture("machines/collectors/ignis_sides"), texture("machines/collectors/top_and_bottom"));
-            topBottom(ArcaneBlocks.AQUA_COLLECTOR.get(), texture("machines/collectors/aqua_sides"), texture("machines/collectors/top_and_bottom"));
+            topBottom(ArcaneBlocks.HEAT_COLLECTOR.get(), texture("machines/ignis_collector"), new ResourceLocation("minecraft", "block/polished_deepslate"));
+            topBottom(ArcaneBlocks.AQUA_COLLECTOR.get(), texture("machines/aqua_collector"), new ResourceLocation("minecraft", "block/polished_deepslate"));
 
             // General Blocks
             simpleTranslucent(ArcaneBlocks.AURAGLASS.get());

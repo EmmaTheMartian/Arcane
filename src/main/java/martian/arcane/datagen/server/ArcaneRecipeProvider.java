@@ -2,7 +2,6 @@ package martian.arcane.datagen.server;
 
 import martian.arcane.ArcaneMod;
 import martian.arcane.ArcaneTags;
-import martian.arcane.api.NBTHelpers;
 import martian.arcane.common.registry.ArcaneBlocks;
 import martian.arcane.common.registry.ArcaneDataComponents;
 import martian.arcane.common.registry.ArcaneItems;
@@ -14,7 +13,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
@@ -22,6 +20,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.Tags;
 
 import java.util.HashMap;
@@ -50,17 +50,18 @@ public class ArcaneRecipeProvider extends BetterRecipeProvider {
         ;
 
         final Ingredient
-                AURAGLASS           = ingOf(ArcaneBlocks.AURAGLASS.get().asItem()),
-                AURAGLASS_DUST      = ingOf(ArcaneItems.AURAGLASS_DUST.get()),
-                COPPER_CORE         = ingOf(ArcaneItems.COPPER_CORE.get()),
-                LARIMAR_CORE        = ingOf(ArcaneItems.LARIMAR_CORE.get()),
-                AURACHALCUM_CORE    = ingOf(ArcaneItems.AURACHALCUM_CORE.get()),
-                ELDRITCH_CORE       = ingOf(ArcaneItems.ELDRITCH_CORE.get()),
-                SPELL_CIRCLE_CORE   = ingOf(ArcaneItems.SPELL_CIRCLE_CORE.get()),
-                POLISHED_LARIMAR    = ingOf(ArcaneItems.POLISHED_LARIMAR.get()),
-                FADED_LARIMAR       = ingOf(ArcaneItems.FADED_POLISHED_LARIMAR.get()),
-                AURACHALCUM         = ingOf(ArcaneItems.AURACHALCUM.get()),
-                ELDRITCH_ALLOY      = ingOf(ArcaneItems.ELDRITCH_ALLOY.get())
+                DEEPSLATE           = ingOf(Blocks.DEEPSLATE_BRICKS.asItem()),
+                AURAGLASS           = ingOf(ArcaneBlocks.AURAGLASS.asItem()),
+                AURAGLASS_DUST      = ingOf(ArcaneItems.AURAGLASS_DUST),
+                COPPER_CORE         = ingOf(ArcaneItems.COPPER_CORE),
+                LARIMAR_CORE        = ingOf(ArcaneItems.LARIMAR_CORE),
+                AURACHALCUM_CORE    = ingOf(ArcaneItems.AURACHALCUM_CORE),
+                ELDRITCH_CORE       = ingOf(ArcaneItems.ELDRITCH_CORE),
+                SPELL_CIRCLE_CORE   = ingOf(ArcaneItems.SPELL_CIRCLE_CORE),
+                POLISHED_LARIMAR    = ingOf(ArcaneItems.POLISHED_LARIMAR),
+                FADED_LARIMAR       = ingOf(ArcaneItems.FADED_POLISHED_LARIMAR),
+                AURACHALCUM         = ingOf(ArcaneItems.AURACHALCUM),
+                ELDRITCH_ALLOY      = ingOf(ArcaneItems.ELDRITCH_ALLOY)
         ;
 
         // Materials
@@ -142,6 +143,37 @@ public class ArcaneRecipeProvider extends BetterRecipeProvider {
         {
             helper.defaultCategory = RecipeCategory.REDSTONE;
 
+            // Machines
+            shaped(ArcaneBlocks.PEDESTAL.get().asItem())
+                    .pattern("CBC", " S ", "SSS")
+                    .define('C', COPPER)
+                    .define('S', DEEPSLATE)
+                    .define('B', COPPER_CORE)
+                    .unlockedWith(ArcaneItems.COPPER_CORE.get())
+                    .save();
+
+            shaped(ArcaneBlocks.AURA_INFUSER.asItem())
+                    .pattern("BCB", " O ", "OOO")
+                    .define('B', COPPER)
+                    .define('C', COPPER_CORE)
+                    .define('O', DEEPSLATE)
+                    .unlockedWith(ArcaneItems.COPPER_CORE.get())
+                    .save();
+
+            shaped(ArcaneBlocks.AURA_BASIN.asItem())
+                    .pattern("B B", "B B", "BCB")
+                    .define('B', DEEPSLATE)
+                    .define('C', COPPER_CORE)
+                    .unlockedWith(ArcaneItems.COPPER_CORE.get())
+                    .save();
+
+            shaped(ArcaneBlocks.AURA_CONNECTOR.asItem())
+                    .pattern(" A ", "DDD")
+                    .define('A', COPPER_CORE)
+                    .define('D', DEEPSLATE)
+                    .unlockedWith(ArcaneItems.COPPER_CORE.get())
+                    .save();
+
             shaped(ArcaneBlocks.HEAT_COLLECTOR.get().asItem())
                     .pattern("GIG", "FCF", "GIG")
                     .define('G', GLASS)
@@ -159,32 +191,6 @@ public class ArcaneRecipeProvider extends BetterRecipeProvider {
                     .define('C', COPPER_CORE)
                     .unlockedWith(ArcaneItems.COPPER_CORE.get())
                     .save();
-
-            shaped(ArcaneBlocks.PEDESTAL.get().asItem())
-                    .pattern("CBC", " S ", "SSS")
-                    .define('C', COPPER)
-                    .define('S', STONE)
-                    .define('B', COPPER_CORE)
-                    .unlockedWith(ArcaneItems.COPPER_CORE.get())
-                    .save();
-
-            // Machines
-            {
-                shaped(ArcaneBlocks.AURA_INFUSER.get().asItem())
-                        .pattern("BCB", " O ", "OOO")
-                        .define('B', COPPER)
-                        .define('C', COPPER_CORE)
-                        .define('O', OBSIDIAN)
-                        .unlockedWith(ArcaneItems.COPPER_CORE.get())
-                        .save();
-
-                makeBasin(ArcaneBlocks.AURA_BASIN.asItem(), COPPER_CORE, Ingredient.of(COPPER));
-                makeExtractor(ArcaneBlocks.AURA_CONNECTOR.asItem(), COPPER_CORE, Ingredient.of(STONE));
-
-//                makeBasin(ArcaneBlocks.COPPER_AURA_BASIN.get().asItem(), COPPER_CORE, Ingredient.of(COPPER));
-//                makeBasin(ArcaneBlocks.LARIMAR_AURA_BASIN.get().asItem(), LARIMAR_CORE, POLISHED_LARIMAR);
-//                makeBasin(ArcaneBlocks.AURACHALCUM_AURA_BASIN.get().asItem(), AURACHALCUM_CORE, AURACHALCUM);
-            }
         }
 
         // Tools
@@ -382,33 +388,6 @@ public class ArcaneRecipeProvider extends BetterRecipeProvider {
                 .save();
     }
 
-    private void makeBasin(Item result, Ingredient core, Ingredient base) {
-        shaped(result)
-                .pattern("B B", "B B", "BCB")
-                .define('B', base)
-                .define('C', core)
-                .unlockedWith(core.getItems()[0].getItem())
-                .save();
-    }
-
-    private void makeInserter(Item result, Ingredient core, Ingredient base) {
-        shaped(result)
-                .pattern(" B ", "SSS")
-                .define('B', core)
-                .define('S', base)
-                .unlockedWith(core.getItems()[0].getItem())
-                .save();
-    }
-
-    private void makeExtractor(Item result, Ingredient core, Ingredient base) {
-        shaped(result)
-                .pattern("SSS", " B ")
-                .define('B', core)
-                .define('S', base)
-                .unlockedWith(core.getItems()[0].getItem())
-                .save();
-    }
-
     private void oreProcessingLine(Item raw, Item crushed, Item purified, Item ingot) {
         SpellRecipeBuilder.hammering()
                 .setInput(raw)
@@ -431,7 +410,7 @@ public class ArcaneRecipeProvider extends BetterRecipeProvider {
         return BuiltInRegistries.ITEM.getKey(item);
     }
 
-    private Ingredient ingOf(Item item) {
+    private Ingredient ingOf(ItemLike item) {
         return Ingredient.of(item);
     }
 

@@ -47,10 +47,6 @@ public class ItemAuraWrench extends Item {
                 if (hitState.is(ArcaneTags.AURA_WRENCH_BREAKABLE)) {
                     level.destroyBlock(hit.getBlockPos(), true);
                 }
-
-//                BlockEntity l = level.getBlockEntity(hit.getBlockPos());
-//                if (l instanceof BlockEntityAuraConnector connector)
-//                    connector.removeTarget();
             }
 
             return InteractionResultHolder.success(stack);
@@ -102,7 +98,8 @@ public class ItemAuraWrench extends Item {
     @ParametersAreNonnullByDefault
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> text, TooltipFlag flag) {
         super.appendHoverText(stack, context, text, flag);
-        text.add(Component.translatable("item.arcane.aura_wrench.tooltip"));
+        text.add(Component.translatable("item.arcane.aura_wrench.tooltip.1"));
+        text.add(Component.translatable("item.arcane.aura_wrench.tooltip.2"));
         if (stack.has(ArcaneDataComponents.TARGET_POS)) {
             text.add(Component
                     .translatable("messages.arcane.linking_from")

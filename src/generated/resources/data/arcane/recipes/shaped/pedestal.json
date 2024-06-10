@@ -9,7 +9,7 @@
       "tag": "c:ingots/copper"
     },
     "S": {
-      "tag": "c:stones"
+      "item": "minecraft:deepslate_bricks"
     }
   },
   "pattern": [

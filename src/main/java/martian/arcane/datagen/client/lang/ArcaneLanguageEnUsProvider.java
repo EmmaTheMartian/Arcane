@@ -91,8 +91,9 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
 
             // Item Tooltips
             add("item.arcane.auraometer.tooltip", "Shows information about blocks that possess Aura when held.");
-            add("item.arcane.aura_wrench.tooltip", "Use while sneaking to quickly break machinery.");
-            add("item.arcane.aura_configurator.tooltip.1", "Used to configure and pair machinery.");
+            add("item.arcane.aura_wrench.tooltip.1", "Used to pair machinery.");
+            add("item.arcane.aura_wrench.tooltip.2", "Use while sneaking to quickly break machinery.");
+            add("item.arcane.aura_configurator.tooltip.1", "Used to configure machinery.");
             add("item.arcane.aura_configurator.tooltip.2", "Pronounced config-aura-tor.");
             add("item.arcane.spell_tablet.tooltip", "Stores the spell inscribed upon it.");
         }

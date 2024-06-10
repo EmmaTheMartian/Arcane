@@ -2,16 +2,16 @@
   "type": "minecraft:crafting_shaped",
   "category": "redstone",
   "key": {
-    "B": {
+    "A": {
       "item": "arcane:copper_core"
     },
-    "S": {
-      "tag": "c:stones"
+    "D": {
+      "item": "minecraft:deepslate_bricks"
     }
   },
   "pattern": [
-    "SSS",
-    " B "
+    " A ",
+    "DDD"
   ],
   "result": {
     "count": 1,
