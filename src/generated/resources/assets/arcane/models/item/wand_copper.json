@@ -1,6 +1,7 @@
 {
-  "parent": "minecraft:item/handheld",
+  "parent": "arcane:item/advanced_wand",
   "textures": {
-    "layer0": "arcane:item/wands/wand_copper"
+    "ring": "minecraft:block/iron_block",
+    "stick": "minecraft:block/copper_block"
   }
 }

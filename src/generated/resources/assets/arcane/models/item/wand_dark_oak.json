@@ -1,6 +1,6 @@
 {
-  "parent": "minecraft:item/handheld",
+  "parent": "arcane:item/basic_wand",
   "textures": {
-    "layer0": "arcane:item/wands/wand_dark_oak"
+    "stick": "minecraft:block/dark_oak_log"
   }
 }

@@ -12,6 +12,8 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 
+import static martian.arcane.common.registry.ArcaneItems.*;
+
 public class ArcaneItemModelProvider extends ItemModelProvider {
     public ArcaneItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
         super(output, ArcaneMod.MODID, existingFileHelper);
@@ -22,64 +24,77 @@ public class ArcaneItemModelProvider extends ItemModelProvider {
         // Tools
         {
             // Wands
-            for (DeferredItem<?> wand : ArcaneItems.WANDS) {
-                handheld(wand, "wands/");
-            }
+            basicWand(WAND_OAK, "minecraft:block/oak_log");
+            basicWand(WAND_ACACIA, "minecraft:block/acacia_log");
+            basicWand(WAND_BAMBOO, "minecraft:block/bamboo_block");
+            basicWand(WAND_BIRCH, "minecraft:block/birch_log");
+            basicWand(WAND_CHERRY, "minecraft:block/cherry_log");
+            basicWand(WAND_DARK_OAK, "minecraft:block/dark_oak_log");
+            basicWand(WAND_JUNGLE, "minecraft:block/jungle_log");
+            basicWand(WAND_MANGROVE, "minecraft:block/mangrove_log");
+            basicWand(WAND_OAK, "minecraft:block/oak_log");
+            basicWand(WAND_SPRUCE, "minecraft:block/spruce_log");
+            basicWand(WAND_WARPED, "minecraft:block/warped_stem");
+            basicWand(WAND_CRIMSON, "minecraft:block/crimson_stem");
+            advancedWand(WAND_COPPER, "minecraft:block/copper_block");
+            advancedWand(WAND_LARIMAR, "arcane:block/larimar_block");
+            mysticalWand(WAND_AURACHALCUM, "arcane:block/aurachalcum_block");
+            mysticalWand(WAND_ELDRITCH, "arcane:block/blackstone_idocrase_ore"); //todo
 
             String path = "tools/";
-            item(ArcaneItems.AURAGLASS_BOTTLE, path);
-            item(ArcaneItems.MEDIUM_AURAGLASS_BOTTLE, path);
-            item(ArcaneItems.LARGE_AURAGLASS_BOTTLE, path);
-            item(ArcaneItems.EXTREME_AURAGLASS_BOTTLE, path);
-            item(ArcaneItems.CREATIVE_AURAGLASS_BOTTLE.get(), "tools/extreme_auraglass_bottle");
+            item(AURAGLASS_BOTTLE, path);
+            item(MEDIUM_AURAGLASS_BOTTLE, path);
+            item(LARGE_AURAGLASS_BOTTLE, path);
+            item(EXTREME_AURAGLASS_BOTTLE, path);
+            item(CREATIVE_AURAGLASS_BOTTLE.get(), "tools/extreme_auraglass_bottle");
 
-            item(ArcaneItems.AURAOMETER, path);
-            item(ArcaneItems.AURA_WRENCH, path);
-            item(ArcaneItems.AURA_CONFIGURATOR, path);
-            item(ArcaneItems.SPELL_TABLET, path);
-            item(ArcaneItems.ARCANE_BLEACH, path);
-            item(ArcaneItems.SPELL_CHALK, path);
-            item(ArcaneItems.ENDERPACK, path);
-            item(ArcaneItems.AXOBOTTLE, path);
-            item(ArcaneItems.GUIDEBOOK, path);
-            item(ArcaneItems.GEM_SAW, path);
+            item(AURAOMETER, path);
+            item(AURA_WRENCH, path);
+            item(AURA_CONFIGURATOR, path);
+            item(SPELL_TABLET, path);
+            item(ARCANE_BLEACH, path);
+            item(SPELL_CHALK, path);
+            item(ENDERPACK, path);
+            item(AXOBOTTLE, path);
+            item(GUIDEBOOK, path);
+            item(GEM_SAW, path);
         }
 
         // Resources
         {
             String path = "resources/";
-            item(ArcaneItems.RAW_LARIMAR, path);
-            item(ArcaneItems.CUT_LARIMAR, path);
-            item(ArcaneItems.POLISHED_LARIMAR, path);
-            item(ArcaneItems.FADED_RAW_LARIMAR, path);
-            item(ArcaneItems.FADED_CUT_LARIMAR, path);
-            item(ArcaneItems.FADED_POLISHED_LARIMAR, path);
-            item(ArcaneItems.RAW_IDOCRASE, path);
-            item(ArcaneItems.CUT_IDOCRASE, path);
-            item(ArcaneItems.POLISHED_IDOCRASE, path);
-            item(ArcaneItems.RAW_AURACHALCUM, path);
-            item(ArcaneItems.AURACHALCUM, path);
-            item(ArcaneItems.ELDRITCH_ALLOY, path);
+            item(RAW_LARIMAR, path);
+            item(CUT_LARIMAR, path);
+            item(POLISHED_LARIMAR, path);
+            item(FADED_RAW_LARIMAR, path);
+            item(FADED_CUT_LARIMAR, path);
+            item(FADED_POLISHED_LARIMAR, path);
+            item(RAW_IDOCRASE, path);
+            item(CUT_IDOCRASE, path);
+            item(POLISHED_IDOCRASE, path);
+            item(RAW_AURACHALCUM, path);
+            item(AURACHALCUM, path);
+            item(ELDRITCH_ALLOY, path);
 
-            item(ArcaneItems.COPPER_CORE, path);
-            item(ArcaneItems.LARIMAR_CORE, path);
-            item(ArcaneItems.AURACHALCUM_CORE, path);
-            item(ArcaneItems.ELDRITCH_CORE, path);
-            item(ArcaneItems.SPELL_CIRCLE_CORE, path);
+            item(COPPER_CORE, path);
+            item(LARIMAR_CORE, path);
+            item(AURACHALCUM_CORE, path);
+            item(ELDRITCH_CORE, path);
+            item(SPELL_CIRCLE_CORE, path);
 
-            item(ArcaneItems.AURAGLASS_SHARD, path);
-            item(ArcaneItems.AURAGLASS_DUST, path);
+            item(AURAGLASS_SHARD, path);
+            item(AURAGLASS_DUST, path);
         }
 
         // Ore Processing
         {
             String path = "dusts/";
-            item(ArcaneItems.CRUSHED_RAW_COPPER, path);
-            item(ArcaneItems.CRUSHED_RAW_IRON, path);
-            item(ArcaneItems.CRUSHED_RAW_GOLD, path);
-            item(ArcaneItems.PURIFIED_RAW_COPPER, path);
-            item(ArcaneItems.PURIFIED_RAW_IRON, path);
-            item(ArcaneItems.PURIFIED_RAW_GOLD, path);
+            item(CRUSHED_RAW_COPPER, path);
+            item(CRUSHED_RAW_IRON, path);
+            item(CRUSHED_RAW_GOLD, path);
+            item(PURIFIED_RAW_COPPER, path);
+            item(PURIFIED_RAW_IRON, path);
+            item(PURIFIED_RAW_GOLD, path);
         }
 
         // Block items
@@ -93,6 +108,26 @@ public class ArcaneItemModelProvider extends ItemModelProvider {
         getBuilder(name)
                 .parent(new ModelFile.UncheckedModelFile(parent))
                 .texture("layer0", texture);
+    }
+
+    private void basicWand(DeferredItem<?> item, String texture) {
+        getBuilder(item.get().toString())
+                .parent(new ModelFile.UncheckedModelFile("arcane:item/basic_wand"))
+                .texture("stick", texture);
+    }
+
+    private void advancedWand(DeferredItem<?> item, String texture) {
+        getBuilder(item.get().toString())
+                .parent(new ModelFile.UncheckedModelFile("arcane:item/advanced_wand"))
+                .texture("ring", "minecraft:block/iron_block")
+                .texture("stick", texture);
+    }
+
+    private void mysticalWand(DeferredItem<?> item, String texture) {
+        getBuilder(item.get().toString())
+                .parent(new ModelFile.UncheckedModelFile("arcane:item/advanced_wand"))
+                .texture("ring", "arcane:block/larimar_block")
+                .texture("stick", texture);
     }
 
     private void item(Item item, String path) {

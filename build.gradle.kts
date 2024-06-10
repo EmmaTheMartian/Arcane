@@ -73,14 +73,6 @@ repositories {
             includeGroup("dev.latvian.mods")
         }
     }
-
-    // GeckoLib
-    maven("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/") {
-        mavenContent {
-            includeGroupByRegex("software\\.bernie.*")
-            includeGroup("com.eliotlash.mclib")
-        }
-    }
 }
 
 dependencies {
@@ -150,9 +142,6 @@ dependencies {
         modRuntimeOnly("curse.maven:probejs-585406:${prop("probejs_version")}")
     }
      */
-
-    // GeckoLib
-    modImplementation("software.bernie.geckolib:geckolib-neoforge-${prop("mc_version")}:${prop("geckolib_version")}")
 }
 
 tasks.withType<ProcessResources>().configureEach {

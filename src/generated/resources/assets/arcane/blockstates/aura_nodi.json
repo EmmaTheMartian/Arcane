@@ -1,9 +1,0 @@
-{
-  "multipart": [
-    {
-      "apply": {
-        "model": "arcane:block/aura_nodi"
-      }
-    }
-  ]
-}

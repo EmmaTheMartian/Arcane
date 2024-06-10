@@ -1,6 +1,7 @@
 {
-  "parent": "minecraft:item/handheld",
+  "parent": "arcane:item/advanced_wand",
   "textures": {
-    "layer0": "arcane:item/wands/wand_aurachalcum"
+    "ring": "arcane:block/larimar_block",
+    "stick": "arcane:block/aurachalcum_block"
   }
 }
