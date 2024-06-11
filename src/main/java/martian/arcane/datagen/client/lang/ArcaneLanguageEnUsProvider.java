@@ -48,6 +48,7 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
             addItem(ArcaneItems.AURAOMETER, "Auraometer");
             addItem(ArcaneItems.AURA_WRENCH, "Aurawrench");
             addItem(ArcaneItems.AURA_CONFIGURATOR, "Configaurator");
+            addItem(ArcaneItems.AURA_MULTITOOL, "Aura Multitool");
             addItem(ArcaneItems.SPELL_TABLET, "Spell Tablet");
             addItem(ArcaneItems.SPELL_CHALK, "Spell Chalk");
             addItem(ArcaneItems.ARCANE_BLEACH, "Arcane Bleach");
@@ -95,6 +96,8 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
             add("item.arcane.aura_wrench.tooltip.2", "Use while sneaking to quickly break machinery.");
             add("item.arcane.aura_configurator.tooltip.1", "Used to configure machinery.");
             add("item.arcane.aura_configurator.tooltip.2", "Pronounced config-aura-tor.");
+            add("item.arcane.aura_multitool.tooltip.1", "Functions universally as an Auraometer, Aura Wrench, and Configaurator.");
+            add("item.arcane.aura_multitool.tooltip.2", "Use while crouching to change modes.");
             add("item.arcane.spell_tablet.tooltip", "Stores the spell inscribed upon it.");
         }
 
@@ -136,6 +139,7 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
             add("messages.arcane.aura", "Aura: ");
             add("messages.arcane.holding", "Holding: ");
             add("messages.arcane.mode", "Mode: ");
+            add("messages.arcane.set_mode_to", "Set mode to ");
             add("messages.arcane.crafting", "Crafting: ");
             add("messages.arcane.linked_to", "Linked to: ");
             add("messages.arcane.is_linked", "Is Linked?: ");
@@ -214,6 +218,7 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
             add("spell.arcane.purifying.name", "Purification");
             add("spell.arcane.activator.name", "Activation");
             add("spell.arcane.preservation.name", "Preservation");
+            add("spell.arcane.lighting.name", "Lighting");
 
             add("spell.arcane.hammering.name.item", "Arcane Hammer");
             add("spell.arcane.breaking.name.item", "Arcane Pickaxe");
@@ -224,6 +229,7 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
             add("spell.arcane.purifying.name.item", "Arcane Purification");
             add("spell.arcane.activator.name.item", "Arcane Activation");
             add("spell.arcane.preservation.name.item", "Arcane Preservation");
+            add("spell.arcane.lighting.name.item", "Arcane Torch");
         }
 
         // Machine tiers

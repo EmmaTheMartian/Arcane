@@ -24,6 +24,7 @@ public class ArcaneSpells extends ArcaneRegistry {
             DASHING = REGISTER.register("dashing", SpellDashing::new),
             CRAFTING = REGISTER.register("crafting", SpellCrafting::new),
             ACTIVATOR = REGISTER.register("activator", SpellSpellCircleActivator::new),
-            PRESERVATION = REGISTER.register("preservation", SpellPreservation::new)
+            PRESERVATION = REGISTER.register("preservation", SpellPreservation::new),
+            LIGHTING = REGISTER.register("lighting", SpellLighting::new)
     ;
 }

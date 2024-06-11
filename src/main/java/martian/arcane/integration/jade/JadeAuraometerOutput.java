@@ -2,12 +2,12 @@ package martian.arcane.integration.jade;
 
 import martian.arcane.ArcaneMod;
 import martian.arcane.api.block.entity.IAuraometerOutput;
+import martian.arcane.api.item.IAuraometer;
 import martian.arcane.common.registry.ArcaneDataAttachments;
-import martian.arcane.common.registry.ArcaneItems;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import snownee.jade.api.BlockAccessor;
 import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
@@ -16,19 +16,19 @@ import snownee.jade.api.config.IPluginConfig;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.function.Predicate;
 
 public enum JadeAuraometerOutput implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
     INSTANCE;
 
-    static final ResourceLocation UID = ArcaneMod.id("jade_auraometer_provider");
-    static final Set<Item> MATCHING_ITEMS = Set.of(ArcaneItems.AURAOMETER.get());
+    static final ResourceLocation uid = ArcaneMod.id("jade_auraometer_provider");
+    static final Predicate<ItemStack> hasAuraometer = it -> it.getItem() instanceof IAuraometer;
 
     @Override
     public void appendTooltip(ITooltip tip, BlockAccessor accessor, IPluginConfig config) {
         if (
             accessor.getBlockEntity() instanceof IAuraometerOutput it &&
-            accessor.getPlayer().getInventory().hasAnyOf(MATCHING_ITEMS)
+            accessor.getPlayer().getInventory().contains(hasAuraometer)
         ) {
             CompoundTag data = accessor.getServerData();
 
@@ -50,15 +50,13 @@ public enum JadeAuraometerOutput implements IBlockComponentProvider, IServerData
 
     @Override
     public ResourceLocation getUid() {
-        return UID;
+        return uid;
     }
 
     @Override
     public void appendServerData(CompoundTag tag, BlockAccessor accessor) {
         if (accessor.getBlockEntity().hasData(ArcaneDataAttachments.AURA)) {
             var aura = accessor.getBlockEntity().getData(ArcaneDataAttachments.AURA);
-            tag.putInt("Aura", aura.getAura());
-            tag.putInt("MaxAura", aura.getMaxAura());
             tag.putBoolean("CanExtract", aura.canExtract());
             tag.putBoolean("CanInsert", aura.canInsert());
         }

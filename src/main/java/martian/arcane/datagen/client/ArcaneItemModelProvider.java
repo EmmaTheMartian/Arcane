@@ -51,6 +51,7 @@ public class ArcaneItemModelProvider extends ItemModelProvider {
             item(AURAOMETER, path);
             item(AURA_WRENCH, path);
             item(AURA_CONFIGURATOR, path);
+            item(AURA_MULTITOOL, path);
             item(SPELL_TABLET, path);
             item(ARCANE_BLEACH, path);
             item(SPELL_CHALK, path);

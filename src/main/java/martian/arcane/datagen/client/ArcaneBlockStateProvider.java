@@ -37,6 +37,9 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
             // General Blocks
             simpleTranslucent(ArcaneBlocks.AURAGLASS.get());
             cubeAll(ArcaneBlocks.SOUL_MAGMA.get());
+            withExistingParent(ArcaneBlocks.AURA_TORCH.get(), new ResourceLocation("minecraft", "block/template_torch"))
+                    .renderType("minecraft:cutout")
+                    .texture("torch", "arcane:block/aura_torch");
 
             // Conjured Blocks
             simpleTranslucent(ArcaneBlocks.CONJURED_BLOCK.get());
@@ -64,6 +67,7 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
         // Block States
         {
             makeBlockState(ArcaneBlocks.SOUL_MAGMA);
+            makeBlockState(ArcaneBlocks.AURA_TORCH);
 
             // Machines
             makeRotatableModel(ArcaneBlocks.AURA_CONNECTOR, BlockAuraConnector.FACING, false);

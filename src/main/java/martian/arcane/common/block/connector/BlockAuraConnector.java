@@ -3,8 +3,8 @@ package martian.arcane.common.block.connector;
 import martian.arcane.api.PropertyHelpers;
 import martian.arcane.api.block.AbstractAuraMachine;
 import martian.arcane.api.block.BlockHelpers;
+import martian.arcane.api.item.IAuraConfigurator;
 import martian.arcane.common.registry.ArcaneBlockEntities;
-import martian.arcane.common.registry.ArcaneItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -50,7 +50,11 @@ public class BlockAuraConnector extends AbstractAuraMachine {
     @Override
     @ParametersAreNonnullByDefault
     public @NotNull ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
-        if (stack.is(ArcaneItems.AURA_CONFIGURATOR) && level.getBlockEntity(pos) instanceof BlockEntityAuraConnector connector) {
+        if (
+                stack.getItem() instanceof IAuraConfigurator auraConfigurator &&
+                auraConfigurator.getIsConfigurator(level, player, state, pos, stack) &&
+                level.getBlockEntity(pos) instanceof BlockEntityAuraConnector connector
+        ) {
             if (level.isClientSide)
                 return ItemInteractionResult.SUCCESS;
             connector.cycleMode();

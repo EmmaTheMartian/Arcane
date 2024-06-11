@@ -4,6 +4,8 @@ import martian.arcane.ArcaneMod;
 import martian.arcane.ArcaneStaticConfig;
 import martian.arcane.api.ArcaneRegistry;
 import martian.arcane.api.block.BasicLarimarBlock;
+import martian.arcane.client.ParticleHelper;
+import martian.arcane.common.block.BlockAuraTorch;
 import martian.arcane.common.block.basin.BlockAuraBasin;
 import martian.arcane.common.block.connector.BlockAuraConnector;
 import martian.arcane.common.block.infuser.BlockAuraInfuser;
@@ -31,6 +33,7 @@ public class ArcaneBlocks extends ArcaneRegistry {
             // General Blocks
             AURAGLASS = register("auraglass", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).noOcclusion())),
             SOUL_MAGMA = register("soul_magma", BlockSoulMagma::new),
+            AURA_TORCH = register("aura_torch", () -> new BlockAuraTorch(ParticleHelper.MAGIC_PARTICLE_OPTIONS, BlockBehaviour.Properties.ofFullCopy(Blocks.TORCH).noLootTable())),
 
             // Aura machines
             AURA_CONNECTOR = register("aura_connector", BlockAuraConnector::new),

@@ -2,6 +2,7 @@ package martian.arcane.client.gui;
 
 import martian.arcane.api.Raycasting;
 import martian.arcane.api.block.entity.IAuraometerOutput;
+import martian.arcane.api.item.IAuraometer;
 import martian.arcane.common.registry.ArcaneItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -24,7 +25,7 @@ public class AuraometerOverlay implements LayeredDraw.Layer {
     public static boolean isHoldingAuraometer(Player player) {
         ItemStack main = player.getMainHandItem();
         ItemStack off = player.getOffhandItem();
-        return main.is(ArcaneItems.AURAOMETER.get()) || off.is(ArcaneItems.AURAOMETER.get());
+        return main.getItem() instanceof IAuraometer || off.getItem() instanceof IAuraometer;
     }
 
     @Override

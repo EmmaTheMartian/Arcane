@@ -40,13 +40,14 @@ public class ItemAuraWrench extends Item {
         BlockHitResult hit = Raycasting.blockRaycast(player, player.blockInteractionRange(), false);
 
         if (player.isCrouching()) {
-            if (hit == null) {
-                stack.remove(ArcaneDataComponents.TARGET_POS);
-            } else {
+            if (hit != null) {
                 BlockState hitState = level.getBlockState(hit.getBlockPos());
-                if (hitState.is(ArcaneTags.AURA_WRENCH_BREAKABLE)) {
+                if (hitState.is(ArcaneTags.AURA_WRENCH_BREAKABLE))
                     level.destroyBlock(hit.getBlockPos(), true);
-                }
+                else if (stack.has(ArcaneDataComponents.TARGET_POS))
+                    stack.remove(ArcaneDataComponents.TARGET_POS);
+            } else if (stack.has(ArcaneDataComponents.TARGET_POS)) {
+                stack.remove(ArcaneDataComponents.TARGET_POS);
             }
 
             return InteractionResultHolder.success(stack);

@@ -37,6 +37,9 @@ public class ArcaneDataComponents extends ArcaneRegistry {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<MachineTier>> MACHINE_TIER = register("machine_tier", builder ->
             builder.persistent(MachineTier.CODEC));
 
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> MODE = register("mode", builder ->
+            builder.persistent(Codec.STRING));
+
     private static <T> DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(String name, UnaryOperator<DataComponentType.Builder<T>> func) {
         return REGISTER.register(name, () -> func.apply(DataComponentType.builder()).build());
     }

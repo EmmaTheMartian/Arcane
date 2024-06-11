@@ -55,6 +55,7 @@ public class ArcaneItems extends ArcaneRegistry {
             AURAOMETER = register("auraometer", ItemAuraometer::new),
             AURA_WRENCH = register("aura_wrench", ItemAuraWrench::new),
             AURA_CONFIGURATOR = register("aura_configurator", ItemAuraConfigurator::new),
+            AURA_MULTITOOL = register("aura_multitool", ItemAuraMultitool::new),
             GEM_SAW = register("gem_saw", ItemGemSaw::new),
             SPELL_TABLET = register("spell_tablet", ItemSpellTablet::new),
             ARCANE_BLEACH = basicItem("arcane_bleach"),
