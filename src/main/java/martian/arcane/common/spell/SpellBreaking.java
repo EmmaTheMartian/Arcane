@@ -23,11 +23,11 @@ public class SpellBreaking extends AbstractSpell {
 
         if (c instanceof CastContext.WandContext wc) {
             if (wc.raycast() instanceof BlockHitResult bHit) {
-                if (c.source.getCastLevel() == 1 || wc.caster.isCrouching()) {
+                if (c.source.getCastLevel(wc) == 1 || wc.caster.isCrouching()) {
                     if (canBreak(c.level, target))
                         cost.getAndAdd(ArcaneStaticConfig.SpellCosts.BREAKING);
                 } else {
-                    AOEHelpers.streamAOE(target, bHit.getDirection(), getRadius(c.source.getCastLevel())).forEach(pos -> {
+                    AOEHelpers.streamAOE(target, bHit.getDirection(), getRadius(c.source.getCastLevel(wc))).forEach(pos -> {
                         if (c.aura.getAura() - cost.get() <= 0)
                             return;
 
@@ -56,11 +56,11 @@ public class SpellBreaking extends AbstractSpell {
 
         if (c instanceof CastContext.WandContext wc) {
             if (wc.raycast() instanceof BlockHitResult bHit) {
-                if (c.source.getCastLevel() == 1 || wc.caster.isCrouching()) {
+                if (c.source.getCastLevel(wc) == 1 || wc.caster.isCrouching()) {
                     if (tryBreak(c.level, target, !wc.caster.isCreative()))
                         cost.getAndAdd(ArcaneStaticConfig.SpellCosts.BREAKING);
                 } else {
-                    AOEHelpers.streamAOE(target, bHit.getDirection(), getRadius(c.source.getCastLevel())).forEach(pos -> {
+                    AOEHelpers.streamAOE(target, bHit.getDirection(), getRadius(c.source.getCastLevel(wc))).forEach(pos -> {
                         if (c.aura.getAura() - cost.get() <= 0)
                             return;
 

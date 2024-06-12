@@ -7,6 +7,7 @@ import martian.arcane.api.Raycasting;
 import martian.arcane.api.aura.IMutableAuraStorage;
 import martian.arcane.api.block.BlockHelpers;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
+import martian.arcane.common.ArcaneContent;
 import martian.arcane.common.registry.ArcaneBlockEntities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -36,7 +37,7 @@ public class BlockEntityAuraConnector extends AbstractAuraBlockEntity {
     public Mode mode = Mode.RELAY;
 
     public BlockEntityAuraConnector(BlockPos pos, BlockState state) {
-        super(ArcaneStaticConfig.AuraMaximums.AURA_EXTRACTORS, false, true, ArcaneBlockEntities.AURA_CONNECTOR.get(), pos, state);
+        super(ArcaneStaticConfig.AuraMaximums.AURA_CONNECTORS, false, true, ArcaneContent.AURA_CONNECTOR.tile().get(), pos, state);
     }
 
     @Override

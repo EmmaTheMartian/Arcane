@@ -4,7 +4,7 @@ import martian.arcane.api.IMachineTierable;
 import martian.arcane.api.MachineTier;
 import martian.arcane.api.Raycasting;
 import martian.arcane.api.block.BlockHelpers;
-import martian.arcane.common.registry.ArcaneDataComponents;
+import martian.arcane.common.ArcaneContent;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ItemUpgradeKit extends Item {
     public ItemUpgradeKit(MachineTier tier) {
-        super(new Properties().stacksTo(1).component(ArcaneDataComponents.MACHINE_TIER, tier));
+        super(new Properties().stacksTo(1).component(ArcaneContent.DC_MACHINE_TIER, tier));
     }
 
     @Override
@@ -34,7 +34,7 @@ public class ItemUpgradeKit extends Item {
         BlockEntity be = level.getBlockEntity(hit.getBlockPos());
 
         if (!level.isClientSide && be instanceof IMachineTierable tierable && tierable.isUpgradable()) {
-            if (tierable.upgradeTo(stack.get(ArcaneDataComponents.MACHINE_TIER))) {
+            if (tierable.upgradeTo(stack.get(ArcaneContent.DC_MACHINE_TIER))) {
                 stack.consume(1, player);
                 BlockHelpers.sync(be);
             } else {

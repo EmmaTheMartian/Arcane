@@ -1,6 +1,7 @@
 package martian.arcane.datagen.builders;
 
 import martian.arcane.api.recipe.RecipeOutput;
+import martian.arcane.common.ArcaneContent;
 import martian.arcane.common.recipe.SpellRecipe;
 import martian.arcane.common.recipe.SpellRecipeType;
 import martian.arcane.common.registry.ArcaneRecipeTypes;
@@ -80,15 +81,15 @@ public class SpellRecipeBuilder implements RecipeBuilder {
         return addResult(new RecipeOutput(stack, chance));
     }
 
-    public SpellRecipeBuilder addResult(Item item, int count, float chance) {
+    public SpellRecipeBuilder addResult(ItemLike item, int count, float chance) {
         return addResult(new RecipeOutput(item, count, chance));
     }
 
-    public SpellRecipeBuilder addResult(Item item, int count) {
+    public SpellRecipeBuilder addResult(ItemLike item, int count) {
         return addResult(new RecipeOutput(item, count, 1));
     }
 
-    public SpellRecipeBuilder addResult(Item item) {
+    public SpellRecipeBuilder addResult(ItemLike item) {
         return addResult(new RecipeOutput(item, 1, 1));
     }
 
@@ -135,14 +136,14 @@ public class SpellRecipeBuilder implements RecipeBuilder {
     }
 
     public static SpellRecipeBuilder hammering() {
-        return new SpellRecipeBuilder().setType(ArcaneRecipeTypes.HAMMERING);
+        return new SpellRecipeBuilder().setType(ArcaneContent.RT_HAMMERING);
     }
 
     public static SpellRecipeBuilder cleansing() {
-        return new SpellRecipeBuilder().setType(ArcaneRecipeTypes.CLEANSING);
+        return new SpellRecipeBuilder().setType(ArcaneContent.RT_CLEANSING);
     }
 
     public static SpellRecipeBuilder purifying() {
-        return new SpellRecipeBuilder().setType(ArcaneRecipeTypes.PURIFYING);
+        return new SpellRecipeBuilder().setType(ArcaneContent.RT_PURIFYING);
     }
 }

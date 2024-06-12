@@ -3,8 +3,8 @@ package martian.arcane.common.item;
 import martian.arcane.ArcaneStaticConfig;
 import martian.arcane.ArcaneTags;
 import martian.arcane.api.Raycasting;
+import martian.arcane.common.ArcaneContent;
 import martian.arcane.common.block.connector.BlockEntityAuraConnector;
-import martian.arcane.common.registry.ArcaneDataComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -27,7 +27,7 @@ import java.util.Objects;
 public class ItemAuraWrench extends Item {
     public ItemAuraWrench() {
         //noinspection DataFlowIssue
-        super(new Item.Properties().stacksTo(1).component(ArcaneDataComponents.TARGET_POS.get(), null));
+        super(new Item.Properties().stacksTo(1).component(ArcaneContent.DC_TARGET_POS.get(), null));
     }
 
     @Override
@@ -44,10 +44,10 @@ public class ItemAuraWrench extends Item {
                 BlockState hitState = level.getBlockState(hit.getBlockPos());
                 if (hitState.is(ArcaneTags.AURA_WRENCH_BREAKABLE))
                     level.destroyBlock(hit.getBlockPos(), true);
-                else if (stack.has(ArcaneDataComponents.TARGET_POS))
-                    stack.remove(ArcaneDataComponents.TARGET_POS);
-            } else if (stack.has(ArcaneDataComponents.TARGET_POS)) {
-                stack.remove(ArcaneDataComponents.TARGET_POS);
+                else if (stack.has(ArcaneContent.DC_TARGET_POS))
+                    stack.remove(ArcaneContent.DC_TARGET_POS);
+            } else if (stack.has(ArcaneContent.DC_TARGET_POS)) {
+                stack.remove(ArcaneContent.DC_TARGET_POS);
             }
 
             return InteractionResultHolder.success(stack);
@@ -56,10 +56,10 @@ public class ItemAuraWrench extends Item {
         if (hit == null)
             return InteractionResultHolder.fail(stack);
 
-        if (stack.has(ArcaneDataComponents.TARGET_POS)) {
+        if (stack.has(ArcaneContent.DC_TARGET_POS)) {
             BlockEntity l = level.getBlockEntity(hit.getBlockPos());
             if (l instanceof BlockEntityAuraConnector target && target.mode != BlockEntityAuraConnector.Mode.EXTRACT) {
-                BlockPos pos1 = Objects.requireNonNull(stack.get(ArcaneDataComponents.TARGET_POS));
+                BlockPos pos1 = Objects.requireNonNull(stack.get(ArcaneContent.DC_TARGET_POS));
                 BlockEntity e = level.getBlockEntity(pos1);
 
                 if (e instanceof BlockEntityAuraConnector source && source.mode != BlockEntityAuraConnector.Mode.INSERT) {
@@ -73,7 +73,7 @@ public class ItemAuraWrench extends Item {
 
                     source.setTarget(target);
                     player.sendSystemMessage(Component.translatable("messages.arcane.linked"));
-                    stack.remove(ArcaneDataComponents.TARGET_POS);
+                    stack.remove(ArcaneContent.DC_TARGET_POS);
                     return InteractionResultHolder.success(stack);
                 }
             }
@@ -86,7 +86,7 @@ public class ItemAuraWrench extends Item {
                     return InteractionResultHolder.success(stack);
                 }
 
-                stack.set(ArcaneDataComponents.TARGET_POS, hit.getBlockPos());
+                stack.set(ArcaneContent.DC_TARGET_POS, hit.getBlockPos());
                 player.sendSystemMessage(Component.translatable("messages.arcane.selected"));
                 return InteractionResultHolder.success(stack);
             }
@@ -101,10 +101,10 @@ public class ItemAuraWrench extends Item {
         super.appendHoverText(stack, context, text, flag);
         text.add(Component.translatable("item.arcane.aura_wrench.tooltip.1"));
         text.add(Component.translatable("item.arcane.aura_wrench.tooltip.2"));
-        if (stack.has(ArcaneDataComponents.TARGET_POS)) {
+        if (stack.has(ArcaneContent.DC_TARGET_POS)) {
             text.add(Component
                     .translatable("messages.arcane.linking_from")
-                    .append(Objects.requireNonNull(stack.get(ArcaneDataComponents.TARGET_POS)).toShortString())
+                    .append(Objects.requireNonNull(stack.get(ArcaneContent.DC_TARGET_POS)).toShortString())
                     .withStyle(ChatFormatting.AQUA));
         }
     }

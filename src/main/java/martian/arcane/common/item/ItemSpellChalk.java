@@ -1,6 +1,6 @@
 package martian.arcane.common.item;
 
-import martian.arcane.common.registry.ArcaneBlocks;
+import martian.arcane.common.ArcaneContent;
 import martian.arcane.integration.photon.ArcaneFx;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.BlockItem;
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class ItemSpellChalk extends BlockItem {
     public ItemSpellChalk() {
-        super(ArcaneBlocks.SPELL_CIRCLE.get(), new Properties().stacksTo(1));
+        super(ArcaneContent.SPELL_CIRCLE.block().get(), new Properties().stacksTo(1));
     }
 
     @Override

@@ -1,12 +1,11 @@
 package martian.arcane.datagen.server;
 
-import martian.arcane.common.registry.ArcaneBlocks;
-import martian.arcane.common.registry.ArcaneItems;
+import martian.arcane.common.ArcaneContent;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.BlockLootSubProvider;
 import net.minecraft.data.loot.LootTableProvider;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -14,10 +13,13 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
+
+import static martian.arcane.common.ArcaneContent.*;
 
 public class ArcaneLootTableProvider extends LootTableProvider {
     public ArcaneLootTableProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
@@ -34,7 +36,7 @@ public class ArcaneLootTableProvider extends LootTableProvider {
         @Override
         @NotNull
         protected Iterable<Block> getKnownBlocks() {
-            return ArcaneBlocks.BLOCKS.getEntries()
+            return ArcaneContent.BLOCKS.getEntries()
                     .stream()
                     .map(it -> (Block) it.value())
                     .toList();
@@ -43,41 +45,33 @@ public class ArcaneLootTableProvider extends LootTableProvider {
         @Override
         protected void generate() {
             // General Blocks
-            dropSelf(ArcaneBlocks.SOUL_MAGMA.get());
+            dropSelf(SOUL_MAGMA.get());
 
             // Machines
-//            dropSelf(ArcaneBlocks.COPPER_AURA_BASIN.get());
-//            dropSelf(ArcaneBlocks.LARIMAR_AURA_BASIN.get());
-//            dropSelf(ArcaneBlocks.AURACHALCUM_AURA_BASIN.get());
-
-            dropSelf(ArcaneBlocks.AURA_CONNECTOR.get());
-
-            dropSelf(ArcaneBlocks.AURA_BASIN.get());
-
-            dropSelf(ArcaneBlocks.PEDESTAL.get());
-            dropSelf(ArcaneBlocks.AURA_INFUSER.get());
-
-            // Generators
-            dropSelf(ArcaneBlocks.HEAT_COLLECTOR.get());
-            dropSelf(ArcaneBlocks.AQUA_COLLECTOR.get());
+            dropSelf(AURA_CONNECTOR.block().get());
+            dropSelf(AURA_BASIN.block().get());
+            dropSelf(PEDESTAL.block().get());
+            dropSelf(AURA_INFUSER.block().get());
+            dropSelf(HEAT_COLLECTOR.block().get());
+            dropSelf(AQUA_COLLECTOR.block().get());
 
             // Ores
-            ore(ArcaneBlocks.LARIMAR_ORE.get(), ArcaneItems.RAW_LARIMAR.get());
-            ore(ArcaneBlocks.FADING_LARIMAR_ORE.get(), ArcaneItems.RAW_LARIMAR.get());
-            ore(ArcaneBlocks.FADED_LARIMAR_ORE.get(), ArcaneItems.FADED_RAW_LARIMAR.get());
-            ore(ArcaneBlocks.DEEPSLATE_LARIMAR_ORE.get(), ArcaneItems.RAW_LARIMAR.get());
-            ore(ArcaneBlocks.FADING_DEEPSLATE_LARIMAR_ORE.get(), ArcaneItems.RAW_LARIMAR.get());
-            ore(ArcaneBlocks.FADED_DEEPSLATE_LARIMAR_ORE.get(), ArcaneItems.FADED_RAW_LARIMAR.get());
-            ore(ArcaneBlocks.IDOCRASE_ORE.get(), ArcaneItems.RAW_IDOCRASE.get());
-            ore(ArcaneBlocks.DEEPSLATE_IDOCRASE_ORE.get(), ArcaneItems.RAW_IDOCRASE.get());
-            ore(ArcaneBlocks.NETHER_IDOCRASE_ORE.get(), ArcaneItems.RAW_IDOCRASE.get());
-            ore(ArcaneBlocks.BLACKSTONE_IDOCRASE_ORE.get(), ArcaneItems.RAW_IDOCRASE.get());
+            ore(LARIMAR_ORE.get(), RAW_LARIMAR.get());
+            ore(FADING_LARIMAR_ORE.get(), RAW_LARIMAR.get());
+            ore(FADED_LARIMAR_ORE.get(), FADED_RAW_LARIMAR.get());
+            ore(DEEPSLATE_LARIMAR_ORE.get(), RAW_LARIMAR.get());
+            ore(FADING_DEEPSLATE_LARIMAR_ORE.get(), RAW_LARIMAR.get());
+            ore(FADED_DEEPSLATE_LARIMAR_ORE.get(), FADED_RAW_LARIMAR.get());
+            ore(IDOCRASE_ORE.get(), RAW_IDOCRASE.get());
+            ore(DEEPSLATE_IDOCRASE_ORE.get(), RAW_IDOCRASE.get());
+            ore(NETHER_IDOCRASE_ORE.get(), RAW_IDOCRASE.get());
+            ore(BLACKSTONE_IDOCRASE_ORE.get(), RAW_IDOCRASE.get());
 
             // Storage Blocks
-            dropSelf(ArcaneBlocks.LARIMAR_BLOCK.get());
-            dropSelf(ArcaneBlocks.FADING_LARIMAR_BLOCK.get());
-            dropSelf(ArcaneBlocks.FADED_LARIMAR_BLOCK.get());
-            dropSelf(ArcaneBlocks.AURACHALCUM_BLOCK.get());
+            dropSelf(LARIMAR_BLOCK.get());
+            dropSelf(FADING_LARIMAR_BLOCK.get());
+            dropSelf(FADED_LARIMAR_BLOCK.get());
+            dropSelf(AURACHALCUM_BLOCK.get());
         }
 
         private void ore(Block block, Item item) {
@@ -85,7 +79,8 @@ public class ArcaneLootTableProvider extends LootTableProvider {
         }
 
         @Override
-        public void generate(HolderLookup.@NotNull Provider registries, BiConsumer<net.minecraft.resources.ResourceKey<LootTable>, LootTable.Builder> consumer) {
+        @ParametersAreNonnullByDefault
+        public void generate(HolderLookup.Provider registries,  BiConsumer<ResourceKey<LootTable>, LootTable.Builder> consumer) {
             generate();
             map.forEach(consumer);
         }

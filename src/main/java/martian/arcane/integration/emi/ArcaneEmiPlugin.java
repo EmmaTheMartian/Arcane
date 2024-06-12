@@ -7,12 +7,10 @@ import dev.emi.emi.api.recipe.EmiRecipe;
 import dev.emi.emi.api.recipe.EmiRecipeCategory;
 import dev.emi.emi.api.stack.EmiStack;
 import martian.arcane.ArcaneMod;
+import martian.arcane.common.ArcaneContent;
 import martian.arcane.common.item.ItemAuraWand;
 import martian.arcane.common.recipe.SpellRecipe;
 import martian.arcane.common.recipe.SpellRecipeType;
-import martian.arcane.common.registry.ArcaneBlocks;
-import martian.arcane.common.registry.ArcaneRecipeTypes;
-import martian.arcane.common.registry.ArcaneSpells;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.Recipe;
@@ -24,11 +22,11 @@ import java.util.function.Function;
 
 @EmiEntrypoint
 public class ArcaneEmiPlugin implements EmiPlugin {
-    public static final EmiStack STACK_AURA_INFUSER = EmiStack.of(ArcaneBlocks.AURA_INFUSER);
-    public static final EmiStack STACK_SPELL_HAMMERING = EmiStack.of(ItemAuraWand.oakWandOfSpell(ArcaneSpells.HAMMERING.getId()));
-    public static final EmiStack STACK_SPELL_CLEANSING = EmiStack.of(ItemAuraWand.oakWandOfSpell(ArcaneSpells.CLEANSING.getId()));
-    public static final EmiStack STACK_SPELL_PURIFYING = EmiStack.of(ItemAuraWand.oakWandOfSpell(ArcaneSpells.PURIFYING.getId()));
-    public static final EmiStack STACK_PEDESTAL = EmiStack.of(ArcaneBlocks.PEDESTAL);
+    public static final EmiStack STACK_AURA_INFUSER = EmiStack.of(ArcaneContent.AURA_INFUSER.block());
+    public static final EmiStack STACK_SPELL_HAMMERING = EmiStack.of(ItemAuraWand.oakWandOfSpell(ArcaneContent.SPELL_HAMMERING.getId()));
+    public static final EmiStack STACK_SPELL_CLEANSING = EmiStack.of(ItemAuraWand.oakWandOfSpell(ArcaneContent.SPELL_CLEANSING.getId()));
+    public static final EmiStack STACK_SPELL_PURIFYING = EmiStack.of(ItemAuraWand.oakWandOfSpell(ArcaneContent.SPELL_PURIFYING.getId()));
+    public static final EmiStack STACK_PEDESTAL = EmiStack.of(ArcaneContent.PEDESTAL.block());
 
     public static final EmiRecipeCategory CATEGORY_AURA_INFUSION = new EmiRecipeCategory(ArcaneMod.id("aura_infusion"), STACK_AURA_INFUSER);
     public static final EmiRecipeCategory CATEGORY_SPELL_HAMMERING = new EmiRecipeCategory(ArcaneMod.id("spell_hammering"), STACK_SPELL_HAMMERING);
@@ -44,15 +42,15 @@ public class ArcaneEmiPlugin implements EmiPlugin {
         this.r = registry;
         this.rm = registry.getRecipeManager();
 
-        addSpellCategory(CATEGORY_SPELL_HAMMERING, STACK_SPELL_HAMMERING, ArcaneRecipeTypes.HAMMERING, ArcaneSpells.HAMMERING.getId());
-        addSpellCategory(CATEGORY_SPELL_CLEANSING, STACK_SPELL_CLEANSING, ArcaneRecipeTypes.CLEANSING, ArcaneSpells.CLEANSING.getId());
-        addSpellCategory(CATEGORY_SPELL_PURIFYING, STACK_SPELL_PURIFYING, ArcaneRecipeTypes.PURIFYING, ArcaneSpells.PURIFYING.getId());
+        addSpellCategory(CATEGORY_SPELL_HAMMERING, STACK_SPELL_HAMMERING, ArcaneContent.RT_HAMMERING, ArcaneContent.SPELL_HAMMERING.getId());
+        addSpellCategory(CATEGORY_SPELL_CLEANSING, STACK_SPELL_CLEANSING, ArcaneContent.RT_CLEANSING, ArcaneContent.SPELL_CLEANSING.getId());
+        addSpellCategory(CATEGORY_SPELL_PURIFYING, STACK_SPELL_PURIFYING, ArcaneContent.RT_PURIFYING, ArcaneContent.SPELL_PURIFYING.getId());
 
         addCategory(CATEGORY_AURA_INFUSION, STACK_AURA_INFUSER);
         addCategory(CATEGORY_PEDESTAL, STACK_PEDESTAL);
 
-        addRecipesFor(ArcaneRecipeTypes.AURA_INFUSION, AuraInfusionEmiRecipe::new);
-        addRecipesFor(ArcaneRecipeTypes.PEDESTAL, PedestalEmiRecipe::new);
+        addRecipesFor(ArcaneContent.RT_AURA_INFUSION, AuraInfusionEmiRecipe::new);
+        addRecipesFor(ArcaneContent.RT_PEDESTAL, PedestalEmiRecipe::new);
     }
 
     private void addCategory(EmiRecipeCategory category, EmiStack stack) {

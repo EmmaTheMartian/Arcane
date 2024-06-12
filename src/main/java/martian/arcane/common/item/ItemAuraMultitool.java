@@ -4,8 +4,7 @@ import martian.arcane.api.Raycasting;
 import martian.arcane.api.item.IAuraConfigurator;
 import martian.arcane.api.item.IAuraWrench;
 import martian.arcane.api.item.IAuraometer;
-import martian.arcane.common.registry.ArcaneDataComponents;
-import martian.arcane.common.registry.ArcaneItems;
+import martian.arcane.common.ArcaneContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -30,11 +29,14 @@ public class ItemAuraMultitool extends Item implements IAuraConfigurator, IAuraW
 
     public ItemAuraMultitool() {
         //noinspection DataFlowIssue
-        super(new Properties().stacksTo(1).component(ArcaneDataComponents.TARGET_POS, null).component(ArcaneDataComponents.MODE, Mode.CONFIGURE.toString()));
+        super(new Properties()
+                .stacksTo(1)
+                .component(ArcaneContent.DC_TARGET_POS, null)
+                .component(ArcaneContent.DC_MODE, Mode.CONFIGURE.toString()));
     }
 
     public static Mode getMode(ItemStack stack) {
-        return Mode.valueOf(stack.get(ArcaneDataComponents.MODE));
+        return Mode.valueOf(stack.get(ArcaneContent.DC_MODE));
     }
 
     public static Mode getNextMode(Mode mode) {
@@ -46,7 +48,7 @@ public class ItemAuraMultitool extends Item implements IAuraConfigurator, IAuraW
     }
 
     public static void setMode(ItemStack stack, Mode mode) {
-        stack.set(ArcaneDataComponents.MODE, mode.toString());
+        stack.set(ArcaneContent.DC_MODE, mode.toString());
     }
 
     @Override
@@ -66,9 +68,9 @@ public class ItemAuraMultitool extends Item implements IAuraConfigurator, IAuraW
         }
 
         return switch (getMode(stack)) {
-            case CONFIGURE -> ArcaneItems.AURA_CONFIGURATOR.get().use(level, player, hand);
-            case WRENCH -> ArcaneItems.AURA_WRENCH.get().use(level, player, hand);
-            case AURAOMETER -> ArcaneItems.AURAOMETER.get().use(level, player, hand);
+            case CONFIGURE -> ArcaneContent.AURA_CONFIGURATOR.get().use(level, player, hand);
+            case WRENCH -> ArcaneContent.AURA_WRENCH.get().use(level, player, hand);
+            case AURAOMETER -> ArcaneContent.AURAOMETER.get().use(level, player, hand);
         };
     }
 

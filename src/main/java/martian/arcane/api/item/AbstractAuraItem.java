@@ -3,7 +3,7 @@ package martian.arcane.api.item;
 import martian.arcane.api.aura.AuraRecord;
 import martian.arcane.api.aura.AuraStorage;
 import martian.arcane.api.aura.IMutableAuraStorage;
-import martian.arcane.common.registry.ArcaneDataComponents;
+import martian.arcane.common.ArcaneContent;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FastColor;
@@ -23,7 +23,7 @@ public abstract class AbstractAuraItem extends Item {
     private final boolean defaultExtractable, defaultInsertable;
 
     public AbstractAuraItem(int maxAura, boolean extractable, boolean insertable, Item.Properties properties) {
-        super(properties.component(ArcaneDataComponents.AURA, new AuraRecord(maxAura, 0, extractable, insertable)));
+        super(properties.component(ArcaneContent.DC_AURA, new AuraRecord(maxAura, 0, extractable, insertable)));
         this.defaultMaxAura = maxAura;
         this.defaultExtractable = extractable;
         this.defaultInsertable = insertable;
@@ -43,7 +43,7 @@ public abstract class AbstractAuraItem extends Item {
     }
 
     public void mutateAuraStorage(ItemStack stack, UnaryOperator<IMutableAuraStorage> func) {
-        stack.set(ArcaneDataComponents.AURA, new AuraRecord(func.apply(getAuraStorage(stack).unfreeze())));
+        stack.set(ArcaneContent.DC_AURA, new AuraRecord(func.apply(getAuraStorage(stack).unfreeze())));
     }
 
     public boolean canExtractFrom(ItemStack stack) {

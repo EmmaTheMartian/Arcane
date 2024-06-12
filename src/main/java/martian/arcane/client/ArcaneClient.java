@@ -2,6 +2,7 @@ package martian.arcane.client;
 
 import martian.arcane.ArcaneMod;
 import martian.arcane.client.gui.AuraometerOverlay;
+import martian.arcane.common.ArcaneContent;
 import martian.arcane.common.block.connector.ConnectorLinkRenderer;
 import martian.arcane.common.block.infuser.AuraInfuserRenderer;
 import martian.arcane.common.block.pedestal.PedestalRenderer;
@@ -42,9 +43,9 @@ public class ArcaneClient {
     }
 
     public static void registerBlockEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        event.registerBlockEntityRenderer(ArcaneBlockEntities.AURA_INFUSER.get(), AuraInfuserRenderer::new);
-        event.registerBlockEntityRenderer(ArcaneBlockEntities.PEDESTAL.get(), PedestalRenderer::new);
-        event.registerBlockEntityRenderer(ArcaneBlockEntities.SPELL_CIRCLE.get(), SpellCircleRenderer::new);
+        event.registerBlockEntityRenderer(ArcaneContent.AURA_INFUSER.tile().get(), AuraInfuserRenderer::new);
+        event.registerBlockEntityRenderer(ArcaneContent.PEDESTAL.tile().get(), PedestalRenderer::new);
+        event.registerBlockEntityRenderer(ArcaneContent.SPELL_CIRCLE.tile().get(), SpellCircleRenderer::new);
     }
 
     public static void registerEntityLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {

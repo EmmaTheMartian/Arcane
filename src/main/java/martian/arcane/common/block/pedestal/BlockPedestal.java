@@ -2,15 +2,16 @@ package martian.arcane.common.block.pedestal;
 
 import com.klikli_dev.modonomicon.client.gui.BookGuiManager;
 import com.klikli_dev.modonomicon.item.ModonomiconItem;
+import martian.arcane.api.ArcaneRegistries;
 import martian.arcane.api.block.BlockHelpers;
 import martian.arcane.api.PropertyHelpers;
 import martian.arcane.api.spell.AbstractSpell;
+import martian.arcane.common.ArcaneContent;
 import martian.arcane.common.item.ItemAuraWand;
 import martian.arcane.common.item.ItemSpellTablet;
 import martian.arcane.common.recipe.RecipePedestalCrafting;
 import martian.arcane.common.registry.ArcaneBlockEntities;
 import martian.arcane.common.registry.ArcaneItems;
-import martian.arcane.common.registry.ArcaneRegistries;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -125,7 +126,7 @@ public class BlockPedestal extends Block implements EntityBlock {
             // Remove wand spell
             if (
                 pedestalStack.getItem() instanceof ItemAuraWand &&
-                stack.is(ArcaneItems.ARCANE_BLEACH.get()) &&
+                stack.is(ArcaneContent.ARCANE_BLEACH) &&
                 ItemAuraWand.hasSpell(pedestalStack)
             ) {
                 ItemAuraWand.removeSpell(pedestalStack);
@@ -212,6 +213,6 @@ public class BlockPedestal extends Block implements EntityBlock {
     @Override
     @ParametersAreNonnullByDefault
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return !level.isClientSide && type == ArcaneBlockEntities.PEDESTAL.get() ? BlockEntityPedestal::tick : null;
+        return !level.isClientSide && type == ArcaneContent.PEDESTAL.tile().get() ? BlockEntityPedestal::tick : null;
     }
 }

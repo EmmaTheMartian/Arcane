@@ -1,9 +1,7 @@
 package martian.arcane.client;
 
 import com.mojang.blaze3d.platform.InputConstants;
-import martian.arcane.api.ArcaneRegistry;
 import net.minecraft.client.KeyMapping;
-import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.client.settings.KeyConflictContext;
 import net.neoforged.neoforge.common.util.Lazy;
 import org.lwjgl.glfw.GLFW;

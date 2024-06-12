@@ -5,7 +5,7 @@ import martian.arcane.api.block.AOEHelpers;
 import martian.arcane.api.spell.AbstractSpell;
 import martian.arcane.api.spell.CastContext;
 import martian.arcane.api.spell.CastResult;
-import martian.arcane.common.registry.ArcaneBlocks;
+import martian.arcane.common.ArcaneContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -28,16 +28,14 @@ public class SpellBuilding extends AbstractSpell {
         if (target == null)
             return 0;
 
-        BlockState toPlace = ArcaneBlocks.CONJURED_BLOCK.get().defaultBlockState();
-
         if (c instanceof CastContext.WandContext wc) {
             if (wc.raycast() instanceof BlockHitResult bHit) {
                 target = bHit.getBlockPos().relative(bHit.getDirection());
-                if (c.source.getCastLevel() == 1 || wc.caster.isCrouching()) {
+                if (c.source.getCastLevel(wc) == 1 || wc.caster.isCrouching()) {
                     if (canPlace(c.level, target))
                         cost.getAndAdd(ArcaneStaticConfig.SpellCosts.BUILDING);
                 } else {
-                    AOEHelpers.streamAOE(target, bHit.getDirection(), getRadius(c.source.getCastLevel())).forEach(pos -> {
+                    AOEHelpers.streamAOE(target, bHit.getDirection(), getRadius(c.source.getCastLevel(wc))).forEach(pos -> {
                         if (c.aura.getAura() - cost.get() <= 0)
                             return;
 
@@ -65,7 +63,7 @@ public class SpellBuilding extends AbstractSpell {
         if (target == null)
             return CastResult.FAILED;
 
-        BlockState toPlace = ArcaneBlocks.CONJURED_BLOCK.get().defaultBlockState();
+        BlockState toPlace = ArcaneContent.CONJURED_BLOCK.get().defaultBlockState();
 
         if (c instanceof CastContext.WandContext wc) {
             ItemStack offStack = wc.caster.getMainHandItem() == wc.castingStack
@@ -80,12 +78,12 @@ public class SpellBuilding extends AbstractSpell {
 
             if (wc.raycast() instanceof BlockHitResult bHit) {
                 target = bHit.getBlockPos().relative(bHit.getDirection());
-                if (c.source.getCastLevel() == 1 || wc.caster.isCrouching()) {
+                if (c.source.getCastLevel(wc) == 1 || wc.caster.isCrouching()) {
                     if (tryPlace(c.level, target, toPlace))
                         cost.getAndAdd(ArcaneStaticConfig.SpellCosts.BUILDING);
                 } else {
                     BlockState finalToPlace = toPlace;
-                    AOEHelpers.streamAOE(target, bHit.getDirection(), getRadius(c.source.getCastLevel())).forEach(pos -> {
+                    AOEHelpers.streamAOE(target, bHit.getDirection(), getRadius(c.source.getCastLevel(wc))).forEach(pos -> {
                         if (c.aura.getAura() - cost.get() <= 0 || (usingOffStack.get() && offStack.isEmpty()))
                             return;
 

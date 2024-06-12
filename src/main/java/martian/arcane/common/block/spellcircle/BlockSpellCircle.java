@@ -1,9 +1,8 @@
 package martian.arcane.common.block.spellcircle;
 
 import martian.arcane.api.block.AbstractAuraMachine;
+import martian.arcane.common.ArcaneContent;
 import martian.arcane.common.item.ItemSpellTablet;
-import martian.arcane.common.registry.ArcaneBlockEntities;
-import martian.arcane.common.registry.ArcaneItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -63,11 +62,11 @@ public class BlockSpellCircle extends AbstractAuraMachine {
         if (held.isEmpty() || circle == null)
             return ItemInteractionResult.FAIL;
 
-        if (held.is(ArcaneItems.SPELL_TABLET.get()) && !circle.hasSpell()) {
+        if (held.is(ArcaneContent.SPELL_TABLET) && !circle.hasSpell()) {
             circle.setSpell(ItemSpellTablet.getSpellId(held));
             held.shrink(1);
             return ItemInteractionResult.CONSUME;
-        } else if (held.is(ArcaneItems.ARCANE_BLEACH.get()) && circle.hasSpell()) {
+        } else if (held.is(ArcaneContent.ARCANE_BLEACH) && circle.hasSpell()) {
             circle.setSpell(null);
             held.shrink(1);
             circle.setActive(false);
@@ -96,7 +95,7 @@ public class BlockSpellCircle extends AbstractAuraMachine {
     @Override
     @ParametersAreNonnullByDefault
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return !level.isClientSide && type == ArcaneBlockEntities.SPELL_CIRCLE.get() ? BlockEntitySpellCircle::tick : null;
+        return !level.isClientSide && type == ArcaneContent.SPELL_CIRCLE.tile().get() ? BlockEntitySpellCircle::tick : null;
     }
 
     @Override

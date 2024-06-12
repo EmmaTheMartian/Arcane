@@ -22,7 +22,6 @@ import java.util.Optional;
 @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 public class RecipeAuraInfusion extends SimpleRecipe<RecipeAuraInfusion.Container> {
-    public static final String NAME = "aura_infusion";
     public static final AuraInfusionType TYPE = new AuraInfusionType();
 
     public final int aura;

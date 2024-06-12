@@ -3,13 +3,13 @@
   "category": "equipment",
   "ingredients": [
     {
-      "item": "minecraft:glass_bottle"
-    },
-    {
       "item": "arcane:auraglass_dust"
     },
     {
       "item": "minecraft:bone_meal"
+    },
+    {
+      "item": "minecraft:glass_bottle"
     }
   ],
   "result": {

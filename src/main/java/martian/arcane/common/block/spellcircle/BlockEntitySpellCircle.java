@@ -1,14 +1,14 @@
 package martian.arcane.common.block.spellcircle;
 
 import martian.arcane.ArcaneStaticConfig;
+import martian.arcane.api.ArcaneRegistries;
 import martian.arcane.api.NBTHelpers;
 import martian.arcane.api.block.BlockHelpers;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
 import martian.arcane.api.spell.CastContext;
 import martian.arcane.api.spell.CastResult;
 import martian.arcane.api.spell.ICastingSource;
-import martian.arcane.common.registry.ArcaneBlockEntities;
-import martian.arcane.common.registry.ArcaneRegistries;
+import martian.arcane.common.ArcaneContent;
 import martian.arcane.integration.photon.ArcaneFx;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -19,6 +19,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -36,14 +37,14 @@ public class BlockEntitySpellCircle extends AbstractAuraBlockEntity implements I
     private @Nullable ResourceLocation spellId = null;
 
     public BlockEntitySpellCircle(int maxAura, int castRateTicks, int castingLevel, BlockPos pos, BlockState state) {
-        super(maxAura, false, true, ArcaneBlockEntities.SPELL_CIRCLE.get(), pos, state);
+        super(maxAura, false, true, ArcaneContent.SPELL_CIRCLE.tile().get(), pos, state);
         this.castRateTicks = castRateTicks;
         this.ticksToNextCast = this.castRateTicks;
         this.castingLevel = castingLevel;
     }
 
     public BlockEntitySpellCircle(BlockPos pos, BlockState state) {
-        super(ArcaneStaticConfig.AuraMaximums.SPELL_CIRCLE_BASIC, false, true, ArcaneBlockEntities.SPELL_CIRCLE.get(), pos, state);
+        super(ArcaneStaticConfig.AuraMaximums.SPELL_CIRCLE_BASIC, false, true, ArcaneContent.SPELL_CIRCLE.tile().get(), pos, state);
         this.castRateTicks = ArcaneStaticConfig.Speed.SPELL_CIRCLE_BASIC;
         this.ticksToNextCast = this.castRateTicks;
         this.castingLevel = 1;
@@ -82,7 +83,7 @@ public class BlockEntitySpellCircle extends AbstractAuraBlockEntity implements I
 
     protected void tick() {
         if (level != null && hasSpell() && isActive && --ticksToNextCast <= 0) {
-            var spell = Objects.requireNonNull(ArcaneRegistries.SPELLS.get(spellId));
+            var spell = Objects.requireNonNull(martian.arcane.api.ArcaneRegistries.SPELLS.get(spellId));
             var con = new CastContext.SpellCircleContext(this);
             int cost = spell.getAuraCost(con);
             if (getAura() >= cost) {
@@ -185,7 +186,7 @@ public class BlockEntitySpellCircle extends AbstractAuraBlockEntity implements I
     }
 
     @Override
-    public int getCastLevel() {
+    public int getCastLevel(CastContext context) {
         return castingLevel;
     }
 }

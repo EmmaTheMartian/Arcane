@@ -1,12 +1,11 @@
 package martian.arcane.common.item;
 
+import martian.arcane.api.ArcaneRegistries;
 import martian.arcane.api.item.AbstractAuraItem;
 import martian.arcane.api.item.IAuraWand;
 import martian.arcane.api.spell.AbstractSpell;
 import martian.arcane.api.spell.CastContext;
-import martian.arcane.common.registry.ArcaneDataComponents;
-import martian.arcane.common.registry.ArcaneItems;
-import martian.arcane.common.registry.ArcaneRegistries;
+import martian.arcane.common.ArcaneContent;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -29,7 +28,7 @@ public class ItemAuraWand extends AbstractAuraItem implements IAuraWand {
 
     public ItemAuraWand(int maxAura, int level, Properties properties) {
         //noinspection DataFlowIssue
-        super(maxAura, false, true, properties.component(ArcaneDataComponents.SPELL.get(), null));
+        super(maxAura, false, true, properties.component(ArcaneContent.DC_SPELL.get(), null));
         this.level = level;
     }
 
@@ -83,7 +82,7 @@ public class ItemAuraWand extends AbstractAuraItem implements IAuraWand {
 
     // Spell casting stuffs
     public void setSpell(ResourceLocation newSpell, ItemStack stack) {
-        stack.set(ArcaneDataComponents.SPELL, newSpell);
+        stack.set(ArcaneContent.DC_SPELL, newSpell);
         if (!stack.has(DataComponents.CUSTOM_NAME))
             stack.set(DataComponents.CUSTOM_NAME, getSpellOrThrow(stack).getItemName(this, stack));
     }
@@ -97,13 +96,13 @@ public class ItemAuraWand extends AbstractAuraItem implements IAuraWand {
     }
 
     @Override
-    public int getCastLevel(ItemStack stack) {
+    public int getCastLevel(CastContext context) {
         return level;
     }
 
     // Static methods
     public static void removeSpell(ItemStack stack) {
-        stack.remove(ArcaneDataComponents.SPELL);
+        stack.remove(ArcaneContent.DC_SPELL);
     }
 
     public static boolean hasSpell(ItemStack stack) {
@@ -111,12 +110,12 @@ public class ItemAuraWand extends AbstractAuraItem implements IAuraWand {
     }
 
     public static @Nullable ResourceLocation getSpellId(ItemStack stack) {
-        return stack.get(ArcaneDataComponents.SPELL);
+        return stack.get(ArcaneContent.DC_SPELL);
     }
 
     public static ItemStack oakWandOfSpell(ResourceLocation spell) {
-        ItemStack stack = new ItemStack(ArcaneItems.WAND_OAK.get());
-        stack.set(ArcaneDataComponents.SPELL, spell);
+        ItemStack stack = new ItemStack(ArcaneContent.WAND_OAK.get());
+        stack.set(ArcaneContent.DC_SPELL, spell);
         return stack;
     }
 }

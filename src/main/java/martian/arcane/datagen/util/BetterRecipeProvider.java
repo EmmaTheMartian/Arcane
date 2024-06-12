@@ -6,6 +6,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -32,28 +33,28 @@ public abstract class BetterRecipeProvider extends RecipeProvider {
     }
 
     // Shaped
-    protected RecipeDataHelper.BuilderWrapper<ShapedRecipeBuilder> shaped(Item output, int count) {
+    protected RecipeDataHelper.BuilderWrapper<ShapedRecipeBuilder> shaped(ItemLike output, int count) {
         return helper.shaped(output, count);
     }
 
-    protected RecipeDataHelper.BuilderWrapper<ShapedRecipeBuilder> shaped(Item output) {
+    protected RecipeDataHelper.BuilderWrapper<ShapedRecipeBuilder> shaped(ItemLike output) {
         return helper.shaped(output);
     }
 
     // Shapeless
-    protected RecipeDataHelper.BuilderWrapper<ShapelessRecipeBuilder> shapeless(Item output, int count) {
+    protected RecipeDataHelper.BuilderWrapper<ShapelessRecipeBuilder> shapeless(ItemLike output, int count) {
         return helper.shapeless(output, count);
     }
 
-    protected RecipeDataHelper.BuilderWrapper<ShapelessRecipeBuilder> shapeless(Item output) {
+    protected RecipeDataHelper.BuilderWrapper<ShapelessRecipeBuilder> shapeless(ItemLike output) {
         return helper.shapeless(output);
     }
 
-    protected RecipeDataHelper.BuilderWrapper<ShapelessRecipeBuilder> shapeless(Item output, int count, Map<Ingredient, Integer> items) {
+    protected RecipeDataHelper.BuilderWrapper<ShapelessRecipeBuilder> shapeless(ItemLike output, int count, Map<Ingredient, Integer> items) {
         return helper.shapeless(output, count, items);
     }
 
-    protected RecipeDataHelper.BuilderWrapper<ShapelessRecipeBuilder> shapeless(Item output, Map<Ingredient, Integer> items) {
+    protected RecipeDataHelper.BuilderWrapper<ShapelessRecipeBuilder> shapeless(ItemLike output, Map<Ingredient, Integer> items) {
         return helper.shapeless(output, items);
     }
 

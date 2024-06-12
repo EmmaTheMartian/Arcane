@@ -5,8 +5,8 @@ import martian.arcane.api.NBTHelpers;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntityWithSingleItem;
 import martian.arcane.api.block.entity.IAuraometerOutput;
+import martian.arcane.common.ArcaneContent;
 import martian.arcane.common.recipe.RecipeAuraInfusion;
-import martian.arcane.common.registry.ArcaneBlockEntities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -29,7 +29,7 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntityWithSingleIte
     public boolean isActive = false;
 
     public BlockEntityAuraInfuser(BlockPos pos, BlockState state) {
-        super(ArcaneStaticConfig.AuraMaximums.AURA_INFUSER, false, true, ArcaneBlockEntities.AURA_INFUSER.get(), pos, state);
+        super(ArcaneStaticConfig.AuraMaximums.AURA_INFUSER, false, true, ArcaneContent.AURA_INFUSER.tile().get(), pos, state);
     }
 
     @Override

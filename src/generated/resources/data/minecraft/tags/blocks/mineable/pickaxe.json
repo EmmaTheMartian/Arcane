@@ -3,13 +3,6 @@
     "arcane:auraglass",
     "arcane:soul_magma",
     "arcane:aura_torch",
-    "arcane:aura_connector",
-    "arcane:aura_basin",
-    "arcane:pedestal",
-    "arcane:aura_infuser",
-    "arcane:spell_circle",
-    "arcane:heat_collector",
-    "arcane:aqua_collector",
     "arcane:conjured_block",
     "arcane:conjured_crafting_table",
     "arcane:faded_larimar_ore",
@@ -25,6 +18,13 @@
     "arcane:faded_larimar_block",
     "arcane:fading_larimar_block",
     "arcane:larimar_block",
-    "arcane:aurachalcum_block"
+    "arcane:aurachalcum_block",
+    "arcane:aura_connector",
+    "arcane:aura_basin",
+    "arcane:pedestal",
+    "arcane:aura_infuser",
+    "arcane:spell_circle",
+    "arcane:heat_collector",
+    "arcane:aqua_collector"
   ]
 }

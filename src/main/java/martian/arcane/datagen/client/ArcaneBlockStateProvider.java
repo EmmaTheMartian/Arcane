@@ -5,7 +5,6 @@ import martian.arcane.common.block.connector.BlockAuraConnector;
 import martian.arcane.common.block.pedestal.BlockPedestal;
 import martian.arcane.common.block.basin.BlockAuraBasin;
 import martian.arcane.common.block.infuser.BlockAuraInfuser;
-import martian.arcane.common.registry.ArcaneBlocks;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
@@ -19,6 +18,8 @@ import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredBlock;
 
+import static martian.arcane.common.ArcaneContent.*;
+
 public class ArcaneBlockStateProvider extends BlockStateProvider {
     private static final ResourceLocation TRANSLUCENT = new ResourceLocation("translucent");
 
@@ -29,79 +30,71 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
         // Models
-        {
-            // Generators
-            topBottom(ArcaneBlocks.HEAT_COLLECTOR.get(), texture("machines/ignis_collector"), new ResourceLocation("minecraft", "block/polished_deepslate"));
-            topBottom(ArcaneBlocks.AQUA_COLLECTOR.get(), texture("machines/aqua_collector"), new ResourceLocation("minecraft", "block/polished_deepslate"));
+        // Generators
+        topBottom(HEAT_COLLECTOR.block().get(), texture("machines/ignis_collector"), new ResourceLocation("minecraft", "block/polished_deepslate"));
+        topBottom(AQUA_COLLECTOR.block().get(), texture("machines/aqua_collector"), new ResourceLocation("minecraft", "block/polished_deepslate"));
 
-            // General Blocks
-            simpleTranslucent(ArcaneBlocks.AURAGLASS.get());
-            cubeAll(ArcaneBlocks.SOUL_MAGMA.get());
-            withExistingParent(ArcaneBlocks.AURA_TORCH.get(), new ResourceLocation("minecraft", "block/template_torch"))
-                    .renderType("minecraft:cutout")
-                    .texture("torch", "arcane:block/aura_torch");
+        // General Blocks
+        simpleTranslucent(AURAGLASS.get());
+        cubeAll(SOUL_MAGMA.get());
+        withExistingParent(AURA_TORCH.get(), new ResourceLocation("minecraft", "block/template_torch"))
+                .renderType("minecraft:cutout")
+                .texture("torch", "arcane:block/aura_torch");
 
-            // Conjured Blocks
-            simpleTranslucent(ArcaneBlocks.CONJURED_BLOCK.get());
+        // Conjured Blocks
+        simpleTranslucent(CONJURED_BLOCK.get());
 
-            // Ores
-            cubeAll(ArcaneBlocks.LARIMAR_ORE.get());
-            cubeAll(ArcaneBlocks.FADING_LARIMAR_ORE.get());
-            cubeAll(ArcaneBlocks.FADED_LARIMAR_ORE.get());
-            cubeAll(ArcaneBlocks.DEEPSLATE_LARIMAR_ORE.get());
-            cubeAll(ArcaneBlocks.FADING_DEEPSLATE_LARIMAR_ORE.get());
-            cubeAll(ArcaneBlocks.FADED_DEEPSLATE_LARIMAR_ORE.get());
+        // Ores
+        cubeAll(LARIMAR_ORE.get());
+        cubeAll(FADING_LARIMAR_ORE.get());
+        cubeAll(FADED_LARIMAR_ORE.get());
+        cubeAll(DEEPSLATE_LARIMAR_ORE.get());
+        cubeAll(FADING_DEEPSLATE_LARIMAR_ORE.get());
+        cubeAll(FADED_DEEPSLATE_LARIMAR_ORE.get());
+        cubeAll(IDOCRASE_ORE.get());
+        cubeAll(DEEPSLATE_IDOCRASE_ORE.get());
+        cubeAll(NETHER_IDOCRASE_ORE.get());
+        cubeAll(BLACKSTONE_IDOCRASE_ORE.get());
 
-            cubeAll(ArcaneBlocks.IDOCRASE_ORE.get());
-            cubeAll(ArcaneBlocks.DEEPSLATE_IDOCRASE_ORE.get());
-            cubeAll(ArcaneBlocks.NETHER_IDOCRASE_ORE.get());
-            cubeAll(ArcaneBlocks.BLACKSTONE_IDOCRASE_ORE.get());
-
-            // Storage Blocks
-            cubeAll(ArcaneBlocks.FADED_LARIMAR_BLOCK.get());
-            cubeAll(ArcaneBlocks.FADING_LARIMAR_BLOCK.get());
-            cubeAll(ArcaneBlocks.LARIMAR_BLOCK.get());
-            cubeAll(ArcaneBlocks.AURACHALCUM_BLOCK.get());
-        }
+        // Storage Blocks
+        cubeAll(FADED_LARIMAR_BLOCK.get());
+        cubeAll(FADING_LARIMAR_BLOCK.get());
+        cubeAll(LARIMAR_BLOCK.get());
+        cubeAll(AURACHALCUM_BLOCK.get());
 
         // Block States
-        {
-            makeBlockState(ArcaneBlocks.SOUL_MAGMA);
-            makeBlockState(ArcaneBlocks.AURA_TORCH);
+        makeBlockState(SOUL_MAGMA);
+        makeBlockState(AURA_TORCH);
 
-            // Machines
-            makeRotatableModel(ArcaneBlocks.AURA_CONNECTOR, BlockAuraConnector.FACING, false);
-            makeRotatableModel(ArcaneBlocks.AURA_BASIN, BlockAuraBasin.FACING, true);
-            makeRotatableModel(ArcaneBlocks.AURA_INFUSER, BlockAuraInfuser.FACING, true);
-            makeRotatableModel(ArcaneBlocks.PEDESTAL, BlockPedestal.FACING, true);
-            makeBlockState(ArcaneBlocks.SPELL_CIRCLE);
+        // Machines
+        makeRotatableModel(AURA_CONNECTOR.block(), BlockAuraConnector.FACING, false);
+        makeRotatableModel(AURA_BASIN.block(), BlockAuraBasin.FACING, true);
+        makeRotatableModel(AURA_INFUSER.block(), BlockAuraInfuser.FACING, true);
+        makeRotatableModel(PEDESTAL.block(), BlockPedestal.FACING, true);
+        makeBlockState(SPELL_CIRCLE.block());
+        makeBlockState(HEAT_COLLECTOR.block());
+        makeBlockState(AQUA_COLLECTOR.block());
 
-            // Generators
-            makeBlockState(ArcaneBlocks.HEAT_COLLECTOR);
-            makeBlockState(ArcaneBlocks.AQUA_COLLECTOR);
+        // Conjured Blocks
+        makeBlockState(CONJURED_CRAFTING_TABLE);
 
-            // Conjured Blocks
-            makeBlockState(ArcaneBlocks.CONJURED_CRAFTING_TABLE);
+        // Ores
+        makeBlockState(LARIMAR_ORE);
+        makeBlockState(FADING_LARIMAR_ORE);
+        makeBlockState(FADED_LARIMAR_ORE);
+        makeBlockState(DEEPSLATE_LARIMAR_ORE);
+        makeBlockState(FADING_DEEPSLATE_LARIMAR_ORE);
+        makeBlockState(FADED_DEEPSLATE_LARIMAR_ORE);
+        makeBlockState(IDOCRASE_ORE);
+        makeBlockState(DEEPSLATE_IDOCRASE_ORE);
+        makeBlockState(NETHER_IDOCRASE_ORE);
+        makeBlockState(BLACKSTONE_IDOCRASE_ORE);
 
-            // Ores
-            makeBlockState(ArcaneBlocks.LARIMAR_ORE);
-            makeBlockState(ArcaneBlocks.FADING_LARIMAR_ORE);
-            makeBlockState(ArcaneBlocks.FADED_LARIMAR_ORE);
-            makeBlockState(ArcaneBlocks.DEEPSLATE_LARIMAR_ORE);
-            makeBlockState(ArcaneBlocks.FADING_DEEPSLATE_LARIMAR_ORE);
-            makeBlockState(ArcaneBlocks.FADED_DEEPSLATE_LARIMAR_ORE);
-
-            makeBlockState(ArcaneBlocks.IDOCRASE_ORE);
-            makeBlockState(ArcaneBlocks.DEEPSLATE_IDOCRASE_ORE);
-            makeBlockState(ArcaneBlocks.NETHER_IDOCRASE_ORE);
-            makeBlockState(ArcaneBlocks.BLACKSTONE_IDOCRASE_ORE);
-
-            // Storage Blocks
-            makeBlockState(ArcaneBlocks.FADED_LARIMAR_BLOCK);
-            makeBlockState(ArcaneBlocks.FADING_LARIMAR_BLOCK);
-            makeBlockState(ArcaneBlocks.LARIMAR_BLOCK);
-            makeBlockState(ArcaneBlocks.AURACHALCUM_BLOCK);
-        }
+        // Storage Blocks
+        makeBlockState(FADED_LARIMAR_BLOCK);
+        makeBlockState(FADING_LARIMAR_BLOCK);
+        makeBlockState(LARIMAR_BLOCK);
+        makeBlockState(AURACHALCUM_BLOCK);
     }
 
     private void makeBlockState(DeferredBlock<?> block) {

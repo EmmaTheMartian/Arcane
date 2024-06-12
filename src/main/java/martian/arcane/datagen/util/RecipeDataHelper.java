@@ -35,32 +35,32 @@ public class RecipeDataHelper {
     }
 
     // Shaped
-    public BuilderWrapper<ShapedRecipeBuilder> shaped(Item output, int count) {
+    public BuilderWrapper<ShapedRecipeBuilder> shaped(ItemLike output, int count) {
         return new BuilderWrapper<>(new ShapedRecipeBuilder(defaultCategory, output, count), this);
     }
 
-    public BuilderWrapper<ShapedRecipeBuilder> shaped(Item output) {
+    public BuilderWrapper<ShapedRecipeBuilder> shaped(ItemLike output) {
         return shaped(output, 1);
     }
 
     // Shapeless
-    public BuilderWrapper<ShapelessRecipeBuilder> shapeless(Item output, int count) {
+    public BuilderWrapper<ShapelessRecipeBuilder> shapeless(ItemLike output, int count) {
         return new BuilderWrapper<>(new ShapelessRecipeBuilder(defaultCategory, output, count), this);
     }
 
-    public BuilderWrapper<ShapelessRecipeBuilder> shapeless(Item output) {
+    public BuilderWrapper<ShapelessRecipeBuilder> shapeless(ItemLike output) {
         return shapeless(output, 1);
     }
 
-    public BuilderWrapper<ShapelessRecipeBuilder> shapeless(Item output, int count, Map<Ingredient, Integer> items) {
+    public BuilderWrapper<ShapelessRecipeBuilder> shapeless(ItemLike output, int count, Map<Ingredient, Integer> items) {
         return shapeless(output, count).requires(items);
     }
 
-    public BuilderWrapper<ShapelessRecipeBuilder> shapeless(Item output, Map<Ingredient, Integer> items) {
+    public BuilderWrapper<ShapelessRecipeBuilder> shapeless(ItemLike output, Map<Ingredient, Integer> items) {
         return shapeless(output, 1, items);
     }
 
-    public void swappable(Item a, Item b) {
+    public void swappable(ItemLike a, ItemLike b) {
         shapeless(a).unlockedWith(b).requires(b).save(itemKey(a).withSuffix("_swappable"));
         shapeless(b).unlockedWith(a).requires(a).save(itemKey(b).withSuffix("_swappable"));
     }
@@ -108,7 +108,7 @@ public class RecipeDataHelper {
             save(RecipeDataHelper.itemKey(builder.getResult()));
         }
 
-        public BuilderWrapper<T> unlockedWith(Item item) {
+        public BuilderWrapper<T> unlockedWith(ItemLike item) {
             builder.unlockedBy("has_item", has(item));
             return this;
         }
@@ -152,13 +152,13 @@ public class RecipeDataHelper {
         }
 
         // ShapelessRecipeBuilder helpers
-        public BuilderWrapper<T> requires(Item item, int count) {
+        public BuilderWrapper<T> requires(ItemLike item, int count) {
             assert builder instanceof ShapelessRecipeBuilder;
             ((ShapelessRecipeBuilder) builder).requires(item, count);
             return this;
         }
 
-        public BuilderWrapper<T> requires(Item item) {
+        public BuilderWrapper<T> requires(ItemLike item) {
             return requires(item, 1);
         }
 
@@ -176,8 +176,8 @@ public class RecipeDataHelper {
         }
     }
 
-    public static ResourceLocation itemKey(Item item) {
-        return BuiltInRegistries.ITEM.getKey(item);
+    public static ResourceLocation itemKey(ItemLike item) {
+        return BuiltInRegistries.ITEM.getKey(item.asItem());
     }
 
     public static Criterion<InventoryChangeTrigger.TriggerInstance> has(ItemLike item) {

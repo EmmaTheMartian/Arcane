@@ -7,11 +7,12 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 
 import java.util.Random;
 
 public record RecipeOutput(ItemStack stack, float chance) {
-    public RecipeOutput(Item item, int count, float chance) {
+    public RecipeOutput(ItemLike item, int count, float chance) {
         this(new ItemStack(item, count), chance);
     }
 

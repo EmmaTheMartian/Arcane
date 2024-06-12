@@ -1,8 +1,8 @@
 package martian.arcane.common.item;
 
+import martian.arcane.api.ArcaneRegistries;
 import martian.arcane.api.spell.AbstractSpell;
-import martian.arcane.common.registry.ArcaneDataComponents;
-import martian.arcane.common.registry.ArcaneRegistries;
+import martian.arcane.common.ArcaneContent;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
@@ -46,21 +46,13 @@ public class ItemSpellTablet extends Item {
     }
 
     public static void setSpell(ResourceLocation newSpell, ItemStack stack) {
-        stack.set(ArcaneDataComponents.SPELL, newSpell);
+        stack.set(ArcaneContent.DC_SPELL, newSpell);
         if (!stack.has(DataComponents.CUSTOM_NAME))
             stack.set(DataComponents.CUSTOM_NAME, getSpellOrThrow(stack).getSpellName());
     }
 
-    public static AbstractSpell getSpell(ItemStack stack) {
-        return ArcaneRegistries.SPELLS.get(getSpellId(stack));
-    }
-
     public static AbstractSpell getSpellOrThrow(ItemStack stack) {
         return Objects.requireNonNull(ArcaneRegistries.SPELLS.get(getSpellId(stack)));
-    }
-
-    public static void removeSpell(ItemStack stack) {
-        stack.remove(ArcaneDataComponents.SPELL);
     }
 
     public static boolean hasSpell(ItemStack stack) {
@@ -68,6 +60,6 @@ public class ItemSpellTablet extends Item {
     }
 
     public static @Nullable ResourceLocation getSpellId(ItemStack stack) {
-        return stack.get(ArcaneDataComponents.SPELL);
+        return stack.get(ArcaneContent.DC_SPELL);
     }
 }

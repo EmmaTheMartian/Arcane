@@ -1,12 +1,12 @@
 package martian.arcane;
 
 import com.mojang.logging.LogUtils;
-import martian.arcane.api.ArcaneRegistry;
+import martian.arcane.api.ArcaneRegistries;
 import martian.arcane.client.ArcaneClient;
+import martian.arcane.common.ArcaneContent;
 import martian.arcane.common.networking.c2s.C2SOpenEnderpackPayload;
 import martian.arcane.common.networking.c2s.C2SSetSelectionComponent;
 import martian.arcane.common.networking.s2c.S2CSyncAuraAttachment;
-import martian.arcane.common.registry.*;
 import martian.arcane.datagen.ArcaneDatagen;
 import martian.arcane.integration.curios.CuriosIntegration;
 import martian.arcane.integration.kubejs.KubeJSIntegration;
@@ -23,6 +23,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
+import net.neoforged.neoforge.registries.NewRegistryEvent;
 import org.slf4j.Logger;
 
 import java.util.HashMap;
@@ -30,8 +31,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Mod(ArcaneMod.MODID)
-public class ArcaneMod
-{
+public class ArcaneMod {
     public static final String MODID = "arcane";
     public static final Logger LOGGER = LogUtils.getLogger();
 
@@ -40,15 +40,7 @@ public class ArcaneMod
     public ArcaneMod(IEventBus modBus) {
 //        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ArcaneConfig.SPEC);
 
-        new ArcaneDataComponents();
-        new ArcaneDataAttachments();
-        new ArcaneBlocks();
-        new ArcaneBlockEntities();
-        new ArcaneItems();
-        new ArcaneSpells();
-        new ArcaneRecipeTypes();
-        new ArcaneTabs();
-        ArcaneRegistry.registerAll(modBus);
+        ArcaneContent.init(modBus);
 
         modBus.addListener(FMLCommonSetupEvent.class, event -> {
             CuriosIntegration.INSTANCE.load();
@@ -63,8 +55,8 @@ public class ArcaneMod
             registrar.playToClient(S2CSyncAuraAttachment.TYPE, S2CSyncAuraAttachment.CODEC, S2CSyncAuraAttachment::handler);
         });
 
-        modBus.addListener(ArcaneRegistries::registerRegisters);
-        modBus.addListener(ArcaneTabs::buildTabContents);
+        modBus.addListener(NewRegistryEvent.class, event -> event.register(ArcaneRegistries.SPELLS));
+
         modBus.addListener(ArcaneDatagen::gatherData);
 
         if (FMLEnvironment.dist.isClient())
@@ -81,7 +73,7 @@ public class ArcaneMod
         ignisGenerationAmounts.put(state -> state.is(Blocks.SOUL_FIRE), 2);
         ignisGenerationAmounts.put(state -> state.is(Blocks.SOUL_CAMPFIRE) && state.getValue(CampfireBlock.LIT), 2);
         ignisGenerationAmounts.put(state -> state.is(Blocks.LAVA), 2);
-        ignisGenerationAmounts.put(state -> state.is(ArcaneBlocks.SOUL_MAGMA.get()), 3);
+        ignisGenerationAmounts.put(state -> state.is(ArcaneContent.SOUL_MAGMA.get()), 3);
     }
 
     public static int getIgnisGenAmountForState(BlockState state) {

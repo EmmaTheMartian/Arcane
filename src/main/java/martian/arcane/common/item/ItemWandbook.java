@@ -1,6 +1,7 @@
 package martian.arcane.common.item;
 
 import martian.arcane.ArcaneTags;
+import martian.arcane.api.ArcaneRegistries;
 import martian.arcane.api.item.AbstractAuraItem;
 import martian.arcane.api.item.IAuraWand;
 import martian.arcane.api.spell.AbstractSpell;
@@ -8,9 +9,8 @@ import martian.arcane.api.spell.CastContext;
 import martian.arcane.api.spell.MutableWandbookData;
 import martian.arcane.api.spell.WandbookDataRecord;
 import martian.arcane.client.ArcaneKeybindings;
+import martian.arcane.common.ArcaneContent;
 import martian.arcane.common.networking.c2s.C2SSetSelectionComponent;
-import martian.arcane.common.registry.ArcaneDataComponents;
-import martian.arcane.common.registry.ArcaneRegistries;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -38,9 +38,10 @@ public class ItemWandbook extends AbstractAuraItem implements IAuraWand {
     public final int defaultMaxWands;
 
     public ItemWandbook(int maxWands, int maxAura) {
+        //noinspection DataFlowIssue
         super(maxAura, false, true, new Properties()
                 .stacksTo(1)
-                .component(ArcaneDataComponents.WANDBOOK_DATA, null));
+                .component(ArcaneContent.DC_WANDBOOK_DATA, null));
         this.defaultMaxWands = maxWands;
     }
 
@@ -162,12 +163,13 @@ public class ItemWandbook extends AbstractAuraItem implements IAuraWand {
     }
 
     @Override
-    public int getCastLevel(ItemStack stack) {
-        var data = getData(stack);
+    public int getCastLevel(CastContext context) {
+        assert context instanceof CastContext.WandContext;
+        var data = getData(((CastContext.WandContext) context).castingStack);
         if (!data.wands().get(data.selection()).isEmpty()) {
             var item = data.wands().get(data.selection());
             if (item.getItem() instanceof IAuraWand wand)
-                return wand.getCastLevel(item);
+                return wand.getCastLevel(context);
         }
         return 0;
     }
@@ -181,7 +183,7 @@ public class ItemWandbook extends AbstractAuraItem implements IAuraWand {
     }
 
     public void mutateData(ItemStack stack, UnaryOperator<MutableWandbookData> operator) {
-        stack.set(ArcaneDataComponents.WANDBOOK_DATA, operator.apply(getData(stack).unfreeze()).freeze());
+        stack.set(ArcaneContent.DC_WANDBOOK_DATA, operator.apply(getData(stack).unfreeze()).freeze());
     }
 
     public void setWand(ItemStack wandbookStack, ItemStack wandStack, int slot) {
@@ -200,7 +202,7 @@ public class ItemWandbook extends AbstractAuraItem implements IAuraWand {
     }
 
     public @Nullable ResourceLocation getWandSpellId(ItemStack stack, int slot) {
-        return getWand(stack, slot).get(ArcaneDataComponents.SPELL);
+        return getWand(stack, slot).get(ArcaneContent.DC_SPELL);
     }
 
     public List<ItemStack> getWands(ItemStack stack) {

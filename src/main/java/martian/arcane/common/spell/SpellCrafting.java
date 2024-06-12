@@ -4,7 +4,7 @@ import martian.arcane.ArcaneStaticConfig;
 import martian.arcane.api.spell.AbstractSpell;
 import martian.arcane.api.spell.CastContext;
 import martian.arcane.api.spell.CastResult;
-import martian.arcane.common.registry.ArcaneBlocks;
+import martian.arcane.common.ArcaneContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -40,7 +40,7 @@ public class SpellCrafting extends AbstractSpell {
         if (!c.level.isInWorldBounds(pos))
             return CastResult.FAILED;
 
-        c.level.setBlockAndUpdate(pos, ArcaneBlocks.CONJURED_CRAFTING_TABLE.get().defaultBlockState());
+        c.level.setBlockAndUpdate(pos, ArcaneContent.CONJURED_CRAFTING_TABLE.get().defaultBlockState());
         return CastResult.SUCCESS;
     }
 }

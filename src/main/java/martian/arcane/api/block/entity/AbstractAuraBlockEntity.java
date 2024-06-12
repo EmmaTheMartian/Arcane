@@ -7,6 +7,7 @@ import martian.arcane.api.NBTHelpers;
 import martian.arcane.api.aura.AuraStorage;
 import martian.arcane.api.aura.IAuraStorage;
 import martian.arcane.api.aura.IMutableAuraStorage;
+import martian.arcane.common.ArcaneContent;
 import martian.arcane.common.networking.s2c.S2CSyncAuraAttachment;
 import martian.arcane.common.registry.ArcaneDataAttachments;
 import net.minecraft.ChatFormatting;
@@ -35,7 +36,7 @@ import java.util.function.Function;
  * AbstractAuraBlockEntity.markChanged() afterward.
  */
 public abstract class AbstractAuraBlockEntity extends BlockEntity implements IAuraometerOutput, IMutableAuraStorage, IMachineTierable {
-    protected Lazy<AuraStorage> auraStorageCache = Lazy.of(() -> getData(ArcaneDataAttachments.AURA));
+    protected Lazy<AuraStorage> auraStorageCache = Lazy.of(() -> getData(ArcaneContent.DA_AURA));
     public final int defaultMaxAura;
     public int ticksUntilIdle = ArcaneStaticConfig.TICKS_UNTIL_CONSIDERED_IDLE;
     public int ticksUntilNextAuraLoss = ArcaneStaticConfig.Rates.AURA_LOSS_TICKS;
@@ -44,8 +45,8 @@ public abstract class AbstractAuraBlockEntity extends BlockEntity implements IAu
     public AbstractAuraBlockEntity(int maxAura, boolean extractable, boolean receivable, BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
         defaultMaxAura = maxAura;
-        setData(ArcaneDataAttachments.MACHINE_TIER, MachineTier.COPPER);
-        setData(ArcaneDataAttachments.AURA, new AuraStorage(maxAura, extractable, receivable));
+        setData(ArcaneContent.DA_MACHINE_TIER, MachineTier.COPPER);
+        setData(ArcaneContent.DA_AURA, new AuraStorage(maxAura, extractable, receivable));
     }
 
     @Override
@@ -81,11 +82,11 @@ public abstract class AbstractAuraBlockEntity extends BlockEntity implements IAu
 
     // Default implementations for IMachineTierable
     public MachineTier getTier() {
-        return getData(ArcaneDataAttachments.MACHINE_TIER);
+        return getData(ArcaneContent.DA_MACHINE_TIER);
     }
 
     public boolean upgradeTo(MachineTier newTier) {
-        setData(ArcaneDataAttachments.MACHINE_TIER, newTier);
+        setData(ArcaneContent.DA_MACHINE_TIER, newTier);
         setMaxAura(newTier.getMaxAuraForMachine(defaultMaxAura));
         return true;
     }

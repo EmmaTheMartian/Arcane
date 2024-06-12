@@ -5,8 +5,8 @@ import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 import martian.arcane.ArcaneMod;
+import martian.arcane.common.ArcaneContent;
 import martian.arcane.common.recipe.RecipePedestalCrafting;
-import martian.arcane.common.registry.ArcaneBlocks;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -24,7 +24,7 @@ public class PedestalEmiRecipe extends BasicEmiRecipe {
         this.inputs.add(EmiIngredient.of(r.input));
         this.inputs.add(EmiIngredient.of(r.interactionItem));
         r.results.forEach(it -> this.outputs.add(EmiStack.of(it.getStack()).setChance(it.getChance())));
-        catalysts.add(EmiStack.of(ArcaneBlocks.PEDESTAL));
+        catalysts.add(EmiStack.of(ArcaneContent.PEDESTAL.block()));
     }
 
     @Override

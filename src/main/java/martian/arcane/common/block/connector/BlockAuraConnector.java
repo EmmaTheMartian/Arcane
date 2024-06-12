@@ -4,7 +4,7 @@ import martian.arcane.api.PropertyHelpers;
 import martian.arcane.api.block.AbstractAuraMachine;
 import martian.arcane.api.block.BlockHelpers;
 import martian.arcane.api.item.IAuraConfigurator;
-import martian.arcane.common.registry.ArcaneBlockEntities;
+import martian.arcane.common.ArcaneContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -75,7 +75,7 @@ public class BlockAuraConnector extends AbstractAuraMachine {
     @Override
     @ParametersAreNonnullByDefault
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return type == ArcaneBlockEntities.AURA_CONNECTOR.get() ? BlockEntityAuraConnector::tick : null;
+        return type == ArcaneContent.AURA_CONNECTOR.tile().get() ? BlockEntityAuraConnector::tick : null;
     }
 
     @Override

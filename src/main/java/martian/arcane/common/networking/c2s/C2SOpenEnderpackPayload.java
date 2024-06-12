@@ -2,8 +2,8 @@ package martian.arcane.common.networking.c2s;
 
 import io.netty.buffer.ByteBuf;
 import martian.arcane.ArcaneMod;
+import martian.arcane.common.ArcaneContent;
 import martian.arcane.common.item.ItemEnderpack;
-import martian.arcane.common.registry.ArcaneItems;
 import martian.arcane.integration.curios.CuriosIntegration;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -32,7 +32,7 @@ public record C2SOpenEnderpackPayload() implements CustomPacketPayload {
             var optionalInv = CuriosApi.getCuriosInventory(sender);
             if (optionalInv.isPresent()) {
                 var inv = optionalInv.get();
-                var res = inv.findFirstCurio(ArcaneItems.ENDERPACK.get());
+                var res = inv.findFirstCurio(ArcaneContent.ENDERPACK.get());
                 if (res.isPresent()) {
                     ItemEnderpack.open(res.get().stack(), sender.level(), sender);
                     return;
@@ -40,7 +40,7 @@ public record C2SOpenEnderpackPayload() implements CustomPacketPayload {
             }
         }
 
-        Optional<ItemStack> slot = sender.getInventory().items.stream().filter(stack -> stack.is(ArcaneItems.ENDERPACK.get())).findFirst();
+        Optional<ItemStack> slot = sender.getInventory().items.stream().filter(stack -> stack.is(ArcaneContent.ENDERPACK)).findFirst();
         slot.ifPresent(stack -> ItemEnderpack.open(stack, sender.level(), sender));
     }
 }

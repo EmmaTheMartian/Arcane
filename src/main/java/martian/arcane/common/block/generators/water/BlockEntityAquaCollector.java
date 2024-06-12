@@ -2,7 +2,7 @@ package martian.arcane.common.block.generators.water;
 
 import martian.arcane.ArcaneStaticConfig;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
-import martian.arcane.common.registry.ArcaneBlockEntities;
+import martian.arcane.common.ArcaneContent;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -16,12 +16,12 @@ import java.util.List;
 public class BlockEntityAquaCollector extends AbstractAuraBlockEntity {
     private int ticksToNextCollect = 0;
 
-    public BlockEntityAquaCollector(int maxAura, int auraLoss, BlockPos pos, BlockState state) {
-        super(maxAura, true, false, ArcaneBlockEntities.AQUA_COLLECTOR.get(), pos, state);
+    public BlockEntityAquaCollector(int maxAura, BlockPos pos, BlockState state) {
+        super(maxAura, true, false, ArcaneContent.AQUA_COLLECTOR.tile().get(), pos, state);
     }
 
     public BlockEntityAquaCollector(BlockPos pos, BlockState state) {
-        super(ArcaneStaticConfig.AuraMaximums.COLLECTOR, true, false, ArcaneBlockEntities.AQUA_COLLECTOR.get(), pos, state);
+        super(ArcaneStaticConfig.AuraMaximums.COLLECTOR, true, false, ArcaneContent.AQUA_COLLECTOR.tile().get(), pos, state);
     }
 
     public List<Component> getText(List<Component> text, boolean detailed) {

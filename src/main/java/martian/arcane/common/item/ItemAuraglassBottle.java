@@ -4,7 +4,7 @@ import martian.arcane.api.Raycasting;
 import martian.arcane.api.aura.AuraRecord;
 import martian.arcane.api.aura.IMutableAuraStorage;
 import martian.arcane.api.item.AbstractAuraItem;
-import martian.arcane.common.registry.ArcaneDataComponents;
+import martian.arcane.common.ArcaneContent;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -24,7 +24,10 @@ import java.util.List;
 
 public class ItemAuraglassBottle extends AbstractAuraItem {
     public ItemAuraglassBottle(int maxAura, int pushRate) {
-        super(maxAura, true, true, new Item.Properties().stacksTo(1).component(ArcaneDataComponents.ACTIVE, false).component(ArcaneDataComponents.PUSH_RATE, pushRate));
+        super(maxAura, true, true, new Item.Properties()
+                .stacksTo(1)
+                .component(ArcaneContent.DC_ACTIVE, false)
+                .component(ArcaneContent.DC_PUSH_RATE, pushRate));
     }
 
     @Override
@@ -36,7 +39,7 @@ public class ItemAuraglassBottle extends AbstractAuraItem {
             return InteractionResultHolder.success(stack);
 
         if (player.isCrouching()) {
-            stack.set(ArcaneDataComponents.ACTIVE, Boolean.FALSE.equals(stack.get(ArcaneDataComponents.ACTIVE)));
+            stack.set(ArcaneContent.DC_ACTIVE, Boolean.FALSE.equals(stack.get(ArcaneContent.DC_ACTIVE)));
         } else {
             BlockHitResult hit = Raycasting.blockRaycast(player, player.blockInteractionRange(), false);
             if (hit == null)
@@ -73,8 +76,8 @@ public class ItemAuraglassBottle extends AbstractAuraItem {
             if (held.isEmpty() || held.getItem() instanceof ItemAuraglassBottle)
                 return;
 
-            if (held.has(ArcaneDataComponents.AURA)) {
-                AuraRecord heldAuraRecord = held.get(ArcaneDataComponents.AURA);
+            if (held.has(ArcaneContent.DC_AURA)) {
+                AuraRecord heldAuraRecord = held.get(ArcaneContent.DC_AURA);
                 if (heldAuraRecord != null && heldAuraRecord.canInsert()) {
                     mutateAuraStorage(stack, bottleAura -> {
                         mutateAuraStorage(held, heldAura -> {
@@ -100,17 +103,17 @@ public class ItemAuraglassBottle extends AbstractAuraItem {
     }
 
     public int getPushRate(ItemStack stack) {
-        if (stack.has(ArcaneDataComponents.PUSH_RATE)) {
+        if (stack.has(ArcaneContent.DC_PUSH_RATE)) {
             //noinspection DataFlowIssue
-            return stack.get(ArcaneDataComponents.PUSH_RATE);
+            return stack.get(ArcaneContent.DC_PUSH_RATE);
         }
         return 0;
     }
 
     public boolean isActive(ItemStack stack) {
-        if (stack.has(ArcaneDataComponents.ACTIVE)) {
+        if (stack.has(ArcaneContent.DC_ACTIVE)) {
             //noinspection DataFlowIssue
-            return stack.get(ArcaneDataComponents.ACTIVE);
+            return stack.get(ArcaneContent.DC_ACTIVE);
         }
         return false;
     }

@@ -4,7 +4,7 @@ import com.klikli_dev.modonomicon.api.datagen.AbstractModonomiconLanguageProvide
 import martian.arcane.ArcaneMod;
 import martian.arcane.datagen.client.ArcaneBlockStateProvider;
 import martian.arcane.datagen.client.ArcaneItemModelProvider;
-import martian.arcane.datagen.client.lang.ArcaneLanguageEnUsProvider;
+import martian.arcane.datagen.client.ArcaneLanguageEnUsProvider;
 import martian.arcane.datagen.server.ArcaneBlockTagProvider;
 import martian.arcane.datagen.server.ArcaneItemTagProvider;
 import martian.arcane.datagen.server.ArcaneLootTableProvider;
@@ -44,7 +44,6 @@ public class ArcaneDatagen {
 
             gen.addProvider(true, new ArcaneBlockStateProvider(packOutput, efh));
             gen.addProvider(true, new ArcaneItemModelProvider(packOutput, efh));
-            // Lang
             gen.addProvider(true, langEnUS);
         }
     }

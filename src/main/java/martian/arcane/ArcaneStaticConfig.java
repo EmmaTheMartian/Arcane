@@ -12,8 +12,7 @@ public final class ArcaneStaticConfig {
         public static final int LARGE_AURAGLASS_BOTTLE = 64;
         public static final int EXTREME_AURAGLASS_BOTTLE = 128;
 
-        public static final int AURA_EXTRACTORS = 16;
-        public static final int AURA_INSERTERS = 16;
+        public static final int AURA_CONNECTORS = 16;
         public static final int AURA_BASIN = 256;
         public static final int AURA_INFUSER = 32;
         public static final int PEDESTAL = 32;

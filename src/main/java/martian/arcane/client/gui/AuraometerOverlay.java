@@ -3,7 +3,6 @@ package martian.arcane.client.gui;
 import martian.arcane.api.Raycasting;
 import martian.arcane.api.block.entity.IAuraometerOutput;
 import martian.arcane.api.item.IAuraometer;
-import martian.arcane.common.registry.ArcaneItems;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.LayeredDraw;

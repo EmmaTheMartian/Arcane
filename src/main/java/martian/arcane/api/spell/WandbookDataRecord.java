@@ -2,7 +2,7 @@ package martian.arcane.api.spell;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import martian.arcane.common.registry.ArcaneDataComponents;
+import martian.arcane.common.ArcaneContent;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
@@ -51,8 +51,8 @@ public record WandbookDataRecord(List<ItemStack> wands, int selection, int maxWa
     }
 
     public static WandbookDataRecord getOrCreate(ItemStack stack, Supplier<WandbookDataRecord> defaultDataRecord) {
-        if (!stack.has(ArcaneDataComponents.WANDBOOK_DATA))
-            stack.set(ArcaneDataComponents.WANDBOOK_DATA, defaultDataRecord.get());
-        return stack.get(ArcaneDataComponents.WANDBOOK_DATA);
+        if (!stack.has(ArcaneContent.DC_WANDBOOK_DATA))
+            stack.set(ArcaneContent.DC_WANDBOOK_DATA, defaultDataRecord.get());
+        return stack.get(ArcaneContent.DC_WANDBOOK_DATA);
     }
 }

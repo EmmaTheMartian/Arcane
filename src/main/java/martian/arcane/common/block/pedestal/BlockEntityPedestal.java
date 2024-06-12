@@ -4,8 +4,7 @@ import martian.arcane.ArcaneStaticConfig;
 import martian.arcane.api.aura.AuraRecord;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntityWithSingleItem;
 import martian.arcane.api.block.entity.IAuraometerOutput;
-import martian.arcane.common.registry.ArcaneBlockEntities;
-import martian.arcane.common.registry.ArcaneDataComponents;
+import martian.arcane.common.ArcaneContent;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -17,11 +16,11 @@ import java.util.List;
 
 public class BlockEntityPedestal extends AbstractAuraBlockEntityWithSingleItem implements IAuraometerOutput {
     public BlockEntityPedestal(BlockPos pos, BlockState state) {
-        super(ArcaneStaticConfig.AuraMaximums.PEDESTAL, false, true, ArcaneBlockEntities.PEDESTAL.get(), pos, state);
+        super(ArcaneStaticConfig.AuraMaximums.PEDESTAL, false, true, ArcaneContent.PEDESTAL.tile().get(), pos, state);
     }
 
     public BlockEntityPedestal(int maxAura, BlockPos pos, BlockState state) {
-        super(maxAura, false, true, ArcaneBlockEntities.PEDESTAL.get(), pos, state);
+        super(maxAura, false, true, ArcaneContent.PEDESTAL.tile().get(), pos, state);
     }
 
     @Override
@@ -38,8 +37,8 @@ public class BlockEntityPedestal extends AbstractAuraBlockEntityWithSingleItem i
                     .translatable("messages.arcane.holding")
                     .append(getItem().getDisplayName()));
 
-            if (getItem().has(ArcaneDataComponents.AURA)) {
-                AuraRecord aura = getItem().get(ArcaneDataComponents.AURA);
+            if (getItem().has(ArcaneContent.DC_AURA)) {
+                AuraRecord aura = getItem().get(ArcaneContent.DC_AURA);
                 assert aura != null;
                 text.add(Component
                         .translatable("messages.arcane.item_aura")
@@ -58,12 +57,12 @@ public class BlockEntityPedestal extends AbstractAuraBlockEntityWithSingleItem i
             return;
 
         if (entity instanceof BlockEntityPedestal pedestal) {
-            if (!pedestal.isEmpty() && pedestal.getItem().has(ArcaneDataComponents.AURA)) {
-                AuraRecord aura = pedestal.getItem().get(ArcaneDataComponents.AURA);
+            if (!pedestal.isEmpty() && pedestal.getItem().has(ArcaneContent.DC_AURA)) {
+                AuraRecord aura = pedestal.getItem().get(ArcaneContent.DC_AURA);
                 if (aura != null && aura.getAura() < aura.getMaxAura()) {
                     var mutable = aura.unfreeze();
                     pedestal.sendAuraTo(mutable, 1);
-                    pedestal.getItem().set(ArcaneDataComponents.AURA, mutable.freeze());
+                    pedestal.getItem().set(ArcaneContent.DC_AURA, mutable.freeze());
                     level.sendBlockUpdated(pos, state, state, 2);
                 }
             }

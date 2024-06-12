@@ -2,7 +2,7 @@ package martian.arcane.api.aura;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import martian.arcane.common.registry.ArcaneDataComponents;
+import martian.arcane.common.ArcaneContent;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
@@ -161,8 +161,8 @@ public class AuraStorage implements IMutableAuraStorage {
     }
 
     public static AuraRecord getOrCreate(ItemStack stack, Supplier<AuraRecord> defaultAuraStorage) {
-        if (!stack.has(ArcaneDataComponents.AURA))
-            stack.set(ArcaneDataComponents.AURA, defaultAuraStorage.get());
-        return stack.get(ArcaneDataComponents.AURA);
+        if (!stack.has(ArcaneContent.DC_AURA))
+            stack.set(ArcaneContent.DC_AURA, defaultAuraStorage.get());
+        return stack.get(ArcaneContent.DC_AURA);
     }
 }

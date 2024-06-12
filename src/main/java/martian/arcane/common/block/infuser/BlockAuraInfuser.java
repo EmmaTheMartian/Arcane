@@ -2,7 +2,7 @@ package martian.arcane.common.block.infuser;
 
 import martian.arcane.api.PropertyHelpers;
 import martian.arcane.api.block.AbstractAuraMachine;
-import martian.arcane.common.registry.ArcaneBlockEntities;
+import martian.arcane.common.ArcaneContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -57,7 +57,7 @@ public class BlockAuraInfuser extends AbstractAuraMachine {
     @Override
     @ParametersAreNonnullByDefault
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return !level.isClientSide && type == ArcaneBlockEntities.AURA_INFUSER.get() ? BlockEntityAuraInfuser::tick : null;
+        return !level.isClientSide && type == ArcaneContent.AURA_INFUSER.tile().get() ? BlockEntityAuraInfuser::tick : null;
     }
 
     @Override

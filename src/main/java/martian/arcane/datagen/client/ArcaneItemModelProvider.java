@@ -1,7 +1,7 @@
 package martian.arcane.datagen.client;
 
 import martian.arcane.ArcaneMod;
-import martian.arcane.common.registry.ArcaneItems;
+import martian.arcane.common.ArcaneContent;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
@@ -12,7 +12,7 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.DeferredItem;
 
-import static martian.arcane.common.registry.ArcaneItems.*;
+import static martian.arcane.common.ArcaneContent.*;
 
 public class ArcaneItemModelProvider extends ItemModelProvider {
     public ArcaneItemModelProvider(PackOutput output, ExistingFileHelper existingFileHelper) {
@@ -99,9 +99,9 @@ public class ArcaneItemModelProvider extends ItemModelProvider {
         }
 
         // Block items
-        ArcaneItems.ITEMS.getEntries()
+        ArcaneContent.ITEMS.getEntries()
                 .stream()
-                .filter(item -> item.get() instanceof BlockItem && item != ArcaneItems.SPELL_CHALK)
+                .filter(item -> item.get() instanceof BlockItem && item != SPELL_CHALK)
                 .forEach(this::blockItem);
     }
 

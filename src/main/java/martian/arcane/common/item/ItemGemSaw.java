@@ -5,8 +5,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.ParametersAreNonnullByDefault;
-
 public class ItemGemSaw extends Item {
     private static final RandomSource random = RandomSource.create();
 

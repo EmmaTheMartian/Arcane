@@ -129,7 +129,7 @@ public class PedestalRecipeBuilder implements RecipeBuilder {
         return pedestalCrafting().setInput(input).setInteractionInput(interactionInput, true).addResult(output);
     }
 
-    public static PedestalRecipeBuilder simpleRecipe(Ingredient input, Ingredient interactionInput, Item output, int count) {
+    public static PedestalRecipeBuilder simpleRecipe(Ingredient input, Ingredient interactionInput, ItemLike output, int count) {
         return simpleRecipe(input, interactionInput, new RecipeOutput(new ItemStack(output, count), 1));
     }
 }

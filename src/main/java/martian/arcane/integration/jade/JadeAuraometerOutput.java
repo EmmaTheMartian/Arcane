@@ -3,7 +3,7 @@ package martian.arcane.integration.jade;
 import martian.arcane.ArcaneMod;
 import martian.arcane.api.block.entity.IAuraometerOutput;
 import martian.arcane.api.item.IAuraometer;
-import martian.arcane.common.registry.ArcaneDataAttachments;
+import martian.arcane.common.ArcaneContent;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -36,7 +36,7 @@ public enum JadeAuraometerOutput implements IBlockComponentProvider, IServerData
             it.getText(text, accessor.getPlayer().isCrouching());
             tip.addAll(text);
 
-            if (accessor.getPlayer().isCrouching() && accessor.getBlockEntity().hasData(ArcaneDataAttachments.AURA)) {
+            if (accessor.getPlayer().isCrouching() && accessor.getBlockEntity().hasData(ArcaneContent.DA_AURA)) {
                 tip.add(Component
                         .translatable("messages.arcane.can_extract")
                         .append(Boolean.toString(data.getBoolean("CanExtract"))));
@@ -55,8 +55,8 @@ public enum JadeAuraometerOutput implements IBlockComponentProvider, IServerData
 
     @Override
     public void appendServerData(CompoundTag tag, BlockAccessor accessor) {
-        if (accessor.getBlockEntity().hasData(ArcaneDataAttachments.AURA)) {
-            var aura = accessor.getBlockEntity().getData(ArcaneDataAttachments.AURA);
+        if (accessor.getBlockEntity().hasData(ArcaneContent.DA_AURA)) {
+            var aura = accessor.getBlockEntity().getData(ArcaneContent.DA_AURA);
             tag.putBoolean("CanExtract", aura.canExtract());
             tag.putBoolean("CanInsert", aura.canInsert());
         }

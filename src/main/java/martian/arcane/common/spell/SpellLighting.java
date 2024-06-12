@@ -3,9 +3,8 @@ package martian.arcane.common.spell;
 import martian.arcane.api.spell.AbstractSpell;
 import martian.arcane.api.spell.CastContext;
 import martian.arcane.api.spell.CastResult;
-import martian.arcane.common.registry.ArcaneBlocks;
+import martian.arcane.common.ArcaneContent;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
 
 public class SpellLighting extends AbstractSpell {
@@ -30,7 +29,7 @@ public class SpellLighting extends AbstractSpell {
         if (context instanceof CastContext.WandContext wc && wc.raycast() instanceof BlockHitResult bHit)
             target = bHit.getBlockPos().relative(bHit.getDirection());
 
-        context.level.setBlockAndUpdate(target, ArcaneBlocks.AURA_TORCH.get().defaultBlockState());
+        context.level.setBlockAndUpdate(target, ArcaneContent.AURA_TORCH.get().defaultBlockState());
 
         return CastResult.SUCCESS;
     }
