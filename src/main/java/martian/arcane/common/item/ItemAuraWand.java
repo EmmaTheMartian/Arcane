@@ -1,9 +1,9 @@
 package martian.arcane.common.item;
 
 import martian.arcane.api.item.AbstractAuraItem;
+import martian.arcane.api.item.IAuraWand;
 import martian.arcane.api.spell.AbstractSpell;
 import martian.arcane.api.spell.CastContext;
-import martian.arcane.api.spell.ICastingSource;
 import martian.arcane.common.registry.ArcaneDataComponents;
 import martian.arcane.common.registry.ArcaneItems;
 import martian.arcane.common.registry.ArcaneRegistries;
@@ -24,7 +24,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Objects;
 
-public class ItemAuraWand extends AbstractAuraItem implements ICastingSource {
+public class ItemAuraWand extends AbstractAuraItem implements IAuraWand {
     public final int level;
 
     public ItemAuraWand(int maxAura, int level, Properties properties) {
@@ -97,7 +97,7 @@ public class ItemAuraWand extends AbstractAuraItem implements ICastingSource {
     }
 
     @Override
-    public int getCastLevel() {
+    public int getCastLevel(ItemStack stack) {
         return level;
     }
 

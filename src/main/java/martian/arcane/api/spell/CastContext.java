@@ -2,8 +2,9 @@ package martian.arcane.api.spell;
 
 import martian.arcane.api.Raycasting;
 import martian.arcane.api.aura.IAuraStorage;
+import martian.arcane.api.item.IAuraWand;
 import martian.arcane.common.block.spellcircle.BlockEntitySpellCircle;
-import martian.arcane.common.item.ItemAuraWand;
+import martian.arcane.common.block.spellcircle.BlockSpellCircle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
@@ -30,9 +31,9 @@ public abstract class CastContext {
         public final Player caster;
         public final InteractionHand castingHand;
         public final ItemStack castingStack;
-        public final ItemAuraWand wand;
+        public final IAuraWand wand;
 
-        public WandContext(Level level, IAuraStorage aura, Player caster, InteractionHand castingHand, ItemStack castingStack, ItemAuraWand wand) {
+        public WandContext(Level level, IAuraStorage aura, Player caster, InteractionHand castingHand, ItemStack castingStack, IAuraWand wand) {
             super(level, aura, wand);
             this.caster = caster;
             this.castingHand = castingHand;
@@ -65,7 +66,7 @@ public abstract class CastContext {
         }
 
         public SpellCircleContext(BlockEntitySpellCircle circle) {
-            this(circle.getLevel(), circle, circle.getBlockPos().below(), circle);
+            this(circle.getLevel(), circle, circle.getBlockPos().relative(circle.getBlockState().getValue(BlockSpellCircle.FACING)), circle);
         }
 
         public @Nullable BlockPos getTarget() {

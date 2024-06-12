@@ -37,6 +37,7 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
             addItem(ArcaneItems.WAND_LARIMAR, "Larimar Wand");
             addItem(ArcaneItems.WAND_AURACHALCUM, "Aurachalcum Wand");
             addItem(ArcaneItems.WAND_ELDRITCH, "Eldritch Wand");
+            addItem(ArcaneItems.WANDBOOK, "Wandbook");
 
             // Tools
             addItem(ArcaneItems.AURAGLASS_BOTTLE, "Auraglass Bottle");
@@ -156,6 +157,7 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
             add("messages.arcane.spell_min_level", "Required Wand Level: ");
             add("messages.arcane.push_rate", "Push Rate: ");
             add("messages.arcane.cast_timer", "Cast Timer: ");
+            add("messages.arcane.selection", "Selection: ");
             add("messages.arcane.not_linked", "Not linked");
             add("messages.arcane.mode_crafting", "Crafting");
             add("messages.arcane.mode_filling", "Filling");

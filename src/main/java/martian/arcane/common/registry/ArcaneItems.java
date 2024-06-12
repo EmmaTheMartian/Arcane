@@ -51,6 +51,7 @@ public class ArcaneItems extends ArcaneRegistry {
             WAND_LARIMAR = register("wand_larimar", ADVANCED_WAND_SUPPLIER),
             WAND_AURACHALCUM = register("wand_aurachalcum", MYSTICAL_WAND_SUPPLIER),
             WAND_ELDRITCH = register("wand_eldritch", MYSTICAL_WAND_SUPPLIER),
+            WANDBOOK = register("wandbook", () -> new ItemWandbook(4, 64)),
 
             AURAOMETER = register("auraometer", ItemAuraometer::new),
             AURA_WRENCH = register("aura_wrench", ItemAuraWrench::new),

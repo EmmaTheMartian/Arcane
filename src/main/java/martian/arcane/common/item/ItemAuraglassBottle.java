@@ -70,7 +70,7 @@ public class ItemAuraglassBottle extends AbstractAuraItem {
 
         if (entity instanceof Player player && isActive(stack)) {
             ItemStack held = player.getMainHandItem();
-            if (held.isEmpty())
+            if (held.isEmpty() || held.getItem() instanceof ItemAuraglassBottle)
                 return;
 
             if (held.has(ArcaneDataComponents.AURA)) {

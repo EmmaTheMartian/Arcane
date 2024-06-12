@@ -3,7 +3,6 @@ package martian.arcane.common.block.pedestal;
 import martian.arcane.ArcaneStaticConfig;
 import martian.arcane.api.aura.AuraRecord;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntityWithSingleItem;
-import martian.arcane.api.block.entity.AbstractSingleItemBlockEntity;
 import martian.arcane.api.block.entity.IAuraometerOutput;
 import martian.arcane.common.registry.ArcaneBlockEntities;
 import martian.arcane.common.registry.ArcaneDataComponents;

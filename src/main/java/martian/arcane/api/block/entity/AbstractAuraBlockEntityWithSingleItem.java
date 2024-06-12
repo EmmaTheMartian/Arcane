@@ -8,13 +8,15 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import org.jetbrains.annotations.NotNull;
 
-public class AbstractAuraBlockEntityWithSingleItem extends AbstractAuraBlockEntity implements ISingleItemContainer {
+public class AbstractAuraBlockEntityWithSingleItem extends AbstractAuraBlockEntity implements Container, IItemHandlerModifiable {
     protected ItemStack stack = ItemStack.EMPTY;
     public boolean hasSignal = false;
 
@@ -28,7 +30,19 @@ public class AbstractAuraBlockEntityWithSingleItem extends AbstractAuraBlockEnti
 
     public void setItem(ItemStack stack) {
         this.stack = stack;
+        setChanged();
         BlockHelpers.sync(this);
+    }
+
+    // Container implementation
+    @Override
+    public int getContainerSize() {
+        return 1;
+    }
+
+    @Override
+    public int getMaxStackSize() {
+        return 1;
     }
 
     @Override
@@ -39,32 +53,34 @@ public class AbstractAuraBlockEntityWithSingleItem extends AbstractAuraBlockEnti
     @Override
     @NotNull
     @Deprecated
-    public ItemStack getItem(int slot) {
+    public ItemStack getItem(int ignoredSlot) {
         return stack;
     }
 
     @Override
     @NotNull
     @Deprecated
-    public ItemStack removeItem(int slot, int amount) {
-        ItemStack stack = getItem().copy().split(amount);
-        getItem().shrink(amount);
+    public ItemStack removeItem(int ignoredSlot, int amount) {
+        ItemStack s = stack.copy().split(amount);
+        stack.shrink(amount);
+        setChanged();
         BlockHelpers.sync(this);
-        return stack;
+        return s;
     }
 
     @Override
     @NotNull
-    public ItemStack removeItemNoUpdate(int slot) {
-        ItemStack old = getItem(slot);
-        this.stack = ItemStack.EMPTY;
+    public ItemStack removeItemNoUpdate(int ignoredSlot) {
+        ItemStack old = stack.copy();
+        setItem(ItemStack.EMPTY);
         return old;
     }
 
     @Override
     @Deprecated
-    public void setItem(int slot, @NotNull ItemStack stack) {
+    public void setItem(int ignoredSlot, @NotNull ItemStack stack) {
         this.stack = stack;
+        setChanged();
         BlockHelpers.sync(this);
     }
 
@@ -78,6 +94,12 @@ public class AbstractAuraBlockEntityWithSingleItem extends AbstractAuraBlockEnti
         setItem(ItemStack.EMPTY);
     }
 
+    @Override
+    public boolean canPlaceItem(int ignoredSlot, ItemStack stack) {
+        return getItem().getCount() == 0 && stack.getCount() <= 1;
+    }
+
+    // Serialization
     @Override
     public void saveAdditional(@NotNull CompoundTag nbt, HolderLookup.@NotNull Provider provider) {
         NBTHelpers.putItemStack(provider, nbt, NBTHelpers.KEY_STACK, stack);
@@ -108,5 +130,54 @@ public class AbstractAuraBlockEntityWithSingleItem extends AbstractAuraBlockEnti
         stack = NBTHelpers.getItemStack(level.registryAccess(), nbt, NBTHelpers.KEY_STACK);
         hasSignal = nbt.getBoolean(NBTHelpers.KEY_HAS_SIGNAL);
         return ClientboundBlockEntityDataPacket.create(this);
+    }
+
+    // IItemHandlerModifiable
+    @Override
+    public void setStackInSlot(int i, ItemStack arg) {
+        setItem(arg);
+    }
+
+    @Override
+    public int getSlots() {
+        return 1;
+    }
+
+    @Override
+    public ItemStack getStackInSlot(int i) {
+        return getItem();
+    }
+
+    @Override
+    public ItemStack insertItem(int i, ItemStack arg, boolean simulate) {
+        if (!getItem().isEmpty())
+            return stack;
+
+        if (stack.getCount() > 1) {
+            if (!simulate)
+                setItem(stack.copyWithCount(1));
+            return stack.copyWithCount(stack.getCount() - 1);
+        }
+
+        return ItemStack.EMPTY;
+    }
+
+    @Override
+    public ItemStack extractItem(int i, int amount, boolean simulate) {
+        if (simulate) {
+            return stack.copy().split(amount);
+        } else {
+            return removeItem(i, amount);
+        }
+    }
+
+    @Override
+    public int getSlotLimit(int i) {
+        return 1;
+    }
+
+    @Override
+    public boolean isItemValid(int i, ItemStack arg) {
+        return true;
     }
 }

@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import martian.arcane.api.ArcaneRegistry;
 import martian.arcane.client.ArcaneClient;
 import martian.arcane.common.networking.c2s.C2SOpenEnderpackPayload;
+import martian.arcane.common.networking.c2s.C2SSetSelectionComponent;
 import martian.arcane.common.networking.s2c.S2CSyncAuraAttachment;
 import martian.arcane.common.registry.*;
 import martian.arcane.datagen.ArcaneDatagen;
@@ -58,7 +59,8 @@ public class ArcaneMod
         modBus.addListener(RegisterPayloadHandlersEvent.class, event -> {
             final PayloadRegistrar registrar = event.registrar("1");
             registrar.playToServer(C2SOpenEnderpackPayload.TYPE, C2SOpenEnderpackPayload.CODEC, C2SOpenEnderpackPayload::handler);
-            registrar.playBidirectional(S2CSyncAuraAttachment.TYPE, S2CSyncAuraAttachment.CODEC, S2CSyncAuraAttachment::handler);
+            registrar.playToServer(C2SSetSelectionComponent.TYPE, C2SSetSelectionComponent.CODEC, C2SSetSelectionComponent::handler);
+            registrar.playToClient(S2CSyncAuraAttachment.TYPE, S2CSyncAuraAttachment.CODEC, S2CSyncAuraAttachment::handler);
         });
 
         modBus.addListener(ArcaneRegistries::registerRegisters);

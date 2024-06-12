@@ -5,6 +5,7 @@ import martian.arcane.ArcaneMod;
 import martian.arcane.api.ArcaneRegistry;
 import martian.arcane.api.MachineTier;
 import martian.arcane.api.aura.AuraRecord;
+import martian.arcane.api.spell.WandbookDataRecord;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.resources.ResourceLocation;
@@ -39,6 +40,9 @@ public class ArcaneDataComponents extends ArcaneRegistry {
 
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> MODE = register("mode", builder ->
             builder.persistent(Codec.STRING));
+
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<WandbookDataRecord>> WANDBOOK_DATA = register("wandbook_data", builder ->
+            builder.persistent(WandbookDataRecord.CODEC).networkSynchronized(WandbookDataRecord.STREAM_CODEC));
 
     private static <T> DeferredHolder<DataComponentType<?>, DataComponentType<T>> register(String name, UnaryOperator<DataComponentType.Builder<T>> func) {
         return REGISTER.register(name, () -> func.apply(DataComponentType.builder()).build());

@@ -92,7 +92,7 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntityWithSingleIte
     public Optional<RecipeHolder<RecipeAuraInfusion>> getRecipe(boolean ignoreAura) {
         if (getLevel() == null)
             return Optional.empty();
-        return RecipeAuraInfusion.getRecipeFor(getLevel(), new RecipeAuraInfusion.Container(this.stack, this.auraProgress), ignoreAura);
+        return RecipeAuraInfusion.getRecipeFor(getLevel(), new RecipeAuraInfusion.Container(this.getItem(), this.auraProgress), ignoreAura);
     }
 
     public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T entity) {
