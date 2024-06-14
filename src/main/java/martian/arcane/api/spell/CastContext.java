@@ -1,5 +1,6 @@
 package martian.arcane.api.spell;
 
+import martian.arcane.api.ArcaneRegistries;
 import martian.arcane.api.Raycasting;
 import martian.arcane.api.aura.IAuraStorage;
 import martian.arcane.api.item.IAuraWand;
@@ -23,6 +24,12 @@ public abstract class CastContext {
         this.level = level;
         this.aura = aura;
         this.source = source;
+    }
+
+    public final CastResult cast(AbstractSpell spell) {
+        if (AbstractSpell.isDisabled(spell))
+            return CastResult.FAIL_DISABLED;
+        return spell.cast(this);
     }
 
     public abstract @Nullable BlockPos getTarget();

@@ -2,14 +2,17 @@ package martian.arcane.api;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import martian.arcane.ArcaneConfig;
 import martian.arcane.ArcaneMod;
-import martian.arcane.ArcaneStaticConfig;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.neoforge.common.util.Lazy;
 
-public record MachineTier(ResourceLocation id, int auraLoss, int ioRate, float maxAuraMultiplier) {
+import java.util.function.Supplier;
+
+public record MachineTier(ResourceLocation id, int auraLoss, int ioRate, double maxAuraMultiplier) {
     public int getMaxAuraForMachine(int machineAura) {
-        return Math.round(machineAura * maxAuraMultiplier);
+        return (int) Math.round(machineAura * maxAuraMultiplier);
     }
 
     public String getTranslationKey() {
@@ -24,10 +27,10 @@ public record MachineTier(ResourceLocation id, int auraLoss, int ioRate, float m
             ResourceLocation.CODEC.fieldOf("id").forGetter(MachineTier::id),
             Codec.INT.fieldOf("auraLoss").forGetter(MachineTier::auraLoss),
             Codec.INT.fieldOf("ioRate").forGetter(MachineTier::ioRate),
-            Codec.FLOAT.fieldOf("maxAuraMultiplier").forGetter(MachineTier::maxAuraMultiplier)
+            Codec.DOUBLE.fieldOf("maxAuraMultiplier").forGetter(MachineTier::maxAuraMultiplier)
     ).apply(instance, MachineTier::new));
 
-    public static final MachineTier COPPER = new MachineTier(ArcaneMod.id("copper"), ArcaneStaticConfig.AuraLoss.COPPER_TIER, ArcaneStaticConfig.Rates.COPPER_AURA_CONNECTOR_RATE, 1);
-    public static final MachineTier LARIMAR = new MachineTier(ArcaneMod.id("larimar"), ArcaneStaticConfig.AuraLoss.LARIMAR_TIER, ArcaneStaticConfig.Rates.LARIMAR_AURA_CONNECTOR_RATE, 2);
-    public static final MachineTier AURACHALCUM = new MachineTier(ArcaneMod.id("aurachalcum"), ArcaneStaticConfig.AuraLoss.AURACHALCUM_TIER, ArcaneStaticConfig.Rates.AURACHALCUM_AURA_CONNECTOR_RATE, 4);
+    public static final Lazy<MachineTier> COPPER = Lazy.of(() -> new MachineTier(ArcaneMod.id("copper"), ArcaneConfig.copperTierAuraLoss, ArcaneConfig.copperTierConnectorRate, ArcaneConfig.copperTierMaxAuraMultiplier));
+    public static final Lazy<MachineTier> LARIMAR = Lazy.of(() -> new MachineTier(ArcaneMod.id("larimar"), ArcaneConfig.larimarTierAuraLoss, ArcaneConfig.larimarTierConnectorRate, ArcaneConfig.larimarTierMaxAuraMultiplier));
+    public static final Lazy<MachineTier> AURACHALCUM = Lazy.of(() -> new MachineTier(ArcaneMod.id("aurachalcum"), ArcaneConfig.aurachalcumTierAuraLoss, ArcaneConfig.aurachalcumTierConnectorRate, ArcaneConfig.aurachalcumTierMaxAuraMultiplier));
 }

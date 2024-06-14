@@ -19,7 +19,7 @@ public class WeatherableBlock extends Block {
     public static final Property<Boolean> WAXED = BooleanProperty.create("waxed");
 
     public final @Nullable Supplier<BlockState> nextBlock;
-    protected int weatherChanceEachRandomTick = 10;
+    protected final int weatherChanceEachRandomTick = 10;
 
     public WeatherableBlock(@Nullable Supplier<BlockState> nextBlock, Properties properties) {
         super(properties);

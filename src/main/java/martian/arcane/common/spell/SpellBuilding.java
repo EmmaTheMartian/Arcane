@@ -1,12 +1,14 @@
 package martian.arcane.common.spell;
 
-import martian.arcane.ArcaneStaticConfig;
+import martian.arcane.ArcaneMod;
 import martian.arcane.api.block.AOEHelpers;
 import martian.arcane.api.spell.AbstractSpell;
 import martian.arcane.api.spell.CastContext;
 import martian.arcane.api.spell.CastResult;
-import martian.arcane.common.ArcaneContent;
+import martian.arcane.api.spell.SpellConfig;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -17,8 +19,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SpellBuilding extends AbstractSpell {
-    public SpellBuilding() {
-        super(ArcaneStaticConfig.SpellMinLevels.BUILDING);
+    private static final SpellConfig config = new SpellConfig(ArcaneMod.id("building"))
+            .set("cooldown", 20)
+            .set("minLevel", 1)
+            .set("auraCostPerBlock", 2)
+            .set("radiusAtLevel1", 0)
+            .set("radiusAtLevel2", 1)
+            .set("radiusAtLevel3", 2)
+            .set("defaultBlock", "arcane:conjured_block")
+            .build();
+
+    @Override
+    protected SpellConfig getConfig() {
+        return config;
     }
 
     @Override
@@ -33,21 +46,21 @@ public class SpellBuilding extends AbstractSpell {
                 target = bHit.getBlockPos().relative(bHit.getDirection());
                 if (c.source.getCastLevel(wc) == 1 || wc.caster.isCrouching()) {
                     if (canPlace(c.level, target))
-                        cost.getAndAdd(ArcaneStaticConfig.SpellCosts.BUILDING);
+                        cost.getAndAdd(config.get("auraCostPerBlock"));
                 } else {
                     AOEHelpers.streamAOE(target, bHit.getDirection(), getRadius(c.source.getCastLevel(wc))).forEach(pos -> {
                         if (c.aura.getAura() - cost.get() <= 0)
                             return;
 
                         if (canPlace(c.level, pos))
-                            cost.getAndAdd(ArcaneStaticConfig.SpellCosts.BUILDING);
+                            cost.getAndAdd(config.get("auraCostPerBlock"));
                     });
                 }
             } else {
                 return 0;
             }
         } else if (canPlace(c.level, target)) {
-            cost.getAndAdd(ArcaneStaticConfig.SpellCosts.BUILDING);
+            cost.getAndAdd(config.get("auraCostPerBlock"));
         }
 
         return cost.get();
@@ -63,7 +76,7 @@ public class SpellBuilding extends AbstractSpell {
         if (target == null)
             return CastResult.FAILED;
 
-        BlockState toPlace = ArcaneContent.CONJURED_BLOCK.get().defaultBlockState();
+        BlockState toPlace = BuiltInRegistries.BLOCK.get(ResourceLocation.of(config.get("defaultBlock"), ':')).defaultBlockState();
 
         if (c instanceof CastContext.WandContext wc) {
             ItemStack offStack = wc.caster.getMainHandItem() == wc.castingStack
@@ -80,7 +93,7 @@ public class SpellBuilding extends AbstractSpell {
                 target = bHit.getBlockPos().relative(bHit.getDirection());
                 if (c.source.getCastLevel(wc) == 1 || wc.caster.isCrouching()) {
                     if (tryPlace(c.level, target, toPlace))
-                        cost.getAndAdd(ArcaneStaticConfig.SpellCosts.BUILDING);
+                        cost.getAndAdd(config.get("auraCostPerBlock"));
                 } else {
                     BlockState finalToPlace = toPlace;
                     AOEHelpers.streamAOE(target, bHit.getDirection(), getRadius(c.source.getCastLevel(wc))).forEach(pos -> {
@@ -88,7 +101,7 @@ public class SpellBuilding extends AbstractSpell {
                             return;
 
                         if (tryPlace(c.level, pos, finalToPlace)) {
-                            cost.getAndAdd(ArcaneStaticConfig.SpellCosts.BUILDING);
+                            cost.getAndAdd(config.get("auraCostPerBlock"));
                             if (usingOffStack.get() && !wc.caster.isCreative())
                                 offStack.shrink(1);
                         }
@@ -118,9 +131,9 @@ public class SpellBuilding extends AbstractSpell {
 
     private static int getRadius(int level) {
         return switch (level) {
-            case 2 -> 1;
-            case 3 -> 2;
-            default -> 0;
+            case 1 -> config.get("radiusAtLevel1");
+            case 2 -> config.get("radiusAtLevel2");
+            default -> config.get("radiusAtLevel3");
         };
     }
 }

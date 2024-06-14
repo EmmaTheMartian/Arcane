@@ -1,13 +1,17 @@
 package martian.arcane.common.item;
 
+import martian.arcane.ArcaneConfig;
 import martian.arcane.ArcaneTags;
 import martian.arcane.api.ArcaneRegistries;
+import martian.arcane.api.aura.AuraRecord;
+import martian.arcane.api.block.entity.IAuraometerOutput;
 import martian.arcane.api.item.AbstractAuraItem;
 import martian.arcane.api.item.IAuraWand;
 import martian.arcane.api.spell.AbstractSpell;
 import martian.arcane.api.spell.CastContext;
 import martian.arcane.api.spell.MutableWandbookData;
 import martian.arcane.api.spell.WandbookDataRecord;
+import martian.arcane.client.ArcaneClient;
 import martian.arcane.client.ArcaneKeybindings;
 import martian.arcane.common.ArcaneContent;
 import martian.arcane.common.networking.c2s.C2SSetSelectionComponent;
@@ -30,19 +34,31 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
-public class ItemWandbook extends AbstractAuraItem implements IAuraWand {
-    public final int defaultMaxWands;
+public class ItemWandbook extends AbstractAuraItem implements IAuraWand, IAuraometerOutput {
+    public final Supplier<Integer> maxWandsSupplier, maxAuraSupplier;
 
-    public ItemWandbook(int maxWands, int maxAura) {
+    public ItemWandbook(Supplier<Integer> maxWandsSupplier, Supplier<Integer> maxAuraSupplier) {
         //noinspection DataFlowIssue
-        super(maxAura, false, true, new Properties()
+        super(null, new Properties()
                 .stacksTo(1)
                 .component(ArcaneContent.DC_WANDBOOK_DATA, null));
-        this.defaultMaxWands = maxWands;
+        this.maxWandsSupplier = maxWandsSupplier;
+        this.maxAuraSupplier = maxAuraSupplier;
+    }
+
+    public ItemWandbook() {
+        this(() -> ArcaneConfig.wandbookSpellCapacity, () -> ArcaneConfig.wandbookAuraCapacity);
+    }
+
+    @Override
+    protected AuraRecord getDefaultAuraRecord() {
+        return new AuraRecord(maxAuraSupplier.get(), 0, false, true);
     }
 
     @Override
@@ -69,7 +85,7 @@ public class ItemWandbook extends AbstractAuraItem implements IAuraWand {
 
             player.getCooldowns().addCooldown(this, spell.getCooldownTicks(ctx));
 
-            spell.cast(ctx);
+            ctx.cast(spell);
             aura.removeAura(cost);
             return aura;
         });
@@ -80,18 +96,20 @@ public class ItemWandbook extends AbstractAuraItem implements IAuraWand {
     @Override
     @ParametersAreNonnullByDefault
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
-        if (!isSelected)
+        if (!level.isClientSide() || !isSelected || !ArcaneClient.isGameActive())
             return;
 
         if (level.isClientSide) {
-            WandbookDataRecord data = getData(stack);
-            if (data != null) {
+            if (ArcaneKeybindings.WANDBOOK_NEXT_SPELL.get().consumeClick()) {
+                WandbookDataRecord data = getData(stack);
                 var selection = data.selection();
-                if (ArcaneKeybindings.WANDBOOK_NEXT_SPELL.get().consumeClick() && selection < data.maxWands()) {
+                if (selection < getUsedSlotCount(stack) - 1)
                     PacketDistributor.sendToServer(new C2SSetSelectionComponent(slotId, selection + 1));
-                } else if (ArcaneKeybindings.WANDBOOK_PREV_SPELL.get().consumeClick() && selection > 0) {
+            } else if (ArcaneKeybindings.WANDBOOK_PREV_SPELL.get().consumeClick()) {
+                WandbookDataRecord data = getData(stack);
+                var selection = data.selection();
+                if (selection > 0)
                     PacketDistributor.sendToServer(new C2SSetSelectionComponent(slotId, selection - 1));
-                }
             }
         }
     }
@@ -100,23 +118,43 @@ public class ItemWandbook extends AbstractAuraItem implements IAuraWand {
     @ParametersAreNonnullByDefault
     public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> text, TooltipFlag flag) {
         super.appendHoverText(stack, context, text, flag);
+        text.addAll(getInfoText(stack, true));
+    }
 
+    @Override
+    public List<Component> getText(List<Component> text, IAuraometerOutput.Context context) {
+        text.add(mapAuraStorage(context.heldStack(), aura -> Component
+                .translatable("messages.arcane.aura")
+                .append(Integer.toString(aura.getAura()))
+                .append("/")
+                .append(Integer.toString(aura.getMaxAura()))
+                .withStyle(ChatFormatting.LIGHT_PURPLE)));
+        text.addAll(getInfoText(context.heldStack(), false));
+        return text;
+    }
+
+    public List<Component> getInfoText(ItemStack stack, boolean includeSelectionInfo) {
         WandbookDataRecord data = getData(stack);
+        List<Component> text = new ArrayList<>();
+        if (data == null)
+            return text;
 
-        if (data != null) {
-            var sel = data.selection();
+        var sel = data.selection();
 
-            for (int i = 0; i < data.wands().size(); i++) {
-                var wand = data.wands().get(i);
-                if (wand.isEmpty())
-                    continue;
-
-                if (i == sel)
-                    text.add(Component.literal(" - ").append(wand.getDisplayName().copy().withStyle(ChatFormatting.GOLD)));
-                else
-                    text.add(Component.literal(" - ").append(wand.getDisplayName().copy().withStyle(ChatFormatting.WHITE)));
-            }
+        if (includeSelectionInfo) {
+            text.add(Component.translatable("messages.arcane.selection").append(Integer.toString(sel + 1)).withStyle(ChatFormatting.BLUE));
+            text.add(Component.translatable("messages.arcane.holding_n_of_n_wands", getUsedSlotCount(stack), data.maxWands()).withStyle(ChatFormatting.BLUE));
         }
+
+        for (int i = 0; i < data.wands().size(); i++) {
+            var wand = data.wands().get(i);
+            if (wand.isEmpty())
+                continue;
+
+            text.add(Component.literal(i + 1 + ". ").append(wand.getDisplayName().copy()
+                    .withStyle(i == sel ? ChatFormatting.GOLD : ChatFormatting.WHITE)));
+        }
+        return text;
     }
 
     @Override
@@ -125,16 +163,16 @@ public class ItemWandbook extends AbstractAuraItem implements IAuraWand {
         if (stack.getCount() == 1 && action == ClickAction.SECONDARY) {
             if (slot.getItem().isEmpty()) {
                 playRemoveOneSound(player);
-                ItemStack s1 = removeFirstWand(stack);
+                ItemStack s1 = removeLastWand(stack);
                 ItemStack s2 = slot.safeInsert(s1);
-                tryAddWand(stack, s2);
+                return tryAddWand(stack, s2);
             } else {
                 if (tryAddWand(stack, slot.getItem())) {
                     slot.set(ItemStack.EMPTY);
                     playInsertSound(player);
+                    return true;
                 }
             }
-            return true;
         }
         return false;
     }
@@ -142,22 +180,21 @@ public class ItemWandbook extends AbstractAuraItem implements IAuraWand {
     @Override
     @ParametersAreNonnullByDefault
     public boolean overrideOtherStackedOnMe(ItemStack stack, ItemStack other, Slot slot, ClickAction action, Player player, SlotAccess access) {
-        if (stack.getCount() != 1) {
-            return false;
-        } else if (action == ClickAction.SECONDARY && slot.allowModification(player)) {
+        if (stack.getCount() == 1 && action == ClickAction.SECONDARY && slot.allowModification(player)) {
             if (other.isEmpty()) {
-                ItemStack wand = removeFirstWand(stack);
+                ItemStack wand = removeLastWand(stack);
                 if (!wand.isEmpty()) {
                     playRemoveOneSound(player);
                     access.set(wand);
+                    return true;
                 }
             } else {
                 if (tryAddWand(stack, other)) {
                     playInsertSound(player);
                     access.set(ItemStack.EMPTY);
+                    return true;
                 }
             }
-            return true;
         }
         return false;
     }
@@ -175,7 +212,7 @@ public class ItemWandbook extends AbstractAuraItem implements IAuraWand {
     }
 
     public WandbookDataRecord getData(ItemStack stack) {
-        return WandbookDataRecord.getOrCreate(stack, () -> new WandbookDataRecord(defaultMaxWands));
+        return WandbookDataRecord.getOrCreate(stack, () -> new WandbookDataRecord(maxWandsSupplier.get()));
     }
 
     public <T> T mapData(ItemStack stack, Function<WandbookDataRecord, T> function) {
@@ -198,7 +235,7 @@ public class ItemWandbook extends AbstractAuraItem implements IAuraWand {
     }
 
     public boolean wandHasSpell(ItemStack stack, int slot) {
-        return getWandSpellId(stack, slot) != null;
+        return !getWand(stack, slot).isEmpty() && getWandSpellId(stack, slot) != null;
     }
 
     public @Nullable ResourceLocation getWandSpellId(ItemStack stack, int slot) {
@@ -213,26 +250,34 @@ public class ItemWandbook extends AbstractAuraItem implements IAuraWand {
         return getWands(stack).get(slot);
     }
 
+    public int getUsedSlotCount(ItemStack stack) {
+        return mapData(stack, data -> {
+            int count = 0;
+            for (ItemStack wand : data.wands())
+                if (!wand.isEmpty())
+                    count++;
+            return count;
+        });
+    }
+
     public int findFirstEmptySlot(ItemStack wandbookStack) {
         final var wands = getWands(wandbookStack);
-        for (int i = 0; i < wands.size(); i++) {
+        for (int i = 0; i < wands.size(); i++)
             if (wands.get(i).isEmpty())
                 return i;
-        }
         return -1;
     }
 
-    public int findFirstUsedSlot(ItemStack wandbookStack) {
+    public int findLastUsedSlot(ItemStack wandbookStack) {
         final var wands = getWands(wandbookStack);
-        for (int i = 0; i < wands.size(); i++) {
+        for (int i = wands.size() - 1; i >= 0; i--)
             if (!wands.get(i).isEmpty())
                 return i;
-        }
         return -1;
     }
 
     public boolean tryAddWand(ItemStack wandbookStack, ItemStack wandStack) {
-        if (wandStack.isEmpty() || !wandStack.is(ArcaneTags.WANDS))
+        if (wandStack.isEmpty() || !wandStack.is(ArcaneTags.WANDS) || ItemAuraWand.getSpellId(wandStack) == null)
             return false;
         int slot = findFirstEmptySlot(wandbookStack);
         if (slot == -1)
@@ -241,12 +286,19 @@ public class ItemWandbook extends AbstractAuraItem implements IAuraWand {
         return true;
     }
 
-    public ItemStack removeFirstWand(ItemStack wandbookStack) {
-        int slot = findFirstUsedSlot(wandbookStack);
+    public ItemStack removeLastWand(ItemStack wandbookStack) {
+        int slot = findLastUsedSlot(wandbookStack);
         if (slot == -1)
             return ItemStack.EMPTY;
         ItemStack wand = getWand(wandbookStack, slot).copy();
         setWand(wandbookStack, ItemStack.EMPTY, slot);
+        // Select the new last wand in the book unless we removed the topmost (ie, the only remaining) wand
+        if (getData(wandbookStack).selection() == getData(wandbookStack).maxWands() - 1 && getUsedSlotCount(wandbookStack) > 0) {
+            mutateData(wandbookStack, data -> {
+                data.selection = findLastUsedSlot(wandbookStack);
+                return data;
+            });
+        }
         return wand;
     }
 

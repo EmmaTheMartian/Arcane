@@ -1,17 +1,21 @@
 package martian.arcane.common.spell;
 
-import martian.arcane.ArcaneStaticConfig;
+import martian.arcane.ArcaneMod;
 import martian.arcane.api.block.IPreservable;
 import martian.arcane.api.spell.AbstractSpell;
 import martian.arcane.api.spell.CastContext;
 import martian.arcane.api.spell.CastResult;
+import martian.arcane.api.spell.SpellConfig;
 import martian.arcane.integration.photon.ArcaneFx;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class SpellPreservation extends AbstractSpell {
-    public SpellPreservation() {
-        super(ArcaneStaticConfig.SpellMinLevels.PRESERVATION);
+    private static final SpellConfig config = SpellConfig.basicConfig(ArcaneMod.id("preservation"), 4, 20, 2).build();
+
+    @Override
+    protected SpellConfig getConfig() {
+        return config;
     }
 
     @Override
@@ -21,7 +25,7 @@ public class SpellPreservation extends AbstractSpell {
             return 0;
 
         BlockState state = c.level.getBlockState(pos);
-        return state.getBlock() instanceof IPreservable ? ArcaneStaticConfig.SpellCosts.PRESERVATION : 0;
+        return state.getBlock() instanceof IPreservable ? config.get("auraCost") : 0;
     }
 
     @Override

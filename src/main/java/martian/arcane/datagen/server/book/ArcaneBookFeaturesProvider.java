@@ -12,8 +12,6 @@ import com.klikli_dev.modonomicon.book.BookCategoryBackgroundParallaxLayer;
 import martian.arcane.ArcaneMod;
 import martian.arcane.ArcaneTags;
 import martian.arcane.common.ArcaneContent;
-import martian.arcane.common.registry.ArcaneBlocks;
-import martian.arcane.common.registry.ArcaneItems;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;

@@ -1,22 +1,22 @@
 package martian.arcane.common.spell;
 
-import martian.arcane.ArcaneStaticConfig;
 import martian.arcane.api.spell.AbstractSpell;
 import martian.arcane.api.spell.CastContext;
 import martian.arcane.api.spell.CastResult;
-import martian.arcane.common.ArcaneContent;
+import martian.arcane.api.spell.SpellConfig;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
-public class SpellCrafting extends AbstractSpell {
-    public SpellCrafting() {
-        super(ArcaneStaticConfig.SpellMinLevels.CRAFTING);
-    }
+import java.util.function.Function;
 
-    @Override
-    public int getAuraCost(CastContext c) {
-        return ArcaneStaticConfig.SpellCosts.CRAFTING;
+public abstract class SimplePlacementSpell extends AbstractSpell {
+    private final Function<CastContext, BlockState> block;
+
+    public SimplePlacementSpell(Function<CastContext, BlockState> block) {
+        this.block = block;
     }
 
     @Override
@@ -40,7 +40,18 @@ public class SpellCrafting extends AbstractSpell {
         if (!c.level.isInWorldBounds(pos))
             return CastResult.FAILED;
 
-        c.level.setBlockAndUpdate(pos, ArcaneContent.CONJURED_CRAFTING_TABLE.get().defaultBlockState());
+        c.level.setBlockAndUpdate(pos, block.apply(c));
         return CastResult.SUCCESS;
+    }
+
+    public static SimplePlacementSpell of(ResourceLocation id, int auraCost, int cooldown, int minLevel, Function<CastContext, BlockState> block) {
+        return new SimplePlacementSpell(block) {
+            private final SpellConfig config = SpellConfig.basicConfig(id, auraCost, cooldown, minLevel).build();
+
+            @Override
+            protected SpellConfig getConfig() {
+                return config;
+            }
+        };
     }
 }

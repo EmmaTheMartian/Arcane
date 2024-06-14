@@ -4,7 +4,6 @@ import martian.arcane.api.recipe.RecipeOutput;
 import martian.arcane.common.ArcaneContent;
 import martian.arcane.common.recipe.SpellRecipe;
 import martian.arcane.common.recipe.SpellRecipeType;
-import martian.arcane.common.registry.ArcaneRecipeTypes;
 import martian.arcane.datagen.util.RecipeDataHelper;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.advancements.*;

@@ -1,27 +1,21 @@
 package martian.arcane.common.spell;
 
-import martian.arcane.ArcaneStaticConfig;
+import martian.arcane.ArcaneMod;
 import martian.arcane.api.block.BlockHelpers;
 import martian.arcane.api.spell.AbstractSpell;
 import martian.arcane.api.spell.CastContext;
 import martian.arcane.api.spell.CastResult;
+import martian.arcane.api.spell.SpellConfig;
 import martian.arcane.common.block.spellcircle.BlockEntitySpellCircle;
 import martian.arcane.integration.photon.ArcaneFx;
 import net.minecraft.core.BlockPos;
 
 public class SpellSpellCircleActivator extends AbstractSpell {
-    public SpellSpellCircleActivator() {
-        super(ArcaneStaticConfig.SpellMinLevels.ACTIVATOR);
-    }
+    private static final SpellConfig config = SpellConfig.basicConfig(ArcaneMod.id("activator"), 16, 60, 2).build();
 
     @Override
-    public int getCooldownTicks(CastContext c) {
-        return 60;
-    }
-
-    @Override
-    public int getAuraCost(CastContext c) {
-        return ArcaneStaticConfig.SpellCosts.ACTIVATOR;
+    protected SpellConfig getConfig() {
+        return config;
     }
 
     @Override

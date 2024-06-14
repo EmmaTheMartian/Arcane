@@ -95,7 +95,7 @@ public class AbstractAuraBlockEntityWithSingleItem extends AbstractAuraBlockEnti
     }
 
     @Override
-    public boolean canPlaceItem(int ignoredSlot, ItemStack stack) {
+    public boolean canPlaceItem(int ignoredSlot, @NotNull ItemStack stack) {
         return getItem().getCount() == 0 && stack.getCount() <= 1;
     }
 
@@ -134,7 +134,7 @@ public class AbstractAuraBlockEntityWithSingleItem extends AbstractAuraBlockEnti
 
     // IItemHandlerModifiable
     @Override
-    public void setStackInSlot(int i, ItemStack arg) {
+    public void setStackInSlot(int i, @NotNull ItemStack arg) {
         setItem(arg);
     }
 
@@ -144,12 +144,14 @@ public class AbstractAuraBlockEntityWithSingleItem extends AbstractAuraBlockEnti
     }
 
     @Override
+    @NotNull
     public ItemStack getStackInSlot(int i) {
         return getItem();
     }
 
     @Override
-    public ItemStack insertItem(int i, ItemStack arg, boolean simulate) {
+    @NotNull
+    public ItemStack insertItem(int i, @NotNull ItemStack arg, boolean simulate) {
         if (!getItem().isEmpty())
             return stack;
 
@@ -163,6 +165,7 @@ public class AbstractAuraBlockEntityWithSingleItem extends AbstractAuraBlockEnti
     }
 
     @Override
+    @NotNull
     public ItemStack extractItem(int i, int amount, boolean simulate) {
         if (simulate) {
             return stack.copy().split(amount);
@@ -177,7 +180,7 @@ public class AbstractAuraBlockEntityWithSingleItem extends AbstractAuraBlockEnti
     }
 
     @Override
-    public boolean isItemValid(int i, ItemStack arg) {
+    public boolean isItemValid(int i, @NotNull ItemStack arg) {
         return true;
     }
 }

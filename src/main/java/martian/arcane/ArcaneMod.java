@@ -17,6 +17,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CampfireBlock;
 import net.minecraft.world.level.block.FurnaceBlock;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
@@ -35,10 +37,10 @@ public class ArcaneMod {
     public static final String MODID = "arcane";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public static Map<Function<BlockState, Boolean>, Integer> ignisGenerationAmounts = new HashMap<>();
+    public static final Map<Function<BlockState, Boolean>, Integer> ignisGenerationAmounts = new HashMap<>();
 
-    public ArcaneMod(IEventBus modBus) {
-//        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ArcaneConfig.SPEC);
+    public ArcaneMod(ModContainer mod, IEventBus modBus) {
+        mod.registerConfig(ModConfig.Type.SERVER, ArcaneConfig.SPEC);
 
         ArcaneContent.init(modBus);
 

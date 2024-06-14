@@ -1,5 +1,6 @@
 package martian.arcane.common.item;
 
+import martian.arcane.ArcaneConfig;
 import martian.arcane.api.ArcaneRegistries;
 import martian.arcane.api.spell.AbstractSpell;
 import martian.arcane.common.ArcaneContent;
@@ -35,8 +36,10 @@ public class ItemSpellTablet extends Item {
                     .withStyle(ChatFormatting.AQUA));
             text.add(Component
                     .translatable("messages.arcane.spell_min_level")
-                    .append(Integer.toString(spell.minLevel))
+                    .append(Integer.toString(spell.getMinLevel()))
                     .withStyle(ChatFormatting.AQUA));
+            if (ArcaneConfig.disabledSpells.contains(getSpellId(stack)))
+                text.add(Component.translatable("messages.arcane.spell_disabled").withStyle(ChatFormatting.RED));
         }
     }
 

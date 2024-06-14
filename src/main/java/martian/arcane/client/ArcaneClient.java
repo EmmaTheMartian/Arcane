@@ -1,5 +1,7 @@
 package martian.arcane.client;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import martian.arcane.ArcaneMod;
 import martian.arcane.client.gui.AuraometerOverlay;
 import martian.arcane.common.ArcaneContent;
@@ -7,9 +9,9 @@ import martian.arcane.common.block.connector.ConnectorLinkRenderer;
 import martian.arcane.common.block.infuser.AuraInfuserRenderer;
 import martian.arcane.common.block.pedestal.PedestalRenderer;
 import martian.arcane.common.block.spellcircle.SpellCircleRenderer;
-import martian.arcane.common.registry.ArcaneBlockEntities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
+import net.minecraft.util.Mth;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.*;
@@ -29,7 +31,7 @@ public class ArcaneClient {
     }
 
     @SubscribeEvent
-    public static void onTick(ClientTickEvent.Post event) {
+    static void onTick(ClientTickEvent.Post event) {
         if (!isGameActive())
             return;
 
@@ -38,21 +40,21 @@ public class ArcaneClient {
         ConnectorLinkRenderer.tick();
     }
 
-    public static void registerGuiOverlays(RegisterGuiLayersEvent event) {
+    static void registerGuiOverlays(RegisterGuiLayersEvent event) {
         event.registerBelowAll(ArcaneMod.id("auraometer_overlay"), new AuraometerOverlay());
     }
 
-    public static void registerBlockEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
+    static void registerBlockEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
         event.registerBlockEntityRenderer(ArcaneContent.AURA_INFUSER.tile().get(), AuraInfuserRenderer::new);
         event.registerBlockEntityRenderer(ArcaneContent.PEDESTAL.tile().get(), PedestalRenderer::new);
         event.registerBlockEntityRenderer(ArcaneContent.SPELL_CIRCLE.tile().get(), SpellCircleRenderer::new);
     }
 
-    public static void registerEntityLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
+    static void registerEntityLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(ArcaneModelLayers.SPELL_CIRCLE, () -> LayerDefinition.create(SpellCircleRenderer.createMesh(), 128, 192));
     }
 
-    public static void registerKeybindings(RegisterKeyMappingsEvent event) {
+    static void registerKeybindings(RegisterKeyMappingsEvent event) {
         event.register(ArcaneKeybindings.OPEN_ENDERPACK.get());
         event.register(ArcaneKeybindings.WANDBOOK_NEXT_SPELL.get());
         event.register(ArcaneKeybindings.WANDBOOK_PREV_SPELL.get());

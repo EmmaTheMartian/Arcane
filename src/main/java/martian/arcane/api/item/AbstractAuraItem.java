@@ -14,32 +14,37 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 public abstract class AbstractAuraItem extends Item {
-    private final int defaultMaxAura;
-    private final boolean defaultExtractable, defaultInsertable;
+    protected final Supplier<AuraRecord> defaultAuraRecordSupplier;
 
+    public AbstractAuraItem(Supplier<AuraRecord> defaultAuraRecordSupplier, Item.Properties properties) {
+        //noinspection DataFlowIssue
+        super(properties.component(ArcaneContent.DC_AURA, null));
+        this.defaultAuraRecordSupplier = defaultAuraRecordSupplier;
+    }
+
+    @Deprecated
     public AbstractAuraItem(int maxAura, boolean extractable, boolean insertable, Item.Properties properties) {
-        super(properties.component(ArcaneContent.DC_AURA, new AuraRecord(maxAura, 0, extractable, insertable)));
-        this.defaultMaxAura = maxAura;
-        this.defaultExtractable = extractable;
-        this.defaultInsertable = insertable;
+        //noinspection DataFlowIssue
+        super(properties.component(ArcaneContent.DC_AURA, null));
+        this.defaultAuraRecordSupplier = () -> new AuraRecord(maxAura, 0, extractable, insertable);
+    }
+
+    protected AuraRecord getDefaultAuraRecord() {
+        return defaultAuraRecordSupplier.get();
     }
 
     // Aura storage
     public AuraRecord getAuraStorage(@NotNull ItemStack stack) {
-        return AuraStorage.getOrCreate(stack, () -> new AuraRecord(defaultMaxAura, 0, defaultExtractable, defaultInsertable));
+        return AuraStorage.getOrCreate(stack, this::getDefaultAuraRecord);
     }
 
     public <U> U mapAuraStorage(ItemStack stack, Function<? super AuraRecord, ? extends U> func) {
         return func.apply(getAuraStorage(stack));
-    }
-
-    public void voidMapAuraStorage(ItemStack stack, Consumer<? super AuraRecord> func) {
-        func.accept(getAuraStorage(stack));
     }
 
     public void mutateAuraStorage(ItemStack stack, UnaryOperator<IMutableAuraStorage> func) {
@@ -61,12 +66,12 @@ public abstract class AbstractAuraItem extends Item {
         return Math.round(mapAuraStorage(stack, aura -> aura.aura() * 13.0F / aura.maxAura()));
     }
 
-    private static final int color_highAura = FastColor.ARGB32.color(155, 50, 155, 255);
-    private static final int color_lowAura = FastColor.ARGB32.color(255, 50, 155, 255);
+    private static final int colorHighAura = FastColor.ARGB32.color(155, 50, 155, 255);
+    private static final int colorLowAura = FastColor.ARGB32.color(255, 50, 155, 255);
 
     @Override
     public int getBarColor(@NotNull ItemStack stack) {
-        return mapAuraStorage(stack, aura -> (float)aura.aura() / aura.maxAura() >= 0.5F ? color_highAura : color_lowAura);
+        return mapAuraStorage(stack, aura -> (float)aura.aura() / aura.maxAura() >= 0.5F ? colorHighAura : colorLowAura);
     }
 
     // Tooltip

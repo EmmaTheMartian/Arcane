@@ -1,6 +1,7 @@
 package martian.arcane.common.item;
 
 import martian.arcane.api.ArcaneRegistries;
+import martian.arcane.api.aura.AuraRecord;
 import martian.arcane.api.item.AbstractAuraItem;
 import martian.arcane.api.item.IAuraWand;
 import martian.arcane.api.spell.AbstractSpell;
@@ -22,13 +23,19 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 public class ItemAuraWand extends AbstractAuraItem implements IAuraWand {
     public final int level;
 
+    @Deprecated
     public ItemAuraWand(int maxAura, int level, Properties properties) {
+        this(() -> maxAura, level, properties);
+    }
+
+    public ItemAuraWand(Supplier<Integer> maxAura, int level, Properties properties) {
         //noinspection DataFlowIssue
-        super(maxAura, false, true, properties.component(ArcaneContent.DC_SPELL.get(), null));
+        super(() -> new AuraRecord(maxAura.get(), 0, false, true), properties.component(ArcaneContent.DC_SPELL.get(), null));
         this.level = level;
     }
 
@@ -54,7 +61,7 @@ public class ItemAuraWand extends AbstractAuraItem implements IAuraWand {
 
             player.getCooldowns().addCooldown(this, spell.getCooldownTicks(ctx));
 
-            spell.cast(ctx);
+            ctx.cast(spell);
             aura.removeAura(cost);
             return aura;
         });
@@ -84,7 +91,7 @@ public class ItemAuraWand extends AbstractAuraItem implements IAuraWand {
     public void setSpell(ResourceLocation newSpell, ItemStack stack) {
         stack.set(ArcaneContent.DC_SPELL, newSpell);
         if (!stack.has(DataComponents.CUSTOM_NAME))
-            stack.set(DataComponents.CUSTOM_NAME, getSpellOrThrow(stack).getItemName(this, stack));
+            stack.set(DataComponents.CUSTOM_NAME, getSpellOrThrow(stack).getItemName());
     }
 
     public @Nullable AbstractSpell getSpell(ItemStack stack) {

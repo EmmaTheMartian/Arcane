@@ -22,7 +22,9 @@ public abstract class AbstractAuraMachine extends BlockWithEntity {
     @Override
     @ParametersAreNonnullByDefault
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return !level.isClientSide ? AbstractAuraBlockEntity::tick : null;
+        return !level.isClientSide ?
+                (inLevel, inPos, inState, inEntity) -> AbstractAuraBlockEntity.tickForAuraLoss(inLevel, (AbstractAuraBlockEntity) inEntity) :
+                null;
     }
 
     @Override

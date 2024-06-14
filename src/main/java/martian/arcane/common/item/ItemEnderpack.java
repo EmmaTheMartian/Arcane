@@ -1,7 +1,8 @@
 
 package martian.arcane.common.item;
 
-import martian.arcane.ArcaneStaticConfig;
+import martian.arcane.ArcaneConfig;
+import martian.arcane.api.aura.AuraRecord;
 import martian.arcane.api.item.AbstractAuraItem;
 import martian.arcane.client.ArcaneKeybindings;
 import martian.arcane.common.networking.c2s.C2SOpenEnderpackPayload;
@@ -27,19 +28,19 @@ public class ItemEnderpack extends AbstractAuraItem {
     private static final Component CONTAINER_TITLE = Component.translatable("container.arcane.enderpack");
 
     public ItemEnderpack() {
-        super(ArcaneStaticConfig.AuraMaximums.ENDERPACK, false, true, new Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+        super(() -> new AuraRecord(ArcaneConfig.enderpackAuraCapacity, 0, false, true), new Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
     }
 
     public static InteractionResultHolder<ItemStack> open(ItemStack stack, Level level, Player player) {
         AtomicReference<InteractionResultHolder<ItemStack>> result = new AtomicReference<>();
         ((ItemEnderpack)stack.getItem()).mutateAuraStorage(stack, storage -> {
-            if (storage.getAura() < ArcaneStaticConfig.Consumption.ENDERPACK) {
+            if (storage.getAura() < ArcaneConfig.enderpackUsageAuraCost) {
                 result.set(InteractionResultHolder.fail(stack));
                 return storage;
             }
 
             if (!level.isClientSide) {
-                storage.removeAura(ArcaneStaticConfig.Consumption.ENDERPACK);
+                storage.removeAura(ArcaneConfig.enderpackUsageAuraCost);
                 PlayerEnderChestContainer playerEnderChestContainer = player.getEnderChestInventory();
                 player.openMenu(new SimpleMenuProvider(
                         (windowId, inventory, ignoredPlayer) -> ChestMenu.threeRows(windowId, inventory, playerEnderChestContainer),

@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 public record S2CSyncAuraAttachment(AuraRecord storage, BlockPos pos) implements CustomPacketPayload {
     public static final Type<S2CSyncAuraAttachment> TYPE = new Type<>(ArcaneMod.id("sync_aura_attachment"));
+
     public static final StreamCodec<RegistryFriendlyByteBuf, S2CSyncAuraAttachment> CODEC = StreamCodec.of(
             (RegistryFriendlyByteBuf buf, S2CSyncAuraAttachment it) -> {
                 AuraRecord.STREAM_CODEC.encode(buf, it.storage);
@@ -20,15 +21,15 @@ public record S2CSyncAuraAttachment(AuraRecord storage, BlockPos pos) implements
             (RegistryFriendlyByteBuf buf) -> new S2CSyncAuraAttachment(AuraRecord.STREAM_CODEC.decode(buf), buf.readBlockPos())
     );
 
-    @Override
-    public @NotNull Type<S2CSyncAuraAttachment> type() {
-        return TYPE;
-    }
-
     public static void handler(final S2CSyncAuraAttachment payload, final IPayloadContext context) {
         context.enqueueWork(() -> {
             if (context.player().level().getBlockEntity(payload.pos) instanceof AbstractAuraBlockEntity be)
                 be.setAuraStorage(payload.storage);
         });
+    }
+
+    @Override
+    public @NotNull Type<S2CSyncAuraAttachment> type() {
+        return TYPE;
     }
 }

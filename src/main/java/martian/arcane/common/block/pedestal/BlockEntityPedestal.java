@@ -1,6 +1,6 @@
 package martian.arcane.common.block.pedestal;
 
-import martian.arcane.ArcaneStaticConfig;
+import martian.arcane.ArcaneConfig;
 import martian.arcane.api.aura.AuraRecord;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntityWithSingleItem;
 import martian.arcane.api.block.entity.IAuraometerOutput;
@@ -16,11 +16,7 @@ import java.util.List;
 
 public class BlockEntityPedestal extends AbstractAuraBlockEntityWithSingleItem implements IAuraometerOutput {
     public BlockEntityPedestal(BlockPos pos, BlockState state) {
-        super(ArcaneStaticConfig.AuraMaximums.PEDESTAL, false, true, ArcaneContent.PEDESTAL.tile().get(), pos, state);
-    }
-
-    public BlockEntityPedestal(int maxAura, BlockPos pos, BlockState state) {
-        super(maxAura, false, true, ArcaneContent.PEDESTAL.tile().get(), pos, state);
+        super(ArcaneConfig.pedestalAuraCapacity, false, true, ArcaneContent.PEDESTAL.tile().get(), pos, state);
     }
 
     @Override
@@ -29,8 +25,8 @@ public class BlockEntityPedestal extends AbstractAuraBlockEntityWithSingleItem i
     }
 
     @Override
-    public List<Component> getText(List<Component> text, boolean detailed) {
-        super.getText(text, detailed);
+    public List<Component> getText(List<Component> text, IAuraometerOutput.Context context) {
+        super.getText(text, context);
 
         if (!getItem().isEmpty()) {
             text.add(Component

@@ -1,14 +1,19 @@
-package martian.arcane.api.spell;
+package martian.arcane.common.spell;
 
 import martian.arcane.api.block.BlockHelpers;
 import martian.arcane.api.item.ItemHelpers;
 import martian.arcane.api.recipe.RecipeOutput;
 import martian.arcane.api.recipe.SimpleContainer;
+import martian.arcane.api.spell.AbstractSpell;
+import martian.arcane.api.spell.CastContext;
+import martian.arcane.api.spell.CastResult;
+import martian.arcane.api.spell.SpellConfig;
 import martian.arcane.common.block.pedestal.BlockEntityPedestal;
 import martian.arcane.common.recipe.SpellRecipe;
 import martian.arcane.common.recipe.SpellRecipeType;
 import martian.arcane.integration.photon.ArcaneFx;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -16,19 +21,11 @@ import net.neoforged.neoforge.items.ItemStackHandler;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class CraftingSpell extends AbstractSpell {
-    public final int costPerCraft;
+public abstract class SimpleCraftingSpell extends AbstractSpell {
     private final SpellRecipeType type;
 
-    public CraftingSpell(SpellRecipeType type, int minLevel, int costPerCraft) {
-        super(minLevel);
-        this.costPerCraft = costPerCraft;
+    public SimpleCraftingSpell(SpellRecipeType type) {
         this.type = type;
-    }
-
-    @Override
-    public int getAuraCost(CastContext c) {
-        return costPerCraft;
     }
 
     @Override
@@ -81,6 +78,17 @@ public class CraftingSpell extends AbstractSpell {
             });
         }
 
-        return new CastResult(didCraft.get());
+        return new CastResult(didCraft.get(), null);
+    }
+
+    public static SimpleCraftingSpell of(ResourceLocation id, int auraCost, int cooldown, int minLevel, SpellRecipeType type) {
+        return new SimpleCraftingSpell(type) {
+            private final SpellConfig config = SpellConfig.basicConfig(id, auraCost, cooldown, minLevel).build();
+
+            @Override
+            protected SpellConfig getConfig() {
+                return config;
+            }
+        };
     }
 }

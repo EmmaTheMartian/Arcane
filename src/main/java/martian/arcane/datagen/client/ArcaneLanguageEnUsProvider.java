@@ -157,6 +157,9 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
         add("messages.arcane.distance_too_far", "Distance too far!");
         add("messages.arcane.unlinked", "Unlinked");
         add("messages.arcane.tier", "Tier: ");
+        add("messages.arcane.holding_n_of_n_wands", "Holding %d/%d max wands");
+        add("messages.arcane.spells", "Spells: ");
+        add("messages.arcane.spell_disabled", "Spell disabled!");
 
         // GUI
         add("gui.arcane.jei.aura_infusion", "Aura Infusion");

@@ -17,7 +17,7 @@ import java.util.Random;
 
 public class ConnectorLinkRenderer {
     private static final Random RANDOM = new Random();
-    public static List<BlockPos> selectedConnectors = new ArrayList<>();
+    public static final List<BlockPos> selectedConnectors = new ArrayList<>();
 
     public static void tick() {
         if (ArcaneClient.clientTicks % 8 != 0)
@@ -49,7 +49,7 @@ public class ConnectorLinkRenderer {
     }
 
     private static void addParticles(BlockPos from, BlockPos to, Level level, float chance) {
-        Raycasting.traverseBetweenPoints(from.getCenter(), to.getCenter(), 0.3D, 0.1D, pos -> {
+        Raycasting.traverseBetweenPoints(from.getCenter(), to.getCenter(), 0.3D, 0.01D, pos -> {
             // This helps cut down on how many particles get spawned to prevent lag
             if (RANDOM.nextFloat() <= chance)
                 ParticleHelper.addMagicParticle(level, pos);

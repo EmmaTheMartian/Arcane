@@ -3,8 +3,8 @@ package martian.arcane.common;
 import com.google.common.collect.ImmutableList;
 import com.klikli_dev.modonomicon.registry.DataComponentRegistry;
 import com.mojang.serialization.Codec;
+import martian.arcane.ArcaneConfig;
 import martian.arcane.ArcaneMod;
-import martian.arcane.ArcaneStaticConfig;
 import martian.arcane.api.ArcaneRegistries;
 import martian.arcane.api.MachineTier;
 import martian.arcane.api.aura.AuraRecord;
@@ -12,7 +12,7 @@ import martian.arcane.api.aura.AuraStorage;
 import martian.arcane.api.block.BasicLarimarBlock;
 import martian.arcane.api.recipe.ArcaneRecipeType;
 import martian.arcane.api.spell.AbstractSpell;
-import martian.arcane.api.spell.CraftingSpell;
+import martian.arcane.common.spell.SimpleCraftingSpell;
 import martian.arcane.api.spell.WandbookDataRecord;
 import martian.arcane.client.ParticleHelper;
 import martian.arcane.common.block.BlockAuraTorch;
@@ -102,24 +102,30 @@ public class ArcaneContent {
     // Block and Block Entities
     public static final DeferredBlockAndTile<?, BlockEntityAuraConnector> AURA_CONNECTOR = blockWithEntity("aura_connector", BlockAuraConnector::new, block -> () -> buildTile(BlockEntityAuraConnector::new, block.get()));
     public static final DeferredBlockAndTile<?, BlockEntityAuraBasin> AURA_BASIN = blockWithEntity("aura_basin", BlockAuraBasin::new, block -> () -> buildTile(BlockEntityAuraBasin::new, block.get()));
-    public static final DeferredBlockAndTile<?, BlockEntityPedestal> PEDESTAL = blockWithEntity("pedestal", () -> new BlockPedestal(ArcaneStaticConfig.AuraMaximums.PEDESTAL), block -> () -> buildTile(BlockEntityPedestal::new, block.get()));
+    public static final DeferredBlockAndTile<?, BlockEntityPedestal> PEDESTAL = blockWithEntity("pedestal", BlockPedestal::new, block -> () -> buildTile(BlockEntityPedestal::new, block.get()));
     public static final DeferredBlockAndTile<?, BlockEntityAuraInfuser> AURA_INFUSER = blockWithEntity("aura_infuser", BlockAuraInfuser::new, block -> () -> buildTile(BlockEntityAuraInfuser::new, block.get()));
-    public static final DeferredBlockAndTile<?, BlockEntitySpellCircle> SPELL_CIRCLE = blockWithoutItemWithEntity("spell_circle", () -> new BlockSpellCircle(ArcaneStaticConfig.AuraMaximums.SPELL_CIRCLE_BASIC, ArcaneStaticConfig.Speed.SPELL_CIRCLE_BASIC, 1), block -> () -> buildTile(BlockEntitySpellCircle::new, block.get()));
-    public static final DeferredBlockAndTile<?, BlockEntityIgnisCollector> HEAT_COLLECTOR = blockWithEntity("heat_collector", () -> new BlockIgnisCollector(ArcaneStaticConfig.AuraMaximums.COLLECTOR), block -> () -> buildTile(BlockEntityIgnisCollector::new, block.get()));
-    public static final DeferredBlockAndTile<?, BlockEntityAquaCollector> AQUA_COLLECTOR = blockWithEntity("aqua_collector", () -> new BlockAquaCollector(ArcaneStaticConfig.AuraMaximums.COLLECTOR), block -> () -> buildTile(BlockEntityAquaCollector::new, block.get()));
+    public static final DeferredBlockAndTile<?, BlockEntitySpellCircle> SPELL_CIRCLE = blockWithoutItemWithEntity("spell_circle", BlockSpellCircle::new, block -> () -> buildTile(BlockEntitySpellCircle::new, block.get()));
+    public static final DeferredBlockAndTile<?, BlockEntityIgnisCollector> HEAT_COLLECTOR = blockWithEntity("heat_collector", BlockIgnisCollector::new, block -> () -> buildTile(BlockEntityIgnisCollector::new, block.get()));
+    public static final DeferredBlockAndTile<?, BlockEntityAquaCollector> AQUA_COLLECTOR = blockWithEntity("aqua_collector", BlockAquaCollector::new, block -> () -> buildTile(BlockEntityAquaCollector::new, block.get()));
 
 
     // Items
-    private static final Supplier<Item> BASIC_WAND_SUPPLIER = () -> new ItemAuraWand(ArcaneStaticConfig.AuraMaximums.BASIC_WAND, 1, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
-    private static final Supplier<Item> ADVANCED_WAND_SUPPLIER = () -> new ItemAuraWand(ArcaneStaticConfig.AuraMaximums.ADVANCED_WAND, 2, new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
-    private static final Supplier<Item> MYSTICAL_WAND_SUPPLIER = () -> new ItemAuraWand(ArcaneStaticConfig.AuraMaximums.MYSTIC_WAND, 3, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
+    private static final Supplier<Item> BASIC_WAND_SUPPLIER = () -> new ItemAuraWand(() -> ArcaneConfig.basicWandAuraCapacity, 1, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
+    private static final Supplier<Item> ADVANCED_WAND_SUPPLIER = () -> new ItemAuraWand(() -> ArcaneConfig.advancedWandAuraCapacity, 2, new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
+    private static final Supplier<Item> MYSTICAL_WAND_SUPPLIER = () -> new ItemAuraWand(() -> ArcaneConfig.mysticWandAuraCapacity, 3, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 
     public static final DeferredItem<?>
-            AURAGLASS_BOTTLE = item("auraglass_bottle", () -> new ItemAuraglassBottle(ArcaneStaticConfig.AuraMaximums.SMALL_AURAGLASS_BOTTLE, ArcaneStaticConfig.Rates.SMALL_AURAGLASS_BOTTLE)),
-            MEDIUM_AURAGLASS_BOTTLE = item("medium_auraglass_bottle", () -> new ItemAuraglassBottle(ArcaneStaticConfig.AuraMaximums.MEDIUM_AURAGLASS_BOTTLE, ArcaneStaticConfig.Rates.MEDIUM_AURAGLASS_BOTTLE)),
-            LARGE_AURAGLASS_BOTTLE = item("large_auraglass_bottle", () -> new ItemAuraglassBottle(ArcaneStaticConfig.AuraMaximums.LARGE_AURAGLASS_BOTTLE, ArcaneStaticConfig.Rates.LARGE_AURAGLASS_BOTTLE)),
-            EXTREME_AURAGLASS_BOTTLE = item("extreme_auraglass_bottle", () -> new ItemAuraglassBottle(ArcaneStaticConfig.AuraMaximums.EXTREME_AURAGLASS_BOTTLE, ArcaneStaticConfig.Rates.EXTREME_AURAGLASS_BOTTLE)),
-            CREATIVE_AURAGLASS_BOTTLE = item("creative_auraglass_bottle", () -> new ItemAuraglassBottle(Integer.MAX_VALUE, Integer.MAX_VALUE)),
+//            AURAGLASS_BOTTLE = item("auraglass_bottle", () -> new ItemAuraglassBottle(ArcaneConfig.smallAuraglassBottleAuraCapacity, ArcaneConfig.smallAuraglassBottleRate)),
+//            MEDIUM_AURAGLASS_BOTTLE = item("medium_auraglass_bottle", () -> new ItemAuraglassBottle(ArcaneConfig.mediumAuraglassBottleAuraCapacity, ArcaneConfig.mediumAuraglassBottleRate)),
+//            LARGE_AURAGLASS_BOTTLE = item("large_auraglass_bottle", () -> new ItemAuraglassBottle(ArcaneConfig.largeAuraglassBottleAuraCapacity, ArcaneConfig.largeAuraglassBottleRate)),
+//            EXTREME_AURAGLASS_BOTTLE = item("extreme_auraglass_bottle", () -> new ItemAuraglassBottle(ArcaneConfig.extremeAuraglassBottleAuraCapacity, ArcaneConfig.extremeAuraglassBottleRate)),
+//            CREATIVE_AURAGLASS_BOTTLE = item("creative_auraglass_bottle", () -> new ItemAuraglassBottle(Integer.MAX_VALUE, Integer.MAX_VALUE)),
+
+            AURAGLASS_BOTTLE = item("auraglass_bottle", () -> new ItemAuraglassBottle(() -> ArcaneConfig.smallAuraglassBottleAuraCapacity, () -> ArcaneConfig.smallAuraglassBottleRate)),
+            MEDIUM_AURAGLASS_BOTTLE = item("medium_auraglass_bottle", () -> new ItemAuraglassBottle(() -> ArcaneConfig.mediumAuraglassBottleAuraCapacity, () -> ArcaneConfig.mediumAuraglassBottleRate)),
+            LARGE_AURAGLASS_BOTTLE = item("large_auraglass_bottle", () -> new ItemAuraglassBottle(() -> ArcaneConfig.largeAuraglassBottleAuraCapacity, () -> ArcaneConfig.largeAuraglassBottleRate)),
+            EXTREME_AURAGLASS_BOTTLE = item("extreme_auraglass_bottle", () -> new ItemAuraglassBottle(() -> ArcaneConfig.extremeAuraglassBottleAuraCapacity, () -> ArcaneConfig.extremeAuraglassBottleRate)),
+            CREATIVE_AURAGLASS_BOTTLE = item("creative_auraglass_bottle", () -> new ItemAuraglassBottle(() -> Integer.MAX_VALUE, () -> Integer.MAX_VALUE)),
 
             WAND_ACACIA = item("wand_acacia", BASIC_WAND_SUPPLIER),
             WAND_BAMBOO = item("wand_bamboo", BASIC_WAND_SUPPLIER),
@@ -136,7 +142,7 @@ public class ArcaneContent {
             WAND_LARIMAR = item("wand_larimar", ADVANCED_WAND_SUPPLIER),
             WAND_AURACHALCUM = item("wand_aurachalcum", MYSTICAL_WAND_SUPPLIER),
             WAND_ELDRITCH = item("wand_eldritch", MYSTICAL_WAND_SUPPLIER),
-            WANDBOOK = item("wandbook", () -> new ItemWandbook(4, 64)),
+            WANDBOOK = item("wandbook", ItemWandbook::new),
 
             AURAOMETER = item("auraometer", ItemAuraometer::new),
             AURA_WRENCH = item("aura_wrench", ItemAuraWrench::new),
@@ -204,7 +210,7 @@ public class ArcaneContent {
     public static final DeferredHolder<AttachmentType<?>, AttachmentType<AuraStorage>> DA_AURA = dataAttachment("aura_storage", () ->
             AttachmentType.builder(() -> new AuraStorage(-1, false, false)).serialize(AuraStorage.CODEC).build());
     public static DeferredHolder<AttachmentType<?>, AttachmentType<MachineTier>> DA_MACHINE_TIER = dataAttachment("machine_tier", () ->
-            AttachmentType.builder(() -> MachineTier.COPPER).serialize(MachineTier.CODEC).build());
+            AttachmentType.builder(MachineTier.COPPER).serialize(MachineTier.CODEC).build());
 
 
     // Data Components
@@ -213,7 +219,6 @@ public class ArcaneContent {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<@Nullable BlockPos>> DC_TARGET_POS = dataComponent("target_pos", BlockPos.CODEC);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> DC_ACTIVE = dataComponent("active", Codec.BOOL);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> DC_PUSH_RATE = dataComponent("push_rate", Codec.INT);
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<MachineTier>> DC_MACHINE_TIER = dataComponent("machine_tier", MachineTier.CODEC);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> DC_MODE = dataComponent("mode", Codec.STRING);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<WandbookDataRecord>> DC_WANDBOOK_DATA = dataComponent("wandbook_data", WandbookDataRecord.CODEC, WandbookDataRecord.STREAM_CODEC);
 
@@ -229,15 +234,15 @@ public class ArcaneContent {
     // Spells
     public static final DeferredHolder<AbstractSpell, ?>
             SPELL_BREAKING = spell("breaking", SpellBreaking::new),
-            SPELL_HAMMERING = spell("hammering", () -> new CraftingSpell(RT_HAMMERING, ArcaneStaticConfig.SpellMinLevels.HAMMERING, ArcaneStaticConfig.SpellCosts.HAMMERING)),
-            SPELL_PURIFYING = spell("purifying", () -> new CraftingSpell(RT_PURIFYING, ArcaneStaticConfig.SpellMinLevels.PURIFYING, ArcaneStaticConfig.SpellCosts.PURIFYING)),
-            SPELL_CLEANSING = spell("cleansing", () -> new CraftingSpell(RT_CLEANSING, ArcaneStaticConfig.SpellMinLevels.CLEANSING, ArcaneStaticConfig.SpellCosts.CLEANSING)),
+            SPELL_HAMMERING = spell("hammering", () -> SimpleCraftingSpell.of(ArcaneMod.id("hammering"), 4, 20, 2, RT_HAMMERING)),
+            SPELL_PURIFYING = spell("purifying", () -> SimpleCraftingSpell.of(ArcaneMod.id("purifying"), 4, 20, 2, RT_PURIFYING)),
+            SPELL_CLEANSING = spell("cleansing", () -> SimpleCraftingSpell.of(ArcaneMod.id("cleansing"), 2, 20, 2, RT_CLEANSING)),
             SPELL_BUILDING = spell("building", SpellBuilding::new),
             SPELL_DASHING = spell("dashing", SpellDashing::new),
-            SPELL_CRAFTING = spell("crafting", SpellCrafting::new),
+            SPELL_CRAFTING = spell("crafting", () -> SimplePlacementSpell.of(ArcaneMod.id("crafting"), 1, 20, 1, c -> CONJURED_CRAFTING_TABLE.get().defaultBlockState())),
             SPELL_ACTIVATOR = spell("activator", SpellSpellCircleActivator::new),
             SPELL_PRESERVATION = spell("preservation", SpellPreservation::new),
-            SPELL_LIGHTING = spell("lighting", SpellLighting::new)
+            SPELL_LIGHTING = spell("lighting", () -> SimplePlacementSpell.of(ArcaneMod.id("crafting"), 1, 20, 1, c -> AURA_TORCH.get().defaultBlockState()))
     ;
 
 
@@ -252,7 +257,12 @@ public class ArcaneContent {
                 output.accept(guidebookStack);
 
                 // Items
-                output.acceptAll(ITEMS.getEntries().stream().map(it -> it.get().getDefaultInstance()).toList());
+                output.acceptAll(ITEMS
+                        .getEntries()
+                        .stream()
+                        .filter(it -> it.get() != GUIDEBOOK.get())
+                        .map(it -> it.get().getDefaultInstance())
+                        .toList());
 
                 // Other items
                 //FIXME: Temporarily removed from tab.

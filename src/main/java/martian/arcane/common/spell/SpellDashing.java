@@ -1,25 +1,29 @@
 package martian.arcane.common.spell;
 
-import martian.arcane.ArcaneStaticConfig;
+import martian.arcane.ArcaneMod;
 import martian.arcane.api.spell.AbstractSpell;
 import martian.arcane.api.spell.CastContext;
 import martian.arcane.api.spell.CastResult;
+import martian.arcane.api.spell.SpellConfig;
 import martian.arcane.integration.photon.ArcaneFx;
 import net.minecraft.world.phys.Vec3;
 
 public class SpellDashing extends AbstractSpell {
-    public SpellDashing() {
-        super(ArcaneStaticConfig.SpellMinLevels.DASHING);
-    }
+    private static final SpellConfig config = SpellConfig
+            .basicConfig(ArcaneMod.id("dashing"), 2, 10, 1)
+            .set("multiplierAtLevel1", 2d)
+            .set("multiplierAtLevel2", 2.5d)
+            .set("multiplierAtLevel3", 3d)
+            .build();
 
     @Override
-    public int getCooldownTicks(CastContext c) {
-        return 10;
+    protected SpellConfig getConfig() {
+        return config;
     }
 
     @Override
     public int getAuraCost(CastContext c) {
-        return c instanceof CastContext.WandContext ? ArcaneStaticConfig.SpellCosts.DASHING : 0;
+        return c instanceof CastContext.WandContext ? config.get("auraCost") : 0;
     }
 
     @Override
@@ -41,9 +45,9 @@ public class SpellDashing extends AbstractSpell {
 
     public static double getMultiplier(CastContext context) {
         return switch (context.source.getCastLevel(context)) {
-            case 2 -> 2.5;
-            case 3 -> 3;
-            default -> 2;
+            case 1 -> config.get("multiplierAtLevel1");
+            case 2 -> config.get("multiplierAtLevel2");
+            default -> config.get("multiplierAtLevel3");
         };
     }
 }

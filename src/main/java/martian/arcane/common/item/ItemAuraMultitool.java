@@ -9,6 +9,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -24,7 +25,6 @@ public class ItemAuraMultitool extends Item implements IAuraConfigurator, IAuraW
     public enum Mode {
         CONFIGURE,
         WRENCH,
-        AURAOMETER,
     }
 
     public ItemAuraMultitool() {
@@ -42,13 +42,29 @@ public class ItemAuraMultitool extends Item implements IAuraConfigurator, IAuraW
     public static Mode getNextMode(Mode mode) {
         return switch (mode) {
             case CONFIGURE -> Mode.WRENCH;
-            case WRENCH -> Mode.AURAOMETER;
-            case AURAOMETER -> Mode.CONFIGURE;
+            case WRENCH -> Mode.CONFIGURE;
         };
     }
 
     public static void setMode(ItemStack stack, Mode mode) {
         stack.set(ArcaneContent.DC_MODE, mode.toString());
+    }
+
+    private boolean modeMessageShown = false;
+
+    @Override
+    @ParametersAreNonnullByDefault
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
+        if (!level.isClientSide)
+            return;
+
+        if (isSelected && !modeMessageShown) {
+            modeMessageShown = true;
+            if (entity instanceof Player player)
+                player.displayClientMessage(Component.translatable("messages.arcane.mode").append(getMode(stack).toString()), true);
+        } else if (!isSelected && modeMessageShown) {
+            modeMessageShown = false;
+        }
     }
 
     @Override
@@ -70,7 +86,6 @@ public class ItemAuraMultitool extends Item implements IAuraConfigurator, IAuraW
         return switch (getMode(stack)) {
             case CONFIGURE -> ArcaneContent.AURA_CONFIGURATOR.get().use(level, player, hand);
             case WRENCH -> ArcaneContent.AURA_WRENCH.get().use(level, player, hand);
-            case AURAOMETER -> ArcaneContent.AURAOMETER.get().use(level, player, hand);
         };
     }
 

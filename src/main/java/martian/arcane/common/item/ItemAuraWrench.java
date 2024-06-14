@@ -1,6 +1,6 @@
 package martian.arcane.common.item;
 
-import martian.arcane.ArcaneStaticConfig;
+import martian.arcane.ArcaneConfig;
 import martian.arcane.ArcaneTags;
 import martian.arcane.api.Raycasting;
 import martian.arcane.common.ArcaneContent;
@@ -27,7 +27,7 @@ import java.util.Objects;
 public class ItemAuraWrench extends Item {
     public ItemAuraWrench() {
         //noinspection DataFlowIssue
-        super(new Item.Properties().stacksTo(1).component(ArcaneContent.DC_TARGET_POS.get(), null));
+        super(new Item.Properties().stacksTo(1).component(ArcaneContent.DC_TARGET_POS, null));
     }
 
     @Override
@@ -56,14 +56,14 @@ public class ItemAuraWrench extends Item {
         if (hit == null)
             return InteractionResultHolder.fail(stack);
 
-        if (stack.has(ArcaneContent.DC_TARGET_POS)) {
+        if (stack.has(ArcaneContent.DC_TARGET_POS) && stack.get(ArcaneContent.DC_TARGET_POS) != null) {
             BlockEntity l = level.getBlockEntity(hit.getBlockPos());
             if (l instanceof BlockEntityAuraConnector target && target.mode != BlockEntityAuraConnector.Mode.EXTRACT) {
                 BlockPos pos1 = Objects.requireNonNull(stack.get(ArcaneContent.DC_TARGET_POS));
                 BlockEntity e = level.getBlockEntity(pos1);
 
                 if (e instanceof BlockEntityAuraConnector source && source.mode != BlockEntityAuraConnector.Mode.INSERT) {
-                    if (!pos1.closerToCenterThan(l.getBlockPos().getCenter(), ArcaneStaticConfig.AURA_EXTRACTOR_MAX_DISTANCE)) {
+                    if (ArcaneConfig.auraConnectorMaxDistance != -1 && !pos1.closerToCenterThan(l.getBlockPos().getCenter(), ArcaneConfig.auraConnectorMaxDistance)) {
                         player.sendSystemMessage(Component
                                 .translatable("messages.arcane.distance_too_far")
                                 .withStyle(ChatFormatting.RED));

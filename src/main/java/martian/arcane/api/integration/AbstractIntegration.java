@@ -12,13 +12,11 @@ public abstract class AbstractIntegration {
 
     protected abstract void onLoad();
 
-    public boolean load() {
+    public void load() {
         if (ModList.get().isLoaded(modid)) {
             isLoaded = true;
             onLoad();
-            return true;
         }
-        return false;
     }
 
     public boolean isLoaded() {

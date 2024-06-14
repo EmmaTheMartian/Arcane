@@ -1,14 +1,14 @@
 package martian.arcane.common.block.connector;
 
-import martian.arcane.ArcaneStaticConfig;
+import martian.arcane.ArcaneConfig;
 import martian.arcane.ArcaneTags;
 import martian.arcane.api.NBTHelpers;
 import martian.arcane.api.Raycasting;
 import martian.arcane.api.aura.IMutableAuraStorage;
 import martian.arcane.api.block.BlockHelpers;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
+import martian.arcane.api.block.entity.IAuraometerOutput;
 import martian.arcane.common.ArcaneContent;
-import martian.arcane.common.registry.ArcaneBlockEntities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -37,7 +37,7 @@ public class BlockEntityAuraConnector extends AbstractAuraBlockEntity {
     public Mode mode = Mode.RELAY;
 
     public BlockEntityAuraConnector(BlockPos pos, BlockState state) {
-        super(ArcaneStaticConfig.AuraMaximums.AURA_CONNECTORS, false, true, ArcaneContent.AURA_CONNECTOR.tile().get(), pos, state);
+        super(ArcaneConfig.auraConnectorsAuraCapacity, false, true, ArcaneContent.AURA_CONNECTOR.tile().get(), pos, state);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class BlockEntityAuraConnector extends AbstractAuraBlockEntity {
     }
 
     @Override
-    public List<Component> getText(List<Component> text, boolean detailed) {
+    public List<Component> getText(List<Component> text, IAuraometerOutput.Context context) {
         if (mode != Mode.INSERT) {
             if (targetPos != null)
                 text.add(Component.translatable("messages.arcane.linked_to")
@@ -78,7 +78,7 @@ public class BlockEntityAuraConnector extends AbstractAuraBlockEntity {
 
         text.add(Component.translatable("messages.arcane.mode").append(mode.toString()));
 
-        return super.getText(text, detailed);
+        return super.getText(text, context);
     }
 
     public boolean validateTarget(Level level) {
@@ -118,9 +118,9 @@ public class BlockEntityAuraConnector extends AbstractAuraBlockEntity {
     }
 
     public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T blockEntity) {
-        AbstractAuraBlockEntity.tick(level, pos, state, blockEntity);
-
         if (!level.isClientSide && blockEntity instanceof BlockEntityAuraConnector connector) {
+            AbstractAuraBlockEntity.tickForAuraLoss(level, connector);
+
             // If there is a redstone signal coming into this block then we stop now
             if (level.hasNeighborSignal(pos))
                 return;

@@ -19,12 +19,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AuraometerOverlay implements LayeredDraw.Layer {
-    private final Minecraft minecraft = Minecraft.getInstance();
+    private static final Minecraft minecraft = Minecraft.getInstance();
 
     public static boolean isHoldingAuraometer(Player player) {
         ItemStack main = player.getMainHandItem();
         ItemStack off = player.getOffhandItem();
         return main.getItem() instanceof IAuraometer || off.getItem() instanceof IAuraometer;
+    }
+
+    public static boolean hasAuraometer(Player player) {
+        return player.getInventory().hasAnyMatching(it -> it.getItem() instanceof IAuraometer);
     }
 
     @Override
@@ -33,13 +37,11 @@ public class AuraometerOverlay implements LayeredDraw.Layer {
         if (player == null)
             return;
 
-        boolean holdingAuraometer = isHoldingAuraometer(player);
-
-        if (holdingAuraometer) {
+        if (isHoldingAuraometer(player)) {
             final Level level = minecraft.level;
             assert level != null;
 
-            int x = gui.guiWidth() / 2 + 4;
+            final int x = gui.guiWidth() / 2 + 4;
             int y = gui.guiHeight() / 2 + 4;
             List<Component> text = new ArrayList<>();
 
@@ -53,10 +55,31 @@ public class AuraometerOverlay implements LayeredDraw.Layer {
 
             BlockEntity be = level.getBlockEntity(hit.getBlockPos());
             if (be instanceof IAuraometerOutput beAo) {
-                text = beAo.getText(text, player.isCrouching());
+                text = beAo.getText(text, new IAuraometerOutput.Context(ItemStack.EMPTY, player.isCrouching()));
                 for (Component c : text) {
-                    gui.drawString(Minecraft.getInstance().font, c, x, y, 0xFFFFFF, true);
-                    y += Minecraft.getInstance().font.lineHeight + 2;
+                    gui.drawString(minecraft.font, c, x, y, 0xFFFFFF, true);
+                    y += minecraft.font.lineHeight + 2;
+                }
+            }
+        }
+
+        if (hasAuraometer(player)) {
+            List<Component> text = new ArrayList<>();
+
+            ItemStack main = player.getMainHandItem(), off = player.getOffhandItem();
+
+            if (main.getItem() instanceof IAuraometerOutput iAo)
+                iAo.getText(text, new IAuraometerOutput.Context(main, player.isCrouching()));
+            else if (off.getItem() instanceof IAuraometerOutput iAo)
+                iAo.getText(text, new IAuraometerOutput.Context(off, player.isCrouching()));
+
+            if (!text.isEmpty()) {
+                final int x = 4;
+                final int lineHeight = minecraft.font.lineHeight + 2;
+                int y = gui.guiHeight() / 2 + 4 - (lineHeight * text.size() / 2);
+                for (Component c : text) {
+                    gui.drawString(minecraft.font, c, x, y, 0xFFFFFF, true);
+                    y += lineHeight;
                 }
             }
         }

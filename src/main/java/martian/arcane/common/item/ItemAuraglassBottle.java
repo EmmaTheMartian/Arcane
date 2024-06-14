@@ -21,13 +21,18 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class ItemAuraglassBottle extends AbstractAuraItem {
-    public ItemAuraglassBottle(int maxAura, int pushRate) {
-        super(maxAura, true, true, new Item.Properties()
+    private final Supplier<Integer> pushRateSupplier;
+
+    public ItemAuraglassBottle(Supplier<Integer> auraCapacitySupplier, Supplier<Integer> pushRateSupplier) {
+        //noinspection DataFlowIssue
+        super(() -> new AuraRecord(auraCapacitySupplier.get(), 0, true, true), new Item.Properties()
                 .stacksTo(1)
                 .component(ArcaneContent.DC_ACTIVE, false)
-                .component(ArcaneContent.DC_PUSH_RATE, pushRate));
+                .component(ArcaneContent.DC_PUSH_RATE, null));
+        this.pushRateSupplier = pushRateSupplier;
     }
 
     @Override
@@ -103,11 +108,11 @@ public class ItemAuraglassBottle extends AbstractAuraItem {
     }
 
     public int getPushRate(ItemStack stack) {
-        if (stack.has(ArcaneContent.DC_PUSH_RATE)) {
-            //noinspection DataFlowIssue
-            return stack.get(ArcaneContent.DC_PUSH_RATE);
+        if (!stack.has(ArcaneContent.DC_PUSH_RATE) || stack.get(ArcaneContent.DC_PUSH_RATE) == null) {
+            stack.set(ArcaneContent.DC_PUSH_RATE, pushRateSupplier.get());
         }
-        return 0;
+        //noinspection DataFlowIssue
+        return stack.get(ArcaneContent.DC_PUSH_RATE);
     }
 
     public boolean isActive(ItemStack stack) {

@@ -51,7 +51,7 @@ public record WandbookDataRecord(List<ItemStack> wands, int selection, int maxWa
     }
 
     public static WandbookDataRecord getOrCreate(ItemStack stack, Supplier<WandbookDataRecord> defaultDataRecord) {
-        if (!stack.has(ArcaneContent.DC_WANDBOOK_DATA))
+        if (!stack.has(ArcaneContent.DC_WANDBOOK_DATA) || stack.get(ArcaneContent.DC_WANDBOOK_DATA) == null)
             stack.set(ArcaneContent.DC_WANDBOOK_DATA, defaultDataRecord.get());
         return stack.get(ArcaneContent.DC_WANDBOOK_DATA);
     }

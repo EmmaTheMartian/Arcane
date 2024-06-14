@@ -161,7 +161,7 @@ public class AuraStorage implements IMutableAuraStorage {
     }
 
     public static AuraRecord getOrCreate(ItemStack stack, Supplier<AuraRecord> defaultAuraStorage) {
-        if (!stack.has(ArcaneContent.DC_AURA))
+        if (!stack.has(ArcaneContent.DC_AURA) || stack.get(ArcaneContent.DC_AURA) == null)
             stack.set(ArcaneContent.DC_AURA, defaultAuraStorage.get());
         return stack.get(ArcaneContent.DC_AURA);
     }

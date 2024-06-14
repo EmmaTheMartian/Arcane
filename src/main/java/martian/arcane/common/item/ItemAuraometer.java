@@ -3,6 +3,7 @@ package martian.arcane.common.item;
 import martian.arcane.api.block.BlockHelpers;
 import martian.arcane.api.Raycasting;
 import martian.arcane.api.block.entity.IAuraometerOutput;
+import martian.arcane.api.item.IAuraometer;
 import martian.arcane.common.block.connector.BlockEntityAuraConnector;
 import martian.arcane.common.block.connector.ConnectorLinkRenderer;
 import net.minecraft.network.chat.Component;
@@ -16,6 +17,7 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.BlockHitResult;
+import net.neoforged.fml.loading.FMLLoader;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -23,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ItemAuraometer extends Item {
+public class ItemAuraometer extends Item implements IAuraometer {
     public ItemAuraometer() {
         super(new Item.Properties().stacksTo(1));
     }
@@ -35,7 +37,8 @@ public class ItemAuraometer extends Item {
         ItemStack stack = player.getItemInHand(hand);
         BlockHitResult hit = Raycasting.blockRaycast(player, player.blockInteractionRange(), false);
 
-        if (player.isCrouching() && hit != null) {
+        // This is a server/client sync debug feature
+        if (!FMLLoader.isProduction() && player.isCrouching() && hit != null) {
             if (!level.isClientSide)
                 BlockHelpers.sync(Objects.requireNonNull(level.getBlockEntity(hit.getBlockPos())));
 
@@ -44,7 +47,7 @@ public class ItemAuraometer extends Item {
             List<Component> text = new ArrayList<>();
             BlockEntity be = level.getBlockEntity(hit.getBlockPos());
             if (be instanceof IAuraometerOutput beAo) {
-                text = beAo.getText(text, player.isCrouching());
+                text = beAo.getText(text, new IAuraometerOutput.Context(ItemStack.EMPTY, player.isCrouching()));
                 for (Component c : text)
                     player.sendSystemMessage(c);
             }

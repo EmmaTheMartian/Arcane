@@ -1,6 +1,6 @@
 package martian.arcane.common.block.infuser;
 
-import martian.arcane.ArcaneStaticConfig;
+import martian.arcane.ArcaneConfig;
 import martian.arcane.api.NBTHelpers;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntityWithSingleItem;
@@ -29,7 +29,7 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntityWithSingleIte
     public boolean isActive = false;
 
     public BlockEntityAuraInfuser(BlockPos pos, BlockState state) {
-        super(ArcaneStaticConfig.AuraMaximums.AURA_INFUSER, false, true, ArcaneContent.AURA_INFUSER.tile().get(), pos, state);
+        super(ArcaneConfig.auraInfuserAuraCapacity, false, true, ArcaneContent.AURA_INFUSER.tile().get(), pos, state);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntityWithSingleIte
     }
 
     @Override
-    public List<Component> getText(List<Component> text, boolean detailed) {
+    public List<Component> getText(List<Component> text, IAuraometerOutput.Context context) {
         if (!getItem().isEmpty())
             text.add(Component.translatable("messages.arcane.holding").append(getItem().getDisplayName()));
 
@@ -86,7 +86,7 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntityWithSingleIte
                     .withStyle(ChatFormatting.LIGHT_PURPLE));
         }
 
-        return super.getText(text, detailed);
+        return super.getText(text, context);
     }
 
     public Optional<RecipeHolder<RecipeAuraInfusion>> getRecipe(boolean ignoreAura) {
@@ -96,12 +96,12 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntityWithSingleIte
     }
 
     public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T entity) {
-        AbstractAuraBlockEntity.tick(level, pos, state, entity);
-
         if (level.isClientSide)
             return;
 
         if (entity instanceof BlockEntityAuraInfuser infuser) {
+            AbstractAuraBlockEntity.tickForAuraLoss(level, infuser);
+
             if (level.hasNeighborSignal(pos))
                 return;
 

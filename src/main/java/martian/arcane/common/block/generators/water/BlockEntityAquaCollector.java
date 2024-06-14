@@ -1,7 +1,8 @@
 package martian.arcane.common.block.generators.water;
 
-import martian.arcane.ArcaneStaticConfig;
+import martian.arcane.ArcaneConfig;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
+import martian.arcane.api.block.entity.IAuraometerOutput;
 import martian.arcane.common.ArcaneContent;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
@@ -16,22 +17,18 @@ import java.util.List;
 public class BlockEntityAquaCollector extends AbstractAuraBlockEntity {
     private int ticksToNextCollect = 0;
 
-    public BlockEntityAquaCollector(int maxAura, BlockPos pos, BlockState state) {
-        super(maxAura, true, false, ArcaneContent.AQUA_COLLECTOR.tile().get(), pos, state);
-    }
-
     public BlockEntityAquaCollector(BlockPos pos, BlockState state) {
-        super(ArcaneStaticConfig.AuraMaximums.COLLECTOR, true, false, ArcaneContent.AQUA_COLLECTOR.tile().get(), pos, state);
+        super(ArcaneConfig.collectorsAuraCapacity, true, false, ArcaneContent.AQUA_COLLECTOR.tile().get(), pos, state);
     }
 
-    public List<Component> getText(List<Component> text, boolean detailed) {
+    public List<Component> getText(List<Component> text, IAuraometerOutput.Context context) {
         if (level != null)
             text.add(Component
                     .translatable("messages.arcane.generating")
                     .append(Integer.toString(getAuraToGenerate(level, getBlockPos())))
                     .withStyle(ChatFormatting.RED));
 
-        return super.getText(text, detailed);
+        return super.getText(text, context);
     }
 
     private static final BlockPos[] posOffsets = new BlockPos[]{
@@ -57,10 +54,10 @@ public class BlockEntityAquaCollector extends AbstractAuraBlockEntity {
         return Math.floorDiv(sources, 2);
     }
 
-    public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T blockEntity) {
-        AbstractAuraBlockEntity.tick(level, pos, state, blockEntity);
+    public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState ignoredState, T blockEntity) {
         if (blockEntity instanceof BlockEntityAquaCollector collector) {
-            if (++collector.ticksToNextCollect >= ArcaneStaticConfig.Speed.AQUA_COLLECTOR_SPEED) {
+            AbstractAuraBlockEntity.tickForAuraLoss(level, collector);
+            if (++collector.ticksToNextCollect >= ArcaneConfig.aquaCollectorSpeed) {
                 collector.mapAuraStorage(aura -> aura.addAura(getAuraToGenerate(level, pos)));
                 collector.ticksToNextCollect = 0;
             }

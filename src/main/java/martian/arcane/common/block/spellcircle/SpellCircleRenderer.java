@@ -39,7 +39,19 @@ public class SpellCircleRenderer implements BlockEntityRenderer<BlockEntitySpell
         int light = be.getActive() ? LightTexture.FULL_BRIGHT : packedLight;
 
         stack.pushPose();
-        stack.translate(0.5, 0.1, 0.5);
+
+        var facing = be.getBlockState().getValue(BlockSpellCircle.FACING);
+        var rotation = facing.getRotation();
+        stack.mulPose(rotation);
+
+        switch (facing) {
+            case UP -> stack.translate( 0.5,  0.9,  0.5);
+            case DOWN -> stack.translate( 0.5, -0.1, -0.5);
+            case NORTH -> stack.translate(-0.5, -0.1, -0.5);
+            case SOUTH -> stack.translate( 0.5,  0.9, -0.5);
+            case WEST -> stack.translate( 0.5, -0.1, -0.5);
+            case EAST -> stack.translate(-0.5,  0.9, -0.5);
+        }
 
         stack.pushPose();
         stack.mulPose(Axis.YP.rotation(tick / 40f));

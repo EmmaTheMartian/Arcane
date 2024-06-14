@@ -31,7 +31,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Map;
 
 public class BlockAuraConnector extends AbstractAuraMachine {
-    public static Map<Direction, VoxelShape> SHAPES = Map.of(
+    public static final Map<Direction, VoxelShape> SHAPES = Map.of(
             Direction.UP, Block.box(0, 14, 0, 16, 16, 16),
             Direction.DOWN, Block.box(0, 0, 0, 16, 2, 16),
             Direction.NORTH, Block.box(0, 0, 0, 16, 16, 2),

@@ -1,10 +1,11 @@
 package martian.arcane.common.spell;
 
-import martian.arcane.ArcaneStaticConfig;
+import martian.arcane.ArcaneMod;
 import martian.arcane.api.block.AOEHelpers;
 import martian.arcane.api.spell.AbstractSpell;
 import martian.arcane.api.spell.CastContext;
 import martian.arcane.api.spell.CastResult;
+import martian.arcane.api.spell.SpellConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
@@ -12,8 +13,18 @@ import net.minecraft.world.phys.BlockHitResult;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SpellBreaking extends AbstractSpell {
-    public SpellBreaking() {
-        super(ArcaneStaticConfig.SpellMinLevels.BREAKING);
+    private static final SpellConfig config = new SpellConfig(ArcaneMod.id("breaking"))
+            .set("cooldown", 20)
+            .set("minLevel", 1)
+            .set("auraCostPerBlock", 2)
+            .set("radiusAtLevel1", 0)
+            .set("radiusAtLevel2", 1)
+            .set("radiusAtLevel3", 2)
+            .build();
+
+    @Override
+    protected SpellConfig getConfig() {
+        return config;
     }
 
     @Override
@@ -25,19 +36,19 @@ public class SpellBreaking extends AbstractSpell {
             if (wc.raycast() instanceof BlockHitResult bHit) {
                 if (c.source.getCastLevel(wc) == 1 || wc.caster.isCrouching()) {
                     if (canBreak(c.level, target))
-                        cost.getAndAdd(ArcaneStaticConfig.SpellCosts.BREAKING);
+                        cost.getAndAdd(config.get("auraCostPerBlock"));
                 } else {
                     AOEHelpers.streamAOE(target, bHit.getDirection(), getRadius(c.source.getCastLevel(wc))).forEach(pos -> {
                         if (c.aura.getAura() - cost.get() <= 0)
                             return;
 
                         if (canBreak(c.level, pos))
-                            cost.getAndAdd(ArcaneStaticConfig.SpellCosts.BREAKING);
+                            cost.getAndAdd(config.get("auraCostPerBlock"));
                     });
                 }
             }
         } else if (canBreak(c.level, target)) {
-            cost.getAndAdd(ArcaneStaticConfig.SpellCosts.BREAKING);
+            cost.getAndAdd(config.get("auraCostPerBlock"));
         }
 
         return cost.get();
@@ -58,14 +69,14 @@ public class SpellBreaking extends AbstractSpell {
             if (wc.raycast() instanceof BlockHitResult bHit) {
                 if (c.source.getCastLevel(wc) == 1 || wc.caster.isCrouching()) {
                     if (tryBreak(c.level, target, !wc.caster.isCreative()))
-                        cost.getAndAdd(ArcaneStaticConfig.SpellCosts.BREAKING);
+                        cost.getAndAdd(config.get("auraCostPerBlock"));
                 } else {
                     AOEHelpers.streamAOE(target, bHit.getDirection(), getRadius(c.source.getCastLevel(wc))).forEach(pos -> {
                         if (c.aura.getAura() - cost.get() <= 0)
                             return;
 
                         if (tryBreak(c.level, pos, !wc.caster.isCreative()))
-                            cost.getAndAdd(ArcaneStaticConfig.SpellCosts.BREAKING);
+                            cost.getAndAdd(config.get("auraCostPerBlock"));
                     });
                 }
             } else {
@@ -92,9 +103,9 @@ public class SpellBreaking extends AbstractSpell {
 
     private static int getRadius(int level) {
         return switch (level) {
-            case 2 -> 1;
-            case 3 -> 2;
-            default -> 0;
+            case 1 -> config.get("radiusAtLevel1");
+            case 2 -> config.get("radiusAtLevel2");
+            default -> config.get("radiusAtLevel3");
         };
     }
 }

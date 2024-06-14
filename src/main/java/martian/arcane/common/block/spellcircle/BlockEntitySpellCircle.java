@@ -1,10 +1,11 @@
 package martian.arcane.common.block.spellcircle;
 
-import martian.arcane.ArcaneStaticConfig;
+import martian.arcane.ArcaneConfig;
 import martian.arcane.api.ArcaneRegistries;
 import martian.arcane.api.NBTHelpers;
 import martian.arcane.api.block.BlockHelpers;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
+import martian.arcane.api.block.entity.IAuraometerOutput;
 import martian.arcane.api.spell.CastContext;
 import martian.arcane.api.spell.CastResult;
 import martian.arcane.api.spell.ICastingSource;
@@ -19,7 +20,6 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -44,14 +44,11 @@ public class BlockEntitySpellCircle extends AbstractAuraBlockEntity implements I
     }
 
     public BlockEntitySpellCircle(BlockPos pos, BlockState state) {
-        super(ArcaneStaticConfig.AuraMaximums.SPELL_CIRCLE_BASIC, false, true, ArcaneContent.SPELL_CIRCLE.tile().get(), pos, state);
-        this.castRateTicks = ArcaneStaticConfig.Speed.SPELL_CIRCLE_BASIC;
-        this.ticksToNextCast = this.castRateTicks;
-        this.castingLevel = 1;
+        this(ArcaneConfig.spellCircleAuraCapacity, ArcaneConfig.basicSpellCircleSpeed, 1, pos, state);
     }
 
     @Override
-    public List<Component> getText(List<Component> text, boolean detailed) {
+    public List<Component> getText(List<Component> text, IAuraometerOutput.Context context) {
         if (isActive && hasSpell()) {
             text.add(Component
                     .translatable("messages.arcane.spell")
@@ -78,7 +75,7 @@ public class BlockEntitySpellCircle extends AbstractAuraBlockEntity implements I
             }
         }
 
-        return super.getText(text, detailed);
+        return super.getText(text, context);
     }
 
     protected void tick() {
@@ -87,7 +84,7 @@ public class BlockEntitySpellCircle extends AbstractAuraBlockEntity implements I
             var con = new CastContext.SpellCircleContext(this);
             int cost = spell.getAuraCost(con);
             if (getAura() >= cost) {
-                CastResult result = spell.cast(con);
+                CastResult result = con.cast(spell);
                 removeAura(cost);
                 if (!result.failed())
                     ArcaneFx.ON_CAST_GRAVITY.goBlock(level, getBlockPos());

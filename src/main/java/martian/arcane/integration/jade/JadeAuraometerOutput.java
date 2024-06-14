@@ -33,7 +33,7 @@ public enum JadeAuraometerOutput implements IBlockComponentProvider, IServerData
             CompoundTag data = accessor.getServerData();
 
             List<Component> text = new ArrayList<>();
-            it.getText(text, accessor.getPlayer().isCrouching());
+            it.getText(text, new IAuraometerOutput.Context(ItemStack.EMPTY, accessor.getPlayer().isCrouching()));
             tip.addAll(text);
 
             if (accessor.getPlayer().isCrouching() && accessor.getBlockEntity().hasData(ArcaneContent.DA_AURA)) {

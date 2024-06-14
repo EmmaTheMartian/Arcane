@@ -12,8 +12,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 public class BlockIgnisCollector extends AbstractAuraMachine {
-    public BlockIgnisCollector(int maxAura) {
-        super(PropertyHelpers.basicAuraMachine(), (pos, state) -> new BlockEntityIgnisCollector(maxAura, pos, state));
+    public BlockIgnisCollector() {
+        super(PropertyHelpers.basicAuraMachine(), BlockEntityIgnisCollector::new);
     }
 
     @Override

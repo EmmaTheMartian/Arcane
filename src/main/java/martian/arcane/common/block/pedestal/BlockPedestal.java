@@ -2,6 +2,7 @@ package martian.arcane.common.block.pedestal;
 
 import com.klikli_dev.modonomicon.client.gui.BookGuiManager;
 import com.klikli_dev.modonomicon.item.ModonomiconItem;
+import martian.arcane.ArcaneConfig;
 import martian.arcane.api.ArcaneRegistries;
 import martian.arcane.api.block.BlockHelpers;
 import martian.arcane.api.PropertyHelpers;
@@ -10,8 +11,6 @@ import martian.arcane.common.ArcaneContent;
 import martian.arcane.common.item.ItemAuraWand;
 import martian.arcane.common.item.ItemSpellTablet;
 import martian.arcane.common.recipe.RecipePedestalCrafting;
-import martian.arcane.common.registry.ArcaneBlockEntities;
-import martian.arcane.common.registry.ArcaneItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -54,12 +53,9 @@ public class BlockPedestal extends Block implements EntityBlock {
     ).reduce((v1, v2) -> Shapes.join(v1, v2, BooleanOp.OR)).get();
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
-    public final int defaultMaxAura;
-
-    public BlockPedestal(int maxAura) {
+    public BlockPedestal() {
         super(PropertyHelpers.basicAuraMachine().noOcclusion());
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH));
-        this.defaultMaxAura = maxAura;
     }
 
     @Override
@@ -101,6 +97,12 @@ public class BlockPedestal extends Block implements EntityBlock {
                 stack.getItem() instanceof ItemSpellTablet &&
                 ItemSpellTablet.hasSpell(stack)
             ) {
+                // Check for blacklisted spells
+                if (ArcaneConfig.disabledSpells.contains(ItemSpellTablet.getSpellId(stack))) {
+                    player.sendSystemMessage(Component.translatable("messages.arcane.spell_disabled"));
+                    return ItemInteractionResult.FAIL;
+                }
+
                 // Prevent overriding spells
                 if (ItemAuraWand.getSpellId(pedestalStack) != null)
                     return ItemInteractionResult.FAIL;
@@ -180,7 +182,7 @@ public class BlockPedestal extends Block implements EntityBlock {
     @Override
     @ParametersAreNonnullByDefault
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new BlockEntityPedestal(defaultMaxAura, pos, state);
+        return new BlockEntityPedestal(pos, state);
     }
 
     @Override
