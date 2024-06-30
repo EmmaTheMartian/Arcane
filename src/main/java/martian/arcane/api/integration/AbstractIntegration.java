@@ -3,7 +3,6 @@ package martian.arcane.api.integration;
 import net.neoforged.fml.ModList;
 
 public abstract class AbstractIntegration {
-    private boolean isLoaded = false;
     public final String modid;
 
     protected AbstractIntegration(String modid) {
@@ -13,13 +12,11 @@ public abstract class AbstractIntegration {
     protected abstract void onLoad();
 
     public void load() {
-        if (ModList.get().isLoaded(modid)) {
-            isLoaded = true;
+        if (isLoaded())
             onLoad();
-        }
     }
 
     public boolean isLoaded() {
-        return isLoaded;
+        return ModList.get().isLoaded(modid);
     }
 }

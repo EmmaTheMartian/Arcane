@@ -1,0 +1,15 @@
+{
+  "type": "arcane:cleansing",
+  "input": {
+    "item": "arcane:sandy_polished_faded_larimar"
+  },
+  "results": [
+    {
+      "chance": 1.0,
+      "stack": {
+        "count": 1,
+        "id": "arcane:polished_faded_larimar"
+      }
+    }
+  ]
+}

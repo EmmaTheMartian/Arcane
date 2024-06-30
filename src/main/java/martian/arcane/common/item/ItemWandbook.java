@@ -200,6 +200,12 @@ public class ItemWandbook extends AbstractAuraItem implements IAuraWand, IAuraom
     }
 
     @Override
+    @ParametersAreNonnullByDefault
+    public boolean shouldCauseReequipAnimation(ItemStack old, ItemStack newStack, boolean slotChanged) {
+        return false;
+    }
+
+    @Override
     public int getCastLevel(CastContext context) {
         assert context instanceof CastContext.WandContext;
         var data = getData(((CastContext.WandContext) context).castingStack);

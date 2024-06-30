@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "arcane:item/resources/gems/exquisite_idocrase"
+  }
+}

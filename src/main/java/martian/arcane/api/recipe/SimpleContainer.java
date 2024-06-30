@@ -5,6 +5,9 @@ import net.neoforged.neoforge.items.IItemHandlerModifiable;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 
+/**
+ * A container which stores a single input item.
+ */
 public class SimpleContainer extends RecipeWrapper {
     public final int editSlot = 0;
 
@@ -36,7 +39,7 @@ public class SimpleContainer extends RecipeWrapper {
     }
 
     public ItemStack removeItemNoUpdate() {
-        ItemStack stack = this.getItem();
+        ItemStack stack = this.getItem().copy();
         if (stack.isEmpty())
             return ItemStack.EMPTY;
         else {

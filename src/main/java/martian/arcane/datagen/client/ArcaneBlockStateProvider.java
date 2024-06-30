@@ -62,6 +62,8 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
         cubeAll(LARIMAR_BLOCK.get());
         cubeAll(AURACHALCUM_BLOCK.get());
 
+        cubeAll(FROZEN_OBSIDIAN_BLOCK.get());
+
         // Block States
         makeBlockState(SOUL_MAGMA);
         makeBlockState(AURA_TORCH);
@@ -95,6 +97,8 @@ public class ArcaneBlockStateProvider extends BlockStateProvider {
         makeBlockState(FADING_LARIMAR_BLOCK);
         makeBlockState(LARIMAR_BLOCK);
         makeBlockState(AURACHALCUM_BLOCK);
+
+        makeBlockState(FROZEN_OBSIDIAN_BLOCK);
     }
 
     private void makeBlockState(DeferredBlock<?> block) {

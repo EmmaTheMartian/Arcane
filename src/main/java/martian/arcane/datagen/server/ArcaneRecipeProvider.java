@@ -4,6 +4,7 @@ import martian.arcane.ArcaneMod;
 import martian.arcane.ArcaneTags;
 import martian.arcane.api.spell.AbstractSpell;
 import martian.arcane.common.ArcaneContent;
+import martian.arcane.datagen.builders.CauldronMixingBuilder;
 import martian.arcane.datagen.builders.PedestalRecipeBuilder;
 import martian.arcane.datagen.builders.SpellRecipeBuilder;
 import martian.arcane.datagen.util.BetterRecipeProvider;
@@ -12,10 +13,12 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
@@ -36,58 +39,46 @@ public class ArcaneRecipeProvider extends BetterRecipeProvider {
     protected void build() {
         helper.prefixesByProvider.put(SpellRecipeBuilder.class, "spells");
         helper.prefixesByProvider.put(PedestalRecipeBuilder.class, "pedestal");
+        helper.prefixesByProvider.put(CauldronMixingBuilder.class, "cauldron_mixing");
         helper.prefixesByProvider.put(ShapelessRecipeBuilder.class, "shapeless");
         helper.prefixesByProvider.put(ShapedRecipeBuilder.class, "shaped");
         helper.prefixesByProvider.put(SimpleCookingRecipeBuilder.class, "cooking");
 
         final TagKey<Item>
-                COPPER      = Tags.Items.INGOTS_COPPER,
-                IRON        = Tags.Items.INGOTS_IRON,
-                REDSTONE    = Tags.Items.DUSTS_REDSTONE,
-                GLASS       = Tags.Items.GLASS_BLOCKS_COLORLESS,
-                STONE       = Tags.Items.STONES,
-                OBSIDIAN    = Tags.Items.OBSIDIANS
+                TAG_COPPER      = Tags.Items.INGOTS_COPPER,
+                TAG_IRON        = Tags.Items.INGOTS_IRON,
+                TAG_REDSTONE    = Tags.Items.DUSTS_REDSTONE,
+                TAG_GLASS       = Tags.Items.GLASS_BLOCKS_COLORLESS,
+                TAG_STONE       = Tags.Items.STONES,
+                TAG_OBSIDIAN    = Tags.Items.OBSIDIANS
         ;
 
-        final Ingredient
-                DEEPSLATE               = ingOf(Blocks.DEEPSLATE_BRICKS),
-                ING_AURAGLASS           = ingOf(AURAGLASS),
-                ING_AURAGLASS_DUST      = ingOf(AURAGLASS_DUST),
-                ING_COPPER_CORE         = ingOf(COPPER_CORE),
-                ING_LARIMAR_CORE        = ingOf(LARIMAR_CORE),
-                ING_AURACHALCUM_CORE    = ingOf(AURACHALCUM_CORE),
-                ING_ELDRITCH_CORE       = ingOf(ELDRITCH_CORE),
-                ING_SPELL_CIRCLE_CORE   = ingOf(SPELL_CIRCLE_CORE),
-                ING_POLISHED_LARIMAR    = ingOf(POLISHED_LARIMAR),
-                ING_FADED_LARIMAR       = ingOf(FADED_POLISHED_LARIMAR),
-                ING_AURACHALCUM         = ingOf(AURACHALCUM),
-                ING_ELDRITCH_ALLOY      = ingOf(ELDRITCH_ALLOY)
-        ;
+        final Ingredient ING_DEEPSLATE = ingOf(Blocks.DEEPSLATE_BRICKS);
 
         // Materials
         {
             shapeless(RAW_AURACHALCUM, 2, Map.of(
-                    ingOf(POLISHED_IDOCRASE), 1,
-                    ingOf(OBSIDIAN), 2
-            )).unlockedWith(POLISHED_IDOCRASE).save();
+                    ingOf(IDOCRASE.polished()), 1,
+                    ingOf(TAG_OBSIDIAN), 2
+            )).unlockedWith(IDOCRASE.polished()).save();
 
             shaped(COPPER_CORE)
                     .pattern(" G ", "GCG", " G ")
-                    .define('G', GLASS)
-                    .define('C', COPPER)
+                    .define('G', TAG_GLASS)
+                    .define('C', TAG_COPPER)
                     .unlockedWith(Items.COPPER_INGOT)
                     .save();
 
             shaped(SPELL_CIRCLE_CORE)
                     .pattern(" A ", "ACA", " A ")
-                    .define('A', ING_AURAGLASS_DUST)
-                    .define('C', ING_AURACHALCUM_CORE)
+                    .define('A', AURAGLASS_DUST)
+                    .define('C', AURACHALCUM_CORE)
                     .unlockedWith(AURACHALCUM_CORE)
                     .save();
 
             // Hammering Recipes
             SpellRecipeBuilder.hammering()
-                    .setInput(ING_AURAGLASS)
+                    .setInput(AURAGLASS)
                     .addResult(AURAGLASS_SHARD)
                     .addResult(AURAGLASS_SHARD, 1, 0.5F)
                     .unlockedWith(AURAGLASS)
@@ -111,28 +102,35 @@ public class ArcaneRecipeProvider extends BetterRecipeProvider {
                     .save(helper);
 
             // Pedestal Interaction Recipes
-            PedestalRecipeBuilder.simpleRecipe(ingOf(COPPER), ING_AURAGLASS, COPPER_CORE, 1).unlockedWith(Items.COPPER_INGOT).save(helper);
-            PedestalRecipeBuilder.simpleRecipe(ingOf(POLISHED_LARIMAR), ING_AURAGLASS, LARIMAR_CORE, 1).unlockedWith(POLISHED_LARIMAR).save(helper);
-            PedestalRecipeBuilder.simpleRecipe(ingOf(AURACHALCUM), ING_AURAGLASS, AURACHALCUM_CORE, 1).unlockedWith(AURACHALCUM).save(helper);
-            PedestalRecipeBuilder.simpleRecipe(ingOf(ELDRITCH_ALLOY), ING_AURAGLASS, ELDRITCH_CORE, 1).unlockedWith(ELDRITCH_ALLOY).save(helper);
+            PedestalRecipeBuilder.simpleRecipe(ingOf(TAG_COPPER), ingOf(AURAGLASS), COPPER_CORE, 1).unlockedWith(Items.COPPER_INGOT).save(helper);
+            PedestalRecipeBuilder.simpleRecipe(ingOf(LARIMAR.polished()), ingOf(AURAGLASS), LARIMAR_CORE, 1).unlockedWith(LARIMAR.polished()).save(helper);
+            PedestalRecipeBuilder.simpleRecipe(ingOf(AURACHALCUM), ingOf(AURAGLASS), AURACHALCUM_CORE, 1).unlockedWith(AURACHALCUM).save(helper);
+            PedestalRecipeBuilder.simpleRecipe(ingOf(ELDRITCH_ALLOY), ingOf(AURAGLASS), ELDRITCH_CORE, 1).unlockedWith(ELDRITCH_ALLOY).save(helper);
 
             // Gems
-            cutAndPolish(RAW_LARIMAR, CUT_LARIMAR, POLISHED_LARIMAR);
-            cutAndPolish(FADED_RAW_LARIMAR, FADED_CUT_LARIMAR, FADED_POLISHED_LARIMAR);
-            cutAndPolish(RAW_IDOCRASE, CUT_IDOCRASE, POLISHED_IDOCRASE);
+            gemLine(LARIMAR);
+            gemLine(FADED_LARIMAR);
+            gemLine(IDOCRASE);
 
             // Storage Blocks
-            storageBlock(ING_FADED_LARIMAR, FADED_LARIMAR_BLOCK);
-            storageBlock(ING_POLISHED_LARIMAR, LARIMAR_BLOCK);
-            storageBlock(ING_AURACHALCUM, AURACHALCUM_BLOCK);
+            storageBlock(FADED_LARIMAR.polished(), FADED_LARIMAR_BLOCK);
+            storageBlock(LARIMAR.polished(), LARIMAR_BLOCK);
+            storageBlock(AURACHALCUM, AURACHALCUM_BLOCK);
         }
 
         // Misc Utility Recipes
         {
-            SpellRecipeBuilder.hammering().setInput(STONE).addResult(Items.COBBLESTONE).unlockedWith(Items.STONE).save(helper);
+            SpellRecipeBuilder.hammering().setInput(TAG_STONE).addResult(Items.COBBLESTONE).unlockedWith(Items.STONE).save(helper);
             SpellRecipeBuilder.hammering().setInput(Items.COBBLESTONE).addResult(Items.GRAVEL).unlockedWith(Items.COBBLESTONE).save(helper);
             SpellRecipeBuilder.hammering().setInput(Items.GRAVEL).addResult(Items.SAND).unlockedWith(Items.GRAVEL).save(helper);
+
             SpellRecipeBuilder.cleansing().setInput(Items.GRAVEL).addResult(Items.FLINT).unlockedWith(Items.GRAVEL).save(helper);
+
+//            SpellRecipeBuilder.freezing().setInput(Blocks.WATER).addResult(Blocks.ICE).unlockedWith(Blocks.WATER).save(helper);
+//            SpellRecipeBuilder.freezing().setInput(Blocks.WATER_CAULDRON).addResult(Blocks.POWDER_SNOW_CAULDRON).unlockedWith(Blocks.WATER_CAULDRON).save(helper);
+//            SpellRecipeBuilder.freezing().setInput(Blocks.MAGMA_BLOCK).addResult(Blocks.OBSIDIAN).unlockedWith(Blocks.MAGMA_BLOCK).save(helper);
+            SpellRecipeBuilder.freezing().setInput(Items.CRYING_OBSIDIAN).addResult(FROZEN_OBSIDIAN_BLOCK).unlockedWith(Items.CRYING_OBSIDIAN).save(helper);
+//            SpellRecipeBuilder.freezing().setInput(Blocks.LAVA).addResult(Blocks.MAGMA_BLOCK).unlockedWith(Blocks.LAVA).save(helper);
         }
 
         // Blocks
@@ -142,49 +140,49 @@ public class ArcaneRecipeProvider extends BetterRecipeProvider {
             // Machines
             shaped(PEDESTAL.block())
                     .pattern("SSS", " S ", "CBC")
-                    .define('C', COPPER)
-                    .define('S', DEEPSLATE)
-                    .define('B', ING_COPPER_CORE)
+                    .define('C', TAG_COPPER)
+                    .define('S', ING_DEEPSLATE)
+                    .define('B', COPPER_CORE)
                     .unlockedWith(COPPER_CORE)
                     .save();
 
             shaped(AURA_INFUSER.block())
                     .pattern("BCB", " O ", "OOO")
-                    .define('B', COPPER)
-                    .define('C', ING_COPPER_CORE)
-                    .define('O', DEEPSLATE)
+                    .define('B', TAG_COPPER)
+                    .define('C', COPPER_CORE)
+                    .define('O', ING_DEEPSLATE)
                     .unlockedWith(COPPER_CORE)
                     .save();
 
             shaped(AURA_BASIN.block())
                     .pattern("B B", "B B", "BCB")
-                    .define('B', DEEPSLATE)
-                    .define('C', ING_COPPER_CORE)
+                    .define('B', ING_DEEPSLATE)
+                    .define('C', COPPER_CORE)
                     .unlockedWith(COPPER_CORE)
                     .save();
 
             shaped(AURA_CONNECTOR.block())
                     .pattern(" A ", "DDD")
-                    .define('A', ING_COPPER_CORE)
-                    .define('D', DEEPSLATE)
+                    .define('A', COPPER_CORE)
+                    .define('D', ING_DEEPSLATE)
                     .unlockedWith(COPPER_CORE)
                     .save();
 
             shaped(HEAT_COLLECTOR.block())
                     .pattern("GIG", "FCF", "GIG")
-                    .define('G', GLASS)
-                    .define('I', COPPER)
-                    .define('F', ingOf(Items.FLINT))
-                    .define('C', ING_COPPER_CORE)
+                    .define('G', TAG_GLASS)
+                    .define('I', TAG_COPPER)
+                    .define('F', Items.FLINT)
+                    .define('C', COPPER_CORE)
                     .unlockedWith(COPPER_CORE)
                     .save();
 
             shaped(AQUA_COLLECTOR.block())
                     .pattern("GIG", "ICI", "GWG")
-                    .define('G', GLASS)
-                    .define('I', COPPER)
-                    .define('W', ingOf(Items.WATER_BUCKET))
-                    .define('C', ING_COPPER_CORE)
+                    .define('G', TAG_GLASS)
+                    .define('I', TAG_COPPER)
+                    .define('W', Items.WATER_BUCKET)
+                    .define('C', COPPER_CORE)
                     .unlockedWith(COPPER_CORE)
                     .save();
         }
@@ -195,30 +193,30 @@ public class ArcaneRecipeProvider extends BetterRecipeProvider {
 
             shaped(AURA_WRENCH)
                     .pattern("C C", " B ", " C ")
-                    .define('C', COPPER)
-                    .define('B', ING_COPPER_CORE)
+                    .define('C', TAG_COPPER)
+                    .define('B', COPPER_CORE)
                     .unlockedWith(COPPER_CORE)
                     .save();
 
             shaped(AURA_CONFIGURATOR)
                     .pattern("B B", " I ", " B ")
-                    .define('B', IRON)
-                    .define('I', ING_COPPER_CORE)
+                    .define('B', TAG_IRON)
+                    .define('I', COPPER_CORE)
                     .unlockedWith(COPPER_CORE)
                     .save();
 
             shaped(GEM_SAW)
                     .pattern("  B", " BS", "BS ")
-                    .define('B', COPPER)
+                    .define('B', TAG_COPPER)
                     .define('S', Tags.Items.NUGGETS_IRON)
                     .unlockedWith(Items.COPPER_INGOT)
                     .save();
 
             shaped(AURAOMETER)
                     .pattern("R", "C", "B")
-                    .define('R', REDSTONE)
-                    .define('B', ING_COPPER_CORE)
-                    .define('C', COPPER)
+                    .define('R', TAG_REDSTONE)
+                    .define('B', COPPER_CORE)
+                    .define('C', TAG_COPPER)
                     .unlockedWith(COPPER_CORE)
                     .save();
 
@@ -230,9 +228,9 @@ public class ArcaneRecipeProvider extends BetterRecipeProvider {
 
             shaped(SPELL_CHALK)
                     .pattern(" CB", "CSC", "BC ")
-                    .define('C', ingOf(Items.CLAY_BALL))
-                    .define('B', ingOf(Items.BONE_MEAL))
-                    .define('S', ING_SPELL_CIRCLE_CORE)
+                    .define('C', Items.CLAY_BALL)
+                    .define('B', Items.BONE_MEAL)
+                    .define('S', SPELL_CIRCLE_CORE)
                     .unlockedWith(SPELL_CIRCLE_CORE)
                     .save();
 
@@ -240,38 +238,38 @@ public class ArcaneRecipeProvider extends BetterRecipeProvider {
                     .pattern(" P ")
                     .pattern("LEL")
                     .pattern("PPP")
-                    .define('P', ING_POLISHED_LARIMAR)
+                    .define('P', LARIMAR.polished())
                     .define('L', Tags.Items.LEATHERS)
-                    .define('E', ingOf(Items.ENDER_CHEST))
-                    .unlockedWith(POLISHED_LARIMAR)
+                    .define('E', Items.ENDER_CHEST)
+                    .unlockedWith(LARIMAR.polished())
                     .save();
 
             // Auraglass Bottles
             {
                 shaped(AURAGLASS_BOTTLE)
                         .pattern("A A", " A ")
-                        .define('A', ING_AURAGLASS)
+                        .define('A', AURAGLASS)
                         .unlockedWith(AURAGLASS)
                         .save();
 
                 shaped(MEDIUM_AURAGLASS_BOTTLE)
                         .pattern("BAB", " B ")
-                        .define('A', ingOf(AURAGLASS_BOTTLE))
-                        .define('B', ING_POLISHED_LARIMAR)
+                        .define('A', AURAGLASS_BOTTLE)
+                        .define('B', LARIMAR.polished())
                         .unlockedWith(AURAGLASS_BOTTLE)
                         .save();
 
                 shaped(LARGE_AURAGLASS_BOTTLE)
                         .pattern("BAB", " B ")
-                        .define('A', ingOf(MEDIUM_AURAGLASS_BOTTLE))
-                        .define('B', ING_AURACHALCUM)
+                        .define('A', MEDIUM_AURAGLASS_BOTTLE)
+                        .define('B', AURACHALCUM)
                         .unlockedWith(MEDIUM_AURAGLASS_BOTTLE)
                         .save();
 
                 shaped(EXTREME_AURAGLASS_BOTTLE)
                         .pattern("BAB", " B ")
-                        .define('A', ingOf(LARGE_AURAGLASS_BOTTLE))
-                        .define('B', ING_ELDRITCH_ALLOY)
+                        .define('A', LARGE_AURAGLASS_BOTTLE)
+                        .define('B', ELDRITCH_ALLOY)
                         .unlockedWith(LARGE_AURAGLASS_BOTTLE)
                         .save();
             }
@@ -293,16 +291,16 @@ public class ArcaneRecipeProvider extends BetterRecipeProvider {
                 wands.put(Items.COPPER_INGOT, WAND_COPPER);
                 wands.forEach((wandItem, output) -> shaped(output)
                         .pattern("  P", " P ", "C  ")
-                        .define('C', ING_COPPER_CORE)
-                        .define('P', ingOf(wandItem))
+                        .define('C', COPPER_CORE)
+                        .define('P', wandItem)
                         .unlockedWith(COPPER_CORE)
                         .save(itemKey(output).withPrefix("wands/")));
 
                 // Advanced Wands
                 shaped(WAND_LARIMAR)
                         .pattern("  B", " W ", "C  ")
-                        .define('B', ING_POLISHED_LARIMAR)
-                        .define('C', ING_LARIMAR_CORE)
+                        .define('B', LARIMAR.polished())
+                        .define('C', LARIMAR_CORE)
                         .define('W', ArcaneTags.BASIC_WANDS)
                         .unlockedWith(LARIMAR_CORE)
                         .save(itemKey(WAND_LARIMAR).withPrefix("wands/"));
@@ -310,17 +308,17 @@ public class ArcaneRecipeProvider extends BetterRecipeProvider {
                 // Mythical Wands
                 shaped(WAND_AURACHALCUM)
                         .pattern("  D", " W ", "C  ")
-                        .define('D', ING_AURACHALCUM)
+                        .define('D', AURACHALCUM)
                         .define('W', ArcaneTags.ADVANCED_WANDS)
-                        .define('C', ING_AURACHALCUM_CORE)
+                        .define('C', AURACHALCUM_CORE)
                         .unlockedWith(AURACHALCUM_CORE)
                         .save(itemKey(WAND_AURACHALCUM).withPrefix("wands/"));
 
                 shaped(WAND_ELDRITCH)
                         .pattern("  D", " W ", "C  ")
-                        .define('D', ING_ELDRITCH_ALLOY)
+                        .define('D', ELDRITCH_ALLOY)
                         .define('W', ArcaneTags.ADVANCED_WANDS)
-                        .define('C', ING_ELDRITCH_CORE)
+                        .define('C', ELDRITCH_CORE)
                         .unlockedWith(ELDRITCH_CORE)
                         .save(itemKey(WAND_ELDRITCH).withPrefix("wands/"));
             }
@@ -342,22 +340,27 @@ public class ArcaneRecipeProvider extends BetterRecipeProvider {
 
             PedestalRecipeBuilder.simpleRecipe(ingOf(Items.CLAY_BALL), ingOf(Items.PAPER), SPELL_TABLET, 1).unlockedWith(PEDESTAL.block()).save(helper);
 
-            Map<DeferredHolder<AbstractSpell, ?>, ItemLike> spellItems = new HashMap<>();
-            spellItems.put(SPELL_BREAKING, Items.DIAMOND_PICKAXE);
-            spellItems.put(SPELL_HAMMERING, Items.IRON_BLOCK);
-            spellItems.put(SPELL_PURIFYING, Items.EMERALD);
-            spellItems.put(SPELL_CLEANSING, Items.WATER_BUCKET);
-            spellItems.put(SPELL_BUILDING, Items.BRICKS);
-            spellItems.put(SPELL_DASHING, Items.FEATHER);
-            spellItems.put(SPELL_CRAFTING, Items.CRAFTING_TABLE);
-            spellItems.put(SPELL_ACTIVATOR, SPELL_CIRCLE_CORE);
+            Map<DeferredHolder<AbstractSpell, ?>, Ingredient> spellItems = new HashMap<>();
+            spellItems.put(SPELL_BREAKING, ingOf(Items.DIAMOND_PICKAXE));
+            spellItems.put(SPELL_HAMMERING, ingOf(Items.IRON_BLOCK));
+            spellItems.put(SPELL_PURIFYING, ingOf(Items.EMERALD));
+            spellItems.put(SPELL_CLEANSING, ingOf(PotionContents.createItemStack(Items.SPLASH_POTION, Potions.WATER)));
+            spellItems.put(SPELL_BUILDING, ingOf(Items.BRICKS));
+            spellItems.put(SPELL_DASHING, ingOf(Items.FEATHER));
+            spellItems.put(SPELL_CRAFTING, ingOf(Items.CRAFTING_TABLE));
+            spellItems.put(SPELL_ACTIVATOR, ingOf(SPELL_CIRCLE_CORE));
+            spellItems.put(SPELL_CONJURE_WATER, ingOf(Items.WATER_BUCKET));
+            spellItems.put(SPELL_FREEZING, ingOf(Items.ICE));
+            spellItems.put(SPELL_LIGHTING, ingOf(Items.TORCH));
+            spellItems.put(SPELL_MIXING, ingOf(Items.STICK));
+
             spellItems.forEach((spellHolder, item) -> {
                 var stack = SPELL_TABLET.get().getDefaultInstance();
                 stack.set(ArcaneContent.DC_SPELL, spellHolder.getId());
                 var holder = new martian.arcane.api.recipe.RecipeOutput.DataGenHolder(stack, 1);
                 PedestalRecipeBuilder
-                        .simpleRecipe(ingOf(SPELL_TABLET.get()), ingOf(item), holder.toRecipeOutput())
-                        .unlockedWith(item)
+                        .simpleRecipe(ingOf(SPELL_TABLET.get()), item, holder.toRecipeOutput())
+                        .unlockedWith(item.getItems()[0].getItem())
                         .save(helper, spellHolder.getId().withPrefix("spell_tablets/"));
             });
         }
@@ -371,18 +374,38 @@ public class ArcaneRecipeProvider extends BetterRecipeProvider {
                 .save();
     }
 
-    private void cutAndPolish(ItemLike raw, ItemLike cut, ItemLike polished) {
-        shapeless(cut)
-                .requires(raw)
-                .requires(GEM_SAW)
-                .unlockedWith(raw)
-                .save();
+    private void storageBlock(ItemLike of, ItemLike output) {
+        storageBlock(Ingredient.of(of), output);
+    }
 
-        shapeless(polished)
-                .requires(cut)
-                .requires(ItemTags.SAND, 2)
-                .unlockedWith(cut)
-                .save();
+    private void gemLine(DeferredGemItems gems) {
+        CauldronMixingBuilder.cauldronMixing()
+                .addInput(gems.rough())
+                .addInput(Items.GRAVEL)
+                .addInput(Items.GRAVEL)
+                .setCauldron(Blocks.WATER_CAULDRON)
+                .setFluidAmount(1)
+                .addResult(gems.smooth())
+                .unlockedWith(gems.rough())
+                .save(helper);
+
+        CauldronMixingBuilder.cauldronMixing()
+                .addInput(gems.smooth())
+                .addInput(Items.SAND)
+                .addInput(Items.SAND)
+                .setCauldron(Blocks.WATER_CAULDRON)
+                .setFluidAmount(1)
+                .addResult(gems.sandyPolished())
+                .unlockedWith(gems.smooth())
+                .save(helper);
+
+        SpellRecipeBuilder.cleansing()
+                .setInput(gems.sandyPolished())
+                .addResult(gems.polished())
+                .unlockedWith(gems.sandyPolished())
+                .save(helper);
+
+        //TODO: Exquisite
     }
 
     private void oreProcessingLine(ItemLike raw, ItemLike crushed, ItemLike purified, ItemLike ingot) {
@@ -407,7 +430,11 @@ public class ArcaneRecipeProvider extends BetterRecipeProvider {
         return BuiltInRegistries.ITEM.getKey(item.asItem());
     }
 
-    private Ingredient ingOf(ItemLike item) {
+    private Ingredient ingOf(ItemLike... item) {
+        return Ingredient.of(item);
+    }
+
+    private Ingredient ingOf(ItemStack... item) {
         return Ingredient.of(item);
     }
 

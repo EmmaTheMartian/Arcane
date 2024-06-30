@@ -55,7 +55,7 @@ public class ArcaneBookFeaturesProvider extends CategoryProvider {
                 new BookCategoryBackgroundParallaxLayer(loc, speed, -1);
 
         return BookCategoryModel.create(modLoc(context().categoryId()), context().categoryName())
-                .withIcon(ArcaneContent.RAW_LARIMAR.get())
+                .withIcon(ArcaneContent.LARIMAR.rough().get())
                 .withBackgroundParallaxLayers(
                         makeLayer.apply(new ResourceLocation("modonomicon", "textures/gui/parallax/flow/base.png"), 0.7f),
                         makeLayer.apply(new ResourceLocation("modonomicon", "textures/gui/parallax/flow/1.png"), 1f),

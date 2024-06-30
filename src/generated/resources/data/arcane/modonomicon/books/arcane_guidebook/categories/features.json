@@ -19,7 +19,7 @@
   "background_width": 512,
   "entry_textures": "modonomicon:textures/gui/entry_textures.png",
   "icon": {
-    "item": "arcane:raw_larimar"
+    "item": "arcane:rough_larimar"
   },
   "name": "book.arcane.arcane_guidebook.features.name",
   "show_category_button": true,

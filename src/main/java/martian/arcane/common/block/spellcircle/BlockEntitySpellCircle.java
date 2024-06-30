@@ -91,9 +91,8 @@ public class BlockEntitySpellCircle extends AbstractAuraBlockEntity implements I
             }
 
             ticksToNextCast = castRateTicks;
-            var state = level.getBlockState(getBlockPos());
-            level.sendBlockUpdated(getBlockPos(), state, state, 2);
         }
+        BlockHelpers.sync(this);
     }
 
     public boolean hasSpell() {

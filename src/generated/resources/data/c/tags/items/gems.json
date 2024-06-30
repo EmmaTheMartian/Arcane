@@ -1,14 +1,20 @@
 {
   "values": [
-    "arcane:raw_larimar",
-    "arcane:cut_larimar",
+    "arcane:rough_larimar",
+    "arcane:smooth_larimar",
+    "arcane:sandy_polished_larimar",
     "arcane:polished_larimar",
-    "arcane:faded_raw_larimar",
-    "arcane:faded_cut_larimar",
-    "arcane:faded_polished_larimar",
-    "arcane:raw_idocrase",
-    "arcane:cut_idocrase",
+    "arcane:exquisite_larimar",
+    "arcane:rough_faded_larimar",
+    "arcane:smooth_faded_larimar",
+    "arcane:sandy_polished_faded_larimar",
+    "arcane:polished_faded_larimar",
+    "arcane:exquisite_faded_larimar",
+    "arcane:rough_idocrase",
+    "arcane:smooth_idocrase",
+    "arcane:sandy_polished_idocrase",
     "arcane:polished_idocrase",
+    "arcane:exquisite_idocrase",
     "arcane:raw_aurachalcum",
     "arcane:aurachalcum"
   ]

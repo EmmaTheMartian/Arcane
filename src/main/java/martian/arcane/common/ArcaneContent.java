@@ -10,6 +10,7 @@ import martian.arcane.api.MachineTier;
 import martian.arcane.api.aura.AuraRecord;
 import martian.arcane.api.aura.AuraStorage;
 import martian.arcane.api.block.BasicLarimarBlock;
+import martian.arcane.api.item.AbstractAuraItem;
 import martian.arcane.api.recipe.ArcaneRecipeType;
 import martian.arcane.api.spell.AbstractSpell;
 import martian.arcane.common.spell.SimpleCraftingSpell;
@@ -35,6 +36,7 @@ import martian.arcane.common.block.spellcircle.BlockSpellCircle;
 import martian.arcane.common.item.*;
 import martian.arcane.common.recipe.*;
 import martian.arcane.common.spell.*;
+import martian.arcane.integration.ArcaneIntegrations;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -48,32 +50,38 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.Fluids;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.*;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
+import static martian.arcane.ArcaneMod.id;
+
 @SuppressWarnings("unused")
 public class ArcaneContent {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(ArcaneMod.MODID);
-    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(ArcaneMod.MODID);
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, ArcaneMod.MODID);
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(ArcaneMod.MODID);
     public static final DeferredRegister<AttachmentType<?>> DATA_ATTACHMENTS = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, ArcaneMod.MODID);
     public static final DeferredRegister<DataComponentType<?>> DATA_COMPONENTS = DeferredRegister.createDataComponents(ArcaneMod.MODID);
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(BuiltInRegistries.RECIPE_SERIALIZER, ArcaneMod.MODID);
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(BuiltInRegistries.RECIPE_TYPE, ArcaneMod.MODID);
-    public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, ArcaneMod.MODID);
     public static final DeferredRegister<AbstractSpell> SPELLS = DeferredRegister.create(ArcaneRegistries.SPELLS, ArcaneMod.MODID);
+    public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, ArcaneMod.MODID);
 
 
-    // ANCHOR: Blocks
+    // Blocks
     public static final DeferredBlock<?>
         AURAGLASS = block("auraglass", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).noOcclusion())),
         SOUL_MAGMA = block("soul_magma", BlockSoulMagma::new),
@@ -95,7 +103,8 @@ public class ArcaneContent {
         FADED_LARIMAR_BLOCK = block("faded_larimar_block", () -> new BasicLarimarBlock(null, BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK))),
         FADING_LARIMAR_BLOCK = block("fading_larimar_block", () -> new BasicLarimarBlock(() -> FADED_LARIMAR_BLOCK.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK))),
         LARIMAR_BLOCK = block("larimar_block", () -> new BasicLarimarBlock(() -> FADING_LARIMAR_BLOCK.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK))),
-        AURACHALCUM_BLOCK = block("aurachalcum_block", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_BLOCK)))
+        AURACHALCUM_BLOCK = block("aurachalcum_block", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_BLOCK))),
+        FROZEN_OBSIDIAN_BLOCK = block("frozen_obsidian", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.OBSIDIAN).friction(0.99F)))
     ;
 
 
@@ -115,12 +124,6 @@ public class ArcaneContent {
     private static final Supplier<Item> MYSTICAL_WAND_SUPPLIER = () -> new ItemAuraWand(() -> ArcaneConfig.mysticWandAuraCapacity, 3, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
 
     public static final DeferredItem<?>
-//            AURAGLASS_BOTTLE = item("auraglass_bottle", () -> new ItemAuraglassBottle(ArcaneConfig.smallAuraglassBottleAuraCapacity, ArcaneConfig.smallAuraglassBottleRate)),
-//            MEDIUM_AURAGLASS_BOTTLE = item("medium_auraglass_bottle", () -> new ItemAuraglassBottle(ArcaneConfig.mediumAuraglassBottleAuraCapacity, ArcaneConfig.mediumAuraglassBottleRate)),
-//            LARGE_AURAGLASS_BOTTLE = item("large_auraglass_bottle", () -> new ItemAuraglassBottle(ArcaneConfig.largeAuraglassBottleAuraCapacity, ArcaneConfig.largeAuraglassBottleRate)),
-//            EXTREME_AURAGLASS_BOTTLE = item("extreme_auraglass_bottle", () -> new ItemAuraglassBottle(ArcaneConfig.extremeAuraglassBottleAuraCapacity, ArcaneConfig.extremeAuraglassBottleRate)),
-//            CREATIVE_AURAGLASS_BOTTLE = item("creative_auraglass_bottle", () -> new ItemAuraglassBottle(Integer.MAX_VALUE, Integer.MAX_VALUE)),
-
             AURAGLASS_BOTTLE = item("auraglass_bottle", () -> new ItemAuraglassBottle(() -> ArcaneConfig.smallAuraglassBottleAuraCapacity, () -> ArcaneConfig.smallAuraglassBottleRate)),
             MEDIUM_AURAGLASS_BOTTLE = item("medium_auraglass_bottle", () -> new ItemAuraglassBottle(() -> ArcaneConfig.mediumAuraglassBottleAuraCapacity, () -> ArcaneConfig.mediumAuraglassBottleRate)),
             LARGE_AURAGLASS_BOTTLE = item("large_auraglass_bottle", () -> new ItemAuraglassBottle(() -> ArcaneConfig.largeAuraglassBottleAuraCapacity, () -> ArcaneConfig.largeAuraglassBottleRate)),
@@ -159,15 +162,6 @@ public class ArcaneContent {
             UPGRADE_KIT_LARIMAR = item("upgrade_kit_larimar", () -> new ItemUpgradeKit(MachineTier.LARIMAR)),
             UPGRADE_KIT_AURACHALCUM = item("upgrade_kit_aurachalcum", () -> new ItemUpgradeKit(MachineTier.AURACHALCUM)),
 
-            RAW_LARIMAR = item("raw_larimar"),
-            CUT_LARIMAR = item("cut_larimar"),
-            POLISHED_LARIMAR = item("polished_larimar"),
-            FADED_RAW_LARIMAR = item("faded_raw_larimar"),
-            FADED_CUT_LARIMAR = item("faded_cut_larimar"),
-            FADED_POLISHED_LARIMAR = item("faded_polished_larimar"),
-            RAW_IDOCRASE = item("raw_idocrase"),
-            CUT_IDOCRASE = item("cut_idocrase"),
-            POLISHED_IDOCRASE = item("polished_idocrase"),
             RAW_AURACHALCUM = item("raw_aurachalcum"),
             AURACHALCUM = item("aurachalcum"),
             ELDRITCH_ALLOY = item("eldritch_alloy"),
@@ -186,6 +180,11 @@ public class ArcaneContent {
             PURIFIED_RAW_IRON = item("purified_raw_iron"),
             PURIFIED_RAW_GOLD = item("purified_raw_gold")
     ;
+
+    public static final DeferredGemItems
+            LARIMAR = gemItems("larimar"),
+            FADED_LARIMAR = gemItems("faded_larimar"),
+            IDOCRASE = gemItems("idocrase");
 
     public static final ImmutableList<DeferredItem<?>> WANDS = ImmutableList.of(
             WAND_ACACIA,
@@ -224,25 +223,37 @@ public class ArcaneContent {
 
 
     // Recipe Types
-    public static final AuraInfusionType RT_AURA_INFUSION = recipeTypeAndSerializer("aura_infusion", RecipeAuraInfusion.TYPE);
-    public static final SpellRecipeType RT_HAMMERING = recipeTypeAndSerializer("hammering", new SpellRecipeType());
-    public static final SpellRecipeType RT_CLEANSING = recipeTypeAndSerializer("cleansing", new SpellRecipeType());
-    public static final SpellRecipeType RT_PURIFYING = recipeTypeAndSerializer("purifying", new SpellRecipeType());
+    public static final RecipeAuraInfusionType RT_AURA_INFUSION = recipeTypeAndSerializer("aura_infusion", RecipeAuraInfusion.TYPE);
     public static final RecipePedestalType RT_PEDESTAL = recipeTypeAndSerializer("pedestal", RecipePedestalCrafting.TYPE);
+    public static final RecipeCauldronMixingType RT_CAULDRON_MIXING = recipeTypeAndSerializer("cauldron_mixing", RecipeCauldronMixing.TYPE);
+    public static final SpellRecipeType
+            RT_HAMMERING = recipeTypeAndSerializer("hammering", new SpellRecipeType()),
+            RT_CLEANSING = recipeTypeAndSerializer("cleansing", new SpellRecipeType()),
+            RT_PURIFYING = recipeTypeAndSerializer("purifying", new SpellRecipeType()),
+            RT_FREEZING = recipeTypeAndSerializer("freezing", new SpellRecipeType());
 
 
     // Spells
     public static final DeferredHolder<AbstractSpell, ?>
             SPELL_BREAKING = spell("breaking", SpellBreaking::new),
-            SPELL_HAMMERING = spell("hammering", () -> SimpleCraftingSpell.of(ArcaneMod.id("hammering"), 4, 20, 2, RT_HAMMERING)),
-            SPELL_PURIFYING = spell("purifying", () -> SimpleCraftingSpell.of(ArcaneMod.id("purifying"), 4, 20, 2, RT_PURIFYING)),
-            SPELL_CLEANSING = spell("cleansing", () -> SimpleCraftingSpell.of(ArcaneMod.id("cleansing"), 2, 20, 2, RT_CLEANSING)),
+            SPELL_HAMMERING = spell("hammering", () -> SimpleCraftingSpell.of(id("hammering"), 4, 20, 2, RT_HAMMERING)),
+            SPELL_PURIFYING = spell("purifying", () -> SimpleCraftingSpell.of(id("purifying"), 4, 20, 2, RT_PURIFYING)),
+            SPELL_CLEANSING = spell("cleansing", () -> SimpleCraftingSpell.of(id("cleansing"), 2, 20, 2, RT_CLEANSING)),
             SPELL_BUILDING = spell("building", SpellBuilding::new),
             SPELL_DASHING = spell("dashing", SpellDashing::new),
-            SPELL_CRAFTING = spell("crafting", () -> SimplePlacementSpell.of(ArcaneMod.id("crafting"), 1, 20, 1, c -> CONJURED_CRAFTING_TABLE.get().defaultBlockState())),
+            SPELL_CRAFTING = spell("crafting", () -> SimplePlacementSpell.of(id("crafting"), 1, 20, 1, c -> CONJURED_CRAFTING_TABLE.get().defaultBlockState())),
             SPELL_ACTIVATOR = spell("activator", SpellSpellCircleActivator::new),
             SPELL_PRESERVATION = spell("preservation", SpellPreservation::new),
-            SPELL_LIGHTING = spell("lighting", () -> SimplePlacementSpell.of(ArcaneMod.id("crafting"), 1, 20, 1, c -> AURA_TORCH.get().defaultBlockState()))
+            SPELL_LIGHTING = spell("lighting", () -> SimplePlacementSpell.of(id("crafting"), 1, 20, 1, c -> AURA_TORCH.get().defaultBlockState())),
+            SPELL_MIXING = spell("mixing", SpellMixing::new),
+            SPELL_CONJURE_WATER = spell("conjure_water", () -> SimpleLiquidSpell.of(id("conjure_water"), 8, 20, 1,
+                    c -> Fluids.WATER,
+                    c -> Blocks.WATER.defaultBlockState(),
+                    c -> Blocks.WATER_CAULDRON.defaultBlockState().setValue(LayeredCauldronBlock.LEVEL, 3))),
+            SPELL_FREEZING = spell("freezing", () -> SimpleCraftingSpell.of(id("freezing"), 4, 20, 1, RT_FREEZING)),
+            SPELL_SMELTING = spell("smelting", SpellSmelting::new),
+            SPELL_ENLARGING = registerIf(() -> spell("enlarging", SpellEnlarging::new), ArcaneIntegrations.PEHKUI.isLoaded()),
+            SPELL_SHRINKING = registerIf(() -> spell("shrinking", SpellShrinking::new), ArcaneIntegrations.PEHKUI.isLoaded())
     ;
 
 
@@ -252,33 +263,35 @@ public class ArcaneContent {
             .icon(() -> new ItemStack(EXTREME_AURAGLASS_BOTTLE.get()))
             .displayItems((params, output) -> {
                 // Guidebook!
-                ItemStack guidebookStack = new ItemStack(GUIDEBOOK.get());
-                guidebookStack.set(DataComponentRegistry.BOOK_ID.get(), ArcaneMod.id("arcane_guidebook"));
-                output.accept(guidebookStack);
+                ItemStack stack = new ItemStack(GUIDEBOOK.get());
+                stack.set(DataComponentRegistry.BOOK_ID.get(), id("arcane_guidebook"));
+                output.accept(stack.copy());
 
                 // Items
+                List<Item> ignoredItems = new ArrayList<>();
+                ignoredItems.add(GUIDEBOOK.get());
+
                 output.acceptAll(ITEMS
                         .getEntries()
                         .stream()
-                        .filter(it -> it.get() != GUIDEBOOK.get())
+                        .filter(it -> !ignoredItems.contains(it.get()))
                         .map(it -> it.get().getDefaultInstance())
                         .toList());
 
                 // Other items
-                //FIXME: Temporarily removed from tab.
-                // See https://github.com/neoforged/NeoForge/issues/1040 and https://github.com/neoforged/NeoForge/pull/1043
-                // I suspect that because the data component has data *inside* of it changing, the hash is not changed.
-                // A mixin could fix this, but I would rather not use one for such a menial difference.
-//                ItemStack creativeAuraglassBottle = new ItemStack(CREATIVE_AURAGLASS_BOTTLE.get());
-//                Objects.requireNonNull(creativeAuraglassBottle.get(ArcaneDataComponents.AURA)).setAura(Integer.MAX_VALUE);
-//                output.accept(creativeAuraglassBottle);
+                stack = new ItemStack(CREATIVE_AURAGLASS_BOTTLE.get());
+                ((AbstractAuraItem)stack.getItem()).mutateAuraStorage(stack, aura -> {
+                    aura.setAura(Integer.MAX_VALUE);
+                    return aura;
+                });
+                output.accept(stack.copy());
             })
             .build());
 
     public static final Supplier<CreativeModeTab> ARCANE_SPELLS_TAB = TABS.register("arcane_spells_tab", () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.arcane.arcane_spells_tab"))
             .icon(() -> new ItemStack(SPELL_TABLET.get()))
-            .withTabsBefore(ArcaneMod.id("arcane_tab"))
+            .withTabsBefore(id("arcane_tab"))
             .displayItems((params, output) -> {
                 ArcaneRegistries.SPELLS.entrySet().forEach(entry -> {
                     ItemStack stack = SPELL_TABLET.get().getDefaultInstance();
@@ -335,6 +348,16 @@ public class ArcaneContent {
         return ITEMS.register(id, () -> new BlockItem(block.get(), new Item.Properties()));
     }
 
+    private static DeferredGemItems gemItems(String id) {
+        return new DeferredGemItems(
+                item("rough_" + id),
+                item("smooth_" + id),
+                item("sandy_polished_" + id),
+                item("polished_" + id),
+                item("exquisite_" + id)
+        );
+    }
+
     private static <T> DeferredHolder<AttachmentType<?>, AttachmentType<T>> dataAttachment(String name, Supplier<AttachmentType<T>> func) {
         return DATA_ATTACHMENTS.register(name, func);
     }
@@ -369,6 +392,13 @@ public class ArcaneContent {
         return SPELLS.register(name, spell);
     }
 
+
+    private static <T> @Nullable T registerIf(Supplier<T> thing, boolean condition) {
+        if (condition)
+            return thing.get();
+        return null;
+    }
+
     public static void init(IEventBus bus) {
         BLOCKS.register(bus);
         ITEMS.register(bus);
@@ -381,5 +411,17 @@ public class ArcaneContent {
         SPELLS.register(bus);
     }
 
-    public record DeferredBlockAndTile<BlockType extends Block, TileType extends BlockEntity>(DeferredBlock<BlockType> block, DeferredHolder<BlockEntityType<?>, BlockEntityType<TileType>> tile) { }
+
+    public record DeferredBlockAndTile<BlockT extends Block, TileT extends BlockEntity>(
+            DeferredBlock<BlockT> block,
+            DeferredHolder<BlockEntityType<?>, BlockEntityType<TileT>> tile
+    ) { }
+
+    public record DeferredGemItems(
+            DeferredItem<Item> rough,
+            DeferredItem<Item> smooth,
+            DeferredItem<Item> sandyPolished,
+            DeferredItem<Item> polished,
+            DeferredItem<Item> exquisite
+    ) { }
 }

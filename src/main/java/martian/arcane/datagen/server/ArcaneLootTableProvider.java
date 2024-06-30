@@ -56,16 +56,16 @@ public class ArcaneLootTableProvider extends LootTableProvider {
             dropSelf(AQUA_COLLECTOR.block().get());
 
             // Ores
-            ore(LARIMAR_ORE.get(), RAW_LARIMAR.get());
-            ore(FADING_LARIMAR_ORE.get(), RAW_LARIMAR.get());
-            ore(FADED_LARIMAR_ORE.get(), FADED_RAW_LARIMAR.get());
-            ore(DEEPSLATE_LARIMAR_ORE.get(), RAW_LARIMAR.get());
-            ore(FADING_DEEPSLATE_LARIMAR_ORE.get(), RAW_LARIMAR.get());
-            ore(FADED_DEEPSLATE_LARIMAR_ORE.get(), FADED_RAW_LARIMAR.get());
-            ore(IDOCRASE_ORE.get(), RAW_IDOCRASE.get());
-            ore(DEEPSLATE_IDOCRASE_ORE.get(), RAW_IDOCRASE.get());
-            ore(NETHER_IDOCRASE_ORE.get(), RAW_IDOCRASE.get());
-            ore(BLACKSTONE_IDOCRASE_ORE.get(), RAW_IDOCRASE.get());
+            ore(LARIMAR_ORE.get(), LARIMAR.rough().get());
+            ore(FADING_LARIMAR_ORE.get(), LARIMAR.rough().get());
+            ore(FADED_LARIMAR_ORE.get(), FADED_LARIMAR.rough().get());
+            ore(DEEPSLATE_LARIMAR_ORE.get(), LARIMAR.rough().get());
+            ore(FADING_DEEPSLATE_LARIMAR_ORE.get(), LARIMAR.rough().get());
+            ore(FADED_DEEPSLATE_LARIMAR_ORE.get(), FADED_LARIMAR.rough().get());
+            ore(IDOCRASE_ORE.get(), IDOCRASE.rough().get());
+            ore(DEEPSLATE_IDOCRASE_ORE.get(), IDOCRASE.rough().get());
+            ore(NETHER_IDOCRASE_ORE.get(), IDOCRASE.rough().get());
+            ore(BLACKSTONE_IDOCRASE_ORE.get(), IDOCRASE.rough().get());
 
             // Storage Blocks
             dropSelf(LARIMAR_BLOCK.get());

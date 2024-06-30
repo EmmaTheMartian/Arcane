@@ -46,14 +46,18 @@ sourceSets {
 repositories {
     maven("https://maven.neoforged.net")
     maven("https://maven.parchmentmc.org")
-    maven("https://maven.blamejared.com/") // JEI
+
+    // Maven repos for mods
+    // The comments before/after each one are the mods I use from that maven.
+    maven("https://maven.blamejared.com/")
     maven("https://modmaven.dev") // JEI Mirror
     maven("https://maven.terraformersmc.com") // EMI
     maven("https://maven.tterrag.com/") // Create
-    maven("https://maven.firstdarkdev.xyz/snapshots") // LDLib and Photon
+    maven("https://maven.firstdarkdev.xyz/snapshots") // LDLib, Photon
     maven("https://maven.theillusivec4.top/") // Curios
+    maven("https://api.modrinth.com/maven") // Energized Power, Pehkui
 
-    // Jade and ProbeJS
+    // Jade, ProbeJS
     maven("https://www.cursemaven.com") {
         mavenContent {
             includeGroup("curse.maven")
@@ -67,7 +71,7 @@ repositories {
         }
     }
 
-    // KubeJS and Rhino
+    // KubeJS, Rhino
     maven("https://maven.saps.dev/minecraft") {
         mavenContent {
             includeGroup("dev.latvian.mods")
@@ -86,11 +90,9 @@ dependencies {
     neoForge("net.neoforged:neoforge:${prop("neoforge_version")}")
 
     // JEI
-    /*
     modCompileOnlyApi("mezz.jei:jei-${prop("mc_version")}-common-api:${prop("jei_version")}") { isTransitive = false }
-    modCompileOnlyApi("mezz.jei:jei-${prop("mc_version")}-forge-api:${prop("jei_version")}") { isTransitive = false }
-    modRuntimeOnly("mezz.jei:jei-${prop("mc_version")}-forge:${prop("jei_version")}") { isTransitive = false }
-     */
+    modCompileOnlyApi("mezz.jei:jei-${prop("mc_version")}-neoforge-api:${prop("jei_version")}") { isTransitive = false }
+    modRuntimeOnly("mezz.jei:jei-${prop("mc_version")}-neoforge:${prop("jei_version")}") { isTransitive = false }
 
     // EMI
     modCompileOnly("dev.emi:emi-neoforge:${prop("emi_version")}+${prop("mc_version")}:api")
@@ -142,6 +144,12 @@ dependencies {
         modRuntimeOnly("curse.maven:probejs-585406:${prop("probejs_version")}")
     }
      */
+
+    // Energized Power
+    localRuntime("maven.modrinth:energized-power:1.20.6-2.11.2-neoforge")
+
+    // Pehkui
+    modApi("maven.modrinth:pehkui:3.8.3+1.20.6-neoforge")
 }
 
 tasks.withType<ProcessResources>().configureEach {

@@ -8,6 +8,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -23,7 +24,15 @@ public class Raycasting {
         if (hit.getType() != HitResult.Type.BLOCK) {
             return null;
         }
-        return (BlockHitResult)hit;
+        return (BlockHitResult) hit;
+    }
+
+    public static @Nullable EntityHitResult entityRaycast(Entity entity, double reach, boolean hitFluids) {
+        HitResult hit = entity.pick(reach, 0, hitFluids);
+        if (hit.getType() != HitResult.Type.ENTITY) {
+            return null;
+        }
+        return (EntityHitResult) hit;
     }
 
     public static HitResult raycast(Entity entity, double reach, boolean hitFluids) {

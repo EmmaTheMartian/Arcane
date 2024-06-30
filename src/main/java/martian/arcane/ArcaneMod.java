@@ -8,9 +8,8 @@ import martian.arcane.common.networking.c2s.C2SOpenEnderpackPayload;
 import martian.arcane.common.networking.c2s.C2SSetSelectionComponent;
 import martian.arcane.common.networking.s2c.S2CSyncAuraAttachment;
 import martian.arcane.datagen.ArcaneDatagen;
+import martian.arcane.integration.ArcaneIntegrations;
 import martian.arcane.integration.curios.CuriosIntegration;
-import martian.arcane.integration.kubejs.KubeJSIntegration;
-import martian.arcane.integration.photon.PhotonIntegration;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.BlastFurnaceBlock;
 import net.minecraft.world.level.block.Blocks;
@@ -46,8 +45,9 @@ public class ArcaneMod {
 
         modBus.addListener(FMLCommonSetupEvent.class, event -> {
             CuriosIntegration.INSTANCE.load();
-            PhotonIntegration.INSTANCE.load();
-            KubeJSIntegration.INSTANCE.load();
+            ArcaneIntegrations.PHOTON.load();
+            ArcaneIntegrations.KUBEJS.load();
+            ArcaneIntegrations.PEHKUI.load();
         });
 
         modBus.addListener(RegisterPayloadHandlersEvent.class, event -> {

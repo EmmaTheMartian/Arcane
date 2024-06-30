@@ -63,16 +63,25 @@ public class ArcaneItemModelProvider extends ItemModelProvider {
 
         // Resources
         {
-            String path = "resources/";
-            item(RAW_LARIMAR, path);
-            item(CUT_LARIMAR, path);
-            item(POLISHED_LARIMAR, path);
-            item(FADED_RAW_LARIMAR, path);
-            item(FADED_CUT_LARIMAR, path);
-            item(FADED_POLISHED_LARIMAR, path);
-            item(RAW_IDOCRASE, path);
-            item(CUT_IDOCRASE, path);
-            item(POLISHED_IDOCRASE, path);
+            String path = "resources/gems/";
+            item(LARIMAR.rough(), path);
+            item(LARIMAR.smooth(), path);
+            item(LARIMAR.sandyPolished(), path);
+            item(LARIMAR.polished(), path);
+            item(LARIMAR.exquisite(), path);
+//            item(FADED_LARIMAR.rough(), path);
+//            item(FADED_LARIMAR.smooth(), path);
+//            item(FADED_LARIMAR.sandyPolished(), path);
+//            item(FADED_LARIMAR.polished(), path);
+//            item(FADED_LARIMAR.exquisite(), path);
+            item(IDOCRASE.rough(), path);
+            item(IDOCRASE.smooth(), path);
+            item(IDOCRASE.sandyPolished(), path);
+            item(IDOCRASE.polished(), path);
+            item(IDOCRASE.exquisite(), path);
+
+            path = "resources/";
+
             item(RAW_AURACHALCUM, path);
             item(AURACHALCUM, path);
             item(ELDRITCH_ALLOY, path);

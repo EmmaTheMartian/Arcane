@@ -7,7 +7,7 @@ import top.theillusivec4.curios.api.CuriosApi;
 public class CuriosIntegration extends AbstractIntegration {
     public static final CuriosIntegration INSTANCE = new CuriosIntegration();
 
-    public CuriosIntegration() {
+    private CuriosIntegration() {
         super("curios");
     }
 

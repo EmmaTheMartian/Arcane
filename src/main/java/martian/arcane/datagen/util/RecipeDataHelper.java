@@ -138,6 +138,10 @@ public class RecipeDataHelper {
             return this;
         }
 
+        public BuilderWrapper<T> define(char ch, ItemLike item) {
+            return define(ch, Ingredient.of(item));
+        }
+
         public BuilderWrapper<T> define(char ch, TagKey<Item> item) {
             assert builder instanceof ShapedRecipeBuilder;
             ((ShapedRecipeBuilder) builder).define(ch, item);

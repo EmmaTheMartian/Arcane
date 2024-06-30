@@ -114,6 +114,7 @@ public class SpellRecipeBuilder implements RecipeBuilder {
 
     public SpellRecipe build() {
         assert !results.isEmpty();
+        assert !input.hasNoItems();
         return new SpellRecipe(type, input, results);
     }
 
@@ -144,5 +145,9 @@ public class SpellRecipeBuilder implements RecipeBuilder {
 
     public static SpellRecipeBuilder purifying() {
         return new SpellRecipeBuilder().setType(ArcaneContent.RT_PURIFYING);
+    }
+
+    public static SpellRecipeBuilder freezing() {
+        return new SpellRecipeBuilder().setType(ArcaneContent.RT_FREEZING);
     }
 }

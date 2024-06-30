@@ -1,0 +1,22 @@
+{
+  "type": "arcane:pedestal",
+  "consumeInteractionItem": true,
+  "input": {
+    "item": "arcane:spell_tablet"
+  },
+  "interactionItem": {
+    "item": "minecraft:ice"
+  },
+  "results": [
+    {
+      "chance": 1.0,
+      "stack": {
+        "components": {
+          "arcane:spell": "arcane:freezing"
+        },
+        "count": 1,
+        "id": "arcane:spell_tablet"
+      }
+    }
+  ]
+}

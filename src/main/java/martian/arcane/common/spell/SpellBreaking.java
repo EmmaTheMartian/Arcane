@@ -2,10 +2,7 @@ package martian.arcane.common.spell;
 
 import martian.arcane.ArcaneMod;
 import martian.arcane.api.block.AOEHelpers;
-import martian.arcane.api.spell.AbstractSpell;
-import martian.arcane.api.spell.CastContext;
-import martian.arcane.api.spell.CastResult;
-import martian.arcane.api.spell.SpellConfig;
+import martian.arcane.api.spell.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
@@ -29,29 +26,33 @@ public class SpellBreaking extends AbstractSpell {
 
     @Override
     public int getAuraCost(CastContext c) {
-        AtomicInteger cost = new AtomicInteger(0);
-        BlockPos target = c.getTarget();
+        if (c.target.type() == CastTarget.Type.BLOCK) {
+            AtomicInteger cost = new AtomicInteger(0);
+            BlockPos target = ((BlockPos) c.target.value());
 
-        if (c instanceof CastContext.WandContext wc) {
-            if (wc.raycast() instanceof BlockHitResult bHit) {
-                if (c.source.getCastLevel(wc) == 1 || wc.caster.isCrouching()) {
-                    if (canBreak(c.level, target))
-                        cost.getAndAdd(config.get("auraCostPerBlock"));
-                } else {
-                    AOEHelpers.streamAOE(target, bHit.getDirection(), getRadius(c.source.getCastLevel(wc))).forEach(pos -> {
-                        if (c.aura.getAura() - cost.get() <= 0)
-                            return;
-
-                        if (canBreak(c.level, pos))
+            if (c instanceof CastContext.WandContext wc) {
+                if (wc.raycast() instanceof BlockHitResult bHit) {
+                    if (c.source.getCastLevel(wc) == 1 || wc.caster.isCrouching()) {
+                        if (canBreak(c.level, target))
                             cost.getAndAdd(config.get("auraCostPerBlock"));
-                    });
+                    } else {
+                        AOEHelpers.streamAOE(target, bHit.getDirection(), getRadius(c.source.getCastLevel(wc))).forEach(pos -> {
+                            if (c.aura.getAura() - cost.get() <= 0)
+                                return;
+
+                            if (canBreak(c.level, pos))
+                                cost.getAndAdd(config.get("auraCostPerBlock"));
+                        });
+                    }
                 }
+            } else if (canBreak(c.level, target)) {
+                cost.getAndAdd(config.get("auraCostPerBlock"));
             }
-        } else if (canBreak(c.level, target)) {
-            cost.getAndAdd(config.get("auraCostPerBlock"));
+
+            return cost.get();
         }
 
-        return cost.get();
+        return 0;
     }
 
     @Override
@@ -59,34 +60,35 @@ public class SpellBreaking extends AbstractSpell {
         if (c.level.isClientSide)
             return CastResult.SUCCESS;
 
-        AtomicInteger cost = new AtomicInteger(0);
-        BlockPos target = c.getTarget();
+        if (c.target.type() == CastTarget.Type.BLOCK) {
+            AtomicInteger cost = new AtomicInteger(0);
+            BlockPos target = ((BlockPos) c.target.value());
 
-        if (target == null)
-            return CastResult.FAILED;
-
-        if (c instanceof CastContext.WandContext wc) {
-            if (wc.raycast() instanceof BlockHitResult bHit) {
-                if (c.source.getCastLevel(wc) == 1 || wc.caster.isCrouching()) {
-                    if (tryBreak(c.level, target, !wc.caster.isCreative()))
-                        cost.getAndAdd(config.get("auraCostPerBlock"));
-                } else {
-                    AOEHelpers.streamAOE(target, bHit.getDirection(), getRadius(c.source.getCastLevel(wc))).forEach(pos -> {
-                        if (c.aura.getAura() - cost.get() <= 0)
-                            return;
-
-                        if (tryBreak(c.level, pos, !wc.caster.isCreative()))
+            if (c instanceof CastContext.WandContext wc) {
+                if (wc.raycast() instanceof BlockHitResult bHit) {
+                    if (c.source.getCastLevel(wc) == 1 || wc.caster.isCrouching()) {
+                        if (tryBreak(c.level, target, !wc.caster.isCreative()))
                             cost.getAndAdd(config.get("auraCostPerBlock"));
-                    });
+                    } else {
+                        AOEHelpers.streamAOE(target, bHit.getDirection(), getRadius(c.source.getCastLevel(wc))).forEach(pos -> {
+                            if (c.aura.getAura() - cost.get() <= 0)
+                                return;
+
+                            if (tryBreak(c.level, pos, !wc.caster.isCreative()))
+                                cost.getAndAdd(config.get("auraCostPerBlock"));
+                        });
+                    }
+                } else {
+                    return CastResult.FAILED;
                 }
             } else {
-                return CastResult.FAILED;
+                tryBreak(c.level, target, true);
             }
-        } else {
-            tryBreak(c.level, target, true);
+
+            return CastResult.SUCCESS;
         }
 
-        return CastResult.SUCCESS;
+        return CastResult.FAILED;
     }
 
     private static boolean canBreak(Level level, BlockPos pos) {

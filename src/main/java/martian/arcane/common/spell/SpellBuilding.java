@@ -2,10 +2,7 @@ package martian.arcane.common.spell;
 
 import martian.arcane.ArcaneMod;
 import martian.arcane.api.block.AOEHelpers;
-import martian.arcane.api.spell.AbstractSpell;
-import martian.arcane.api.spell.CastContext;
-import martian.arcane.api.spell.CastResult;
-import martian.arcane.api.spell.SpellConfig;
+import martian.arcane.api.spell.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -36,34 +33,36 @@ public class SpellBuilding extends AbstractSpell {
 
     @Override
     public int getAuraCost(CastContext c) {
-        AtomicInteger cost = new AtomicInteger(0);
-        BlockPos target = c.getTarget();
-        if (target == null)
-            return 0;
+        if (c.target.type() == CastTarget.Type.BLOCK) {
+            BlockPos target = ((BlockPos) c.target.value());
+            AtomicInteger cost = new AtomicInteger(0);
 
-        if (c instanceof CastContext.WandContext wc) {
-            if (wc.raycast() instanceof BlockHitResult bHit) {
-                target = bHit.getBlockPos().relative(bHit.getDirection());
-                if (c.source.getCastLevel(wc) == 1 || wc.caster.isCrouching()) {
-                    if (canPlace(c.level, target))
-                        cost.getAndAdd(config.get("auraCostPerBlock"));
-                } else {
-                    AOEHelpers.streamAOE(target, bHit.getDirection(), getRadius(c.source.getCastLevel(wc))).forEach(pos -> {
-                        if (c.aura.getAura() - cost.get() <= 0)
-                            return;
-
-                        if (canPlace(c.level, pos))
+            if (c instanceof CastContext.WandContext wc) {
+                if (wc.raycast() instanceof BlockHitResult bHit) {
+                    target = bHit.getBlockPos().relative(bHit.getDirection());
+                    if (c.source.getCastLevel(wc) == 1 || wc.caster.isCrouching()) {
+                        if (canPlace(c.level, target))
                             cost.getAndAdd(config.get("auraCostPerBlock"));
-                    });
+                    } else {
+                        AOEHelpers.streamAOE(target, bHit.getDirection(), getRadius(c.source.getCastLevel(wc))).forEach(pos -> {
+                            if (c.aura.getAura() - cost.get() <= 0)
+                                return;
+
+                            if (canPlace(c.level, pos))
+                                cost.getAndAdd(config.get("auraCostPerBlock"));
+                        });
+                    }
+                } else {
+                    return 0;
                 }
-            } else {
-                return 0;
+            } else if (canPlace(c.level, target)) {
+                cost.getAndAdd(config.get("auraCostPerBlock"));
             }
-        } else if (canPlace(c.level, target)) {
-            cost.getAndAdd(config.get("auraCostPerBlock"));
+
+            return cost.get();
         }
 
-        return cost.get();
+        return 0;
     }
 
     @Override
@@ -71,50 +70,51 @@ public class SpellBuilding extends AbstractSpell {
         if (c.level.isClientSide)
             return CastResult.SUCCESS;
 
-        AtomicInteger cost = new AtomicInteger(0);
-        BlockPos target = c.getTarget();
-        if (target == null)
-            return CastResult.FAILED;
+        if (c.target.type() == CastTarget.Type.BLOCK) {
+            AtomicInteger cost = new AtomicInteger(0);
+            BlockPos target = ((BlockPos) c.target.value());
+            BlockState toPlace = BuiltInRegistries.BLOCK.get(ResourceLocation.of(config.get("defaultBlock"), ':')).defaultBlockState();
 
-        BlockState toPlace = BuiltInRegistries.BLOCK.get(ResourceLocation.of(config.get("defaultBlock"), ':')).defaultBlockState();
+            if (c instanceof CastContext.WandContext wc) {
+                ItemStack offStack = wc.caster.getMainHandItem() == wc.castingStack
+                        ? wc.caster.getOffhandItem()
+                        : wc.caster.getMainHandItem();
+                AtomicBoolean usingOffStack = new AtomicBoolean(false);
 
-        if (c instanceof CastContext.WandContext wc) {
-            ItemStack offStack = wc.caster.getMainHandItem() == wc.castingStack
-                    ? wc.caster.getOffhandItem()
-                    : wc.caster.getMainHandItem();
-            AtomicBoolean usingOffStack = new AtomicBoolean(false);
+                if (!offStack.isEmpty() && offStack.getItem() instanceof BlockItem bi) {
+                    toPlace = bi.getBlock().defaultBlockState();
+                    usingOffStack.set(true);
+                }
 
-            if (!offStack.isEmpty() && offStack.getItem() instanceof BlockItem bi) {
-                toPlace = bi.getBlock().defaultBlockState();
-                usingOffStack.set(true);
-            }
-
-            if (wc.raycast() instanceof BlockHitResult bHit) {
-                target = bHit.getBlockPos().relative(bHit.getDirection());
-                if (c.source.getCastLevel(wc) == 1 || wc.caster.isCrouching()) {
-                    if (tryPlace(c.level, target, toPlace))
-                        cost.getAndAdd(config.get("auraCostPerBlock"));
-                } else {
-                    BlockState finalToPlace = toPlace;
-                    AOEHelpers.streamAOE(target, bHit.getDirection(), getRadius(c.source.getCastLevel(wc))).forEach(pos -> {
-                        if (c.aura.getAura() - cost.get() <= 0 || (usingOffStack.get() && offStack.isEmpty()))
-                            return;
-
-                        if (tryPlace(c.level, pos, finalToPlace)) {
+                if (wc.raycast() instanceof BlockHitResult bHit) {
+                    target = bHit.getBlockPos().relative(bHit.getDirection());
+                    if (c.source.getCastLevel(wc) == 1 || wc.caster.isCrouching()) {
+                        if (tryPlace(c.level, target, toPlace))
                             cost.getAndAdd(config.get("auraCostPerBlock"));
-                            if (usingOffStack.get() && !wc.caster.isCreative())
-                                offStack.shrink(1);
-                        }
-                    });
+                    } else {
+                        BlockState finalToPlace = toPlace;
+                        AOEHelpers.streamAOE(target, bHit.getDirection(), getRadius(c.source.getCastLevel(wc))).forEach(pos -> {
+                            if (c.aura.getAura() - cost.get() <= 0 || (usingOffStack.get() && offStack.isEmpty()))
+                                return;
+
+                            if (tryPlace(c.level, pos, finalToPlace)) {
+                                cost.getAndAdd(config.get("auraCostPerBlock"));
+                                if (usingOffStack.get() && !wc.caster.isCreative())
+                                    offStack.shrink(1);
+                            }
+                        });
+                    }
+                } else {
+                    return CastResult.FAILED;
                 }
             } else {
-                return CastResult.FAILED;
+                tryPlace(c.level, target, toPlace);
             }
-        } else {
-            tryPlace(c.level, target, toPlace);
+
+            return CastResult.SUCCESS;
         }
 
-        return CastResult.SUCCESS;
+        return CastResult.FAILED;
     }
 
     private static boolean canPlace(Level level, BlockPos pos) {

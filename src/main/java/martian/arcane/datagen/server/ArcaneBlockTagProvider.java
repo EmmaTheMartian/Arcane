@@ -64,5 +64,11 @@ public class ArcaneBlockTagProvider extends BlockTagsProvider {
                 .add(FADING_LARIMAR_BLOCK.get())
                 .add(FADED_LARIMAR_BLOCK.get())
                 .add(AURACHALCUM_BLOCK.get());
+
+        tag(ArcaneTags.MIXING_CAULDRONS)
+                .add(Blocks.CAULDRON)
+                .add(Blocks.WATER_CAULDRON)
+                .add(Blocks.LAVA_CAULDRON)
+                .add(Blocks.POWDER_SNOW_CAULDRON);
     }
 }

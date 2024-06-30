@@ -1,0 +1,22 @@
+{
+  "type": "arcane:pedestal",
+  "consumeInteractionItem": true,
+  "input": {
+    "item": "arcane:spell_tablet"
+  },
+  "interactionItem": {
+    "item": "minecraft:stick"
+  },
+  "results": [
+    {
+      "chance": 1.0,
+      "stack": {
+        "components": {
+          "arcane:spell": "arcane:mixing"
+        },
+        "count": 1,
+        "id": "arcane:spell_tablet"
+      }
+    }
+  ]
+}

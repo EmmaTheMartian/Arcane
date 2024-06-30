@@ -1,0 +1,27 @@
+{
+  "type": "arcane:cauldron_mixing",
+  "cauldron": {
+    "block": "minecraft:water_cauldron"
+  },
+  "fluidAmount": 1,
+  "inputs": [
+    {
+      "item": "arcane:rough_larimar"
+    },
+    {
+      "item": "minecraft:gravel"
+    },
+    {
+      "item": "minecraft:gravel"
+    }
+  ],
+  "results": [
+    {
+      "chance": 1.0,
+      "stack": {
+        "count": 1,
+        "id": "arcane:smooth_larimar"
+      }
+    }
+  ]
+}

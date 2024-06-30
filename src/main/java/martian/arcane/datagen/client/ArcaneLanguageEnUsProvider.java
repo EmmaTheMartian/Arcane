@@ -55,15 +55,21 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
         addItem(UPGRADE_KIT_LARIMAR, "Larimar Machine Parts");
         addItem(UPGRADE_KIT_AURACHALCUM, "Aurachalcum Machine Parts");
 
-        addItem(RAW_LARIMAR, "Raw Larimar");
-        addItem(CUT_LARIMAR, "Cut Larimar");
-        addItem(POLISHED_LARIMAR, "Polished Larimar");
-        addItem(FADED_RAW_LARIMAR, "Faded Raw Larimar");
-        addItem(FADED_CUT_LARIMAR, "Faded Cut Larimar");
-        addItem(FADED_POLISHED_LARIMAR, "Faded Polished Larimar");
-        addItem(RAW_IDOCRASE, "Raw Idocrase");
-        addItem(CUT_IDOCRASE, "Cut Idocrase");
-        addItem(POLISHED_IDOCRASE, "Polished Idocrase");
+        addItem(LARIMAR.rough(), "Rough Larimar");
+        addItem(LARIMAR.smooth(), "Smooth Larimar");
+        addItem(LARIMAR.sandyPolished(), "Sandy Polished Larimar");
+        addItem(LARIMAR.polished(), "Polished Larimar");
+        addItem(LARIMAR.exquisite(), "Exquisite Larimar");
+        addItem(FADED_LARIMAR.rough(), "Rough Faded Larimar");
+        addItem(FADED_LARIMAR.smooth(), "Smooth Faded Larimar");
+        addItem(FADED_LARIMAR.sandyPolished(), "Sandy Polished Faded Larimar");
+        addItem(FADED_LARIMAR.polished(), "Polished Faded Larimar");
+        addItem(FADED_LARIMAR.exquisite(), "Exquisite Faded Larimar");
+        addItem(IDOCRASE.rough(), "Rough Idocrase");
+        addItem(IDOCRASE.smooth(), "Smooth Idocrase");
+        addItem(IDOCRASE.sandyPolished(), "Sandy Polished Idocrase");
+        addItem(IDOCRASE.polished(), "Polished Idocrase");
+        addItem(IDOCRASE.exquisite(), "Exquisite Idocrase");
         addItem(RAW_AURACHALCUM, "Raw Aurachalcum");
         addItem(AURACHALCUM, "Aurachalcum");
         addItem(ELDRITCH_ALLOY, "Eldritch Alloy");
@@ -204,6 +210,9 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
         add("spell.arcane.activator.name", "Activation");
         add("spell.arcane.preservation.name", "Preservation");
         add("spell.arcane.lighting.name", "Lighting");
+        add("spell.arcane.conjure_water.name", "Conjure Water");
+        add("spell.arcane.freezing.name", "Freezing");
+        add("spell.arcane.smelting.name", "Smelting");
 
         add("spell.arcane.hammering.name.item", "Arcane Hammer");
         add("spell.arcane.breaking.name.item", "Arcane Pickaxe");
@@ -215,6 +224,9 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
         add("spell.arcane.activator.name.item", "Arcane Activation");
         add("spell.arcane.preservation.name.item", "Arcane Preservation");
         add("spell.arcane.lighting.name.item", "Arcane Torch");
+        add("spell.arcane.conjure_water.item", "Arcane Bucket");
+        add("spell.arcane.freezing.item", "Arcane Freezing");
+        add("spell.arcane.smelting.item", "Arcane Smelting");
 
         // Machine tiers
         add("arcane.machine_tier.arcane.copper.name", "Copper");

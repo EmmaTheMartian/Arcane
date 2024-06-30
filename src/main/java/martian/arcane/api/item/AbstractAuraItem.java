@@ -10,7 +10,6 @@ import net.minecraft.util.FastColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -39,7 +38,7 @@ public abstract class AbstractAuraItem extends Item {
     }
 
     // Aura storage
-    public AuraRecord getAuraStorage(@NotNull ItemStack stack) {
+    public AuraRecord getAuraStorage(ItemStack stack) {
         return AuraStorage.getOrCreate(stack, this::getDefaultAuraRecord);
     }
 
@@ -51,18 +50,14 @@ public abstract class AbstractAuraItem extends Item {
         stack.set(ArcaneContent.DC_AURA, new AuraRecord(func.apply(getAuraStorage(stack).unfreeze())));
     }
 
-    public boolean canExtractFrom(ItemStack stack) {
-        return mapAuraStorage(stack, AuraRecord::canExtract);
-    }
-
     // Durability bar thingy
     @Override
-    public boolean isBarVisible(@NotNull ItemStack stack) {
+    public boolean isBarVisible(ItemStack stack) {
         return true;
     }
 
     @Override
-    public int getBarWidth(@NotNull ItemStack stack) {
+    public int getBarWidth(ItemStack stack) {
         return Math.round(mapAuraStorage(stack, aura -> aura.aura() * 13.0F / aura.maxAura()));
     }
 
@@ -70,7 +65,7 @@ public abstract class AbstractAuraItem extends Item {
     private static final int colorLowAura = FastColor.ARGB32.color(255, 50, 155, 255);
 
     @Override
-    public int getBarColor(@NotNull ItemStack stack) {
+    public int getBarColor(ItemStack stack) {
         return mapAuraStorage(stack, aura -> (float)aura.aura() / aura.maxAura() >= 0.5F ? colorHighAura : colorLowAura);
     }
 
