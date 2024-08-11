@@ -29,7 +29,7 @@ public class BlockEntityAuraInfuser extends AbstractAuraBlockEntityWithSingleIte
     public boolean isActive = false;
 
     public BlockEntityAuraInfuser(BlockPos pos, BlockState state) {
-        super(ArcaneConfig.auraInfuserAuraCapacity, false, true, ArcaneContent.AURA_INFUSER.tile().get(), pos, state);
+        super(ArcaneConfig.auraInfuserAuraCapacity, false, true, ArcaneContent.BE_AURA_INFUSER.tile().get(), pos, state);
     }
 
     @Override

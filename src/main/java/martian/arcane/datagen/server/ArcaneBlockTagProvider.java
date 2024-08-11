@@ -38,21 +38,18 @@ public class ArcaneBlockTagProvider extends BlockTagsProvider {
         });
 
         tag(BlockTags.NEEDS_STONE_TOOL)
-                .add(LARIMAR_ORE.get())
-                .add(FADING_LARIMAR_ORE.get())
-                .add(FADED_LARIMAR_ORE.get())
-                .add(DEEPSLATE_LARIMAR_ORE.get())
-                .add(FADING_DEEPSLATE_LARIMAR_ORE.get())
-                .add(FADED_DEEPSLATE_LARIMAR_ORE.get());
+                .add(BLOCK_LARIMAR_ORE.get())
+                .add(BLOCK_FADING_LARIMAR_ORE.get())
+                .add(BLOCK_FADED_LARIMAR_ORE.get())
+                .add(BLOCK_DEEPSLATE_LARIMAR_ORE.get())
+                .add(BLOCK_FADING_DEEPSLATE_LARIMAR_ORE.get())
+                .add(BLOCK_FADED_DEEPSLATE_LARIMAR_ORE.get());
 
         tag(BlockTags.NEEDS_IRON_TOOL)
-                .add(LARIMAR_BLOCK.get())
-                .add(FADING_LARIMAR_ORE.get())
-                .add(FADED_LARIMAR_BLOCK.get())
-                .add(AURACHALCUM_BLOCK.get());
-
-        tag(ArcaneTags.AURA_BASINS)
-                .add(AURA_BASIN.block().get());
+                .add(BLOCK_LARIMAR.get())
+                .add(BLOCK_FADING_LARIMAR_ORE.get())
+                .add(BLOCK_FADED_LARIMAR.get())
+                .add(BLOCK_AURACHALCUM.get());
 
         tag(ArcaneTags.BLOCKS_AURA_FLOW)
                 .add(Blocks.COPPER_BLOCK)
@@ -60,10 +57,10 @@ public class ArcaneBlockTagProvider extends BlockTagsProvider {
                 .add(Blocks.CUT_COPPER)
                 .add(Blocks.WAXED_CUT_COPPER)
                 .add(Blocks.RAW_COPPER_BLOCK)
-                .add(LARIMAR_BLOCK.get())
-                .add(FADING_LARIMAR_BLOCK.get())
-                .add(FADED_LARIMAR_BLOCK.get())
-                .add(AURACHALCUM_BLOCK.get());
+                .add(BLOCK_LARIMAR.get())
+                .add(BLOCK_FADING_LARIMAR.get())
+                .add(BLOCK_FADED_LARIMAR.get())
+                .add(BLOCK_AURACHALCUM.get());
 
         tag(ArcaneTags.MIXING_CAULDRONS)
                 .add(Blocks.CAULDRON)

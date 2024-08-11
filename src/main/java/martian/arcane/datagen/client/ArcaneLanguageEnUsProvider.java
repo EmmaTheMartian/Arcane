@@ -15,78 +15,66 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
     protected void addTranslations() {
         // Tabs
         add("itemGroup.arcane.arcane_tab", "Arcane");
-        add("itemGroup.arcane.arcane_spells_tab", "Arcane (Spells)");
+        add("itemGroup.arcane.arcane_spells_tab", "Arcane (Spells & Pigments)");
 
         // Items
-        addItem(AURAGLASS_BOTTLE, "Auraglass Bottle");
-        addItem(MEDIUM_AURAGLASS_BOTTLE, "Medium Auraglass Bottle");
-        addItem(LARGE_AURAGLASS_BOTTLE, "Large Auraglass Bottle");
-        addItem(EXTREME_AURAGLASS_BOTTLE, "Extreme Auraglass Bottle");
+        addItem(ITEM_AURAGLASS_BOTTLE, "Auraglass Bottle");
+        addItem(ITEM_MEDIUM_AURAGLASS_BOTTLE, "Medium Auraglass Bottle");
+        addItem(ITEM_LARGE_AURAGLASS_BOTTLE, "Large Auraglass Bottle");
+        addItem(ITEM_EXTREME_AURAGLASS_BOTTLE, "Extreme Auraglass Bottle");
         add("item.arcane.creative_auraglass_bottle", "Creative Auraglass Bottle");
 
-        addItem(WAND_ACACIA, "Acacia Wand");
-        addItem(WAND_BAMBOO, "Bamboo Wand");
-        addItem(WAND_BIRCH, "Birch Wand");
-        addItem(WAND_CHERRY, "Cherry Wand");
-        addItem(WAND_DARK_OAK, "Dark Oak Wand");
-        addItem(WAND_JUNGLE, "Jungle Wand");
-        addItem(WAND_MANGROVE, "Mangrove Wand");
-        addItem(WAND_OAK, "Oak Wand");
-        addItem(WAND_SPRUCE, "Spruce Wand");
-        addItem(WAND_WARPED, "Warped Wand");
-        addItem(WAND_CRIMSON, "Crimson Wand");
-        addItem(WAND_COPPER, "Copper Wand");
-        addItem(WAND_LARIMAR, "Larimar Wand");
-        addItem(WAND_AURACHALCUM, "Aurachalcum Wand");
-        addItem(WAND_ELDRITCH, "Eldritch Wand");
-        addItem(WANDBOOK, "Wandbook");
+        addItem(ITEM_WAND, "Wand");
+        addItem(ITEM_WANDBOOK, "Wandbook");
+        addItem(ITEM_CHAINWAND, "Chainwand");
 
-        addItem(AURAOMETER, "Auraometer");
-        addItem(AURA_WRENCH, "Aurawrench");
-        addItem(AURA_CONFIGURATOR, "Configaurator");
-        addItem(AURA_MULTITOOL, "Aura Multitool");
-        addItem(SPELL_TABLET, "Spell Tablet");
-        addItem(SPELL_CHALK, "Spell Chalk");
-        addItem(ARCANE_BLEACH, "Arcane Bleach");
-        addItem(ENDERPACK, "Enderpack");
-        addItem(AXOBOTTLE, "Axobottle");
-        addItem(GEM_SAW, "Gem Saw");
-        addItem(UPGRADE_KIT_COPPER, "Copper Machine Parts");
-        addItem(UPGRADE_KIT_LARIMAR, "Larimar Machine Parts");
-        addItem(UPGRADE_KIT_AURACHALCUM, "Aurachalcum Machine Parts");
+        addItem(ITEM_AURAOMETER, "Auraometer");
+        addItem(ITEM_AURA_WRENCH, "Aurawrench");
+        addItem(ITEM_AURA_CONFIGURATOR, "Configaurator");
+        addItem(ITEM_AURA_MULTITOOL, "Aura Multitool");
+        addItem(ITEM_SPELL_TABLET, "Spell Tablet");
+        addItem(ITEM_SPELL_CHALK, "Spell Chalk");
+        addItem(ITEM_ARCANE_BLEACH, "Arcane Bleach");
+        addItem(ITEM_ENDERPACK, "Enderpack");
+        addItem(ITEM_AXOBOTTLE, "Axobottle");
+        addItem(ITEM_GEM_SAW, "Gem Saw");
+        addItem(ITEM_UPGRADE_KIT_COPPER, "Copper Machine Parts");
+        addItem(ITEM_UPGRADE_KIT_LARIMAR, "Larimar Machine Parts");
+        addItem(ITEM_UPGRADE_KIT_AURACHALCUM, "Aurachalcum Machine Parts");
+        addItem(ITEM_ARCANE_PIGMENT, "Arcane Pigment");
 
-        addItem(LARIMAR.rough(), "Rough Larimar");
-        addItem(LARIMAR.smooth(), "Smooth Larimar");
-        addItem(LARIMAR.sandyPolished(), "Sandy Polished Larimar");
-        addItem(LARIMAR.polished(), "Polished Larimar");
-        addItem(LARIMAR.exquisite(), "Exquisite Larimar");
-        addItem(FADED_LARIMAR.rough(), "Rough Faded Larimar");
-        addItem(FADED_LARIMAR.smooth(), "Smooth Faded Larimar");
-        addItem(FADED_LARIMAR.sandyPolished(), "Sandy Polished Faded Larimar");
-        addItem(FADED_LARIMAR.polished(), "Polished Faded Larimar");
-        addItem(FADED_LARIMAR.exquisite(), "Exquisite Faded Larimar");
-        addItem(IDOCRASE.rough(), "Rough Idocrase");
-        addItem(IDOCRASE.smooth(), "Smooth Idocrase");
-        addItem(IDOCRASE.sandyPolished(), "Sandy Polished Idocrase");
-        addItem(IDOCRASE.polished(), "Polished Idocrase");
-        addItem(IDOCRASE.exquisite(), "Exquisite Idocrase");
-        addItem(RAW_AURACHALCUM, "Raw Aurachalcum");
-        addItem(AURACHALCUM, "Aurachalcum");
-        addItem(ELDRITCH_ALLOY, "Eldritch Alloy");
-        addItem(COPPER_CORE, "Copper Focus");
-        addItem(LARIMAR_CORE, "Larimar Focus");
-        addItem(AURACHALCUM_CORE, "Aurachalcum Focus");
-        addItem(ELDRITCH_CORE, "Eldritch Focus");
-        addItem(SPELL_CIRCLE_CORE, "Spell Circle Focus");
-        addItem(AURAGLASS_SHARD, "Auraglass Shard");
-        addItem(AURAGLASS_DUST, "Auraglass Dust");
+        addItem(ITEMS_LARIMAR.rough(), "Rough Larimar");
+        addItem(ITEMS_LARIMAR.smooth(), "Smooth Larimar");
+        addItem(ITEMS_LARIMAR.sandyPolished(), "Sandy Polished Larimar");
+        addItem(ITEMS_LARIMAR.polished(), "Polished Larimar");
+        addItem(ITEMS_LARIMAR.exquisite(), "Exquisite Larimar");
+        addItem(ITEMS_FADED_LARIMAR.rough(), "Rough Faded Larimar");
+        addItem(ITEMS_FADED_LARIMAR.smooth(), "Smooth Faded Larimar");
+        addItem(ITEMS_FADED_LARIMAR.sandyPolished(), "Sandy Polished Faded Larimar");
+        addItem(ITEMS_FADED_LARIMAR.polished(), "Polished Faded Larimar");
+        addItem(ITEMS_FADED_LARIMAR.exquisite(), "Exquisite Faded Larimar");
+        addItem(ITEMS_IDOCRASE.rough(), "Rough Idocrase");
+        addItem(ITEMS_IDOCRASE.smooth(), "Smooth Idocrase");
+        addItem(ITEMS_IDOCRASE.sandyPolished(), "Sandy Polished Idocrase");
+        addItem(ITEMS_IDOCRASE.polished(), "Polished Idocrase");
+        addItem(ITEMS_IDOCRASE.exquisite(), "Exquisite Idocrase");
+        addItem(ITEM_RAW_AURACHALCUM, "Raw Aurachalcum");
+        addItem(ITEM_AURACHALCUM, "Aurachalcum");
+        addItem(ITEM_ELDRITCH_ALLOY, "Eldritch Alloy");
+        addItem(ITEM_COPPER_CORE, "Copper Focus");
+        addItem(ITEM_LARIMAR_CORE, "Larimar Focus");
+        addItem(ITEM_AURACHALCUM_CORE, "Aurachalcum Focus");
+        addItem(ITEM_ELDRITCH_CORE, "Eldritch Focus");
+        addItem(ITEM_SPELL_CIRCLE_CORE, "Spell Circle Focus");
+        addItem(ITEM_AURAGLASS_SHARD, "Auraglass Shard");
+        addItem(ITEM_AURAGLASS_DUST, "Auraglass Dust");
 
-        addItem(CRUSHED_RAW_COPPER, "Crushed Raw Copper");
-        addItem(CRUSHED_RAW_IRON, "Crushed Raw Iron");
-        addItem(CRUSHED_RAW_GOLD, "Crushed Raw Gold");
-        addItem(PURIFIED_RAW_COPPER, "Purified Raw Copper");
-        addItem(PURIFIED_RAW_IRON, "Purified Raw Iron");
-        addItem(PURIFIED_RAW_GOLD, "Purified Raw Gold");
+        addItem(ITEM_CRUSHED_RAW_COPPER, "Crushed Raw Copper");
+        addItem(ITEM_CRUSHED_RAW_IRON, "Crushed Raw Iron");
+        addItem(ITEM_CRUSHED_RAW_GOLD, "Crushed Raw Gold");
+        addItem(ITEM_PURIFIED_RAW_COPPER, "Purified Raw Copper");
+        addItem(ITEM_PURIFIED_RAW_IRON, "Purified Raw Iron");
+        addItem(ITEM_PURIFIED_RAW_GOLD, "Purified Raw Gold");
 
         add("item.arcane.auraometer.tooltip", "Shows information about blocks that possess Aura when held.");
         add("item.arcane.aura_wrench.tooltip.1", "Used to pair machinery.");
@@ -96,37 +84,38 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
         add("item.arcane.aura_multitool.tooltip.1", "Functions universally as an Auraometer, Aura Wrench, and Configaurator.");
         add("item.arcane.aura_multitool.tooltip.2", "Use while crouching to change modes.");
         add("item.arcane.spell_tablet.tooltip", "Stores the spell inscribed upon it.");
+        add("item.arcane.arcane_pigment.tooltip", "Stores the color palette inscribed upon it.");
 
         // Blocks
-        addBlock(AURA_CONNECTOR.block(), "Aura Connector");
-        addBlock(AURA_BASIN.block(), "Aura Basin");
-        addBlock(AURA_INFUSER.block(), "Aura Infuser");
-        addBlock(PEDESTAL.block(), "Pedestal");
-        addBlock(HEAT_COLLECTOR.block(), "Ignis Collector");
-        addBlock(AQUA_COLLECTOR.block(), "Aqua Collector");
+        addBlock(BE_AURA_CONNECTOR.block(), "Aura Connector");
+        addBlock(BE_AURA_BASIN.block(), "Aura Basin");
+        addBlock(BE_AURA_INFUSER.block(), "Aura Infuser");
+        addBlock(BE_PEDESTAL.block(), "Pedestal");
+        addBlock(BE_HEAT_COLLECTOR.block(), "Ignis Collector");
+        addBlock(BE_AQUA_COLLECTOR.block(), "Aqua Collector");
 
-        addBlock(AURAGLASS, "Auraglass");
-        addBlock(SOUL_MAGMA, "Soul Magma");
+        addBlock(BLOCK_AURAGLASS, "Auraglass");
+        addBlock(BLOCK_SOUL_MAGMA, "Soul Magma");
 
-        addBlock(CONJURED_CRAFTING_TABLE, "Conjured Crafting Table");
-        addBlock(CONJURED_BLOCK, "Conjured Block");
+        addBlock(BLOCK_CONJURED_CRAFTING_TABLE, "Conjured Crafting Table");
+        addBlock(BLOCK_CONJURED_BLOCK, "Conjured Block");
 
-        addBlock(LARIMAR_ORE, "Larimar Ore");
-        addBlock(FADING_LARIMAR_ORE, "Fading Larimar Ore");
-        addBlock(FADED_LARIMAR_ORE, "Faded Larimar Ore");
-        addBlock(DEEPSLATE_LARIMAR_ORE, "Deepslate Larimar Ore");
-        addBlock(FADING_DEEPSLATE_LARIMAR_ORE, "Fading Deepslate Larimar Ore");
-        addBlock(FADED_DEEPSLATE_LARIMAR_ORE, "Faded Deepslate Larimar Ore");
+        addBlock(BLOCK_LARIMAR_ORE, "Larimar Ore");
+        addBlock(BLOCK_FADING_LARIMAR_ORE, "Fading Larimar Ore");
+        addBlock(BLOCK_FADED_LARIMAR_ORE, "Faded Larimar Ore");
+        addBlock(BLOCK_DEEPSLATE_LARIMAR_ORE, "Deepslate Larimar Ore");
+        addBlock(BLOCK_FADING_DEEPSLATE_LARIMAR_ORE, "Fading Deepslate Larimar Ore");
+        addBlock(BLOCK_FADED_DEEPSLATE_LARIMAR_ORE, "Faded Deepslate Larimar Ore");
 
-        addBlock(IDOCRASE_ORE, "Idocrase Ore");
-        addBlock(DEEPSLATE_IDOCRASE_ORE, "Deepslate Idocrase Ore");
-        addBlock(NETHER_IDOCRASE_ORE, "Idocrase Ore");
-        addBlock(BLACKSTONE_IDOCRASE_ORE, "Idocrase-Guilded Blackstone");
+        addBlock(BLOCK_IDOCRASE_ORE, "Idocrase Ore");
+        addBlock(BLOCK_DEEPSLATE_IDOCRASE_ORE, "Deepslate Idocrase Ore");
+        addBlock(BLOCK_NETHER_IDOCRASE_ORE, "Idocrase Ore");
+        addBlock(BLOCK_BLACKSTONE_IDOCRASE_ORE, "Idocrase-Guilded Blackstone");
 
-        addBlock(FADED_LARIMAR_BLOCK, "Faded Larimar Block");
-        addBlock(FADING_LARIMAR_BLOCK, "Fading Larimar Block");
-        addBlock(LARIMAR_BLOCK, "Larimar Block");
-        addBlock(AURACHALCUM_BLOCK, "Aurachalcum Block");
+        addBlock(BLOCK_FADED_LARIMAR, "Faded Larimar Block");
+        addBlock(BLOCK_FADING_LARIMAR, "Fading Larimar Block");
+        addBlock(BLOCK_LARIMAR, "Larimar Block");
+        addBlock(BLOCK_AURACHALCUM, "Aurachalcum Block");
 
         // Messages
         add("messages.arcane.aura", "Aura: ");
@@ -163,9 +152,10 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
         add("messages.arcane.distance_too_far", "Distance too far!");
         add("messages.arcane.unlinked", "Unlinked");
         add("messages.arcane.tier", "Tier: ");
-        add("messages.arcane.holding_n_of_n_wands", "Holding %d/%d max wands");
+        add("messages.arcane.holding_n_of_n_wands", "Holding %d/%d wands");
         add("messages.arcane.spells", "Spells: ");
         add("messages.arcane.spell_disabled", "Spell disabled!");
+        add("messages.arcane.colour", "Color: ");
 
         // GUI
         add("gui.arcane.jei.aura_infusion", "Aura Infusion");
@@ -213,6 +203,10 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
         add("spell.arcane.conjure_water.name", "Conjure Water");
         add("spell.arcane.freezing.name", "Freezing");
         add("spell.arcane.smelting.name", "Smelting");
+        add("spell.arcane.mixing.name", "Mixing");
+        add("spell.arcane.enlarging.name", "Enlarging");
+        add("spell.arcane.shrinking.name", "Shrinking");
+        add("spell.arcane.deploy_elytra.name", "Deploy Elytra");
 
         add("spell.arcane.hammering.name.item", "Arcane Hammer");
         add("spell.arcane.breaking.name.item", "Arcane Pickaxe");
@@ -224,13 +218,22 @@ public class ArcaneLanguageEnUsProvider extends AbstractModonomiconLanguageProvi
         add("spell.arcane.activator.name.item", "Arcane Activation");
         add("spell.arcane.preservation.name.item", "Arcane Preservation");
         add("spell.arcane.lighting.name.item", "Arcane Torch");
-        add("spell.arcane.conjure_water.item", "Arcane Bucket");
-        add("spell.arcane.freezing.item", "Arcane Freezing");
-        add("spell.arcane.smelting.item", "Arcane Smelting");
+        add("spell.arcane.conjure_water.name.item", "Arcane Bucket");
+        add("spell.arcane.freezing.name.item", "Arcane Freezing");
+        add("spell.arcane.smelting.name.item", "Arcane Smelting");
+        add("spell.arcane.mixing.name.item", "Arcane Mixing");
+        add("spell.arcane.enlarging.name.item", "Arcane Enlarging");
+        add("spell.arcane.shrinking.name.item", "Arcane Shrinking");
+        add("spell.arcane.deploy_elytra.name.item", "Arcane Elytra");
 
         // Machine tiers
         add("arcane.machine_tier.arcane.copper.name", "Copper");
         add("arcane.machine_tier.arcane.larimar.name", "Larimar");
         add("arcane.machine_tier.arcane.aurachalcum.name", "Aurachalcum");
+
+        // Pigments
+        add("pigment.arcane.magic", "Magic");
+        add("pigment.arcane.pride", "Pride");
+        add("pigment.arcane.trans", "Trans");
     }
 }

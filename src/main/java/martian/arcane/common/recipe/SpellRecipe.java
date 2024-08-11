@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Optional;
 
-public class SpellRecipe extends SimpleRecipe<SimpleContainer> implements ISpellRecipe {
+public class SpellRecipe extends SimpleRecipe<SingleItemContainer> implements ISpellRecipe {
     private final SpellRecipeType type;
 
     public SpellRecipe(SpellRecipeType type, Ingredient input, NonNullList<RecipeOutput> results) {
@@ -33,7 +33,7 @@ public class SpellRecipe extends SimpleRecipe<SimpleContainer> implements ISpell
         return type;
     }
 
-    public static Optional<RecipeHolder<SpellRecipe>> getRecipeFor(SpellRecipeType type, Level level, SimpleContainer container) {
+    public static Optional<RecipeHolder<SpellRecipe>> getRecipeFor(SpellRecipeType type, Level level, SingleItemContainer container) {
         return getAllRecipes(type, level)
                 .stream()
                 .filter(recipe -> recipe.value().matches(container, level))

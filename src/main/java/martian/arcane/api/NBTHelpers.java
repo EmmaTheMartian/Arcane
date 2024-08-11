@@ -6,8 +6,6 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 
-import java.util.function.BiConsumer;
-
 public final class NBTHelpers {
     public static final String KEY_AURA_PROGRESS = ArcaneMod.MODID + ".auraProgress";
     public static final String KEY_EXTRACTOR_TARGET_POS = ArcaneMod.MODID + ".targetPos";

@@ -46,10 +46,9 @@ public class SpellCircleRenderer implements BlockEntityRenderer<BlockEntitySpell
 
         switch (facing) {
             case UP -> stack.translate( 0.5,  0.9,  0.5);
-            case DOWN -> stack.translate( 0.5, -0.1, -0.5);
+            case DOWN, WEST -> stack.translate( 0.5, -0.1, -0.5);
             case NORTH -> stack.translate(-0.5, -0.1, -0.5);
             case SOUTH -> stack.translate( 0.5,  0.9, -0.5);
-            case WEST -> stack.translate( 0.5, -0.1, -0.5);
             case EAST -> stack.translate(-0.5,  0.9, -0.5);
         }
 

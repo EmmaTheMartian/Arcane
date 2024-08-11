@@ -2,7 +2,7 @@ package martian.arcane.common.recipe;
 
 import martian.arcane.api.item.ItemHelpers;
 import martian.arcane.api.recipe.RecipeOutput;
-import martian.arcane.api.recipe.SimpleContainer;
+import martian.arcane.api.recipe.SingleItemContainer;
 import martian.arcane.api.recipe.SimpleRecipe;
 import martian.arcane.common.block.pedestal.BlockEntityPedestal;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -21,7 +21,7 @@ import java.util.Optional;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class RecipePedestalCrafting extends SimpleRecipe<SimpleContainer> {
+public class RecipePedestalCrafting extends SimpleRecipe<SingleItemContainer> {
     public static final RecipePedestalType TYPE = new RecipePedestalType();
 
     public final Ingredient interactionItem;

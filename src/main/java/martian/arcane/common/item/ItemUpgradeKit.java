@@ -1,7 +1,7 @@
 package martian.arcane.common.item;
 
-import martian.arcane.api.IMachineTierable;
-import martian.arcane.api.MachineTier;
+import martian.arcane.api.machine.IMachineTierable;
+import martian.arcane.api.machine.MachineTier;
 import martian.arcane.api.Raycasting;
 import martian.arcane.api.block.BlockHelpers;
 import net.minecraft.world.InteractionHand;

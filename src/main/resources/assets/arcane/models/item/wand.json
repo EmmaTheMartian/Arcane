@@ -1,0 +1,4 @@
+{
+  "parent": "arcane:item/template_wand",
+  "loader": "arcane:wand"
+}

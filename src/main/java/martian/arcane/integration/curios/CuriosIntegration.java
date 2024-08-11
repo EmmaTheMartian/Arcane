@@ -1,6 +1,6 @@
 package martian.arcane.integration.curios;
 
-import martian.arcane.api.integration.AbstractIntegration;
+import martian.arcane.integration.AbstractIntegration;
 import martian.arcane.common.ArcaneContent;
 import top.theillusivec4.curios.api.CuriosApi;
 
@@ -13,6 +13,6 @@ public class CuriosIntegration extends AbstractIntegration {
 
     @Override
     protected void onLoad() {
-        CuriosApi.registerCurio(ArcaneContent.ENDERPACK.get(), new CurioEnderpack());
+        CuriosApi.registerCurio(ArcaneContent.ITEM_ENDERPACK.get(), new CurioEnderpack());
     }
 }

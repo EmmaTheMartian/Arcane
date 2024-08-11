@@ -52,19 +52,12 @@ public class SpellRecipeBuilder implements RecipeBuilder {
         return this;
     }
 
-    public SpellRecipeBuilder setInput(ItemLike... input) {
-        this.input = Ingredient.of(input);
-        return this;
-    }
-
-    public SpellRecipeBuilder setInput(ItemStack... input) {
-        this.input = Ingredient.of(input);
-        return this;
+    public SpellRecipeBuilder setInput(ItemLike input) {
+        return setInput(Ingredient.of(input));
     }
 
     public SpellRecipeBuilder setInput(TagKey<Item> input) {
-        this.input = Ingredient.of(input);
-        return this;
+        return setInput(Ingredient.of(input));
     }
 
     public SpellRecipeBuilder addResult(RecipeOutput result) {

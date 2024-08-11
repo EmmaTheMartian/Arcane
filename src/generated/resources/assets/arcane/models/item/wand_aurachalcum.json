@@ -1,7 +1,0 @@
-{
-  "parent": "arcane:item/advanced_wand",
-  "textures": {
-    "ring": "arcane:block/larimar_block",
-    "stick": "arcane:block/aurachalcum_block"
-  }
-}

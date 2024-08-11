@@ -6,11 +6,11 @@ import martian.arcane.api.NBTHelpers;
 import martian.arcane.api.block.BlockHelpers;
 import martian.arcane.api.block.entity.AbstractAuraBlockEntity;
 import martian.arcane.api.block.entity.IAuraometerOutput;
+import martian.arcane.api.spell.AbstractSpell;
 import martian.arcane.api.spell.CastContext;
-import martian.arcane.api.spell.CastResult;
 import martian.arcane.api.spell.ICastingSource;
+import martian.arcane.client.particle.MagicParticle;
 import martian.arcane.common.ArcaneContent;
-import martian.arcane.integration.photon.ArcaneFx;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -37,7 +37,7 @@ public class BlockEntitySpellCircle extends AbstractAuraBlockEntity implements I
     private @Nullable ResourceLocation spellId = null;
 
     public BlockEntitySpellCircle(int maxAura, int castRateTicks, int castingLevel, BlockPos pos, BlockState state) {
-        super(maxAura, false, true, ArcaneContent.SPELL_CIRCLE.tile().get(), pos, state);
+        super(maxAura, false, true, ArcaneContent.BE_SPELL_CIRCLE.tile().get(), pos, state);
         this.castRateTicks = castRateTicks;
         this.ticksToNextCast = this.castRateTicks;
         this.castingLevel = castingLevel;
@@ -80,16 +80,11 @@ public class BlockEntitySpellCircle extends AbstractAuraBlockEntity implements I
 
     protected void tick() {
         if (level != null && hasSpell() && isActive && --ticksToNextCast <= 0) {
-            var spell = Objects.requireNonNull(martian.arcane.api.ArcaneRegistries.SPELLS.get(spellId));
-            var con = new CastContext.SpellCircleContext(this);
-            int cost = spell.getAuraCost(con);
-            if (getAura() >= cost) {
-                CastResult result = con.cast(spell);
-                removeAura(cost);
-                if (!result.failed())
-                    ArcaneFx.ON_CAST_GRAVITY.goBlock(level, getBlockPos());
+            AbstractSpell spell = Objects.requireNonNull(ArcaneRegistries.SPELLS.get(spellId));
+            CastContext.SpellCircleContext c = new CastContext.SpellCircleContext(this);
+            if (!c.tryCast(spell).failed()) {
+                MagicParticle.spawn(level, worldPosition.getCenter(), .4f, ArcaneContent.PIGMENT_MAGIC.get());
             }
-
             ticksToNextCast = castRateTicks;
         }
         BlockHelpers.sync(this);

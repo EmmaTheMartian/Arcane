@@ -1,6 +1,6 @@
 package martian.arcane.common.block.generators.heat;
 
-import martian.arcane.api.PropertyHelpers;
+import martian.arcane.api.block.BlockHelpers;
 import martian.arcane.api.block.AbstractAuraMachine;
 import martian.arcane.common.ArcaneContent;
 import net.minecraft.world.level.Level;
@@ -13,12 +13,12 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 public class BlockIgnisCollector extends AbstractAuraMachine {
     public BlockIgnisCollector() {
-        super(PropertyHelpers.basicAuraMachine(), BlockEntityIgnisCollector::new);
+        super(BlockHelpers.basicAuraMachine(), BlockEntityIgnisCollector::new);
     }
 
     @Override
     @ParametersAreNonnullByDefault
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return !level.isClientSide && type == ArcaneContent.HEAT_COLLECTOR.tile().get() ? BlockEntityIgnisCollector::tick : null;
+        return !level.isClientSide && type == ArcaneContent.BE_HEAT_COLLECTOR.tile().get() ? BlockEntityIgnisCollector::tick : null;
     }
 }

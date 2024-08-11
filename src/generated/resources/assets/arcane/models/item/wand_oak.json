@@ -1,6 +1,0 @@
-{
-  "parent": "arcane:item/basic_wand",
-  "textures": {
-    "stick": "minecraft:block/oak_log"
-  }
-}

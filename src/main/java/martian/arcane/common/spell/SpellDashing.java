@@ -5,7 +5,6 @@ import martian.arcane.api.spell.AbstractSpell;
 import martian.arcane.api.spell.CastContext;
 import martian.arcane.api.spell.CastResult;
 import martian.arcane.api.spell.SpellConfig;
-import martian.arcane.integration.photon.ArcaneFx;
 import net.minecraft.world.phys.Vec3;
 
 public class SpellDashing extends AbstractSpell {
@@ -22,25 +21,17 @@ public class SpellDashing extends AbstractSpell {
     }
 
     @Override
-    public int getAuraCost(CastContext c) {
-        return c instanceof CastContext.WandContext ? config.get("auraCost") : 0;
+    public boolean canCastFromContext(CastContext c) {
+        return c instanceof CastContext.WandContext;
     }
 
     @Override
     public CastResult cast(CastContext c) {
-        if (c instanceof CastContext.WandContext wc) {
-            double m = getMultiplier(wc);
-            Vec3 look = wc.caster.getLookAngle().normalize();
-
-            if (!c.level.isClientSide)
-                ArcaneFx.ON_CAST_CONSTANT.goEntity(c.level, wc.caster);
-
-            wc.caster.push(look.x * m, look.y * m, look.z * m);
-
-            return CastResult.SUCCESS;
-        }
-
-        return CastResult.FAILED;
+        CastContext.WandContext wc = ((CastContext.WandContext) c);
+        double m = getMultiplier(wc);
+        Vec3 look = wc.caster.getLookAngle().normalize();
+        wc.caster.push(look.x * m, look.y * m, look.z * m);
+        return CastResult.SUCCESS;
     }
 
     public static double getMultiplier(CastContext context) {

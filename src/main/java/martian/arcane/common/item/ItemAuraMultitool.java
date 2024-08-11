@@ -84,8 +84,8 @@ public class ItemAuraMultitool extends Item implements IAuraConfigurator, IAuraW
         }
 
         return switch (getMode(stack)) {
-            case CONFIGURE -> ArcaneContent.AURA_CONFIGURATOR.get().use(level, player, hand);
-            case WRENCH -> ArcaneContent.AURA_WRENCH.get().use(level, player, hand);
+            case CONFIGURE -> ArcaneContent.ITEM_AURA_CONFIGURATOR.get().use(level, player, hand);
+            case WRENCH -> ArcaneContent.ITEM_AURA_WRENCH.get().use(level, player, hand);
         };
     }
 

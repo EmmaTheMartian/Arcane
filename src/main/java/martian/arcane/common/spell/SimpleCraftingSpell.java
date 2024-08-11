@@ -2,12 +2,11 @@ package martian.arcane.common.spell;
 
 import martian.arcane.api.item.ItemHelpers;
 import martian.arcane.api.recipe.RecipeOutput;
-import martian.arcane.api.recipe.SimpleContainer;
+import martian.arcane.api.recipe.SingleItemContainer;
 import martian.arcane.api.spell.*;
 import martian.arcane.common.block.pedestal.BlockEntityPedestal;
 import martian.arcane.common.recipe.SpellRecipe;
 import martian.arcane.common.recipe.SpellRecipeType;
-import martian.arcane.integration.photon.ArcaneFx;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
@@ -42,7 +41,7 @@ public abstract class SimpleCraftingSpell extends AbstractSpell {
         };
     }
 
-    public static boolean mapRecipeIfExists(SpellRecipeType type, Level level, BlockPos pos, SimpleContainer container, BiConsumer<RecipeHolder<SpellRecipe>, List<ItemStack>> consumer) {
+    public static boolean mapRecipeIfExists(SpellRecipeType type, Level level, BlockPos pos, SingleItemContainer container, BiConsumer<RecipeHolder<SpellRecipe>, List<ItemStack>> consumer) {
         AtomicBoolean didCraft = new AtomicBoolean(false);
         SpellRecipe.getRecipeFor(type, level, container).ifPresent(r -> {
             var stacks = r.value().getRecipeOutput()
@@ -51,7 +50,6 @@ public abstract class SimpleCraftingSpell extends AbstractSpell {
                     .filter(stack -> !stack.isEmpty())
                     .toList();
             consumer.accept(r, stacks);
-            ArcaneFx.ON_CAST_GRAVITY.goBlock(level, pos);
             didCraft.set(true);
         });
         return didCraft.get();
@@ -59,7 +57,7 @@ public abstract class SimpleCraftingSpell extends AbstractSpell {
 
     public static boolean craftUsingBlock(SpellRecipeType type, Level level, BlockPos pos) {
         if (level.getBlockEntity(pos) instanceof BlockEntityPedestal pedestal) {
-            return mapRecipeIfExists(type, level, pos, new SimpleContainer(pedestal.getItem()), (r, stacks) -> {
+            return mapRecipeIfExists(type, level, pos, new SingleItemContainer(pedestal.getItem()), (r, stacks) -> {
                 if (r.value().getRecipeOutput().size() == 1) {
                     pedestal.setItem(stacks.getFirst());
                 } else {
@@ -68,7 +66,7 @@ public abstract class SimpleCraftingSpell extends AbstractSpell {
                 }
             });
         } else {
-            return mapRecipeIfExists(type, level, pos, new SimpleContainer(level.getBlockState(pos).getBlock().asItem().getDefaultInstance()), (r, stacks) -> {
+            return mapRecipeIfExists(type, level, pos, new SingleItemContainer(level.getBlockState(pos).getBlock().asItem().getDefaultInstance()), (r, stacks) -> {
                 level.removeBlock(pos, false);
                 if (stacks.size() == 1 && stacks.getFirst().getItem() instanceof BlockItem bi)
                     level.setBlockAndUpdate(pos, bi.getBlock().defaultBlockState());
@@ -79,7 +77,7 @@ public abstract class SimpleCraftingSpell extends AbstractSpell {
     }
 
     public static boolean craftUsingItemEntity(ItemEntity item, SpellRecipeType type, Level level, BlockPos pos) {
-        return mapRecipeIfExists(type, level, pos, new SimpleContainer(item.getItem()), (r, stacks) -> {
+        return mapRecipeIfExists(type, level, pos, new SingleItemContainer(item.getItem()), (r, stacks) -> {
             item.remove(Entity.RemovalReason.DISCARDED);
 
             if (stacks.size() == 1 && stacks.getFirst().getItem() instanceof BlockItem bi)

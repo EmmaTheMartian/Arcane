@@ -25,79 +25,56 @@ public class ArcaneItemTagProvider extends ItemTagsProvider {
 
     @Override
     public void addTags(@NotNull HolderLookup.Provider provider) {
-        tag(ArcaneTags.BASIC_WANDS)
-                .add(WAND_ACACIA.get())
-                .add(WAND_BAMBOO.get())
-                .add(WAND_BIRCH.get())
-                .add(WAND_CHERRY.get())
-                .add(WAND_DARK_OAK.get())
-                .add(WAND_JUNGLE.get())
-                .add(WAND_MANGROVE.get())
-                .add(WAND_OAK.get())
-                .add(WAND_SPRUCE.get())
-                .add(WAND_WARPED.get())
-                .add(WAND_CRIMSON.get())
-                .add(WAND_COPPER.get());
-
-        tag(ArcaneTags.ADVANCED_WANDS)
-                .add(WAND_LARIMAR.get());
-
-        tag(ArcaneTags.MYSTICAL_WANDS)
-                .add(WAND_AURACHALCUM.get())
-                .add(WAND_ELDRITCH.get());
-
         tag(ArcaneTags.WANDS)
-                .addTag(ArcaneTags.BASIC_WANDS)
-                .addTag(ArcaneTags.ADVANCED_WANDS)
-                .addTag(ArcaneTags.MYSTICAL_WANDS);
+                .add(ITEM_WAND.get());
 
         tag(ArcaneTags.CRUSHED_DUSTS)
-                .add(CRUSHED_RAW_COPPER.get())
-                .add(CRUSHED_RAW_IRON.get())
-                .add(CRUSHED_RAW_GOLD.get());
+                .add(ITEM_CRUSHED_RAW_COPPER.get())
+                .add(ITEM_CRUSHED_RAW_IRON.get())
+                .add(ITEM_CRUSHED_RAW_GOLD.get());
 
         tag(ArcaneTags.PURIFIED_DUSTS)
-                .add(PURIFIED_RAW_COPPER.get())
-                .add(PURIFIED_RAW_IRON.get())
-                .add(PURIFIED_RAW_GOLD.get());
+                .add(ITEM_PURIFIED_RAW_COPPER.get())
+                .add(ITEM_PURIFIED_RAW_IRON.get())
+                .add(ITEM_PURIFIED_RAW_GOLD.get());
 
         tag(commonTag("ingots"))
-                .add(ELDRITCH_ALLOY.get());
+                .add(ITEM_ELDRITCH_ALLOY.get());
 
         tag(commonTag("gems"))
-                .add(LARIMAR.rough().get())
-                .add(LARIMAR.smooth().get())
-                .add(LARIMAR.sandyPolished().get())
-                .add(LARIMAR.polished().get())
-                .add(LARIMAR.exquisite().get())
-                .add(FADED_LARIMAR.rough().get())
-                .add(FADED_LARIMAR.smooth().get())
-                .add(FADED_LARIMAR.sandyPolished().get())
-                .add(FADED_LARIMAR.polished().get())
-                .add(FADED_LARIMAR.exquisite().get())
-                .add(IDOCRASE.rough().get())
-                .add(IDOCRASE.smooth().get())
-                .add(IDOCRASE.sandyPolished().get())
-                .add(IDOCRASE.polished().get())
-                .add(IDOCRASE.exquisite().get())
-                .add(RAW_AURACHALCUM.get())
-                .add(AURACHALCUM.get());
+                .add(ITEMS_LARIMAR.rough().get())
+                .add(ITEMS_LARIMAR.smooth().get())
+                .add(ITEMS_LARIMAR.sandyPolished().get())
+                .add(ITEMS_LARIMAR.polished().get())
+                .add(ITEMS_LARIMAR.exquisite().get())
+                .add(ITEMS_FADED_LARIMAR.rough().get())
+                .add(ITEMS_FADED_LARIMAR.smooth().get())
+                .add(ITEMS_FADED_LARIMAR.sandyPolished().get())
+                .add(ITEMS_FADED_LARIMAR.polished().get())
+                .add(ITEMS_FADED_LARIMAR.exquisite().get())
+                .add(ITEMS_IDOCRASE.rough().get())
+                .add(ITEMS_IDOCRASE.smooth().get())
+                .add(ITEMS_IDOCRASE.sandyPolished().get())
+                .add(ITEMS_IDOCRASE.polished().get())
+                .add(ITEMS_IDOCRASE.exquisite().get())
+                .add(ITEM_RAW_AURACHALCUM.get())
+                .add(ITEM_AURACHALCUM.get());
 
         tag(commonTag("dusts"))
                 .addTag(ArcaneTags.CRUSHED_DUSTS)
                 .addTag(ArcaneTags.PURIFIED_DUSTS);
 
         tag(commonTag("dusts/copper"))
-                .add(CRUSHED_RAW_COPPER.get())
-                .add(PURIFIED_RAW_COPPER.get());
+                .add(ITEM_CRUSHED_RAW_COPPER.get())
+                .add(ITEM_PURIFIED_RAW_COPPER.get());
 
         tag(commonTag("dusts/iron"))
-                .add(CRUSHED_RAW_IRON.get())
-                .add(PURIFIED_RAW_IRON.get());
+                .add(ITEM_CRUSHED_RAW_IRON.get())
+                .add(ITEM_PURIFIED_RAW_IRON.get());
 
         tag(commonTag("dusts/gold"))
-                .add(CRUSHED_RAW_GOLD.get())
-                .add(PURIFIED_RAW_GOLD.get());
+                .add(ITEM_CRUSHED_RAW_GOLD.get())
+                .add(ITEM_PURIFIED_RAW_GOLD.get());
     }
 
     private static TagKey<Item> commonTag(String location) {

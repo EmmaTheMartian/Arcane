@@ -4,8 +4,9 @@ import com.mojang.logging.LogUtils;
 import martian.arcane.api.ArcaneRegistries;
 import martian.arcane.client.ArcaneClient;
 import martian.arcane.common.ArcaneContent;
-import martian.arcane.common.networking.c2s.C2SOpenEnderpackPayload;
+import martian.arcane.common.networking.c2s.C2SOpenEnderpack;
 import martian.arcane.common.networking.c2s.C2SSetSelectionComponent;
+import martian.arcane.common.networking.c2s.C2SUpdateWandTexture;
 import martian.arcane.common.networking.s2c.S2CSyncAuraAttachment;
 import martian.arcane.datagen.ArcaneDatagen;
 import martian.arcane.integration.ArcaneIntegrations;
@@ -45,19 +46,24 @@ public class ArcaneMod {
 
         modBus.addListener(FMLCommonSetupEvent.class, event -> {
             CuriosIntegration.INSTANCE.load();
-            ArcaneIntegrations.PHOTON.load();
             ArcaneIntegrations.KUBEJS.load();
             ArcaneIntegrations.PEHKUI.load();
         });
 
         modBus.addListener(RegisterPayloadHandlersEvent.class, event -> {
             final PayloadRegistrar registrar = event.registrar("1");
-            registrar.playToServer(C2SOpenEnderpackPayload.TYPE, C2SOpenEnderpackPayload.CODEC, C2SOpenEnderpackPayload::handler);
+
+            registrar.playToServer(C2SOpenEnderpack.TYPE, C2SOpenEnderpack.CODEC, C2SOpenEnderpack::handler);
             registrar.playToServer(C2SSetSelectionComponent.TYPE, C2SSetSelectionComponent.CODEC, C2SSetSelectionComponent::handler);
+            registrar.playToServer(C2SUpdateWandTexture.TYPE, C2SUpdateWandTexture.CODEC, C2SUpdateWandTexture::handler);
+
             registrar.playToClient(S2CSyncAuraAttachment.TYPE, S2CSyncAuraAttachment.CODEC, S2CSyncAuraAttachment::handler);
         });
 
-        modBus.addListener(NewRegistryEvent.class, event -> event.register(ArcaneRegistries.SPELLS));
+        modBus.addListener(NewRegistryEvent.class, event -> {
+            event.register(ArcaneRegistries.SPELLS);
+            event.register(ArcaneRegistries.PIGMENTS);
+        });
 
         modBus.addListener(ArcaneDatagen::gatherData);
 
@@ -75,7 +81,7 @@ public class ArcaneMod {
         ignisGenerationAmounts.put(state -> state.is(Blocks.SOUL_FIRE), 2);
         ignisGenerationAmounts.put(state -> state.is(Blocks.SOUL_CAMPFIRE) && state.getValue(CampfireBlock.LIT), 2);
         ignisGenerationAmounts.put(state -> state.is(Blocks.LAVA), 2);
-        ignisGenerationAmounts.put(state -> state.is(ArcaneContent.SOUL_MAGMA.get()), 3);
+        ignisGenerationAmounts.put(state -> state.is(ArcaneContent.BLOCK_SOUL_MAGMA.get()), 3);
     }
 
     public static int getIgnisGenAmountForState(BlockState state) {

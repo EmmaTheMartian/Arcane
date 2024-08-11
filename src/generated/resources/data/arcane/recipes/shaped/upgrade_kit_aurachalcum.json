@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "A": {
+      "item": "arcane:aurachalcum"
+    },
+    "I": {
+      "tag": "c:gems/diamond"
+    },
+    "L": {
+      "item": "arcane:polished_larimar"
+    }
+  },
+  "pattern": [
+    "LAL",
+    "AIA",
+    "LAL"
+  ],
+  "result": {
+    "count": 1,
+    "id": "arcane:upgrade_kit_aurachalcum"
+  }
+}

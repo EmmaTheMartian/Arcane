@@ -1,6 +1,5 @@
 package martian.arcane.common.block.connector;
 
-import martian.arcane.api.PropertyHelpers;
 import martian.arcane.api.block.AbstractAuraMachine;
 import martian.arcane.api.block.BlockHelpers;
 import martian.arcane.api.item.IAuraConfigurator;
@@ -43,7 +42,7 @@ public class BlockAuraConnector extends AbstractAuraMachine {
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
     public BlockAuraConnector() {
-        super(PropertyHelpers.basicAuraMachine().noOcclusion(), BlockEntityAuraConnector::new);
+        super(BlockHelpers.basicAuraMachine().noOcclusion(), BlockEntityAuraConnector::new);
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.DOWN));
     }
 
@@ -75,7 +74,7 @@ public class BlockAuraConnector extends AbstractAuraMachine {
     @Override
     @ParametersAreNonnullByDefault
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return type == ArcaneContent.AURA_CONNECTOR.tile().get() ? BlockEntityAuraConnector::tick : null;
+        return type == ArcaneContent.BE_AURA_CONNECTOR.tile().get() ? BlockEntityAuraConnector::tick : null;
     }
 
     @Override

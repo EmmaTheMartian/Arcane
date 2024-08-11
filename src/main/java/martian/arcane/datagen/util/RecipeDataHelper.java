@@ -26,7 +26,7 @@ public class RecipeDataHelper {
     public boolean moveNamespacesToModid = true;
     public RecipeCategory defaultCategory;
     // Used to add prefixes to recipe IDs based on their provider.
-    public Map<Class<?>, String> prefixesByProvider = new HashMap<>();
+    public final Map<Class<?>, String> prefixesByProvider = new HashMap<>();
 
     public RecipeDataHelper(RecipeOutput writer, String modid, RecipeCategory defaultCategory) {
         this.writer = writer;

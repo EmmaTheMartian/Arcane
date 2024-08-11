@@ -6,7 +6,7 @@ import dev.emi.emi.api.stack.EmiIngredient;
 import dev.emi.emi.api.stack.EmiStack;
 import dev.emi.emi.api.widget.WidgetHolder;
 import martian.arcane.ArcaneMod;
-import martian.arcane.common.item.ItemAuraWand;
+import martian.arcane.common.item.ItemWand;
 import martian.arcane.common.recipe.SpellRecipe;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -24,7 +24,7 @@ public class SpellEmiRecipe extends BasicEmiRecipe {
 
         this.inputs.add(EmiIngredient.of(r.input));
         r.results.forEach(it -> this.outputs.add(EmiStack.of(it.getStack()).setChance(it.getChance())));
-        catalysts.add(EmiStack.of(ItemAuraWand.oakWandOfSpell(spellId)));
+        catalysts.add(EmiStack.of(ItemWand.wandOfSpell(spellId)));
     }
 
     @Override

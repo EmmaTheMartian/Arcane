@@ -10,6 +10,7 @@ import net.minecraft.util.FastColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -52,12 +53,12 @@ public abstract class AbstractAuraItem extends Item {
 
     // Durability bar thingy
     @Override
-    public boolean isBarVisible(ItemStack stack) {
+    public boolean isBarVisible(@NotNull ItemStack stack) {
         return true;
     }
 
     @Override
-    public int getBarWidth(ItemStack stack) {
+    public int getBarWidth(@NotNull ItemStack stack) {
         return Math.round(mapAuraStorage(stack, aura -> aura.aura() * 13.0F / aura.maxAura()));
     }
 
@@ -65,7 +66,7 @@ public abstract class AbstractAuraItem extends Item {
     private static final int colorLowAura = FastColor.ARGB32.color(255, 50, 155, 255);
 
     @Override
-    public int getBarColor(ItemStack stack) {
+    public int getBarColor(@NotNull ItemStack stack) {
         return mapAuraStorage(stack, aura -> (float)aura.aura() / aura.maxAura() >= 0.5F ? colorHighAura : colorLowAura);
     }
 

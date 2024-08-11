@@ -2,7 +2,7 @@ package martian.arcane.common.recipe;
 
 import martian.arcane.api.item.ItemHelpers;
 import martian.arcane.api.recipe.RecipeOutput;
-import martian.arcane.api.recipe.SimpleContainer;
+import martian.arcane.api.recipe.SingleItemContainer;
 import martian.arcane.api.recipe.SimpleRecipe;
 import martian.arcane.common.block.infuser.BlockEntityAuraInfuser;
 import net.minecraft.MethodsReturnNonnullByDefault;
@@ -96,7 +96,7 @@ public class RecipeAuraInfusion extends SimpleRecipe<RecipeAuraInfusion.Containe
         return level.getRecipeManager().getAllRecipesFor(TYPE);
     }
 
-    public static class Container extends SimpleContainer {
+    public static class Container extends SingleItemContainer {
         public final int aura;
 
         public Container(ItemStack item, int aura) {

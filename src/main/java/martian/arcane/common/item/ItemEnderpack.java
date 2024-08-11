@@ -5,7 +5,7 @@ import martian.arcane.ArcaneConfig;
 import martian.arcane.api.aura.AuraRecord;
 import martian.arcane.api.item.AbstractAuraItem;
 import martian.arcane.client.ArcaneKeybindings;
-import martian.arcane.common.networking.c2s.C2SOpenEnderpackPayload;
+import martian.arcane.common.networking.c2s.C2SOpenEnderpack;
 import net.minecraft.network.chat.Component;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -57,7 +57,7 @@ public class ItemEnderpack extends AbstractAuraItem {
 
     public void tick(Entity entity) {
         if (entity.level().isClientSide && entity instanceof Player && ArcaneKeybindings.OPEN_ENDERPACK.get().consumeClick())
-            PacketDistributor.sendToServer(new C2SOpenEnderpackPayload());
+            PacketDistributor.sendToServer(new C2SOpenEnderpack());
     }
 
     @ParametersAreNonnullByDefault

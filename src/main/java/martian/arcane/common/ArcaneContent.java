@@ -1,20 +1,22 @@
 package martian.arcane.common;
 
-import com.google.common.collect.ImmutableList;
 import com.klikli_dev.modonomicon.registry.DataComponentRegistry;
 import com.mojang.serialization.Codec;
 import martian.arcane.ArcaneConfig;
 import martian.arcane.ArcaneMod;
 import martian.arcane.api.ArcaneRegistries;
-import martian.arcane.api.MachineTier;
+import martian.arcane.api.colour.ColourPalette;
+import martian.arcane.api.colour.UnpackedColour;
+import martian.arcane.api.machine.MachineTier;
 import martian.arcane.api.aura.AuraRecord;
 import martian.arcane.api.aura.AuraStorage;
 import martian.arcane.api.block.BasicLarimarBlock;
 import martian.arcane.api.item.AbstractAuraItem;
 import martian.arcane.api.recipe.ArcaneRecipeType;
 import martian.arcane.api.spell.AbstractSpell;
-import martian.arcane.common.spell.SimpleCraftingSpell;
-import martian.arcane.api.spell.WandbookDataRecord;
+import martian.arcane.api.wand.WandData;
+import martian.arcane.common.particle.MagicParticleType;
+import martian.arcane.api.wand.WandbookData;
 import martian.arcane.client.ParticleHelper;
 import martian.arcane.common.block.BlockAuraTorch;
 import martian.arcane.common.block.BlockConjuredCraftingTable;
@@ -39,6 +41,7 @@ import martian.arcane.common.spell.*;
 import martian.arcane.integration.ArcaneIntegrations;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -62,9 +65,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import java.util.function.UnaryOperator;
+import java.util.Map;
+import java.util.function.*;
 
 import static martian.arcane.ArcaneMod.id;
 
@@ -72,143 +74,58 @@ import static martian.arcane.ArcaneMod.id;
 public class ArcaneContent {
     public static final DeferredRegister.Blocks BLOCKS = DeferredRegister.createBlocks(ArcaneMod.MODID);
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(BuiltInRegistries.BLOCK_ENTITY_TYPE, ArcaneMod.MODID);
-    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(ArcaneMod.MODID);
     public static final DeferredRegister<AttachmentType<?>> DATA_ATTACHMENTS = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, ArcaneMod.MODID);
     public static final DeferredRegister<DataComponentType<?>> DATA_COMPONENTS = DeferredRegister.createDataComponents(ArcaneMod.MODID);
+    public static final DeferredRegister.Items ITEMS = DeferredRegister.createItems(ArcaneMod.MODID);
     public static final DeferredRegister<RecipeSerializer<?>> RECIPE_SERIALIZERS = DeferredRegister.create(BuiltInRegistries.RECIPE_SERIALIZER, ArcaneMod.MODID);
     public static final DeferredRegister<RecipeType<?>> RECIPE_TYPES = DeferredRegister.create(BuiltInRegistries.RECIPE_TYPE, ArcaneMod.MODID);
     public static final DeferredRegister<AbstractSpell> SPELLS = DeferredRegister.create(ArcaneRegistries.SPELLS, ArcaneMod.MODID);
     public static final DeferredRegister<CreativeModeTab> TABS = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, ArcaneMod.MODID);
+    public static final DeferredRegister<ParticleType<?>> PARTICLE_TYPES = DeferredRegister.create(Registries.PARTICLE_TYPE, ArcaneMod.MODID);
+    public static final DeferredRegister<ColourPalette> PIGMENTS = DeferredRegister.create(ArcaneRegistries.PIGMENTS, ArcaneMod.MODID);
 
 
     // Blocks
     public static final DeferredBlock<?>
-        AURAGLASS = block("auraglass", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).noOcclusion())),
-        SOUL_MAGMA = block("soul_magma", BlockSoulMagma::new),
-        AURA_TORCH = block("aura_torch", () -> new BlockAuraTorch(ParticleHelper.MAGIC_PARTICLE_OPTIONS, BlockBehaviour.Properties.ofFullCopy(Blocks.TORCH).noLootTable())),
-        CONJURED_BLOCK = block("conjured_block", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).instabreak())),
-        CONJURED_CRAFTING_TABLE = block("conjured_crafting_table",BlockConjuredCraftingTable::new),
+        BLOCK_AURAGLASS = block("auraglass", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).noOcclusion())),
+        BLOCK_SOUL_MAGMA = block("soul_magma", BlockSoulMagma::new),
+        BLOCK_AURA_TORCH = block("aura_torch", () -> new BlockAuraTorch(ParticleHelper.MAGIC_PARTICLE_OPTIONS, BlockBehaviour.Properties.ofFullCopy(Blocks.TORCH).noLootTable())),
+        BLOCK_CONJURED_BLOCK = block("conjured_block", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS).instabreak())),
+        BLOCK_CONJURED_CRAFTING_TABLE = block("conjured_crafting_table",BlockConjuredCraftingTable::new),
 
-        FADED_LARIMAR_ORE = block("faded_larimar_ore", () -> new BasicLarimarBlock(null, BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_ORE))),
-        FADING_LARIMAR_ORE = block("fading_larimar_ore", () -> new BasicLarimarBlock(() -> FADED_LARIMAR_ORE.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_ORE))),
-        LARIMAR_ORE = block("larimar_ore", () -> new BasicLarimarBlock(() -> FADING_LARIMAR_ORE.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_ORE))),
-        FADED_DEEPSLATE_LARIMAR_ORE = block("faded_deepslate_larimar_ore", () -> new BasicLarimarBlock(null, BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_COPPER_ORE))),
-        FADING_DEEPSLATE_LARIMAR_ORE = block("fading_deepslate_larimar_ore", () -> new BasicLarimarBlock(() -> FADED_DEEPSLATE_LARIMAR_ORE.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_COPPER_ORE))),
-        DEEPSLATE_LARIMAR_ORE = block("deepslate_larimar_ore", () -> new BasicLarimarBlock(() -> FADING_DEEPSLATE_LARIMAR_ORE.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_COPPER_ORE))),
-        IDOCRASE_ORE = block("idocrase_ore", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GOLD_ORE))),
-        DEEPSLATE_IDOCRASE_ORE = block("deepslate_idocrase_ore", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_GOLD_ORE))),
-        NETHER_IDOCRASE_ORE = block("nether_idocrase_ore", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.NETHER_GOLD_ORE))),
-        BLACKSTONE_IDOCRASE_ORE = block("blackstone_idocrase_ore", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GILDED_BLACKSTONE))),
+        BLOCK_FADED_LARIMAR_ORE = block("faded_larimar_ore", () -> new BasicLarimarBlock(null, BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_ORE))),
+        BLOCK_FADING_LARIMAR_ORE = block("fading_larimar_ore", () -> new BasicLarimarBlock(() -> BLOCK_FADED_LARIMAR_ORE.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_ORE))),
+        BLOCK_LARIMAR_ORE = block("larimar_ore", () -> new BasicLarimarBlock(() -> BLOCK_FADING_LARIMAR_ORE.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_ORE))),
+        BLOCK_FADED_DEEPSLATE_LARIMAR_ORE = block("faded_deepslate_larimar_ore", () -> new BasicLarimarBlock(null, BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_COPPER_ORE))),
+        BLOCK_FADING_DEEPSLATE_LARIMAR_ORE = block("fading_deepslate_larimar_ore", () -> new BasicLarimarBlock(() -> BLOCK_FADED_DEEPSLATE_LARIMAR_ORE.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_COPPER_ORE))),
+        BLOCK_DEEPSLATE_LARIMAR_ORE = block("deepslate_larimar_ore", () -> new BasicLarimarBlock(() -> BLOCK_FADING_DEEPSLATE_LARIMAR_ORE.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_COPPER_ORE))),
+        BLOCK_IDOCRASE_ORE = block("idocrase_ore", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GOLD_ORE))),
+        BLOCK_DEEPSLATE_IDOCRASE_ORE = block("deepslate_idocrase_ore", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.DEEPSLATE_GOLD_ORE))),
+        BLOCK_NETHER_IDOCRASE_ORE = block("nether_idocrase_ore", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.NETHER_GOLD_ORE))),
+        BLOCK_BLACKSTONE_IDOCRASE_ORE = block("blackstone_idocrase_ore", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.GILDED_BLACKSTONE))),
 
-        FADED_LARIMAR_BLOCK = block("faded_larimar_block", () -> new BasicLarimarBlock(null, BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK))),
-        FADING_LARIMAR_BLOCK = block("fading_larimar_block", () -> new BasicLarimarBlock(() -> FADED_LARIMAR_BLOCK.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK))),
-        LARIMAR_BLOCK = block("larimar_block", () -> new BasicLarimarBlock(() -> FADING_LARIMAR_BLOCK.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK))),
-        AURACHALCUM_BLOCK = block("aurachalcum_block", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_BLOCK))),
-        FROZEN_OBSIDIAN_BLOCK = block("frozen_obsidian", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.OBSIDIAN).friction(0.99F)))
+        BLOCK_FADED_LARIMAR = block("faded_larimar_block", () -> new BasicLarimarBlock(null, BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK))),
+        BLOCK_FADING_LARIMAR = block("fading_larimar_block", () -> new BasicLarimarBlock(() -> BLOCK_FADED_LARIMAR.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK))),
+        BLOCK_LARIMAR = block("larimar_block", () -> new BasicLarimarBlock(() -> BLOCK_FADING_LARIMAR.get().defaultBlockState(), BlockBehaviour.Properties.ofFullCopy(Blocks.COPPER_BLOCK))),
+        BLOCK_AURACHALCUM = block("aurachalcum_block", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_BLOCK))),
+        BLOCK_FROZEN_OBSIDIAN = block("frozen_obsidian", () -> new Block(BlockBehaviour.Properties.ofFullCopy(Blocks.OBSIDIAN).friction(0.99F)))
     ;
 
 
     // Block and Block Entities
-    public static final DeferredBlockAndTile<?, BlockEntityAuraConnector> AURA_CONNECTOR = blockWithEntity("aura_connector", BlockAuraConnector::new, block -> () -> buildTile(BlockEntityAuraConnector::new, block.get()));
-    public static final DeferredBlockAndTile<?, BlockEntityAuraBasin> AURA_BASIN = blockWithEntity("aura_basin", BlockAuraBasin::new, block -> () -> buildTile(BlockEntityAuraBasin::new, block.get()));
-    public static final DeferredBlockAndTile<?, BlockEntityPedestal> PEDESTAL = blockWithEntity("pedestal", BlockPedestal::new, block -> () -> buildTile(BlockEntityPedestal::new, block.get()));
-    public static final DeferredBlockAndTile<?, BlockEntityAuraInfuser> AURA_INFUSER = blockWithEntity("aura_infuser", BlockAuraInfuser::new, block -> () -> buildTile(BlockEntityAuraInfuser::new, block.get()));
-    public static final DeferredBlockAndTile<?, BlockEntitySpellCircle> SPELL_CIRCLE = blockWithoutItemWithEntity("spell_circle", BlockSpellCircle::new, block -> () -> buildTile(BlockEntitySpellCircle::new, block.get()));
-    public static final DeferredBlockAndTile<?, BlockEntityIgnisCollector> HEAT_COLLECTOR = blockWithEntity("heat_collector", BlockIgnisCollector::new, block -> () -> buildTile(BlockEntityIgnisCollector::new, block.get()));
-    public static final DeferredBlockAndTile<?, BlockEntityAquaCollector> AQUA_COLLECTOR = blockWithEntity("aqua_collector", BlockAquaCollector::new, block -> () -> buildTile(BlockEntityAquaCollector::new, block.get()));
-
-
-    // Items
-    private static final Supplier<Item> BASIC_WAND_SUPPLIER = () -> new ItemAuraWand(() -> ArcaneConfig.basicWandAuraCapacity, 1, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON));
-    private static final Supplier<Item> ADVANCED_WAND_SUPPLIER = () -> new ItemAuraWand(() -> ArcaneConfig.advancedWandAuraCapacity, 2, new Item.Properties().stacksTo(1).rarity(Rarity.RARE));
-    private static final Supplier<Item> MYSTICAL_WAND_SUPPLIER = () -> new ItemAuraWand(() -> ArcaneConfig.mysticWandAuraCapacity, 3, new Item.Properties().stacksTo(1).rarity(Rarity.EPIC));
-
-    public static final DeferredItem<?>
-            AURAGLASS_BOTTLE = item("auraglass_bottle", () -> new ItemAuraglassBottle(() -> ArcaneConfig.smallAuraglassBottleAuraCapacity, () -> ArcaneConfig.smallAuraglassBottleRate)),
-            MEDIUM_AURAGLASS_BOTTLE = item("medium_auraglass_bottle", () -> new ItemAuraglassBottle(() -> ArcaneConfig.mediumAuraglassBottleAuraCapacity, () -> ArcaneConfig.mediumAuraglassBottleRate)),
-            LARGE_AURAGLASS_BOTTLE = item("large_auraglass_bottle", () -> new ItemAuraglassBottle(() -> ArcaneConfig.largeAuraglassBottleAuraCapacity, () -> ArcaneConfig.largeAuraglassBottleRate)),
-            EXTREME_AURAGLASS_BOTTLE = item("extreme_auraglass_bottle", () -> new ItemAuraglassBottle(() -> ArcaneConfig.extremeAuraglassBottleAuraCapacity, () -> ArcaneConfig.extremeAuraglassBottleRate)),
-            CREATIVE_AURAGLASS_BOTTLE = item("creative_auraglass_bottle", () -> new ItemAuraglassBottle(() -> Integer.MAX_VALUE, () -> Integer.MAX_VALUE)),
-
-            WAND_ACACIA = item("wand_acacia", BASIC_WAND_SUPPLIER),
-            WAND_BAMBOO = item("wand_bamboo", BASIC_WAND_SUPPLIER),
-            WAND_BIRCH = item("wand_birch", BASIC_WAND_SUPPLIER),
-            WAND_CHERRY = item("wand_cherry", BASIC_WAND_SUPPLIER),
-            WAND_DARK_OAK = item("wand_dark_oak", BASIC_WAND_SUPPLIER),
-            WAND_JUNGLE = item("wand_jungle", BASIC_WAND_SUPPLIER),
-            WAND_MANGROVE = item("wand_mangrove", BASIC_WAND_SUPPLIER),
-            WAND_OAK = item("wand_oak", BASIC_WAND_SUPPLIER),
-            WAND_SPRUCE = item("wand_spruce", BASIC_WAND_SUPPLIER),
-            WAND_WARPED = item("wand_warped", BASIC_WAND_SUPPLIER),
-            WAND_CRIMSON = item("wand_crimson", BASIC_WAND_SUPPLIER),
-            WAND_COPPER = item("wand_copper", BASIC_WAND_SUPPLIER),
-            WAND_LARIMAR = item("wand_larimar", ADVANCED_WAND_SUPPLIER),
-            WAND_AURACHALCUM = item("wand_aurachalcum", MYSTICAL_WAND_SUPPLIER),
-            WAND_ELDRITCH = item("wand_eldritch", MYSTICAL_WAND_SUPPLIER),
-            WANDBOOK = item("wandbook", ItemWandbook::new),
-
-            AURAOMETER = item("auraometer", ItemAuraometer::new),
-            AURA_WRENCH = item("aura_wrench", ItemAuraWrench::new),
-            AURA_CONFIGURATOR = item("aura_configurator", ItemAuraConfigurator::new),
-            AURA_MULTITOOL = item("aura_multitool", ItemAuraMultitool::new),
-            GEM_SAW = item("gem_saw", ItemGemSaw::new),
-            SPELL_TABLET = item("spell_tablet", ItemSpellTablet::new),
-            ARCANE_BLEACH = item("arcane_bleach"),
-            SPELL_CHALK = item("spell_chalk", ItemSpellChalk::new),
-            ENDERPACK = item("enderpack", ItemEnderpack::new),
-            AXOBOTTLE = item("axobottle"),
-            GUIDEBOOK = item("guidebook", ItemGuidebook::new),
-            UPGRADE_KIT_COPPER = item("upgrade_kit_copper", () -> new ItemUpgradeKit(MachineTier.COPPER)),
-            UPGRADE_KIT_LARIMAR = item("upgrade_kit_larimar", () -> new ItemUpgradeKit(MachineTier.LARIMAR)),
-            UPGRADE_KIT_AURACHALCUM = item("upgrade_kit_aurachalcum", () -> new ItemUpgradeKit(MachineTier.AURACHALCUM)),
-
-            RAW_AURACHALCUM = item("raw_aurachalcum"),
-            AURACHALCUM = item("aurachalcum"),
-            ELDRITCH_ALLOY = item("eldritch_alloy"),
-            COPPER_CORE = item("copper_core"),
-            LARIMAR_CORE = item("larimar_core"),
-            AURACHALCUM_CORE = item("aurachalcum_core"),
-            ELDRITCH_CORE = item("eldritch_core"),
-            SPELL_CIRCLE_CORE = item("spell_circle_core"),
-            AURAGLASS_SHARD = item("auraglass_shard"),
-            AURAGLASS_DUST = item("auraglass_dust"),
-
-            CRUSHED_RAW_COPPER = item("crushed_raw_copper"),
-            CRUSHED_RAW_IRON = item("crushed_raw_iron"),
-            CRUSHED_RAW_GOLD = item("crushed_raw_gold"),
-            PURIFIED_RAW_COPPER = item("purified_raw_copper"),
-            PURIFIED_RAW_IRON = item("purified_raw_iron"),
-            PURIFIED_RAW_GOLD = item("purified_raw_gold")
-    ;
-
-    public static final DeferredGemItems
-            LARIMAR = gemItems("larimar"),
-            FADED_LARIMAR = gemItems("faded_larimar"),
-            IDOCRASE = gemItems("idocrase");
-
-    public static final ImmutableList<DeferredItem<?>> WANDS = ImmutableList.of(
-            WAND_ACACIA,
-            WAND_BAMBOO,
-            WAND_BIRCH,
-            WAND_CHERRY,
-            WAND_DARK_OAK,
-            WAND_JUNGLE,
-            WAND_MANGROVE,
-            WAND_OAK,
-            WAND_SPRUCE,
-            WAND_WARPED,
-            WAND_CRIMSON,
-            WAND_COPPER,
-            WAND_LARIMAR,
-            WAND_AURACHALCUM,
-            WAND_ELDRITCH
-    );
+    public static final DeferredBlockAndTile<?, BlockEntityAuraConnector> BE_AURA_CONNECTOR = blockWithEntity("aura_connector", BlockAuraConnector::new, block -> () -> buildTile(BlockEntityAuraConnector::new, block.get()));
+    public static final DeferredBlockAndTile<?, BlockEntityAuraBasin> BE_AURA_BASIN = blockWithEntity("aura_basin", BlockAuraBasin::new, block -> () -> buildTile(BlockEntityAuraBasin::new, block.get()));
+    public static final DeferredBlockAndTile<?, BlockEntityPedestal> BE_PEDESTAL = blockWithEntity("pedestal", BlockPedestal::new, block -> () -> buildTile(BlockEntityPedestal::new, block.get()));
+    public static final DeferredBlockAndTile<?, BlockEntityAuraInfuser> BE_AURA_INFUSER = blockWithEntity("aura_infuser", BlockAuraInfuser::new, block -> () -> buildTile(BlockEntityAuraInfuser::new, block.get()));
+    public static final DeferredBlockAndTile<?, BlockEntitySpellCircle> BE_SPELL_CIRCLE = blockWithoutItemWithEntity("spell_circle", BlockSpellCircle::new, block -> () -> buildTile(BlockEntitySpellCircle::new, block.get()));
+    public static final DeferredBlockAndTile<?, BlockEntityIgnisCollector> BE_HEAT_COLLECTOR = blockWithEntity("heat_collector", BlockIgnisCollector::new, block -> () -> buildTile(BlockEntityIgnisCollector::new, block.get()));
+    public static final DeferredBlockAndTile<?, BlockEntityAquaCollector> BE_AQUA_COLLECTOR = blockWithEntity("aqua_collector", BlockAquaCollector::new, block -> () -> buildTile(BlockEntityAquaCollector::new, block.get()));
 
 
     // Data Attachments
     public static final DeferredHolder<AttachmentType<?>, AttachmentType<AuraStorage>> DA_AURA = dataAttachment("aura_storage", () ->
             AttachmentType.builder(() -> new AuraStorage(-1, false, false)).serialize(AuraStorage.CODEC).build());
-    public static DeferredHolder<AttachmentType<?>, AttachmentType<MachineTier>> DA_MACHINE_TIER = dataAttachment("machine_tier", () ->
+    public static final DeferredHolder<AttachmentType<?>, AttachmentType<MachineTier>> DA_MACHINE_TIER = dataAttachment("machine_tier", () ->
             AttachmentType.builder(MachineTier.COPPER).serialize(MachineTier.CODEC).build());
 
 
@@ -219,7 +136,62 @@ public class ArcaneContent {
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Boolean>> DC_ACTIVE = dataComponent("active", Codec.BOOL);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<Integer>> DC_PUSH_RATE = dataComponent("push_rate", Codec.INT);
     public static final DeferredHolder<DataComponentType<?>, DataComponentType<String>> DC_MODE = dataComponent("mode", Codec.STRING);
-    public static final DeferredHolder<DataComponentType<?>, DataComponentType<WandbookDataRecord>> DC_WANDBOOK_DATA = dataComponent("wandbook_data", WandbookDataRecord.CODEC, WandbookDataRecord.STREAM_CODEC);
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<WandbookData>> DC_WANDBOOK_DATA = dataComponent("wandbook_data", WandbookData.CODEC, WandbookData.STREAM_CODEC);
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<WandData>> DC_WAND_DATA = dataComponent("wand_data", WandData.CODEC, WandData.STREAM_CODEC);
+    public static final DeferredHolder<DataComponentType<?>, DataComponentType<ResourceLocation>> DC_COLOUR_PALETTE = dataComponent("colour_palette", ResourceLocation.CODEC, ResourceLocation.STREAM_CODEC);
+
+
+    // Items
+    public static final DeferredItem<?>
+            ITEM_AURAGLASS_BOTTLE = item("auraglass_bottle", () -> new ItemAuraglassBottle(() -> ArcaneConfig.smallAuraglassBottleAuraCapacity, () -> ArcaneConfig.smallAuraglassBottleRate)),
+            ITEM_MEDIUM_AURAGLASS_BOTTLE = item("medium_auraglass_bottle", () -> new ItemAuraglassBottle(() -> ArcaneConfig.mediumAuraglassBottleAuraCapacity, () -> ArcaneConfig.mediumAuraglassBottleRate)),
+            ITEM_LARGE_AURAGLASS_BOTTLE = item("large_auraglass_bottle", () -> new ItemAuraglassBottle(() -> ArcaneConfig.largeAuraglassBottleAuraCapacity, () -> ArcaneConfig.largeAuraglassBottleRate)),
+            ITEM_EXTREME_AURAGLASS_BOTTLE = item("extreme_auraglass_bottle", () -> new ItemAuraglassBottle(() -> ArcaneConfig.extremeAuraglassBottleAuraCapacity, () -> ArcaneConfig.extremeAuraglassBottleRate)),
+            ITEM_CREATIVE_AURAGLASS_BOTTLE = item("creative_auraglass_bottle", () -> new ItemAuraglassBottle(() -> Integer.MAX_VALUE, () -> Integer.MAX_VALUE)),
+
+            ITEM_WAND = item("wand", () -> new ItemWand(() -> ArcaneConfig.basicWandAuraCapacity, new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON))),
+            ITEM_WANDBOOK = item("wandbook", ItemWandbook::new),
+            ITEM_CHAINWAND = item("chainwand", () -> new ItemChainwand(() -> ArcaneConfig.chainwandSpellCapacity, () -> ArcaneConfig.chainwandAuraCapacity, 3)),
+
+            ITEM_AURAOMETER = item("auraometer", ItemAuraometer::new),
+            ITEM_AURA_WRENCH = item("aura_wrench", ItemAuraWrench::new),
+            ITEM_AURA_CONFIGURATOR = item("aura_configurator", ItemAuraConfigurator::new),
+            ITEM_AURA_MULTITOOL = item("aura_multitool", ItemAuraMultitool::new),
+            ITEM_GEM_SAW = item("gem_saw", ItemGemSaw::new),
+            ITEM_SPELL_TABLET = item("spell_tablet", ItemSpellTablet::new),
+            ITEM_ARCANE_BLEACH = item("arcane_bleach"),
+            ITEM_SPELL_CHALK = item("spell_chalk", ItemSpellChalk::new),
+            ITEM_ENDERPACK = item("enderpack", ItemEnderpack::new),
+            ITEM_AXOBOTTLE = item("axobottle"),
+            ITEM_GUIDEBOOK = item("guidebook", ItemGuidebook::new),
+            ITEM_UPGRADE_KIT_COPPER = item("upgrade_kit_copper", () -> new ItemUpgradeKit(MachineTier.COPPER)),
+            ITEM_UPGRADE_KIT_LARIMAR = item("upgrade_kit_larimar", () -> new ItemUpgradeKit(MachineTier.LARIMAR)),
+            ITEM_UPGRADE_KIT_AURACHALCUM = item("upgrade_kit_aurachalcum", () -> new ItemUpgradeKit(MachineTier.AURACHALCUM)),
+            ITEM_ARCANE_PIGMENT = item("arcane_pigment", ItemArcanePigment::new),
+
+            ITEM_RAW_AURACHALCUM = item("raw_aurachalcum"),
+            ITEM_AURACHALCUM = item("aurachalcum"),
+            ITEM_ELDRITCH_ALLOY = item("eldritch_alloy"),
+            ITEM_COPPER_CORE = item("copper_core"),
+            ITEM_LARIMAR_CORE = item("larimar_core"),
+            ITEM_AURACHALCUM_CORE = item("aurachalcum_core"),
+            ITEM_ELDRITCH_CORE = item("eldritch_core"),
+            ITEM_SPELL_CIRCLE_CORE = item("spell_circle_core"),
+            ITEM_AURAGLASS_SHARD = item("auraglass_shard"),
+            ITEM_AURAGLASS_DUST = item("auraglass_dust"),
+
+            ITEM_CRUSHED_RAW_COPPER = item("crushed_raw_copper"),
+            ITEM_CRUSHED_RAW_IRON = item("crushed_raw_iron"),
+            ITEM_CRUSHED_RAW_GOLD = item("crushed_raw_gold"),
+            ITEM_PURIFIED_RAW_COPPER = item("purified_raw_copper"),
+            ITEM_PURIFIED_RAW_IRON = item("purified_raw_iron"),
+            ITEM_PURIFIED_RAW_GOLD = item("purified_raw_gold")
+    ;
+
+    public static final DeferredGemItems
+            ITEMS_LARIMAR = gemItems("larimar"),
+            ITEMS_FADED_LARIMAR = gemItems("faded_larimar"),
+            ITEMS_IDOCRASE = gemItems("idocrase");
 
 
     // Recipe Types
@@ -241,10 +213,10 @@ public class ArcaneContent {
             SPELL_CLEANSING = spell("cleansing", () -> SimpleCraftingSpell.of(id("cleansing"), 2, 20, 2, RT_CLEANSING)),
             SPELL_BUILDING = spell("building", SpellBuilding::new),
             SPELL_DASHING = spell("dashing", SpellDashing::new),
-            SPELL_CRAFTING = spell("crafting", () -> SimplePlacementSpell.of(id("crafting"), 1, 20, 1, c -> CONJURED_CRAFTING_TABLE.get().defaultBlockState())),
+            SPELL_CRAFTING = spell("crafting", () -> SimplePlacementSpell.of(id("crafting"), 1, 20, 1, c -> BLOCK_CONJURED_CRAFTING_TABLE.get().defaultBlockState())),
             SPELL_ACTIVATOR = spell("activator", SpellSpellCircleActivator::new),
             SPELL_PRESERVATION = spell("preservation", SpellPreservation::new),
-            SPELL_LIGHTING = spell("lighting", () -> SimplePlacementSpell.of(id("crafting"), 1, 20, 1, c -> AURA_TORCH.get().defaultBlockState())),
+            SPELL_LIGHTING = spell("lighting", () -> SimplePlacementSpell.of(id("crafting"), 1, 20, 1, c -> BLOCK_AURA_TORCH.get().defaultBlockState())),
             SPELL_MIXING = spell("mixing", SpellMixing::new),
             SPELL_CONJURE_WATER = spell("conjure_water", () -> SimpleLiquidSpell.of(id("conjure_water"), 8, 20, 1,
                     c -> Fluids.WATER,
@@ -253,23 +225,28 @@ public class ArcaneContent {
             SPELL_FREEZING = spell("freezing", () -> SimpleCraftingSpell.of(id("freezing"), 4, 20, 1, RT_FREEZING)),
             SPELL_SMELTING = spell("smelting", SpellSmelting::new),
             SPELL_ENLARGING = registerIf(() -> spell("enlarging", SpellEnlarging::new), ArcaneIntegrations.PEHKUI.isLoaded()),
-            SPELL_SHRINKING = registerIf(() -> spell("shrinking", SpellShrinking::new), ArcaneIntegrations.PEHKUI.isLoaded())
+            SPELL_SHRINKING = registerIf(() -> spell("shrinking", SpellShrinking::new), ArcaneIntegrations.PEHKUI.isLoaded()),
+            SPELL_DEPLOY_ELYTRA = spell("deploy_elytra", SpellDeployElytra::new)
     ;
 
 
     // Creative Tabs
     public static final Supplier<CreativeModeTab> ARCANE_TAB = TABS.register("arcane_tab", () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.arcane.arcane_tab"))
-            .icon(() -> new ItemStack(EXTREME_AURAGLASS_BOTTLE.get()))
+            .icon(() -> new ItemStack(ITEM_EXTREME_AURAGLASS_BOTTLE.get()))
             .displayItems((params, output) -> {
+                final BiConsumer<ItemStack, UnaryOperator<ItemStack>> add = (stack, unaryOperator) ->
+                        output.accept(unaryOperator.apply(stack).copy());
+
                 // Guidebook!
-                ItemStack stack = new ItemStack(GUIDEBOOK.get());
-                stack.set(DataComponentRegistry.BOOK_ID.get(), id("arcane_guidebook"));
-                output.accept(stack.copy());
+                add.accept(new ItemStack(ITEM_GUIDEBOOK.get()), stack -> {
+                    stack.set(DataComponentRegistry.BOOK_ID.get(), id("arcane_guidebook"));
+                    return stack;
+                });
 
                 // Items
                 List<Item> ignoredItems = new ArrayList<>();
-                ignoredItems.add(GUIDEBOOK.get());
+                ignoredItems.add(ITEM_GUIDEBOOK.get());
 
                 output.acceptAll(ITEMS
                         .getEntries()
@@ -279,27 +256,84 @@ public class ArcaneContent {
                         .toList());
 
                 // Other items
-                stack = new ItemStack(CREATIVE_AURAGLASS_BOTTLE.get());
-                ((AbstractAuraItem)stack.getItem()).mutateAuraStorage(stack, aura -> {
-                    aura.setAura(Integer.MAX_VALUE);
-                    return aura;
+                add.accept(new ItemStack(ITEM_CREATIVE_AURAGLASS_BOTTLE.get()), stack -> {
+                    ((AbstractAuraItem)stack.getItem()).mutateAuraStorage(stack, aura -> {
+                        aura.setAura(Integer.MAX_VALUE);
+                        return aura;
+                    });
+                    return stack;
                 });
-                output.accept(stack.copy());
+
+                add.accept(new ItemStack(ITEM_WAND.get()), stack -> {
+                    ItemWand.mutateWandData(stack, data -> data.withLevel(2));
+                    return stack;
+                });
+
+                add.accept(new ItemStack(ITEM_WAND.get()), stack -> {
+                    ItemWand.mutateWandData(stack, data -> data.withLevel(3));
+                    return stack;
+                });
             })
             .build());
 
     public static final Supplier<CreativeModeTab> ARCANE_SPELLS_TAB = TABS.register("arcane_spells_tab", () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.arcane.arcane_spells_tab"))
-            .icon(() -> new ItemStack(SPELL_TABLET.get()))
+            .icon(() -> new ItemStack(ITEM_SPELL_TABLET.get()))
             .withTabsBefore(id("arcane_tab"))
+            .withSearchBar()
             .displayItems((params, output) -> {
-                ArcaneRegistries.SPELLS.entrySet().forEach(entry -> {
-                    ItemStack stack = SPELL_TABLET.get().getDefaultInstance();
-                    ItemSpellTablet.setSpell(entry.getKey().location(), stack);
-                    output.accept(stack);
-                });
+                ArcaneRegistries.SPELLS
+                        .entrySet()
+                        .stream()
+                        .sorted(Map.Entry.comparingByKey())
+                        .forEach(entry -> {
+                            ItemStack stack = ITEM_SPELL_TABLET.get().getDefaultInstance();
+                            ItemSpellTablet.setSpell(entry.getKey().location(), stack);
+                            output.accept(stack);
+                        });
+
+                ArcaneRegistries.PIGMENTS
+                        .entrySet()
+                        .stream()
+                        .sorted(Map.Entry.comparingByKey())
+                        .forEach(entry -> {
+                            ItemStack stack = ITEM_ARCANE_PIGMENT.get().getDefaultInstance();
+                            stack.set(DC_COLOUR_PALETTE, entry.getKey().location());
+                            output.accept(stack);
+                        });
             })
             .build());
+
+
+    // Particle Types
+    public static final DeferredHolder<ParticleType<?>, MagicParticleType> PARTICLE_TYPE_MAGIC = PARTICLE_TYPES.register("magic", () -> MagicParticleType.INSTANCE);
+
+
+    // Pigments
+    public static final DeferredHolder<ColourPalette, ColourPalette>
+            PIGMENT_MAGIC = PIGMENTS.register("magic", () -> new ColourPalette(
+                    new UnpackedColour(240, 107, 146),
+                    new UnpackedColour(237, 128, 160),
+                    new UnpackedColour(240, 142, 192),
+                    new UnpackedColour(244, 162, 215),
+                    new UnpackedColour(240, 174, 217),
+                    new UnpackedColour(244, 194, 227),
+                    new UnpackedColour(248, 215, 237)
+            )),
+            PIGMENT_PRIDE = PIGMENTS.register("pride", () -> new ColourPalette(
+                    new UnpackedColour(228,   3,   3),
+                    new UnpackedColour(255, 140,   0),
+                    new UnpackedColour(255, 237,   0),
+                    new UnpackedColour(  0, 128,  38),
+                    new UnpackedColour(  0,  76, 255),
+                    new UnpackedColour(115,  41, 130)
+            )),
+            PIGMENT_TRANS = PIGMENTS.register("trans", () -> new ColourPalette(
+                new UnpackedColour( 91, 206, 250),
+                new UnpackedColour(245, 169, 184),
+                new UnpackedColour(255, 255, 255)
+            ))
+    ;
 
 
     // Helpers
@@ -401,14 +435,16 @@ public class ArcaneContent {
 
     public static void init(IEventBus bus) {
         BLOCKS.register(bus);
-        ITEMS.register(bus);
-        BLOCK_ENTITIES.register(bus);
         DATA_ATTACHMENTS.register(bus);
         DATA_COMPONENTS.register(bus);
+        ITEMS.register(bus);
+        BLOCK_ENTITIES.register(bus);
         RECIPE_SERIALIZERS.register(bus);
         RECIPE_TYPES.register(bus);
         TABS.register(bus);
         SPELLS.register(bus);
+        PARTICLE_TYPES.register(bus);
+        PIGMENTS.register(bus);
     }
 
 

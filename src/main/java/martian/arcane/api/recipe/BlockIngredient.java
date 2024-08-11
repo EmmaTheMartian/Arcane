@@ -8,9 +8,13 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public record BlockIngredient(Optional<Block> block, Optional<TagKey<Block>> tag) {
@@ -24,6 +28,19 @@ public record BlockIngredient(Optional<Block> block, Optional<TagKey<Block>> tag
 
     public boolean test(BlockState state) {
         return (block.isPresent() && state.is(block.get())) || (tag.isPresent() && state.is(tag.get()));
+    }
+    
+    public Ingredient toNonBlockIngredient() {
+        if (block.isPresent()) {
+            return Ingredient.of(block.get().asItem());
+        } else if (tag.isPresent()) {
+            List<ItemLike> blocks = new ArrayList<>();
+            BuiltInRegistries.BLOCK.getTag(tag.get()).ifPresent(tagEntries ->
+                tagEntries.forEach(entry -> blocks.add(entry.value())));
+            return Ingredient.of(blocks.toArray(new ItemLike[]{}));
+        }
+
+        throw new UnsupportedOperationException("Cannot invoke BlockIngredient.toNonBlockIngredient where neither block nor tag are present.");
     }
 
     public BIRL toBIRL() {

@@ -38,6 +38,7 @@ public abstract class SimpleLiquidSpell extends AbstractSpell {
 
             if (targetState.hasBlockEntity()) {
                 BlockEntity entity = c.level.getBlockEntity(target);
+                //noinspection DataFlowIssue
                 var cap = c.level.getCapability(Capabilities.FluidHandler.BLOCK, target, targetState, entity, null);
                 if (cap != null)
                     cap.fill(new FluidStack(fluid.apply(c), 1000), IFluidHandler.FluidAction.EXECUTE);

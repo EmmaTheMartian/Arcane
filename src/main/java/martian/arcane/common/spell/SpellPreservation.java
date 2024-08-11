@@ -3,7 +3,6 @@ package martian.arcane.common.spell;
 import martian.arcane.ArcaneMod;
 import martian.arcane.api.block.IPreservable;
 import martian.arcane.api.spell.*;
-import martian.arcane.integration.photon.ArcaneFx;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -16,10 +15,9 @@ public class SpellPreservation extends AbstractSpell {
     }
 
     @Override
-    public int getAuraCost(CastContext c) {
-        return c.target.type() == CastTarget.Type.BLOCK && c.level.getBlockState(((BlockPos) c.target.value())).getBlock() instanceof IPreservable ?
-                config.get("auraCost") :
-                0;
+    public boolean canCastFromContext(CastContext c) {
+        return c.target.type() == CastTarget.Type.BLOCK &&
+                c.level.getBlockState(((BlockPos) c.target.value())).getBlock() instanceof IPreservable;
     }
 
     @Override
@@ -31,7 +29,6 @@ public class SpellPreservation extends AbstractSpell {
             BlockPos pos = ((BlockPos) c.target.value());
             BlockState state = c.level.getBlockState(pos);
             if (state.getBlock() instanceof IPreservable preservable) {
-                ArcaneFx.ON_CAST_GRAVITY.goBlock(c.level, pos.above());
                 preservable.onPreserve(c.level, pos, state, c);
                 return CastResult.SUCCESS;
             }

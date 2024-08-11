@@ -13,7 +13,7 @@ import java.util.Random;
 
 public record RecipeOutput(ItemStack stack, float chance) {
     public RecipeOutput(ItemLike item, int count, float chance) {
-        this(new ItemStack(item, count), chance);
+        this(new ItemStack(item.asItem(), count), chance);
     }
 
     public static final Codec<RecipeOutput> CODEC = RecordCodecBuilder.create(instance -> instance.group(

@@ -2,7 +2,7 @@ package martian.arcane.api.spell;
 
 import martian.arcane.ArcaneConfig;
 import martian.arcane.api.ArcaneRegistries;
-import martian.arcane.common.item.ItemAuraWand;
+import martian.arcane.common.item.ItemWand;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -19,8 +19,8 @@ public abstract class AbstractSpell {
         return Component.translatable("spell." + Objects.requireNonNull(ArcaneRegistries.SPELLS.getKey(this)).toShortLanguageKey() + ".name.item");
     }
 
-    public boolean isValidWand(ItemAuraWand wand) {
-        return wand.level >= getMinLevel();
+    public boolean isValidWand(ItemStack stack) {
+        return ItemWand.getWandData(stack).level() >= getMinLevel();
     }
 
     public int getCooldownTicks(CastContext context) {
@@ -33,6 +33,10 @@ public abstract class AbstractSpell {
 
     public int getAuraCost(CastContext context) {
         return getConfig().get("auraCost");
+    }
+
+    public boolean canCastFromContext(CastContext context) {
+        return true;
     }
 
     protected abstract SpellConfig getConfig();

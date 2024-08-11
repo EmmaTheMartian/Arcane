@@ -10,7 +10,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public abstract class SimpleRecipe<T extends SimpleContainer> implements Recipe<T> {
+public abstract class SimpleRecipe<T extends SingleItemContainer> implements Recipe<T> {
     public final Ingredient input;
     public final NonNullList<RecipeOutput> results;
 
@@ -40,7 +40,7 @@ public abstract class SimpleRecipe<T extends SimpleContainer> implements Recipe<
     }
 
     @Override
-    public boolean matches(SimpleContainer container, Level level) {
+    public boolean matches(SingleItemContainer container, Level level) {
         return this.input.test(container.getItem());
     }
 
@@ -51,7 +51,7 @@ public abstract class SimpleRecipe<T extends SimpleContainer> implements Recipe<
 
     @Override
     @Deprecated
-    public ItemStack assemble(SimpleContainer container, HolderLookup.Provider registries) throws RuntimeException {
+    public ItemStack assemble(SingleItemContainer container, HolderLookup.Provider registries) throws RuntimeException {
         throw new RuntimeException("Cannot invoke SimpleRecipe#assemble(SimpleContainer, HolderLookup.Provider)");
     }
 }

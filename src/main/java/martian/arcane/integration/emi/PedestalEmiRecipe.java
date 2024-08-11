@@ -24,7 +24,7 @@ public class PedestalEmiRecipe extends BasicEmiRecipe {
         this.inputs.add(EmiIngredient.of(r.input));
         this.inputs.add(EmiIngredient.of(r.interactionItem));
         r.results.forEach(it -> this.outputs.add(EmiStack.of(it.getStack()).setChance(it.getChance())));
-        catalysts.add(EmiStack.of(ArcaneContent.PEDESTAL.block()));
+        catalysts.add(EmiStack.of(ArcaneContent.BE_PEDESTAL.block()));
     }
 
     @Override

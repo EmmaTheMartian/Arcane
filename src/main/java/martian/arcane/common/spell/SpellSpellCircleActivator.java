@@ -4,7 +4,6 @@ import martian.arcane.ArcaneMod;
 import martian.arcane.api.block.BlockHelpers;
 import martian.arcane.api.spell.*;
 import martian.arcane.common.block.spellcircle.BlockEntitySpellCircle;
-import martian.arcane.integration.photon.ArcaneFx;
 import net.minecraft.core.BlockPos;
 
 public class SpellSpellCircleActivator extends AbstractSpell {
@@ -23,8 +22,6 @@ public class SpellSpellCircleActivator extends AbstractSpell {
         if (c.target.type() == CastTarget.Type.BLOCK) {
             BlockPos pos = ((BlockPos) c.target.value());
             if (c.level.getBlockEntity(pos) instanceof BlockEntitySpellCircle spellCircle && !spellCircle.getActive()) {
-                ArcaneFx.ON_CAST_GRAVITY.goBlock(c.level, pos);
-                ArcaneFx.SPELL_CIRCLE_INIT.goBlock(c.level, pos);
                 spellCircle.setActive(true);
                 BlockHelpers.sync(spellCircle);
                 return CastResult.SUCCESS;

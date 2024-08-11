@@ -5,10 +5,9 @@ import com.klikli_dev.modonomicon.item.ModonomiconItem;
 import martian.arcane.ArcaneConfig;
 import martian.arcane.api.ArcaneRegistries;
 import martian.arcane.api.block.BlockHelpers;
-import martian.arcane.api.PropertyHelpers;
 import martian.arcane.api.spell.AbstractSpell;
 import martian.arcane.common.ArcaneContent;
-import martian.arcane.common.item.ItemAuraWand;
+import martian.arcane.common.item.ItemWand;
 import martian.arcane.common.item.ItemSpellTablet;
 import martian.arcane.common.recipe.RecipePedestalCrafting;
 import net.minecraft.core.BlockPos;
@@ -54,7 +53,7 @@ public class BlockPedestal extends Block implements EntityBlock {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public BlockPedestal() {
-        super(PropertyHelpers.basicAuraMachine().noOcclusion());
+        super(BlockHelpers.basicAuraMachine().noOcclusion());
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH));
     }
 
@@ -93,7 +92,7 @@ public class BlockPedestal extends Block implements EntityBlock {
 
             // Set wand spell
             if (
-                pedestalStack.getItem() instanceof ItemAuraWand wand &&
+                pedestalStack.getItem() instanceof ItemWand &&
                 stack.getItem() instanceof ItemSpellTablet &&
                 ItemSpellTablet.hasSpell(stack)
             ) {
@@ -104,7 +103,7 @@ public class BlockPedestal extends Block implements EntityBlock {
                 }
 
                 // Prevent overriding spells
-                if (ItemAuraWand.getSpellId(pedestalStack) != null)
+                if (ItemWand.getSpellId(pedestalStack) != null)
                     return ItemInteractionResult.FAIL;
 
                 ResourceLocation id = ItemSpellTablet.getSpellId(stack);
@@ -113,8 +112,8 @@ public class BlockPedestal extends Block implements EntityBlock {
 
                 AbstractSpell spell = ArcaneRegistries.SPELLS.get(id);
                 assert spell != null;
-                if (spell.isValidWand(wand)) {
-                    wand.setSpell(id, pedestalStack);
+                if (spell.isValidWand(pedestalStack)) {
+                    ItemWand.setSpell(id, pedestalStack);
                     player.sendSystemMessage(Component.translatable("messages.arcane.pedestal_set_spell"));
                     stack.shrink(1);
                     level.sendBlockUpdated(pos, state, state, 2);
@@ -127,11 +126,11 @@ public class BlockPedestal extends Block implements EntityBlock {
 
             // Remove wand spell
             if (
-                pedestalStack.getItem() instanceof ItemAuraWand &&
-                stack.is(ArcaneContent.ARCANE_BLEACH) &&
-                ItemAuraWand.hasSpell(pedestalStack)
+                pedestalStack.getItem() instanceof ItemWand &&
+                stack.is(ArcaneContent.ITEM_ARCANE_BLEACH) &&
+                ItemWand.hasSpell(pedestalStack)
             ) {
-                ItemAuraWand.removeSpell(pedestalStack);
+                ItemWand.removeSpell(pedestalStack);
                 stack.shrink(1);
                 return ItemInteractionResult.CONSUME;
             }
@@ -215,6 +214,6 @@ public class BlockPedestal extends Block implements EntityBlock {
     @Override
     @ParametersAreNonnullByDefault
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return !level.isClientSide && type == ArcaneContent.PEDESTAL.tile().get() ? BlockEntityPedestal::tick : null;
+        return !level.isClientSide && type == ArcaneContent.BE_PEDESTAL.tile().get() ? BlockEntityPedestal::tick : null;
     }
 }

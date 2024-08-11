@@ -1,8 +1,8 @@
 package martian.arcane.api.block.entity;
 
 import martian.arcane.ArcaneConfig;
-import martian.arcane.api.IMachineTierable;
-import martian.arcane.api.MachineTier;
+import martian.arcane.api.machine.IMachineTierable;
+import martian.arcane.api.machine.MachineTier;
 import martian.arcane.api.NBTHelpers;
 import martian.arcane.api.aura.AuraStorage;
 import martian.arcane.api.aura.IAuraStorage;

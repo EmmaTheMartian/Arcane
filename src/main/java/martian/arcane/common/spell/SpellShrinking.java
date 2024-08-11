@@ -21,19 +21,20 @@ public class SpellShrinking extends AbstractSpell {
     }
 
     @Override
-    public int getAuraCost(CastContext c) {
-        return c instanceof CastContext.WandContext ? config.get("auraCost") : 0;
+    public boolean canCastFromContext(CastContext c) {
+        return c instanceof CastContext.WandContext;
     }
 
     @Override
     public CastResult cast(CastContext c) {
-        if (c instanceof CastContext.WandContext wc) {
-            final ScaleData data = ScaleTypes.BASE.getScaleData(wc.caster);
-            if (data.getTargetScale() > ((double) config.get("minScale")))
-                data.setTargetScale((float) (data.getTargetScale() - ((double) config.get("shrinkFactor"))));
-            return CastResult.SUCCESS;
-        }
+        CastContext.WandContext wc = ((CastContext.WandContext) c);
 
-        return CastResult.FAILED;
+        final ScaleData data = ScaleTypes.BASE.getScaleData(wc.caster);
+        if (data.getTargetScale() > ((double) config.get("minScale"))) {
+            data.setTargetScale((float) (data.getTargetScale() - ((double) config.get("shrinkFactor"))));
+            return CastResult.SUCCESS;
+        } else {
+            return CastResult.FAILED;
+        }
     }
 }

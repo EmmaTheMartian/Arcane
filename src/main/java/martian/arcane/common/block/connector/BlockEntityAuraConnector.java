@@ -37,7 +37,7 @@ public class BlockEntityAuraConnector extends AbstractAuraBlockEntity {
     public Mode mode = Mode.RELAY;
 
     public BlockEntityAuraConnector(BlockPos pos, BlockState state) {
-        super(ArcaneConfig.auraConnectorsAuraCapacity, false, true, ArcaneContent.AURA_CONNECTOR.tile().get(), pos, state);
+        super(ArcaneConfig.auraConnectorsAuraCapacity, false, true, ArcaneContent.BE_AURA_CONNECTOR.tile().get(), pos, state);
     }
 
     @Override

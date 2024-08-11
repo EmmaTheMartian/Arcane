@@ -18,7 +18,7 @@ public class BlockEntityAquaCollector extends AbstractAuraBlockEntity {
     private int ticksToNextCollect = 0;
 
     public BlockEntityAquaCollector(BlockPos pos, BlockState state) {
-        super(ArcaneConfig.collectorsAuraCapacity, true, false, ArcaneContent.AQUA_COLLECTOR.tile().get(), pos, state);
+        super(ArcaneConfig.collectorsAuraCapacity, true, false, ArcaneContent.BE_AQUA_COLLECTOR.tile().get(), pos, state);
     }
 
     public List<Component> getText(List<Component> text, IAuraometerOutput.Context context) {

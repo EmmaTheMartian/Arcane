@@ -9,6 +9,9 @@ displayName="${mod_name}"
 authors="${mod_authors}"
 description='''Magical automation or smth idk'''
 
+[[mixins]]
+config="arcane.mixins.json"
+
 [[dependencies.${mod_id}]]
     modId="neoforge"
     mandatory=true

@@ -32,10 +32,7 @@ public record C2SSetSelectionComponent(int slot, int val) implements CustomPacke
             ItemStack stack = sender.getInventory().getItem(payload.slot);
 
             if (stack.getItem() instanceof ItemWandbook wandbook) {
-                wandbook.mutateData(stack, it -> {
-                    it.selection = payload.val;
-                    return it;
-                });
+                wandbook.mutateData(stack, it -> it.withSelection(payload.val));
                 sender.getInventory().setChanged();
             } else {
                 ArcaneMod.LOGGER.error("C2sSetSelectionComponent sent but the target item was not an ItemWandbook");

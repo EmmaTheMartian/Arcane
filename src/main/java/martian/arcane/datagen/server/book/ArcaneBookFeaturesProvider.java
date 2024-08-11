@@ -55,7 +55,7 @@ public class ArcaneBookFeaturesProvider extends CategoryProvider {
                 new BookCategoryBackgroundParallaxLayer(loc, speed, -1);
 
         return BookCategoryModel.create(modLoc(context().categoryId()), context().categoryName())
-                .withIcon(ArcaneContent.LARIMAR.rough().get())
+                .withIcon(ArcaneContent.ITEMS_LARIMAR.rough().get())
                 .withBackgroundParallaxLayers(
                         makeLayer.apply(new ResourceLocation("modonomicon", "textures/gui/parallax/flow/base.png"), 0.7f),
                         makeLayer.apply(new ResourceLocation("modonomicon", "textures/gui/parallax/flow/1.png"), 1f),
@@ -84,7 +84,7 @@ public class ArcaneBookFeaturesProvider extends CategoryProvider {
         var putMeOnAPedestal = simpleTextPage("put_me_on_a_pedestal", "", """
                 Now that you have a Pedestal, please put me on it. It is so much more comfortable there than in your hand.""");
 
-        return createEntry(ArcaneContent.AURA_BASIN.block().get().asItem(), loc, pedestal, putMeOnAPedestal);
+        return createEntry(ArcaneContent.BE_AURA_BASIN.block().get().asItem(), loc, pedestal, putMeOnAPedestal);
     }
 
     private BookEntryModel makeAboutAuraEntry(char loc) {
@@ -100,7 +100,7 @@ public class ArcaneBookFeaturesProvider extends CategoryProvider {
                 \\
                 Finally, the flow of Aura can only be impeded by a small handful of materials. Some materials are better at others than this. One of these materials is the abundant Copper.""");
 
-        return createEntry(ArcaneContent.AURAOMETER.get(), loc, aboutAura, aboutAura2);
+        return createEntry(ArcaneContent.ITEM_AURAOMETER.get(), loc, aboutAura, aboutAura2);
     }
 
     private BookEntryModel makeCopperEntry(char loc) {
@@ -120,7 +120,7 @@ public class ArcaneBookFeaturesProvider extends CategoryProvider {
         var jadeTip = simpleTextPage("jade_tip", "Tip", """
                 If you have the Jade mod installed, just having the Auraometer in your inventory lets you see details in the Jade view.""");
 
-        return createEntry(ArcaneContent.AURA_BASIN.block().get().asItem(), loc, copper, basin, auraometer, jadeTip);
+        return createEntry(ArcaneContent.BE_AURA_BASIN.block().get().asItem(), loc, copper, basin, auraometer, jadeTip);
     }
 
     private BookEntryModel makeBasicCollectorsEntry(char loc) {
@@ -134,7 +134,7 @@ public class ArcaneBookFeaturesProvider extends CategoryProvider {
                 \\
                 The Aqua Collector produces Aura based on the amount of Water around it.""");
 
-        return createEntry(ArcaneContent.AQUA_COLLECTOR.block().get().asItem(), loc, about, collectors);
+        return createEntry(ArcaneContent.BE_AQUA_COLLECTOR.block().get().asItem(), loc, about, collectors);
     }
 
     private BookEntryModel makeBasicLogisticsEntry(char loc) {
@@ -149,18 +149,18 @@ public class ArcaneBookFeaturesProvider extends CategoryProvider {
         var aurawrench = simpleCraftingPage("aurawrench", ArcaneMod.id("shaped/aura_wrench"), """
                 The Aurawrench can be used to bind an Extractor to an Inserter to send Aura. First, click the Extractor, then the Inserter.""");
 
-        return createEntry(ArcaneContent.AURA_CONNECTOR.block().get().asItem(), loc, about, extractorAndInserter, aurawrench);
+        return createEntry(ArcaneContent.BE_AURA_CONNECTOR.block().get().asItem(), loc, about, extractorAndInserter, aurawrench);
     }
 
     private BookEntryModel makeBasicWandEntry(char loc) {
         this.startEntry("wand", "Wand");
 
-        var wand = simpleSpotlightPage("wand", Ingredient.of(ArcaneTags.BASIC_WANDS), """
+        var wand = simpleSpotlightPage("wand", Ingredient.of(ArcaneTags.WANDS), """
                 Wands are perhaps even more important than Pedestals. Actually I take that back, Pedestals are more comfortable to sit on.\\
                 \\
                 Wands are capable of channeling Aura and casting spells to perform many common tasks.""");
 
-        return createEntry(ArcaneContent.WAND_OAK.get(), loc, wand);
+        return createEntry(ArcaneContent.ITEM_WAND.get(), loc, wand);
     }
 
     // Entry Helpers

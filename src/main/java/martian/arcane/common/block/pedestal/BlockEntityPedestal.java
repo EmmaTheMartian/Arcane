@@ -16,7 +16,7 @@ import java.util.List;
 
 public class BlockEntityPedestal extends AbstractAuraBlockEntityWithSingleItem implements IAuraometerOutput {
     public BlockEntityPedestal(BlockPos pos, BlockState state) {
-        super(ArcaneConfig.pedestalAuraCapacity, false, true, ArcaneContent.PEDESTAL.tile().get(), pos, state);
+        super(ArcaneConfig.pedestalAuraCapacity, false, true, ArcaneContent.BE_PEDESTAL.tile().get(), pos, state);
     }
 
     @Override

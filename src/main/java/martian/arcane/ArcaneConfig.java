@@ -29,7 +29,6 @@ public class ArcaneConfig {
             .comment("The maximum distance two Aura Connectors can be in blocks. Use -1 to allow infinite range.", "Note that infinite range means it would be VERY easy for someone to crash a server due to how links check for specific blocks (aurachalcum, copper, and larimar blocks).", "I recommend keeping this value below around 32.")
             .defineInRange("auraConnectorMaxDistance", 10.0d, -1, Double.MAX_VALUE);
 
-    //todo
     private static final ConfigValue<List<? extends String>> DISABLED_SPELLS = BUILDER
             .comment("A list of spells by their ID that should be disabled. These spells will not be removed however they will be blacklisted from crafting and cannot be casted.")
             .defineListAllowEmpty("disabledSpells", List.of(), it -> it instanceof String str && ResourceLocation.isValidResourceLocation(str));
@@ -44,6 +43,10 @@ public class ArcaneConfig {
                     .defineInRange("itemAuraCapacities.mysticWand", 64, 1, Integer.MAX_VALUE),
             WANDBOOK_AURA_CAPACITY = BUILDER
                     .defineInRange("itemAuraCapacities.wandbook", 64, 1, Integer.MAX_VALUE),
+            CHAINWAND_AURA_CAPACITY = BUILDER
+                    .defineInRange("itemAuraCapacities.chainwand", 64, 1, Integer.MAX_VALUE),
+            MYSTICAL_CHAINWAND_AURA_CAPACITY = BUILDER
+                    .defineInRange("itemAuraCapacities.mysticalChainwand", 128, 1, Integer.MAX_VALUE),
             SMALL_AURAGLASS_BOTTLE_AURA_CAPACITY = BUILDER
                     .defineInRange("itemAuraCapacities.smallAuraglassBottle", 16, 1, Integer.MAX_VALUE),
             MEDIUM_AURAGLASS_BOTTLE_AURA_CAPACITY = BUILDER
@@ -137,9 +140,16 @@ public class ArcaneConfig {
 
 
     // Misc
-    private static final IntValue WANDBOOK_SPELL_CAPACITY = BUILDER
-            .comment("Maximum spells a Wandbook can hold. Changing this will not change existing Wandbooks.")
-            .defineInRange("misc.wandbookSpellCapacity", 4, 1, Integer.MAX_VALUE);
+    private static final IntValue
+            WANDBOOK_SPELL_CAPACITY = BUILDER
+                    .comment("Maximum spells a Wandbook can hold. Changing this will not change existing Wandbooks.")
+                    .defineInRange("misc.wandbookSpellCapacity", 4, 1, Integer.MAX_VALUE),
+            CHAINWAND_SPELL_CAPACITY = BUILDER
+                    .comment("Maximum spells a Chainwands can hold. Changing this will not change existing Chainbooks.")
+                    .defineInRange("misc.chainwandSpellCapacity", 4, 1, Integer.MAX_VALUE),
+            MYSTICAL_CHAINWAND_SPELL_CAPACITY = BUILDER
+                    .comment("Maximum spells a Mystical Chainwands can hold. Changing this will not change existing Chainbooks.")
+                    .defineInRange("misc.chainwandSpellCapacity", 6, 1, Integer.MAX_VALUE);
 
 
     // Spec
@@ -153,6 +163,8 @@ public class ArcaneConfig {
             advancedWandAuraCapacity,
             mysticWandAuraCapacity,
             wandbookAuraCapacity,
+            chainwandAuraCapacity,
+            mysticalChainwandAuraCapacity,
             smallAuraglassBottleAuraCapacity,
             mediumAuraglassBottleAuraCapacity,
             largeAuraglassBottleAuraCapacity,
@@ -178,7 +190,9 @@ public class ArcaneConfig {
             aquaCollectorSpeed,
             basicSpellCircleSpeed,
             enderpackUsageAuraCost,
-            wandbookSpellCapacity;
+            wandbookSpellCapacity,
+            chainwandSpellCapacity,
+            mysticalChainwandSpellCapacity;
     public static double
             auraConnectorMaxDistance,
             copperTierMaxAuraMultiplier,
@@ -198,6 +212,8 @@ public class ArcaneConfig {
         advancedWandAuraCapacity = ADVANCED_WAND_AURA_CAPACITY.get();
         mysticWandAuraCapacity = MYSTIC_WAND_AURA_CAPACITY.get();
         wandbookAuraCapacity = WANDBOOK_AURA_CAPACITY.get();
+        chainwandAuraCapacity = CHAINWAND_AURA_CAPACITY.get();
+        mysticalChainwandAuraCapacity = MYSTICAL_CHAINWAND_AURA_CAPACITY.get();
         smallAuraglassBottleAuraCapacity = SMALL_AURAGLASS_BOTTLE_AURA_CAPACITY.get();
         mediumAuraglassBottleAuraCapacity = MEDIUM_AURAGLASS_BOTTLE_AURA_CAPACITY.get();
         largeAuraglassBottleAuraCapacity = LARGE_AURAGLASS_BOTTLE_AURA_CAPACITY.get();
@@ -232,5 +248,7 @@ public class ArcaneConfig {
         enderpackUsageAuraCost = ENDERPACK_USAGE_AURA_COST.get();
 
         wandbookSpellCapacity = WANDBOOK_SPELL_CAPACITY.get();
+        chainwandSpellCapacity = CHAINWAND_SPELL_CAPACITY.get();
+        mysticalChainwandSpellCapacity = MYSTICAL_CHAINWAND_SPELL_CAPACITY.get();
     }
 }

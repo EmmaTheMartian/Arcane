@@ -2,7 +2,7 @@ package martian.arcane.common.spell;
 
 import martian.arcane.ArcaneMod;
 import martian.arcane.api.item.ItemHelpers;
-import martian.arcane.api.recipe.SimpleContainer;
+import martian.arcane.api.recipe.SingleItemContainer;
 import martian.arcane.api.recipe.SingleItemEntityContainer;
 import martian.arcane.api.spell.*;
 import martian.arcane.common.block.pedestal.BlockEntityPedestal;
@@ -22,6 +22,7 @@ public class SpellSmelting extends AbstractSpell {
     protected SpellConfig getConfig() {
         return config;
     }
+
     @Override
     public CastResult cast(CastContext c) {
         if (c.level.isClientSide)
@@ -31,12 +32,12 @@ public class SpellSmelting extends AbstractSpell {
             BlockPos pos = ((BlockPos) c.target.value());
             BlockState state = c.level.getBlockState(pos);
             if (c.level.getBlockEntity(pos) instanceof BlockEntityPedestal pedestal) {
-                var container = new SimpleContainer(pedestal.getItem());
+                var container = new SingleItemContainer(pedestal.getItem());
                 var recipe = c.level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, container, c.level);
                 recipe.ifPresent(it -> pedestal.setItem(it.value().assemble(container, c.level.registryAccess())));
                 return recipe.isPresent() ? CastResult.SUCCESS : CastResult.FAILED;
             } else {
-                var container = new SimpleContainer(state.getBlock().asItem().getDefaultInstance());
+                var container = new SingleItemContainer(state.getBlock().asItem().getDefaultInstance());
                 var recipe = c.level.getRecipeManager().getRecipeFor(RecipeType.SMELTING, container, c.level);
                 recipe.ifPresent(it -> {
                     var result = it.value().assemble(container, c.level.registryAccess());

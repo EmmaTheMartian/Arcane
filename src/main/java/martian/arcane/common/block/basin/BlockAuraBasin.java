@@ -1,6 +1,6 @@
 package martian.arcane.common.block.basin;
 
-import martian.arcane.api.PropertyHelpers;
+import martian.arcane.api.block.BlockHelpers;
 import martian.arcane.api.block.AbstractAuraMachine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -25,7 +25,7 @@ public class BlockAuraBasin extends AbstractAuraMachine {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public BlockAuraBasin() {
-        super(PropertyHelpers.basicAuraMachine().noOcclusion(), BlockEntityAuraBasin::new);
+        super(BlockHelpers.basicAuraMachine().noOcclusion(), BlockEntityAuraBasin::new);
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH));
     }
 

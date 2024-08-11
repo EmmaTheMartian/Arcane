@@ -1,6 +1,6 @@
 package martian.arcane.common.block.infuser;
 
-import martian.arcane.api.PropertyHelpers;
+import martian.arcane.api.block.BlockHelpers;
 import martian.arcane.api.block.AbstractAuraMachine;
 import martian.arcane.common.ArcaneContent;
 import net.minecraft.core.BlockPos;
@@ -33,7 +33,7 @@ public class BlockAuraInfuser extends AbstractAuraMachine {
     public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     public BlockAuraInfuser() {
-        super(PropertyHelpers.basicAuraMachine().noOcclusion(), BlockEntityAuraInfuser::new);
+        super(BlockHelpers.basicAuraMachine().noOcclusion(), BlockEntityAuraInfuser::new);
         registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH));
     }
 
@@ -57,7 +57,7 @@ public class BlockAuraInfuser extends AbstractAuraMachine {
     @Override
     @ParametersAreNonnullByDefault
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return !level.isClientSide && type == ArcaneContent.AURA_INFUSER.tile().get() ? BlockEntityAuraInfuser::tick : null;
+        return !level.isClientSide && type == ArcaneContent.BE_AURA_INFUSER.tile().get() ? BlockEntityAuraInfuser::tick : null;
     }
 
     @Override
@@ -69,9 +69,7 @@ public class BlockAuraInfuser extends AbstractAuraMachine {
         }
 
         if (level.getBlockEntity(pos) instanceof BlockEntityAuraInfuser infuser) {
-            /*if (stack.is(ArcaneItems.AURA_WRENCH.get())) {
-                infuser.nextMode();
-            } else */if (!infuser.getItem().isEmpty()) {
+            if (!infuser.getItem().isEmpty()) {
                 player.getInventory().placeItemBackInInventory(infuser.getItem());
                 infuser.setItem(ItemStack.EMPTY);
             } else if (!stack.isEmpty() && infuser.getItem().isEmpty()) {

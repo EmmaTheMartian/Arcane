@@ -15,6 +15,8 @@ public class AuraInfusionEmiRecipe extends BasicEmiRecipe {
     public static final ResourceLocation OVERLAY = ArcaneMod.id("textures/gui/recipe_browsers/infusion_overlay.png");
     private static final int padding = 2;
 
+    protected final int aura;
+
     public AuraInfusionEmiRecipe(RecipeHolder<RecipeAuraInfusion> recipe) {
         super(ArcaneEmiPlugin.CATEGORY_AURA_INFUSION, recipe.id(), 32 + (18 * 2) + (padding * 2), (18 * 3) + (padding * 2));
 
@@ -22,6 +24,7 @@ public class AuraInfusionEmiRecipe extends BasicEmiRecipe {
 
         this.inputs.add(EmiIngredient.of(r.input));
         r.results.forEach(it -> this.outputs.add(EmiStack.of(it.getStack()).setChance(it.getChance())));
+        this.aura = r.aura;
     }
 
     @Override
@@ -29,6 +32,8 @@ public class AuraInfusionEmiRecipe extends BasicEmiRecipe {
         widgets.addTexture(OVERLAY, padding, padding, 32, 34, 0, 0, 32, 34, 32, 34);
 
         widgets.addSlot(inputs.getFirst(), padding, padding);
+        //noinspection DataFlowIssue
+        widgets.addText(Component.translatable("messages.arcane.aura").append(Integer.toString(aura)), padding, padding + 44, ChatFormatting.DARK_PURPLE.getColor(), false);
 
         final int
                 x = 30 + padding,

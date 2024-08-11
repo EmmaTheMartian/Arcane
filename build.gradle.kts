@@ -1,5 +1,3 @@
-@file:Suppress("UnstableApiUsage")
-
 import java.time.format.DateTimeFormatter
 
 plugins {
@@ -90,8 +88,6 @@ dependencies {
     neoForge("net.neoforged:neoforge:${prop("neoforge_version")}")
 
     // JEI
-    modCompileOnlyApi("mezz.jei:jei-${prop("mc_version")}-common-api:${prop("jei_version")}") { isTransitive = false }
-    modCompileOnlyApi("mezz.jei:jei-${prop("mc_version")}-neoforge-api:${prop("jei_version")}") { isTransitive = false }
     modRuntimeOnly("mezz.jei:jei-${prop("mc_version")}-neoforge:${prop("jei_version")}") { isTransitive = false }
 
     // EMI
@@ -136,14 +132,14 @@ dependencies {
         modRuntimeOnly("com.jozufozu.flywheel:flywheel-forge-${prop("mc_version")}:${prop("flywheel_version")}")
         modRuntimeOnly("com.tterrag.registrate:Registrate:${prop("registrate_version")}")
     }
+    */
 
     // KubeJS
-    modImplementation("dev.latvian.mods:kubejs-forge:${prop("kubejs_version")}")
-    localRuntime("io.github.llamalad7:mixinextras-forge:0.3.5")
-    if (prop("enable_probejs").toBoolean()) {
-        modRuntimeOnly("curse.maven:probejs-585406:${prop("probejs_version")}")
-    }
-     */
+    modImplementation("dev.latvian.mods:kubejs-neoforge:${prop("kubejs_version")}")
+    localRuntime("io.github.llamalad7:mixinextras-neoforge:0.3.5")
+//    if (prop("enable_probejs").toBoolean()) {
+//        modRuntimeOnly("curse.maven:probejs-585406:${prop("probejs_version")}")
+//    }
 
     // Energized Power
     localRuntime("maven.modrinth:energized-power:1.20.6-2.11.2-neoforge")

@@ -14,7 +14,7 @@
   "description": "",
   "hide_while_locked": true,
   "icon": {
-    "item": "arcane:wand_oak"
+    "item": "arcane:wand"
   },
   "name": "book.arcane.arcane_guidebook.features.wand.name",
   "pages": [
@@ -25,7 +25,7 @@
         "type": "modonomicon:none"
       },
       "item": {
-        "tag": "arcane:basic_wands"
+        "tag": "arcane:wands"
       },
       "text": "book.arcane.arcane_guidebook.features.wand.wand.text",
       "title": ""
